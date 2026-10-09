@@ -61,6 +61,20 @@ const ca = (await caBenh()).slice(0, 4);
 </section>
 
 <section class="s">
+  <div class="wrap cols2" style="align-items:center">
+    {tt.anh_tap_the
+      ? <img src={u(tt.anh_tap_the)} alt={`Đội ngũ ${tt.ten}`} loading="lazy" width="600" height="400" style="aspect-ratio:3/2;object-fit:cover;width:100%">
+      : <div class="cho-trong" style="aspect-ratio:3/2">Ảnh tập thể bác sĩ, nhân viên (đang cập nhật)</div>}
+    <div>
+      <span class="kicker">Về chúng tôi</span>
+      <h2 style="font-size:32px;margin:6px 0 12px">{tt.ten}</h2>
+      <p class="muted">{tt.gioi_thieu_ngan || `Bệnh viện thú y chuyên chó mèo tại ${tt.dia_chi}. Mở cửa ${tt.gio_mo_cua} hằng ngày và trực cấp cứu 24/24.`}</p>
+      <a class="btn btn-line" href={u('/gioi-thieu/')}>Xem thêm về bệnh viện <Icon name="arrow" size={18} /></a>
+    </div>
+  </div>
+</section>
+
+<section class="s">
   <div class="wrap cols2">
     {[{ ten: 'Chó', ds: cho, href: '/tu-van/cho/' }, { ten: 'Mèo', ds: meo, href: '/tu-van/meo/' }].map((m) => (
       <div>
@@ -83,20 +97,6 @@ const ca = (await caBenh()).slice(0, 4);
 </section>
 
 <section class="s">
-  <div class="wrap cols2" style="align-items:center">
-    {tt.anh_tap_the
-      ? <img src={u(tt.anh_tap_the)} alt={`Đội ngũ ${tt.ten}`} loading="lazy" width="600" height="400" style="aspect-ratio:3/2;object-fit:cover;width:100%">
-      : <div class="cho-trong" style="aspect-ratio:3/2">Ảnh tập thể bác sĩ, nhân viên (đang cập nhật)</div>}
-    <div>
-      <span class="kicker">Về chúng tôi</span>
-      <h2 style="font-size:32px;margin:6px 0 12px">{tt.ten}</h2>
-      <p class="muted">{tt.gioi_thieu_ngan || `Bệnh viện thú y chuyên chó mèo tại ${tt.dia_chi}. Mở cửa ${tt.gio_mo_cua} hằng ngày và trực cấp cứu 24/24.`}</p>
-      <a class="btn btn-line" href={u('/gioi-thieu/')}>Xem thêm về bệnh viện <Icon name="arrow" size={18} /></a>
-    </div>
-  </div>
-</section>
-
-<section class="s" style="padding-top:0">
   <div class="wrap">
     <div class="sh"><h2>Dịch vụ tại bệnh viện</h2><a href={u('/dich-vu/')}>Bảng giá <Icon name="arrow" size={16} /></a></div>
     <div class="dv-list">
