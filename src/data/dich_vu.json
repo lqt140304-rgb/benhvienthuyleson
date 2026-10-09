@@ -571,8 +571,8 @@
       "theo_ngay": true,
       "giam_dai_ngay": [
         {
-          "nhan": "Trên 5 ngày",
-          "tu_ngay": 5.1,
+          "nhan": "Từ 5 ngày",
+          "tu_ngay": 5,
           "giam": 10
         },
         {
@@ -581,18 +581,18 @@
           "giam": 15
         },
         {
-          "nhan": "Trên 10 ngày",
-          "tu_ngay": 10.1,
+          "nhan": "Từ 10 ngày",
+          "tu_ngay": 10,
           "giam": 20
         },
         {
-          "nhan": "Trên 20 ngày",
-          "tu_ngay": 20.1,
+          "nhan": "Từ 20 ngày",
+          "tu_ngay": 20,
           "giam": 30
         },
         {
-          "nhan": "Trên 30 ngày",
-          "tu_ngay": 30.1,
+          "nhan": "Từ 30 ngày",
+          "tu_ngay": 30,
           "giam": 50
         }
       ]
