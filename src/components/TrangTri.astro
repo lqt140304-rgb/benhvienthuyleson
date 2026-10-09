@@ -1,0 +1,90 @@
+---
+// Hình trang trí chó mèo vẽ tay (SVG), lơ lửng / ló đầu ở hai bên các khu để bớt khoảng trắng.
+// Chỉ để trang trí: aria-hidden, không bắt sự kiện chuột. Tự đứng yên khi máy bật "giảm chuyển động".
+interface Props { kieu: 'hero' | 've' | 'cam-nang' | 'ca-benh' | 'dich-vu' | 'dau-trang' }
+const { kieu } = Astro.props;
+
+const VIEN = '#2B0D2E';
+// Dấu chân
+const chan = (mau: string) => `<svg viewBox="0 0 40 40"><g fill="${mau}"><ellipse cx="20" cy="27" rx="10" ry="8.5"/><ellipse cx="8" cy="16" rx="4.2" ry="5.4" transform="rotate(-20 8 16)"/><ellipse cx="16" cy="9" rx="4.2" ry="5.6" transform="rotate(-6 16 9)"/><ellipse cx="25" cy="9" rx="4.2" ry="5.6" transform="rotate(6 25 9)"/><ellipse cx="33" cy="16" rx="4.2" ry="5.4" transform="rotate(20 33 16)"/></g></svg>`;
+// Cuộn len
+const len = `<svg viewBox="0 0 64 64"><path d="M50 50c8 6 10 10 4 12" fill="none" stroke="#9C6BB8" stroke-width="3" stroke-linecap="round"/><circle cx="30" cy="30" r="24" fill="#B98AD3" stroke="${VIEN}" stroke-width="2.5"/><path d="M10 22c14 2 28 12 34 28M14 14c16 4 30 18 36 30M22 8c10 8 22 22 28 34M8 34c10-2 24 4 30 18" fill="none" stroke="#8E5BAD" stroke-width="2.5" stroke-linecap="round"/></svg>`;
+// Khúc xương
+const xuong = `<svg viewBox="0 0 80 40"><path d="M18 12a8 8 0 1 0-6 14 8 8 0 1 0 8 8h40a8 8 0 1 0 8-8 8 8 0 1 0-6-14 8 8 0 1 0-10 4H28a8 8 0 1 0-10-4z" fill="#FFF7EE" stroke="${VIEN}" stroke-width="2.5" stroke-linejoin="round"/></svg>`;
+// Trái tim nhỏ
+const tim = (mau: string) => `<svg viewBox="0 0 32 30"><path d="M16 28S2 19 2 10a7 7 0 0 1 14-2 7 7 0 0 1 14 2c0 9-14 18-14 18z" fill="${mau}"/></svg>`;
+// Mèo cam ló đầu (hai chân bám mép)
+const meo = `<svg viewBox="0 0 130 96">
+  <path d="M30 40 34 6l24 22Z" fill="#F79A3E" stroke="${VIEN}" stroke-width="2.5" stroke-linejoin="round"/><path d="M37 32 39 15l12 12Z" fill="#F7B5C9"/>
+  <path d="M100 40 96 6 72 28Z" fill="#F79A3E" stroke="${VIEN}" stroke-width="2.5" stroke-linejoin="round"/><path d="M93 32 91 15 79 27Z" fill="#F7B5C9"/>
+  <ellipse cx="65" cy="56" rx="42" ry="34" fill="#F79A3E" stroke="${VIEN}" stroke-width="2.5"/>
+  <path d="M65 24v10M53 26l3 9M77 26l-3 9" stroke="#C9661F" stroke-width="4" stroke-linecap="round"/>
+  <ellipse cx="65" cy="70" rx="16" ry="11" fill="#FFE6C7"/>
+  <ellipse cx="39" cy="66" rx="6" ry="4" fill="#F28BA8" opacity=".75"/><ellipse cx="91" cy="66" rx="6" ry="4" fill="#F28BA8" opacity=".75"/>
+  <g class="tt-mat"><ellipse cx="50" cy="55" rx="6" ry="7" fill="${VIEN}"/><circle cx="52" cy="52.5" r="2.2" fill="#fff"/><ellipse cx="80" cy="55" rx="6" ry="7" fill="${VIEN}"/><circle cx="82" cy="52.5" r="2.2" fill="#fff"/></g>
+  <path d="M61 64h8l-4 4Z" fill="#E5688A" stroke="${VIEN}" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M65 68q-2 5-7 3M65 68q2 5 7 3" fill="none" stroke="${VIEN}" stroke-width="2" stroke-linecap="round"/>
+  <ellipse cx="38" cy="88" rx="12" ry="8" fill="#F79A3E" stroke="${VIEN}" stroke-width="2.5"/><ellipse cx="92" cy="88" rx="12" ry="8" fill="#F79A3E" stroke="${VIEN}" stroke-width="2.5"/>
+  <path d="M34 86v5M40 86v5M88 86v5M94 86v5" stroke="${VIEN}" stroke-width="1.8" stroke-linecap="round"/>
+</svg>`;
+// Cún ló đầu, tai cụp, thè lưỡi
+const cho = `<svg viewBox="0 0 130 100">
+  <g class="tt-tai"><path d="M28 22c-16 4-20 30-12 44 4 6 12 4 14-4l6-30z" fill="#8A5A33" stroke="${VIEN}" stroke-width="2.5" stroke-linejoin="round"/></g>
+  <g class="tt-tai tt-tai-p"><path d="M102 22c16 4 20 30 12 44-4 6-12 4-14-4l-6-30z" fill="#8A5A33" stroke="${VIEN}" stroke-width="2.5" stroke-linejoin="round"/></g>
+  <ellipse cx="65" cy="52" rx="40" ry="38" fill="#E9B872" stroke="${VIEN}" stroke-width="2.5"/>
+  <path d="M52 20c4-6 22-6 26 0" fill="none" stroke="#C99550" stroke-width="4" stroke-linecap="round"/>
+  <ellipse cx="65" cy="70" rx="22" ry="16" fill="#FFF3E0"/>
+  <g class="tt-mat"><ellipse cx="48" cy="50" rx="6" ry="7" fill="${VIEN}"/><circle cx="50" cy="47.5" r="2.2" fill="#fff"/><ellipse cx="82" cy="50" rx="6" ry="7" fill="${VIEN}"/><circle cx="84" cy="47.5" r="2.2" fill="#fff"/></g>
+  <ellipse cx="65" cy="62" rx="8" ry="6" fill="${VIEN}"/>
+  <path d="M65 68v4M65 72q-6 6-12 1M65 72q6 6 12 1" fill="none" stroke="${VIEN}" stroke-width="2" stroke-linecap="round"/>
+  <path class="tt-luoi" d="M60 76h10v6a5 5 0 0 1-10 0z" fill="#F28BA8" stroke="${VIEN}" stroke-width="1.8"/>
+  <ellipse cx="38" cy="66" rx="6" ry="4" fill="#F28BA8" opacity=".6"/><ellipse cx="92" cy="66" rx="6" ry="4" fill="#F28BA8" opacity=".6"/>
+  <ellipse cx="36" cy="92" rx="13" ry="8" fill="#E9B872" stroke="${VIEN}" stroke-width="2.5"/><ellipse cx="94" cy="92" rx="13" ry="8" fill="#E9B872" stroke="${VIEN}" stroke-width="2.5"/>
+  <path d="M32 90v5M38 90v5M90 90v5M96 90v5" stroke="${VIEN}" stroke-width="1.8" stroke-linecap="round"/>
+</svg>`;
+
+const TIM = '#D9B3DC', CAM = '#FFC9A3', CAM_DAM = '#F7A46E', TIM_DAM = '#B98AD3';
+type Hinh = { svg: string; c: string; s?: string };
+const BO: Record<string, Hinh[]> = {
+  hero: [
+    { svg: chan(CAM_DAM), c: 'tt-noi tt-xoay', s: 'top:28px;left:2%;width:62px;--tre:0s' },
+    { svg: chan(TIM), c: 'tt-noi', s: 'top:150px;left:5%;width:40px;--tre:-1.2s' },
+    { svg: tim('#F7B5C9'), c: 'tt-noi an-dt', s: 'top:46px;left:46%;width:35px;--tre:-2s' },
+    { svg: len, c: 'tt-noi tt-xoay', s: 'top:24px;right:3%;width:84px;--tre:-.6s' },
+    { svg: xuong, c: 'tt-noi an-dt', s: 'bottom:70px;left:40%;width:94px;--tre:-1.8s' },
+    { svg: chan(CAM), c: 'tt-noi an-dt', s: 'bottom:84px;right:2%;width:49px;--tre:-2.6s' },
+    { svg: cho, c: 'tt-lo', s: 'bottom:22px;left:1.5%;width:159px' },
+  ],
+  've': [
+    { svg: chan(CAM_DAM), c: 'tt-buoc', s: 'top:8%;right:2%;width:40px;--tre:0s' },
+    { svg: chan(CAM_DAM), c: 'tt-buoc', s: 'top:20%;right:5%;width:40px;--tre:.5s' },
+    { svg: chan(CAM_DAM), c: 'tt-buoc', s: 'top:32%;right:2.5%;width:40px;--tre:1s' },
+    { svg: chan(CAM_DAM), c: 'tt-buoc', s: 'top:44%;right:5.5%;width:40px;--tre:1.5s' },
+    { svg: tim('#F7B5C9'), c: 'tt-noi an-dt', s: 'bottom:12%;left:1.5%;width:38px;--tre:-1s' },
+  ],
+  'cam-nang': [
+    { svg: meo, c: 'tt-lo tt-lo-tren', s: 'top:-84px;right:6%;width:162px' },
+    { svg: len, c: 'tt-noi tt-xoay an-dt', s: 'bottom:40px;left:1.5%;width:70px;--tre:-1s' },
+    { svg: chan(TIM_DAM), c: 'tt-noi', s: 'top:36px;left:42%;width:40px;--tre:-2.2s' },
+  ],
+  'ca-benh': [
+    { svg: cho, c: 'tt-lo tt-lo-tren', s: 'top:-90px;left:5%;width:130px' },
+    { svg: chan(TIM_DAM), c: 'tt-buoc an-dt', s: 'top:30%;right:2%;width:36px;--tre:0s' },
+    { svg: chan(TIM_DAM), c: 'tt-buoc an-dt', s: 'top:45%;right:5%;width:36px;--tre:.5s' },
+    { svg: chan(TIM_DAM), c: 'tt-buoc an-dt', s: 'top:60%;right:2%;width:36px;--tre:1s' },
+  ],
+  'dich-vu': [
+    { svg: xuong, c: 'tt-noi tt-xoay', s: 'top:40px;right:3%;width:103px;--tre:-.4s' },
+    { svg: chan(CAM_DAM), c: 'tt-noi an-dt', s: 'bottom:48px;left:2%;width:49px;--tre:-1.6s' },
+    { svg: tim(TIM), c: 'tt-noi an-dt', s: 'top:56px;left:38%;width:32px;--tre:-2.4s' },
+  ],
+  'dau-trang': [
+    { svg: chan(CAM_DAM), c: 'tt-noi tt-xoay', s: 'top:26px;right:6%;width:59px;--tre:0s' },
+    { svg: len, c: 'tt-noi tt-xoay an-dt', s: 'bottom:64px;right:18%;width:73px;--tre:-1.4s' },
+    { svg: chan(TIM), c: 'tt-noi an-dt', s: 'top:90px;right:28%;width:38px;--tre:-2.2s' },
+  ],
+};
+---
+<div class="tt" aria-hidden="true">
+  {BO[kieu].map((h) => <span class={`tt-h ${h.c}`} style={h.s} set:html={h.svg} />)}
+</div>

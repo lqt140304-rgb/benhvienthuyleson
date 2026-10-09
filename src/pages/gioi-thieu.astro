@@ -1,4 +1,5 @@
 ---
+import TrangTri from '../components/TrangTri.astro';
 import { marked } from 'marked';
 import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
@@ -11,7 +12,7 @@ const gioiThieu = tt.gioi_thieu ? await marked.parse(tt.gioi_thieu) : '';
 const bacSi = bs.danh_sach.length > 0 ? bs.danh_sach : null;
 ---
 <Layout title="Giới thiệu bệnh viện" description={`Giới thiệu ${tt.ten}: đội ngũ bác sĩ, cơ sở vật chất, dịch vụ khám chữa bệnh cho chó mèo tại ${tt.dia_chi}.`}>
-  <section class="pagehead"><div class="wrap">
+  <section class="pagehead"><TrangTri kieu="dau-trang" /><div class="wrap">
     <nav class="crumb" aria-label="Đường dẫn"><a href={u('/')}>Trang chủ</a><span aria-hidden="true">›</span><span>Giới thiệu</span></nav>
     <h1>{tt.ten}</h1>
     <p class="lead">{tt.gioi_thieu_ngan || `Bệnh viện thú y chuyên chó mèo tại ${tt.dia_chi}.`}</p>

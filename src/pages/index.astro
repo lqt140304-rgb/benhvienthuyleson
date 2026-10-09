@@ -3,91 +3,93 @@ import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
 import PostCard from '../components/PostCard.astro';
 import CaseCard from '../components/CaseCard.astro';
+import TrangTri from '../components/TrangTri.astro';
 import tt from '../data/thong_tin.json';
-import { u, ngay, baiTuVan, caBenh, dsDichVu } from '../lib/site';
-const dv = { danh_sach: dsDichVu() };
+import { u, ngay, neo, giaTu, baiTuVan, caBenh, dsDichVu } from '../lib/site';
+const dv = dsDichVu();
 
 const bai = await baiTuVan();
-const noiBat = bai.find((b) => b.data.noi_bat) ?? bai[0];
-const moiDang = bai.filter((b) => b !== noiBat).slice(0, 4);
-const cho = bai.filter((b) => b.data.chuyen_muc === 'Chó').slice(0, 2);
-const meo = bai.filter((b) => b.data.chuyen_muc === 'Mèo').slice(0, 2);
+const noiBat = bai.find((b) => b.data.noi_bat);
+const moiDang = bai.filter((b) => b !== noiBat).slice(0, 3);
+const soBai = (loai: string) => bai.filter((b) => b.data.chuyen_muc === loai).length;
 const ca = (await caBenh()).slice(0, 4);
 ---
 <Layout cam="trang_chu">
 
-<section class="s-tight">
-  <div class="wrap feature">
-    <div class="feature-main">
+<section class="hero">
+  <TrangTri kieu="hero" />
+  <div class="wrap hero-in">
+    <div class="hero-main">
       {noiBat ? (
         <a class="feat" href={u(`/tu-van/${noiBat.id}/`)}>
-          {noiBat.data.image
-            ? <img class="anh" src={u(noiBat.data.image)} alt="" width="1200" height="675" fetchpriority="high">
-            : <div class="anh cho-trong" aria-hidden="true">{noiBat.data.chuyen_muc}</div>}
-          <span class={`kicker${noiBat.data.chuyen_muc === 'Chó' ? ' cho' : ''}`}>{noiBat.data.chuyen_muc}</span>
+          {noiBat.data.image && <img class="anh" src={u(noiBat.data.image)} alt="" width="1200" height="675" fetchpriority="high">}
+          <span class={`kicker${noiBat.data.chuyen_muc === 'Chó' ? ' cho' : ''}`}>Bài nổi bật · {noiBat.data.chuyen_muc}</span>
           <h1>{noiBat.data.title}</h1>
-          {noiBat.data.description && <p class="lead" style="margin:0">{noiBat.data.description}</p>}
+          {noiBat.data.description && <p class="lead">{noiBat.data.description}</p>}
           <span class="muted">{noiBat.data.tac_gia ? `${noiBat.data.tac_gia} · ` : ''}{ngay(noiBat.data.date)}</span>
         </a>
       ) : (
-        <div class="feat">
+        <>
           <span class="kicker">Bệnh viện thú y · Thanh Xuân, Hà Nội</span>
           <h1>Chăm sóc chó mèo tận tâm, như người nhà</h1>
-          <p class="lead">Khám chữa bệnh, tiêm phòng, phẫu thuật, spa và nội trú cho chó mèo. Các bài tư vấn của bác sĩ đang được chuẩn bị và sẽ sớm có mặt tại đây.</p>
-          <div class="dv-nut"><a class="btn btn-cta" href={u('/dat-lich/')}>Đặt lịch khám</a><a class="btn btn-line" href={`tel:${tt.dien_thoai_goi}`}><Icon name="phone" />{tt.dien_thoai}</a></div>
-        </div>
+          <p class="lead">Khám chữa bệnh, tiêm phòng, phẫu thuật, spa và nội trú cho chó mèo. Mở cửa {tt.gio_mo_cua}, trực cấp cứu 24/24.</p>
+        </>
       )}
-    </div>
-    <aside class="feature-side">
-      {moiDang.length > 0 && (
-        <div>
-          <h2 class="side-h">Mới đăng</h2>
-          <div class="side-list">
-            {moiDang.map((b) => (
-              <a href={u(`/tu-van/${b.id}/`)}><span class={`kicker${b.data.chuyen_muc === 'Chó' ? ' cho' : ''}`}>{b.data.chuyen_muc}</span><b>{b.data.title}</b></a>
-            ))}
-          </div>
-        </div>
-      )}
-      <div class="box-tim">
-        <h2>Bé cần khám?</h2>
-        <p>Đặt lịch online hoặc nhắn Zalo. Bệnh viện sẽ gọi lại xác nhận.</p>
-        <a class="btn btn-cta" href={u('/dat-lich/')}>Đặt lịch khám</a>
-        {tt.zalo && <a class="btn btn-trang" href={tt.zalo} target="_blank" rel="noopener">Nhắn Zalo</a>}
-        <p style="font-size:15px">Cấp cứu 24/24: <a href={`tel:${tt.dien_thoai_goi}`} style="color:#FFC9A6;font-weight:800">{tt.dien_thoai}</a></p>
+      <div class="dv-nut">
+        <a class="btn btn-cta" href={u('/dat-lich/')}><Icon name="calendar" />Đặt lịch khám</a>
+        <a class="btn btn-line" href={`tel:${tt.dien_thoai_goi}`}><Icon name="phone" />{tt.dien_thoai}</a>
       </div>
+    </div>
+    <aside class="box-tim">
+      <h2>Đặt lịch trong 3 bước</h2>
+      <ol class="buoc">
+        <li><span>1</span>Chọn dịch vụ, giờ hẹn trên web hoặc nhắn Zalo. Web tính sẵn hoá đơn tham khảo.</li>
+        <li><span>2</span>Nhân viên gọi lại xác nhận lịch.</li>
+        <li><span>3</span>Đưa bé đến {tt.dia_chi.split(',')[0]} đúng giờ hẹn.</li>
+      </ol>
+      {tt.zalo && <a class="btn btn-trang" href={tt.zalo} target="_blank" rel="noopener"><Icon name="chat" />Nhắn Zalo</a>}
+      <p class="cc">Cấp cứu 24/24: <a href={`tel:${tt.dien_thoai_goi}`}>{tt.dien_thoai}</a></p>
     </aside>
   </div>
 </section>
 
-<section class="s">
-  <div class="wrap cols2" style="align-items:center">
+<section class="s co-tt">
+  <TrangTri kieu="ve" />
+  <div class="wrap ve">
     {tt.anh_tap_the
-      ? <img src={u(tt.anh_tap_the)} alt={`Đội ngũ ${tt.ten}`} loading="lazy" width="600" height="400" style="aspect-ratio:3/2;object-fit:cover;width:100%">
-      : <div class="cho-trong" style="aspect-ratio:3/2">Ảnh tập thể bác sĩ, nhân viên (đang cập nhật)</div>}
+      ? <img class="ve-anh" src={u(tt.anh_tap_the)} alt={`Đội ngũ ${tt.ten}`} loading="lazy" width="600" height="450">
+      : <div class="ve-anh cho-trong">Ảnh tập thể bác sĩ, nhân viên (đang cập nhật)</div>}
     <div>
       <span class="kicker">Về chúng tôi</span>
-      <h2 style="font-size:32px;margin:6px 0 12px">{tt.ten}</h2>
+      <h2>{tt.ten}</h2>
       <p class="muted">{tt.gioi_thieu_ngan || `Bệnh viện thú y chuyên chó mèo tại ${tt.dia_chi}. Mở cửa ${tt.gio_mo_cua} hằng ngày và trực cấp cứu 24/24.`}</p>
+      <ul class="chip">
+        <li>Trực cấp cứu 24/24</li>
+        <li>Siêu âm · X-quang · Xét nghiệm</li>
+        <li>Spa & nội trú</li>
+        {tt.so_nam_hoat_dong && <li>{tt.so_nam_hoat_dong} năm hoạt động</li>}
+      </ul>
       <a class="btn btn-line" href={u('/gioi-thieu/')}>Xem thêm về bệnh viện <Icon name="arrow" size={18} /></a>
     </div>
   </div>
 </section>
 
-<section class="s">
-  <div class="wrap cols2">
-    {[{ ten: 'Chó', ds: cho, href: '/tu-van/cho/' }, { ten: 'Mèo', ds: meo, href: '/tu-van/meo/' }].map((m) => (
-      <div>
-        <div class="sh"><h2>{m.ten}</h2><a href={u(m.href)}>Xem tất cả <Icon name="arrow" size={16} /></a></div>
-        {m.ds.length > 0
-          ? <div class="grid2">{m.ds.map((b) => <PostCard bai={b} />)}</div>
-          : <p class="empty">Bài viết về {m.ten.toLowerCase()} đang được bác sĩ chuẩn bị.</p>}
-      </div>
-    ))}
+<section class="s s-tim co-tt">
+  <TrangTri kieu="cam-nang" />
+  <div class="wrap">
+    <div class="sh"><h2>Cẩm nang thú cưng</h2><a href={u('/tu-van/')}>Xem tất cả <Icon name="arrow" size={16} /></a></div>
+    <div class="loai">
+      <a href={u('/tu-van/cho/')}><span class="loai-ic cho"><Icon name="dog" size={44} /></span><span><h3>Chó</h3><span>{soBai('Chó') ? `${soBai('Chó')} bài · ` : ''}Phòng bệnh, dinh dưỡng, dấu hiệu cần đi khám.</span></span></a>
+      <a href={u('/tu-van/meo/')}><span class="loai-ic"><Icon name="cat" size={44} /></span><span><h3>Mèo</h3><span>{soBai('Mèo') ? `${soBai('Mèo')} bài · ` : ''}Chăm sóc mèo con, mèo trưởng thành, tiêm phòng, triệt sản.</span></span></a>
+    </div>
+    {moiDang.length > 0
+      ? <div class="grid3" style="margin-top:28px">{moiDang.map((b) => <PostCard bai={b} />)}</div>
+      : <p class="empty" style="margin-top:28px">Bài viết đang được bác sĩ chuẩn bị và sẽ sớm có mặt tại đây.</p>}
   </div>
 </section>
 
-<section class="s s-tim">
+<section class="s co-tt">
+  <TrangTri kieu="ca-benh" />
   <div class="wrap">
     <div class="sh"><h2>Nhật ký ca bệnh</h2><a href={u('/nhat-ky-ca-benh/')}>Xem tất cả <Icon name="arrow" size={16} /></a></div>
     {ca.length > 0
@@ -96,11 +98,19 @@ const ca = (await caBenh()).slice(0, 4);
   </div>
 </section>
 
-<section class="s">
+<section class="s s-cam co-tt">
+  <TrangTri kieu="dich-vu" />
   <div class="wrap">
-    <div class="sh"><h2>Dịch vụ tại bệnh viện</h2><a href={u('/dich-vu/')}>Bảng giá <Icon name="arrow" size={16} /></a></div>
+    <div class="sh"><h2>Dịch vụ tại bệnh viện</h2><a href={u('/dich-vu/')}>Bảng giá đầy đủ <Icon name="arrow" size={16} /></a></div>
     <div class="dv-list">
-      {dv.danh_sach.map((d) => <div class={d.cap_cuu ? 'cc' : ''}><b>{d.ten}</b><span>{d.mo_ta}</span></div>)}
+      {dv.map((d) => (
+        <a class={d.cap_cuu ? 'cc' : ''} href={u(`/dich-vu/#${neo(d.ten)}`)}>
+          <span class="dv-ic"><Icon name={d.icon} size={24} /></span>
+          <b>{d.ten}</b>
+          <span>{d.mo_ta}</span>
+          <span class="dv-gia">{d.cap_cuu ? `Gọi ${tt.dien_thoai}` : giaTu(d) || 'Xem bảng giá'}</span>
+        </a>
+      ))}
     </div>
   </div>
 </section>

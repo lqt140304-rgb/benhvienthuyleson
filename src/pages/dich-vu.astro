@@ -1,4 +1,5 @@
 ---
+import TrangTri from '../components/TrangTri.astro';
 import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
 import tt from '../data/thong_tin.json';
@@ -7,7 +8,7 @@ import { u, gia, neo, dsDichVu } from '../lib/site';
 const dv = { danh_sach: dsDichVu() };
 ---
 <Layout title="Dịch vụ và bảng giá" description={`Bảng giá khám, xét nghiệm, tắm, cắt tỉa, triệt sản, gửi nội trú cho chó mèo tại ${tt.ten}.`} cam="dich_vu">
-  <section class="pagehead"><div class="wrap">
+  <section class="pagehead"><TrangTri kieu="dau-trang" /><div class="wrap">
     <nav class="crumb" aria-label="Đường dẫn"><a href={u('/')}>Trang chủ</a><span aria-hidden="true">›</span><span>Dịch vụ & bảng giá</span></nav>
     <h1>Dịch vụ và bảng giá</h1>
     <p class="lead">Giá tham khảo; chưa gồm thuốc, vật tư phát sinh. Khi đặt lịch online, web tự tính hoá đơn tham khảo kèm phụ phí (nếu có).</p>

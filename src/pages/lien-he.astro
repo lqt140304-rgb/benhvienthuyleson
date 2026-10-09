@@ -1,4 +1,5 @@
 ---
+import TrangTri from '../components/TrangTri.astro';
 import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
 import tt from '../data/thong_tin.json';
@@ -6,7 +7,7 @@ import { u } from '../lib/site';
 const banDo = 'https://www.google.com/maps?q=' + encodeURIComponent('Bệnh viện thú y Lê Sơn, ' + tt.dia_chi) + '&output=embed';
 ---
 <Layout title="Liên hệ" description={`Địa chỉ ${tt.ten}: ${tt.dia_chi}. Điện thoại ${tt.dien_thoai}. Mở cửa ${tt.gio_mo_cua}, trực cấp cứu 24/24.`}>
-  <section class="pagehead"><div class="wrap">
+  <section class="pagehead"><TrangTri kieu="dau-trang" /><div class="wrap">
     <nav class="crumb" aria-label="Đường dẫn"><a href={u('/')}>Trang chủ</a><span aria-hidden="true">›</span><span>Liên hệ</span></nav>
     <h1>Liên hệ và chỉ đường</h1>
   </div></section>

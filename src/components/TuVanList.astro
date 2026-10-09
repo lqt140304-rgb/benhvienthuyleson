@@ -1,4 +1,5 @@
 ---
+import TrangTri from './TrangTri.astro';
 // Danh sách bài tư vấn, dùng chung cho /tu-van/, /tu-van/cho/, /tu-van/meo/
 import Layout from '../layouts/Layout.astro';
 import PostCard from './PostCard.astro';
@@ -10,7 +11,7 @@ const tieuDe = loai ? `Cẩm nang chăm sóc ${loai.toLowerCase()}` : 'Cẩm nan
 const tabs = [{ ten: 'Tất cả', href: '/tu-van/', on: !loai }, { ten: 'Chó', href: '/tu-van/cho/', on: loai === 'Chó' }, { ten: 'Mèo', href: '/tu-van/meo/', on: loai === 'Mèo' }];
 ---
 <Layout title={tieuDe} description={`Bài tư vấn ${loai ? 'chăm sóc ' + loai.toLowerCase() : 'chăm sóc chó mèo'} do bác sĩ Bệnh viện thú y Lê Sơn biên soạn: phòng bệnh, dinh dưỡng, dấu hiệu cần đi khám.`} cam="trang_khac">
-  <section class="pagehead"><div class="wrap">
+  <section class="pagehead"><TrangTri kieu="dau-trang" /><div class="wrap">
     <nav class="crumb" aria-label="Đường dẫn"><a href={u('/')}>Trang chủ</a><span aria-hidden="true">›</span>{loai ? <><a href={u('/tu-van/')}>Cẩm nang thú cưng</a><span aria-hidden="true">›</span><span>{loai}</span></> : <span>Cẩm nang thú cưng</span>}</nav>
     <h1>{tieuDe}</h1>
     <p class="lead">Kiến thức chăm sóc do bác sĩ bệnh viện biên soạn, viết dễ hiểu cho chủ nuôi.</p>

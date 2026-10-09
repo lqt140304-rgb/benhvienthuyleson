@@ -1,4 +1,5 @@
 ---
+import TrangTri from '../components/TrangTri.astro';
 // Đặt lịch: cách A (form → Google Sheet + email, kèm hoá đơn tham khảo) và cách C (nhắn Zalo)
 import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
@@ -12,7 +13,7 @@ const duLieu = JSON.stringify({ nhom, pp }).replace(/</g, '\\u003c');
 const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết mức';
 ---
 <Layout title="Đặt lịch khám" description={`Đặt lịch khám, tắm, cắt tỉa, triệt sản, gửi nội trú cho chó mèo tại ${tt.ten}. Xem trước hoá đơn tham khảo.`} cam="dat_lich">
-  <section class="pagehead"><div class="wrap">
+  <section class="pagehead"><TrangTri kieu="dau-trang" /><div class="wrap">
     <nav class="crumb" aria-label="Đường dẫn"><a href={u('/')}>Trang chủ</a><span aria-hidden="true">›</span><span>Đặt lịch</span></nav>
     <h1>Đặt lịch cho bé</h1>
     <p class="lead">Chọn dịch vụ và giờ hẹn, web tự tính hoá đơn tham khảo. Nhân viên sẽ gọi lại để xác nhận.</p>

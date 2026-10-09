@@ -74,3 +74,10 @@ export function dsDichVu(): NhomDV[] {
     };
   });
 }
+
+/** Giá thấp nhất của một nhóm dịch vụ, dạng "từ 85.000đ" (rỗng nếu chưa có giá) */
+export function giaTu(d: NhomDV): string {
+  const ds = [...d.bang.dong.flatMap((r) => r.gia), ...d.hang_muc.map((h) => h.gia)];
+  const so = ds.map((g) => { const m = (g || '').match(/\d{1,3}(?:\.\d{3})+|\d+/); return m ? parseInt(m[0].replace(/\./g, ''), 10) : 0; }).filter((n) => n > 0);
+  return so.length ? `từ ${Math.min(...so).toLocaleString('vi-VN').replace(/,/g, '.')}đ` : '';
+}

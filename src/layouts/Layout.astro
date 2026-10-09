@@ -68,31 +68,31 @@ const schema = {
 <link rel="sitemap" href={u('/sitemap-index.xml')}>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script type="application/ld+json" set:html={JSON.stringify(schema)}></script>
 </head>
 <body>
 <a class="skip" href="#noi-dung">Bỏ qua menu</a>
 
+<div class="head-top">
+  <div class="wrap head-top-in">
+    <span class="head-info"><Icon name="clock" size={16} />Mở cửa {tt.gio_mo_cua} hằng ngày · Trực cấp cứu 24/24</span>
+    <a href={`tel:${tt.dien_thoai_goi}`}><Icon name="phone" size={16} />{tt.dien_thoai}</a>
+  </div>
+</div>
 <header class="head">
-  <div class="wrap">
-    <div class="head-top">
-      <span class="head-info"><Icon name="clock" size={16} />Mở cửa {tt.gio_mo_cua} · Trực cấp cứu 24/24 · <a href={`tel:${tt.dien_thoai_goi}`}>{tt.dien_thoai}</a></span>
-      <a class="btn btn-cta btn-sm head-cta" href={u('/dat-lich/')}><Icon name="calendar" size={18} />Đặt lịch khám</a>
-    </div>
-    <div class="masthead">
-      <a class="brand" href={u('/')}>
-        <img src={u('/img/logo.jpg')} alt="" width="56" height="56">
-        <span class="brand-name">Bệnh viện thú y Lê Sơn</span>
-      </a>
-      <span class="brand-tag">Kiến thức chăm sóc chó mèo từ bác sĩ thú y</span>
-      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu-chinh" data-menu>
-        <Icon name="menu" size={22} /><span>Menu</span>
-      </button>
-    </div>
+  <div class="wrap head-in">
+    <a class="brand" href={u('/')}>
+      <img src={u('/img/logo.jpg')} alt="" width="56" height="56">
+      <span class="brand-name">Bệnh viện thú y Lê Sơn<small class="brand-tag">101 Khuất Duy Tiến · Thanh Xuân</small></span>
+    </a>
     <nav class="nav" id="menu-chinh" aria-label="Menu chính">
       {menu.map((m) => <a href={u(m.href)} aria-current={dangO(m.href) ? 'page' : undefined}>{m.ten}</a>)}
     </nav>
+    <a class="btn btn-cta head-cta" href={u('/dat-lich/')}><Icon name="calendar" size={18} />Đặt lịch khám</a>
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu-chinh" data-menu>
+      <Icon name="menu" size={22} /><span>Menu</span>
+    </button>
   </div>
 </header>
 
@@ -140,13 +140,22 @@ const schema = {
   // Hiện dần các khối nội dung khi khách cuộn tới; thẻ cùng hàng hiện lần lượt
   (function () {
     if (!document.documentElement.classList.contains('js')) return;
-    var ds = document.querySelectorAll('main .sh, main .card, main .dv, main .dv-list > div, main .cols2 > *, main .empty, main .bang-wrap, main .pagehead, main .lo-hien');
+    var ds = document.querySelectorAll('main .sh, main .card, main .dv, main .dv-list > *, main .loai > a, main .ve > *, main .cols2 > *, main .empty, main .bang-wrap, main .so-lieu > div, main .lo-hien');
     var io = new IntersectionObserver(function (es) {
       es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('hien'); io.unobserve(e.target); } });
     }, { rootMargin: '0px 0px -8% 0px' });
+    // Cuộn nhanh có thể bỏ qua khối: khối nào đã nằm trên mép dưới màn hình thì cho hiện luôn
+    var cho = false;
+    addEventListener('scroll', function () {
+      if (cho) return; cho = true;
+      setTimeout(function () {
+        cho = false;
+        document.querySelectorAll('.lo:not(.hien)').forEach(function (el) { if (el.getBoundingClientRect().top < innerHeight) { el.classList.add('hien'); io.unobserve(el); } });
+      }, 150);
+    }, { passive: true });
     ds.forEach(function (el) {
-      if (el.closest('.s-tight') || el.parentElement.closest('.lo')) return;
-      var anh = el.parentElement ? Array.prototype.filter.call(el.parentElement.children, function (c) { return c.matches('.card, .dv-list > div, .cols2 > *'); }) : [];
+      if (el.closest('.hero') || el.parentElement.closest('.lo')) return;
+      var anh = el.parentElement ? Array.prototype.filter.call(el.parentElement.children, function (c) { return c.matches('.card, .dv-list > *, .loai > a, .cols2 > *, .so-lieu > div'); }) : [];
       var i = anh.indexOf(el);
       if (i > 0) el.style.transitionDelay = (i % 4) * 90 + 'ms';
       el.classList.add('lo');
