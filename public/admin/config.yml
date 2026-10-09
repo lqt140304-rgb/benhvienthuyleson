@@ -139,6 +139,7 @@ collections:
                   - { label: "Phụ phí tắm", value: spa_tam }
                   - { label: "Phụ phí cắt tỉa / cạo", value: spa_cat }
               - { label: Tính phụ phí ngày lễ, name: ngay_le, widget: boolean, default: false, required: false }
+              - { label: "Tính theo số ngày (nội trú: hỏi thêm ngày đón, giờ đón)", name: theo_ngay, widget: boolean, default: false, required: false }
               - { label: "Là mục cấp cứu (hiện nút gọi và phụ phí ngoài giờ)", name: cap_cuu, widget: boolean, default: false, required: false }
               - label: "Bảng giá theo cân nặng (để trống nếu không dùng)"
                 name: bang

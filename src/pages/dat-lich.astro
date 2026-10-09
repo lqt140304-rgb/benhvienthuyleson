@@ -39,6 +39,11 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết 
               <label><input type="radio" name="thu_cung" value="Mèo"> Mèo</label>
               <label><input type="radio" name="thu_cung" value="Khác"> Khác</label>
             </div>
+            <div id="o-loai" style="margin-top:12px" hidden>
+              <label for="f-loai">Loài nào? <span class="bb" aria-hidden="true">*</span></label>
+              <input id="f-loai" maxlength="40" placeholder="Ví dụ: thỏ, hamster, chim…" aria-describedby="e-loai">
+              <p class="loi" id="e-loai" hidden>Vui lòng ghi loài thú cưng.</p>
+            </div>
           </fieldset>
           <div class="f">
             <label for="f-nhom">Nhóm dịch vụ <span class="bb" aria-hidden="true">*</span></label>
@@ -61,15 +66,26 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết 
             <p class="loi" id="e-kg" hidden>Vui lòng chọn cân nặng để tính giá.</p>
           </div>
           <div class="f">
-            <label for="f-ngay">Ngày muốn đến <span class="bb" aria-hidden="true">*</span></label>
+            <label for="f-ngay" id="l-ngay">Ngày đến <span class="bb" aria-hidden="true">*</span></label>
             <input id="f-ngay" name="ngay" type="date" required aria-describedby="e-ngay">
             <p class="loi" id="e-ngay" hidden>Vui lòng chọn ngày từ hôm nay trở đi.</p>
           </div>
           <div class="f">
-            <label for="f-gio">Giờ muốn đến <span class="bb" aria-hidden="true">*</span></label>
+            <label for="f-gio" id="l-gio">Giờ đến <span class="bb" aria-hidden="true">*</span></label>
             <input id="f-gio" name="gio" type="time" required aria-describedby="e-gio g-gio" value="09:00">
-            <p class="goi-y" id="g-gio">Nhận lịch 8:00 – 21:00 (spa đến {pp.spa_nhan_den}).</p>
+            <p class="goi-y" id="g-gio" data-spa={`Spa nhận lịch online 8:00 – ${pp.spa_nhan_den}.`}>Nhận lịch 8:00 – 21:00.</p>
             <p class="loi" id="e-gio" hidden>Vui lòng chọn giờ.</p>
+          </div>
+          <div class="f" id="o-ngay-don" hidden>
+            <label for="f-ngay-don">Ngày đón <span class="bb" aria-hidden="true">*</span></label>
+            <input id="f-ngay-don" type="date" aria-describedby="e-ngay-don">
+            <p class="loi" id="e-ngay-don" hidden>Ngày đón phải từ ngày gửi trở đi.</p>
+          </div>
+          <div class="f" id="o-gio-don" hidden>
+            <label for="f-gio-don">Giờ đón <span class="bb" aria-hidden="true">*</span></label>
+            <input id="f-gio-don" type="time" value="17:00" aria-describedby="e-gio-don">
+            <p class="goi-y">Đón trong giờ 8:00 – 21:00.</p>
+            <p class="loi" id="e-gio-don" hidden>Vui lòng chọn giờ đón trong khoảng 8:00 – 21:00.</p>
           </div>
 
           <div class="full ngoai-gio" id="ngoai-gio" role="alert" hidden>
@@ -152,7 +168,7 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết 
   // Form đặt lịch: kiểm tra dữ liệu, tính hoá đơn tham khảo + phụ phí tự động, gửi tới Google Apps Script
   type Gia = { tu: string; den: string; gia: string };
   type Nhom = {
-    id: string; ten: string; spa: boolean; phu_phi_gio: string; ngay_le: boolean;
+    id: string; ten: string; spa: boolean; phu_phi_gio: string; ngay_le: boolean; theo_ngay: boolean;
     bang: { cot: string[]; dong: { nhan: string; gia: string[] }[] };
     hang_muc: { ten: string; gia: string; ghi_chu: string; phu_phi?: string }[];
   };
@@ -190,6 +206,13 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết 
     const selNhom = $<HTMLSelectElement>('f-nhom'), selDv = $<HTMLSelectElement>('f-dv'), selKg = $<HTMLSelectElement>('f-kg');
     const ngay = $<HTMLInputElement>('f-ngay'), gio = $<HTMLInputElement>('f-gio'), gui = $<HTMLButtonElement>('gui');
     const tb = $<HTMLDialogElement>('tb-phu-phi');
+    const ngayDon = $<HTMLInputElement>('f-ngay-don'), gioDon = $<HTMLInputElement>('f-gio-don'), loai = $<HTMLInputElement>('f-loai');
+    const thuCung = () => (form.querySelector('input[name="thu_cung"]:checked') as HTMLInputElement | null)?.value || '';
+    const soNgay = () => {
+      if (!ngay.value || !ngayDon.value) return 0;
+      return Math.max(1, Math.round((Date.parse(ngayDon.value) - Date.parse(ngay.value)) / 86400000));
+    };
+    const ddmm = (v: string) => v.split('-').reverse().join('/');
     ngay.min = homNay();
     if (!ngay.value) ngay.value = homNay();
 
@@ -228,7 +251,14 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết 
         const j = +v.slice(1);
         const r = selKg.value === '' ? null : n.bang.dong[+selKg.value];
         chinh = n.bang.cot.length === 1 ? n.ten : `${n.ten} – ${n.bang.cot[j]}`;
-        if (r) { kg = r.nhan; dong.push({ ten: `${chinh} · ${r.nhan}`, tien: so(r.gia[j]), chu: hienGia(r.gia[j]) }); }
+        if (r && n.theo_ngay) {
+          kg = r.nhan;
+          const sn = soNgay(), g = so(r.gia[j]);
+          dong.push(sn && g !== null
+            ? { ten: `${chinh} · ${r.nhan} · ${sn} ngày × ${hienGia(r.gia[j])}`, tien: g * sn, chu: tien(g * sn) }
+            : { ten: `${chinh} · ${r.nhan}`, tien: null, chu: 'Chọn ngày đón' });
+          if (sn > 5) dong.push({ ten: 'Gửi trên 5 ngày được giảm giá theo bảng, nhân viên báo khi xác nhận', tien: null, chu: 'Có giảm giá' });
+        } else if (r) { kg = r.nhan; dong.push({ ten: `${chinh} · ${r.nhan}`, tien: so(r.gia[j]), chu: hienGia(r.gia[j]) }); }
         else dong.push({ ten: chinh, tien: null, chu: 'Chọn cân nặng' });
       } else {
         const h = n.hang_muc[+v.slice(1)];
@@ -254,6 +284,15 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết 
       const t = gio.value;
       const n = nhomDangChon();
       const ngoai = ngoaiGio(t);
+      const g = $('g-gio');
+      g.textContent = n?.spa ? (g.dataset.spa || '') : 'Nhận lịch 8:00 – 21:00.';
+      const noiTru = !!n?.theo_ngay;
+      $('o-ngay-don').hidden = !noiTru;
+      $('o-gio-don').hidden = !noiTru;
+      $('l-ngay').firstChild!.textContent = noiTru ? 'Ngày gửi ' : 'Ngày đến ';
+      $('l-gio').firstChild!.textContent = noiTru ? 'Giờ gửi ' : 'Giờ đến ';
+      ngayDon.min = ngay.value || homNay();
+      $('o-loai').hidden = thuCung() !== 'Khác';
       const spaMuon = !ngoai && !!n?.spa && !!t && phut(t) >= SPA_DEN;
       $('ngoai-gio').hidden = !ngoai;
       $('spa-muon').hidden = !spaMuon;
@@ -281,7 +320,8 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết 
       const a = document.createElement('td'), b = document.createElement('td');
       a.textContent = 'Tổng tạm tính';
       const tu = /từ|–/.test(chinh.chu) ? 'từ ' : '';
-      b.textContent = chinh.tien === null ? (tong ? tien(tong) + ' + phí khám (báo sau)' : 'Báo sau') : tu + tien(tong);
+      const giam = hd.dong.some((d) => d.chu === 'Có giảm giá') ? ' (chưa trừ giảm giá)' : '';
+      b.textContent = chinh.tien === null ? (tong ? tien(tong) + ' + phí khám (báo sau)' : chinh.chu === 'Chọn ngày đón' ? 'Chọn ngày đón' : 'Báo sau') : tu + tien(tong) + giam;
       tr.append(a, b);
       body.append(tr);
 
@@ -314,6 +354,9 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết 
     gio.addEventListener('change', () => capNhat(true));
     gio.addEventListener('input', () => capNhat(false));
     ngay.addEventListener('change', () => capNhat(true));
+    ngayDon.addEventListener('change', () => capNhat(true));
+    gioDon.addEventListener('change', () => capNhat(true));
+    form.querySelectorAll('input[name="thu_cung"]').forEach((r) => r.addEventListener('change', () => { capNhat(false); if (thuCung() === 'Khác') loai.focus(); }));
 
     // Chọn sẵn nhóm khi đến từ trang Dịch vụ (?nhom=...)
     const nhomUrl = new URLSearchParams(location.search).get('nhom');
@@ -329,11 +372,15 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết 
       const loi = {
         ten: !ten.value.trim(), sdt: !sdtDung(sdt.value), nhom: !n, dv: !!n && !selDv.value,
         kg: canKg && selKg.value === '', ngay: !ngay.value || ngay.value < homNay(), gio: !gio.value,
+        loai: thuCung() === 'Khác' && !loai.value.trim(),
+        ngayDon: !!n?.theo_ngay && (!ngayDon.value || ngayDon.value < ngay.value),
+        gioDon: !!n?.theo_ngay && (!gioDon.value || ngoaiGio(gioDon.value)),
       };
+      baoLoi('e-loai', loi.loai, loai); baoLoi('e-ngay-don', loi.ngayDon, ngayDon); baoLoi('e-gio-don', loi.gioDon, gioDon);
       baoLoi('e-ten', loi.ten, ten); baoLoi('e-sdt', loi.sdt, sdt); baoLoi('e-nhom', loi.nhom, selNhom);
       baoLoi('e-dv', loi.dv, selDv); baoLoi('e-kg', loi.kg, selKg); baoLoi('e-ngay', loi.ngay, ngay); baoLoi('e-gio', loi.gio, gio);
       capNhat(false);
-      const dau = loi.ten ? ten : loi.sdt ? sdt : loi.nhom ? selNhom : loi.dv ? selDv : loi.kg ? selKg : loi.ngay ? ngay : loi.gio || gui.disabled ? gio : null;
+      const dau = loi.ten ? ten : loi.sdt ? sdt : loi.loai ? loai : loi.nhom ? selNhom : loi.dv ? selDv : loi.kg ? selKg : loi.ngay ? ngay : loi.gio || gui.disabled ? gio : loi.ngayDon ? ngayDon : loi.gioDon ? gioDon : null;
       if (dau) { dau.focus(); return; }
       if ($<HTMLInputElement>('f-web').value) return; // ô bẫy chống tin rác
 
@@ -346,9 +393,10 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết 
       const hd = tinh()!;
       const tongText = ($('hd-dong').lastElementChild?.lastElementChild?.textContent || '').trim();
       const hoaDon = hd.dong.map((d) => `${d.tuDong ? '[Tự động] ' : ''}${d.ten}: ${d.tuDong && d.tien ? '+' + tien(d.tien) : d.chu}`).join('\n');
-      const thuCung = (form.querySelector('input[name="thu_cung"]:checked') as HTMLInputElement | null)?.value || '';
+      const tc = thuCung() === 'Khác' ? `Khác (${loai.value.trim()})` : thuCung();
+      const don = n?.theo_ngay ? ` · đón ${ddmm(ngayDon.value)} lúc ${gioDon.value}` : '';
       const data = new URLSearchParams({
-        ten: ten.value.trim(), dien_thoai: sachSdt(sdt.value), thu_cung: thuCung, dich_vu: hd.chinh, can_nang: hd.kg,
+        ten: ten.value.trim(), dien_thoai: sachSdt(sdt.value), thu_cung: tc, dich_vu: hd.chinh + don, can_nang: hd.kg,
         ngay: ngay.value, gio: gio.value, ghi_chu: $<HTMLTextAreaElement>('f-ghichu').value.trim(),
         hoa_don: hoaDon, tong_tam_tinh: tongText, website: '',
       });
@@ -357,7 +405,7 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết 
         // Apps Script không cho đọc phản hồi từ web khác (no-cors); máy chủ kiểm tra lại dữ liệu.
         await fetch(diaChi, { method: 'POST', mode: 'no-cors', body: data });
         const [y, m, d] = ngay.value.split('-');
-        $('ok-text').textContent = `Cảm ơn ${ten.value.trim()}. Nhân viên sẽ gọi số ${sachSdt(sdt.value)} để xác nhận lịch ngày ${d}/${m}/${y} lúc ${gio.value}. Tổng tạm tính: ${tongText}.`;
+        $('ok-text').textContent = `Cảm ơn ${ten.value.trim()}. Nhân viên sẽ gọi số ${sachSdt(sdt.value)} để xác nhận lịch ngày ${d}/${m}/${y} lúc ${gio.value}${n?.theo_ngay ? `, đón ngày ${ddmm(ngayDon.value)} lúc ${gioDon.value}` : ''}. Tổng tạm tính: ${tongText}.`;
         form.hidden = true;
         $('ok').hidden = false;
         $('ok').focus();
@@ -373,6 +421,7 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết 
       form.reset();
       ngay.value = homNay();
       gio.value = '09:00';
+      gioDon.value = '17:00';
       daBao = '';
       doiNhom();
       $('ok').hidden = true;

@@ -49,7 +49,7 @@ export function neo(s: string): string {
 type HangMuc = { ten: string; gia: string; ghi_chu: string; phu_phi: string };
 export type NhomDV = {
   ten: string; icon: string; mo_ta: string; ghi_chu: string; cap_cuu: boolean; dat_lich: boolean; spa: boolean;
-  phu_phi_gio: string; ngay_le: boolean;
+  phu_phi_gio: string; ngay_le: boolean; theo_ngay: boolean;
   bang: { tieu_de_dong: string; cot: string[]; dong: { nhan: string; gia: string[] }[] };
   hang_muc: HangMuc[];
 };
@@ -61,7 +61,7 @@ export function dsDichVu(): NhomDV[] {
     return {
       ten: d.ten, icon: d.icon || 'stethoscope', mo_ta: d.mo_ta || '', ghi_chu: d.ghi_chu || '',
       cap_cuu: !!d.cap_cuu, dat_lich: d.dat_lich !== false && !d.cap_cuu, spa: !!d.spa,
-      phu_phi_gio: d.phu_phi_gio || '', ngay_le: !!d.ngay_le,
+      phu_phi_gio: d.phu_phi_gio || '', ngay_le: !!d.ngay_le, theo_ngay: !!d.theo_ngay,
       bang: {
         tieu_de_dong: d.bang?.tieu_de_dong || 'Cân nặng', cot,
         dong: (d.bang?.dong ?? []).filter((r: any) => r && r.nhan).map((r: any) => ({ nhan: r.nhan, gia: cot.map((_, j) => String(r.gia?.[j] ?? '')) })),

@@ -52,7 +52,8 @@
           "gia": "290.000",
           "ghi_chu": ""
         }
-      ]
+      ],
+      "theo_ngay": false
     },
     {
       "ten": "Xét nghiệm",
@@ -120,7 +121,8 @@
           "gia": "50.000",
           "ghi_chu": ""
         }
-      ]
+      ],
+      "theo_ngay": false
     },
     {
       "ten": "Tiêm phòng vaccine",
@@ -148,7 +150,8 @@
           "gia": "",
           "ghi_chu": ""
         }
-      ]
+      ],
+      "theo_ngay": false
     },
     {
       "ten": "Tắm",
@@ -258,7 +261,8 @@
           "gia": "105.000",
           "ghi_chu": ""
         }
-      ]
+      ],
+      "theo_ngay": false
     },
     {
       "ten": "Cắt tỉa và cạo lông (trọn gói)",
@@ -353,7 +357,8 @@
           }
         ]
       },
-      "hang_muc": []
+      "hang_muc": [],
+      "theo_ngay": false
     },
     {
       "ten": "Dịch vụ lẻ",
@@ -406,7 +411,8 @@
           "gia": "từ 410.000",
           "ghi_chu": ""
         }
-      ]
+      ],
+      "theo_ngay": false
     },
     {
       "ten": "Triệt sản (combo trọn gói)",
@@ -474,7 +480,8 @@
           }
         ]
       },
-      "hang_muc": []
+      "hang_muc": [],
+      "theo_ngay": false
     },
     {
       "ten": "Phẫu thuật",
@@ -497,7 +504,8 @@
           "gia": "",
           "ghi_chu": ""
         }
-      ]
+      ],
+      "theo_ngay": false
     },
     {
       "ten": "Gửi nội trú (khách sạn thú cưng)",
@@ -559,7 +567,8 @@
           }
         ]
       },
-      "hang_muc": []
+      "hang_muc": [],
+      "theo_ngay": true
     },
     {
       "ten": "Cấp cứu 24/24",
@@ -576,7 +585,8 @@
         "cot": [],
         "dong": []
       },
-      "hang_muc": []
+      "hang_muc": [],
+      "theo_ngay": false
     }
   ]
 }
