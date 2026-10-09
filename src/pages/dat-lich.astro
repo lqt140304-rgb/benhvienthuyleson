@@ -86,7 +86,7 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết 
             <input id="f-gio-don" type="time" value="17:00" aria-describedby="e-gio-don">
             <p class="loi" id="e-gio-don" hidden>Vui lòng chọn giờ đón.</p>
           </div>
-          <p class="full goi-y" id="g-noi-tru" style="margin:-6px 0 0" hidden>Tính theo 24 giờ: mỗi 24 giờ là 1 ngày; phần lẻ đến 12 giờ tính nửa ngày, trên 12 giờ tính 1 ngày.</p>
+          <p class="full goi-y" id="g-noi-tru" style="margin:-6px 0 0" hidden>Tính theo giờ thực tế: 24 giờ là 1 ngày, phần lẻ tính theo giờ (ví dụ 28 giờ = 1,2 ngày), tối thiểu 0,5 ngày.</p>
 
           <div class="full ngoai-gio" id="ngoai-gio" role="alert" hidden>
             <h2><Icon name="clock" />Giờ này ngoài giờ làm việc (8:00 – 21:00)</h2>
@@ -214,7 +214,7 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết 
     const tb = $<HTMLDialogElement>('tb-phu-phi');
     const ngayDon = $<HTMLInputElement>('f-ngay-don'), gioDon = $<HTMLInputElement>('f-gio-don'), loai = $<HTMLInputElement>('f-loai');
     const thuCung = () => (form.querySelector('input[name="thu_cung"]:checked') as HTMLInputElement | null)?.value || '';
-    // Nội trú tính theo 24 giờ: mỗi 24 giờ = 1 ngày; phần dư ≤ 12 giờ = nửa ngày, > 12 giờ = 1 ngày
+    // Nội trú tính theo giờ thật: số giờ ÷ 24, làm tròn 0,1 ngày, tối thiểu 0,5 ngày
     const soGio = () => {
       if (!ngay.value || !ngayDon.value || !gio.value || !gioDon.value) return 0;
       return (Date.parse(ngayDon.value + 'T' + gioDon.value + ':00Z') - Date.parse(ngay.value + 'T' + gio.value + ':00Z')) / 3600000;
@@ -222,8 +222,7 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết 
     const soNgay = () => {
       const h = soGio();
       if (h <= 0) return 0;
-      const ngayDu = Math.floor(h / 24), du = h - ngayDu * 24;
-      return ngayDu + (du === 0 ? 0 : du <= 12 ? 0.5 : 1);
+      return Math.max(0.5, Math.round((h / 24) * 10) / 10);
     };
     const soNgayChu = (n: number) => String(n).replace('.', ',');
     const ddmm = (v: string) => v.split('-').reverse().join('/');
