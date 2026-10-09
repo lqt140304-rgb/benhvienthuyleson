@@ -86,7 +86,7 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết 
             <input id="f-gio-don" type="time" value="17:00" aria-describedby="e-gio-don">
             <p class="loi" id="e-gio-don" hidden>Vui lòng chọn giờ đón.</p>
           </div>
-          <p class="full goi-y" id="g-noi-tru" style="margin:-6px 0 0" hidden>Tính theo giờ thực tế: 24 giờ là 1 ngày, phần lẻ tính theo giờ (ví dụ 28 giờ = 1,2 ngày), tối thiểu 0,5 ngày.</p>
+          <p class="full goi-y" id="g-noi-tru" style="margin:-6px 0 0" hidden>Tính theo giờ thực tế: 24 giờ là 1 ngày, phần lẻ tính theo giờ (ví dụ 28 giờ = 1,2 ngày). Gửi dưới 12 giờ: bệnh viện liên hệ tư vấn.</p>
 
           <div class="full ngoai-gio" id="ngoai-gio" role="alert" hidden>
             <h2><Icon name="clock" />Giờ này ngoài giờ làm việc (8:00 – 21:00)</h2>
@@ -266,8 +266,9 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết 
         chinh = n.bang.cot.length === 1 ? n.ten : `${n.ten} – ${n.bang.cot[j]}`;
         if (r && n.theo_ngay) {
           kg = r.nhan;
-          const sn = soNgay(), g = so(r.gia[j]);
-          dong.push(sn && g !== null
+          const sn = soNgay(), g = so(r.gia[j]), h = soGio();
+          if (h > 0 && h < 12) dong.push({ ten: `${chinh} · ${r.nhan} · gửi ${Math.floor(h) ? Math.floor(h) + ' giờ' : ''}${Math.round((h % 1) * 60) ? ' ' + Math.round((h % 1) * 60) + ' phút' : ''} (dưới 12 giờ)`, tien: null, chu: 'Liên hệ tư vấn' });
+          else dong.push(sn && g !== null
             ? { ten: `${chinh} · ${r.nhan} · ${soNgayChu(sn)} ngày (${Math.round(soGio())} giờ) × ${hienGia(r.gia[j])}`, tien: Math.round(g * sn), chu: tien(Math.round(g * sn)) }
             : { ten: `${chinh} · ${r.nhan}`, tien: null, chu: soGio() < 0 ? 'Giờ đón phải sau giờ gửi' : 'Chọn ngày, giờ đón' });
           if (sn > 5) dong.push({ ten: 'Gửi trên 5 ngày được giảm giá theo bảng, nhân viên báo khi xác nhận', tien: null, chu: 'Có giảm giá' });
@@ -337,7 +338,7 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết 
       a.textContent = 'Tổng tạm tính';
       const tu = /từ|–/.test(chinh.chu) ? 'từ ' : '';
       const giam = hd.dong.some((d) => d.chu === 'Có giảm giá') ? ' (chưa trừ giảm giá)' : '';
-      b.textContent = chinh.tien === null ? (tong ? tien(tong) + ' + phí khám (báo sau)' : /^(Chọn ngày|Giờ đón)/.test(chinh.chu) ? chinh.chu : 'Báo sau') : tu + tien(tong) + giam;
+      b.textContent = chinh.tien === null ? (tong ? tien(tong) + ' + phí khám (báo sau)' : /^(Chọn ngày|Giờ đón|Liên hệ)/.test(chinh.chu) ? chinh.chu : 'Báo sau') : tu + tien(tong) + giam;
       tr.append(a, b);
       body.append(tr);
 
