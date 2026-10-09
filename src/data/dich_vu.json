@@ -511,7 +511,7 @@
       "ten": "Gửi nội trú (khách sạn thú cưng)",
       "icon": "bed",
       "mo_ta": "Chỗ ở an toàn, được theo dõi sức khỏe trong thời gian gửi.",
-      "ghi_chu": "Gửi dài ngày: trên 5 ngày giảm 10%, 7 ngày giảm 15%, trên 10 ngày giảm 20%, trên 20 ngày giảm 30%, trên 30 ngày giảm 50%.",
+      "ghi_chu": "Tính theo 24 giờ: mỗi 24 giờ là 1 ngày; phần lẻ đến 12 giờ tính nửa ngày, trên 12 giờ tính 1 ngày (ví dụ gửi 8:00 ngày 12, đón 12:00 ngày 13 = 1,5 ngày). Gửi dài ngày: trên 5 ngày giảm 10%, 7 ngày giảm 15%, trên 10 ngày giảm 20%, trên 20 ngày giảm 30%, trên 30 ngày giảm 50%. Gửi / đón ngoài 8:00 – 21:00 vui lòng gọi hẹn trước.",
       "cap_cuu": false,
       "dat_lich": true,
       "spa": false,
