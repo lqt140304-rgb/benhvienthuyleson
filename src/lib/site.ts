@@ -52,6 +52,7 @@ export type NhomDV = {
   phu_phi_gio: string; ngay_le: boolean; theo_ngay: boolean;
   bang: { tieu_de_dong: string; cot: string[]; dong: { nhan: string; gia: string[] }[] };
   hang_muc: HangMuc[];
+  giam_dai_ngay: { nhan: string; tu_ngay: number; giam: number }[];
 };
 
 /** Danh sách dịch vụ đã chuẩn hoá (ô bị bỏ trống trong trang quản trị vẫn chạy được) */
@@ -67,6 +68,9 @@ export function dsDichVu(): NhomDV[] {
         dong: (d.bang?.dong ?? []).filter((r: any) => r && r.nhan).map((r: any) => ({ nhan: r.nhan, gia: cot.map((_, j) => String(r.gia?.[j] ?? '')) })),
       },
       hang_muc: (d.hang_muc ?? []).filter((h: any) => h && h.ten).map((h: any) => ({ ten: h.ten, gia: h.gia || '', ghi_chu: h.ghi_chu || '', phu_phi: h.phu_phi || '' })),
+      // Giảm giá gửi dài ngày, xếp theo số ngày tăng dần
+      giam_dai_ngay: (d.giam_dai_ngay ?? []).filter((g: any) => g && +g.tu_ngay > 0 && +g.giam > 0)
+        .map((g: any) => ({ nhan: g.nhan || `Từ ${g.tu_ngay} ngày`, tu_ngay: +g.tu_ngay, giam: +g.giam })).sort((a: any, b: any) => a.tu_ngay - b.tu_ngay),
     };
   });
 }

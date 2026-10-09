@@ -52,6 +52,14 @@ const dv = { danh_sach: dsDichVu() };
                 </tbody></table>
               </>
             )}
+            {d.giam_dai_ngay.length > 0 && (
+              <>
+                <p style="margin:12px 0 4px"><b>Giảm giá gửi dài ngày</b> (tự trừ trong hoá đơn tham khảo khi đặt lịch):</p>
+                <table class="gia"><tbody>
+                  {d.giam_dai_ngay.map((g) => <tr><td>{g.nhan}</td><td>Giảm {g.giam}%</td></tr>)}
+                </tbody></table>
+              </>
+            )}
             {d.ghi_chu && <p class="luu-y" style="margin:10px 0 14px">{d.ghi_chu}</p>}
             <div class="dv-nut">
               {d.cap_cuu

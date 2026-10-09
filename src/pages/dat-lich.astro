@@ -177,8 +177,9 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết 
     id: string; ten: string; spa: boolean; phu_phi_gio: string; ngay_le: boolean; theo_ngay: boolean;
     bang: { cot: string[]; dong: { nhan: string; gia: string[] }[] };
     hang_muc: { ten: string; gia: string; ghi_chu: string; phu_phi?: string }[];
+    giam_dai_ngay: { nhan: string; tu_ngay: number; giam: number }[];
   };
-  type Dong = { ten: string; tien: number | null; chu: string; tuDong?: boolean };
+  type Dong = { ten: string; tien: number | null; chu: string; tuDong?: boolean; giam?: boolean };
 
   const form = document.getElementById('dat-lich') as HTMLFormElement | null;
   const raw = document.getElementById('du-lieu-gia')?.textContent;
@@ -271,7 +272,9 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết 
           else dong.push(sn && g !== null
             ? { ten: `${chinh} · ${r.nhan} · ${soNgayChu(sn)} ngày (${Math.round(soGio())} giờ) × ${hienGia(r.gia[j])}`, tien: Math.round(g * sn), chu: tien(Math.round(g * sn)) }
             : { ten: `${chinh} · ${r.nhan}`, tien: null, chu: soGio() < 0 ? 'Giờ đón phải sau giờ gửi' : 'Chọn ngày, giờ đón' });
-          if (sn > 5) dong.push({ ten: 'Gửi trên 5 ngày được giảm giá theo bảng, nhân viên báo khi xác nhận', tien: null, chu: 'Có giảm giá' });
+          // Giảm giá gửi dài ngày: lấy mức cao nhất đạt tới, trừ thẳng vào hoá đơn
+          const muc = h >= 12 && g !== null ? (n.giam_dai_ngay || []).filter((m) => sn >= m.tu_ngay).pop() : undefined;
+          if (muc) { const t = Math.round((g! * sn * muc.giam) / 100); dong.push({ ten: `Giảm giá gửi dài ngày (${muc.nhan.toLowerCase()}, −${muc.giam}%)`, tien: -t, chu: '−' + tien(t), giam: true }); }
         } else if (r) { kg = r.nhan; dong.push({ ten: `${chinh} · ${r.nhan}`, tien: so(r.gia[j]), chu: hienGia(r.gia[j]) }); }
         else dong.push({ ten: chinh, tien: null, chu: 'Chọn cân nặng' });
       } else {
@@ -323,6 +326,7 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết 
       for (const d of hd.dong) {
         const tr = document.createElement('tr');
         if (d.tuDong) tr.className = 'tu-dong';
+        if (d.giam) tr.className = 'giam';
         const a = document.createElement('td'), b = document.createElement('td');
         a.textContent = d.ten;
         if (d.tuDong) { const s = document.createElement('span'); s.className = 'nhan-tu-dong'; s.textContent = 'Tự động'; a.append(s); }
@@ -337,8 +341,7 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết 
       const a = document.createElement('td'), b = document.createElement('td');
       a.textContent = 'Tổng tạm tính';
       const tu = /từ|–/.test(chinh.chu) ? 'từ ' : '';
-      const giam = hd.dong.some((d) => d.chu === 'Có giảm giá') ? ' (chưa trừ giảm giá)' : '';
-      b.textContent = chinh.tien === null ? (tong ? tien(tong) + ' + phí khám (báo sau)' : /^(Chọn ngày|Giờ đón|Liên hệ)/.test(chinh.chu) ? chinh.chu : 'Báo sau') : tu + tien(tong) + giam;
+      b.textContent = chinh.tien === null ? (tong ? tien(tong) + ' + phí khám (báo sau)' : /^(Chọn ngày|Giờ đón|Liên hệ)/.test(chinh.chu) ? chinh.chu : 'Báo sau') : tu + tien(tong);
       tr.append(a, b);
       body.append(tr);
 

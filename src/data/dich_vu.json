@@ -511,7 +511,7 @@
       "ten": "Gửi nội trú (khách sạn thú cưng)",
       "icon": "bed",
       "mo_ta": "Chỗ ở an toàn, được theo dõi sức khỏe trong thời gian gửi.",
-      "ghi_chu": "Tính theo giờ thực tế: 24 giờ là 1 ngày, phần lẻ tính theo giờ (ví dụ gửi 8:00 ngày 12, đón 12:00 ngày 13 = 28 giờ = 1,2 ngày). Gửi dưới 12 giờ vui lòng liên hệ bệnh viện để được tư vấn. Gửi dài ngày: trên 5 ngày giảm 10%, 7 ngày giảm 15%, trên 10 ngày giảm 20%, trên 20 ngày giảm 30%, trên 30 ngày giảm 50%. Gửi / đón ngoài 8:00 – 21:00 vui lòng gọi hẹn trước.",
+      "ghi_chu": "Tính theo giờ thực tế: 24 giờ là 1 ngày, phần lẻ tính theo giờ (ví dụ gửi 8:00 ngày 12, đón 12:00 ngày 13 = 28 giờ = 1,2 ngày). Gửi dưới 12 giờ vui lòng liên hệ bệnh viện để được tư vấn. Gửi / đón ngoài 8:00 – 21:00 vui lòng gọi hẹn trước.",
       "cap_cuu": false,
       "dat_lich": true,
       "spa": false,
@@ -568,7 +568,34 @@
         ]
       },
       "hang_muc": [],
-      "theo_ngay": true
+      "theo_ngay": true,
+      "giam_dai_ngay": [
+        {
+          "nhan": "Trên 5 ngày",
+          "tu_ngay": 5.1,
+          "giam": 10
+        },
+        {
+          "nhan": "Từ 7 ngày",
+          "tu_ngay": 7,
+          "giam": 15
+        },
+        {
+          "nhan": "Trên 10 ngày",
+          "tu_ngay": 10.1,
+          "giam": 20
+        },
+        {
+          "nhan": "Trên 20 ngày",
+          "tu_ngay": 20.1,
+          "giam": 30
+        },
+        {
+          "nhan": "Trên 30 ngày",
+          "tu_ngay": 30.1,
+          "giam": 50
+        }
+      ]
     },
     {
       "ten": "Cấp cứu 24/24",
