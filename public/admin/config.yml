@@ -1,0 +1,176 @@
+# Cấu hình trang quản trị (Sveltia CMS) – https://lqt140304-rgb.github.io/benhvienthuyleson/admin/
+# Đăng nhập: chọn "Sign In with Token" và dán mã GitHub (xem HUONG-DAN.md).
+backend:
+  name: github
+  repo: lqt140304-rgb/benhvienthuyleson
+  branch: main
+  commit_messages:
+    create: "Thêm {{collection}} “{{slug}}”"
+    update: "Sửa {{collection}} “{{slug}}”"
+    delete: "Xoá {{collection}} “{{slug}}”"
+    uploadMedia: "Tải ảnh “{{path}}”"
+    deleteMedia: "Xoá ảnh “{{path}}”"
+
+site_url: https://lqt140304-rgb.github.io/benhvienthuyleson/
+display_url: https://lqt140304-rgb.github.io/benhvienthuyleson/
+logo_url: /benhvienthuyleson/img/logo.jpg
+
+# Ảnh tải lên lưu ở public/uploads, tự chuyển sang WebP và thu nhỏ để web nhanh
+media_folder: public/uploads
+public_folder: /uploads
+media_libraries:
+  default:
+    config:
+      max_file_size: 15000000
+      transformations:
+        raster_image:
+          format: webp
+          quality: 82
+          width: 1600
+          height: 1600
+
+# Tên file không dấu: "Mèo bỏ ăn" → "meo-bo-an"
+slug:
+  encoding: ascii
+  clean_accents: true
+  sanitize_replacement: "-"
+
+collections:
+  - name: tu_van
+    label: Bài tư vấn
+    label_singular: bài tư vấn
+    description: Bài tư vấn chăm sóc chó mèo. Bài mới lên web sau 1–3 phút kể từ khi bấm Lưu.
+    folder: src/content/tu-van
+    extension: md
+    format: frontmatter
+    create: true
+    slug: "{{slug}}"
+    summary: "{{title}} · {{chuyen_muc}} · {{date | date('DD/MM/YYYY')}}"
+    sortable_fields: [date, title, chuyen_muc]
+    view_filters:
+      - { label: Chó, field: chuyen_muc, pattern: Chó }
+      - { label: Mèo, field: chuyen_muc, pattern: Mèo }
+      - { label: Bài nháp, field: nhap, pattern: true }
+    fields:
+      - { label: Tiêu đề (nên đặt dạng câu hỏi), name: title, widget: string }
+      - { label: Ngày đăng, name: date, widget: datetime, time_format: false, format: "YYYY-MM-DD", date_format: "DD/MM/YYYY" }
+      - { label: Chuyên mục, name: chuyen_muc, widget: select, options: [Chó, Mèo] }
+      - { label: "Mô tả ngắn (1–2 câu, hiện trên Google)", name: description, widget: text, required: false }
+      - { label: Ảnh đầu bài (ảnh ngang), name: image, widget: image, required: false }
+      - { label: Tác giả (ví dụ BS. Nguyễn Văn A), name: tac_gia, widget: string, required: false }
+      - { label: Dấu hiệu cần đưa bé đi khám ngay (mỗi dòng một dấu hiệu), name: dau_hieu_nguy_hiem, widget: list, required: false, field: { label: Dấu hiệu, name: dau_hieu, widget: string } }
+      - { label: Bài nổi bật trên trang chủ, name: noi_bat, widget: boolean, default: false, required: false }
+      - { label: Bài nháp (chưa hiện lên web), name: nhap, widget: boolean, default: false, required: false }
+      - { label: Nội dung bài, name: body, widget: markdown }
+
+  - name: ca_benh
+    label: Nhật ký ca bệnh
+    label_singular: ca bệnh
+    description: Ảnh và câu chuyện các ca tại viện. Nhớ xin phép chủ nuôi, không ghi tên hay số điện thoại chủ nuôi.
+    folder: src/content/ca-benh
+    extension: md
+    format: frontmatter
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    summary: "{{title}} · {{loai}} · {{date | date('DD/MM/YYYY')}}"
+    sortable_fields: [date, title, loai]
+    fields:
+      - { label: "Tiêu đề (ví dụ Bé Mướp, 3 tuổi – mổ sỏi bàng quang)", name: title, widget: string }
+      - { label: Ngày, name: date, widget: datetime, time_format: false, format: "YYYY-MM-DD", date_format: "DD/MM/YYYY" }
+      - { label: Loài, name: loai, widget: select, options: [Chó, Mèo] }
+      - { label: Ảnh bìa, name: image, widget: image, required: false }
+      - label: Ảnh của ca (trước, trong, sau điều trị)
+        name: anh
+        widget: list
+        required: false
+        fields:
+          - { label: Ảnh, name: src, widget: image }
+          - { label: Chú thích, name: chu_thich, widget: string, required: false }
+      - { label: "Tóm tắt ngắn (lý do khám, cách xử lý, kết quả)", name: tom_tat, widget: text, required: false }
+      - { label: Bác sĩ phụ trách, name: bac_si, widget: string, required: false }
+      - { label: Có ảnh phẫu thuật / vết thương (ảnh sẽ được làm mờ), name: nhay_cam, widget: boolean, default: false, required: false }
+      - { label: Bản nháp (chưa hiện lên web), name: nhap, widget: boolean, default: false, required: false }
+      - { label: Câu chuyện chi tiết, name: body, widget: markdown, required: false }
+
+  - name: cai_dat
+    label: Thông tin & cài đặt
+    editor: { preview: false }
+    files:
+      - name: thong_tin
+        label: Thông tin bệnh viện
+        file: src/data/thong_tin.json
+        fields:
+          - { label: Tên bệnh viện, name: ten, widget: string }
+          - { label: Số điện thoại hiển thị, name: dien_thoai, widget: string }
+          - { label: Số điện thoại để bấm gọi (viết liền), name: dien_thoai_goi, widget: string }
+          - { label: Địa chỉ, name: dia_chi, widget: string }
+          - { label: Giờ mở cửa, name: gio_mo_cua, widget: string }
+          - { label: Link Google Maps, name: ban_do, widget: string }
+          - { label: Link Zalo (để trống thì ẩn nút), name: zalo, widget: string, required: false }
+          - { label: Link Facebook (để trống thì ẩn nút), name: facebook, widget: string, required: false }
+          - { label: "Phụ phí khám ngoài giờ (ví dụ 100.000đ) – để trống thì web ghi “vui lòng gọi để biết mức”", name: phu_phi_kham_ngoai_gio, widget: string, required: false }
+          - { label: Phụ phí cấp cứu ngoài giờ, name: phu_phi_cap_cuu_ngoai_gio, widget: string, required: false }
+          - { label: "Giới thiệu ngắn (2–3 câu, hiện ở trang chủ)", name: gioi_thieu_ngan, widget: text, required: false }
+          - { label: Giới thiệu đầy đủ (trang Giới thiệu), name: gioi_thieu, widget: markdown, required: false }
+          - { label: Số năm hoạt động, name: so_nam_hoat_dong, widget: string, required: false }
+          - { label: "Ảnh tập thể bác sĩ, nhân viên", name: anh_tap_the, widget: image, required: false }
+          - { label: "Địa chỉ nhận form đặt lịch (Google Apps Script) – không sửa nếu không chắc", name: dia_chi_nhan_dat_lich, widget: string, required: false }
+
+      - name: dich_vu
+        label: Dịch vụ và bảng giá
+        file: src/data/dich_vu.json
+        fields:
+          - label: Dịch vụ
+            name: danh_sach
+            widget: list
+            summary: "{{ten}}"
+            fields:
+              - { label: Tên dịch vụ, name: ten, widget: string }
+              - { label: Biểu tượng, name: icon, widget: select, options: [stethoscope, syringe, cross, scissors, bed, heart-pulse] }
+              - { label: Mô tả ngắn, name: mo_ta, widget: text }
+              - { label: Là mục cấp cứu (hiện nút gọi và phụ phí ngoài giờ), name: cap_cuu, widget: boolean, default: false, required: false }
+              - label: Bảng giá
+                name: hang_muc
+                widget: list
+                summary: "{{ten}} – {{gia}}"
+                fields:
+                  - { label: Hạng mục, name: ten, widget: string }
+                  - { label: "Giá (để trống = Đang cập nhật)", name: gia, widget: string, required: false }
+
+      - name: bac_si
+        label: Đội ngũ bác sĩ
+        file: src/data/bac_si.json
+        fields:
+          - label: Bác sĩ
+            name: danh_sach
+            widget: list
+            summary: "{{ten}}"
+            fields:
+              - { label: Họ tên, name: ten, widget: string }
+              - { label: Chức vụ / chuyên môn, name: chuc_vu, widget: string, required: false }
+              - { label: Ảnh chân dung (ảnh vuông), name: anh, widget: image, required: false }
+
+      - name: co_so_vat_chat
+        label: Ảnh cơ sở vật chất
+        file: src/data/co_so_vat_chat.json
+        fields:
+          - label: Khu vực
+            name: danh_sach
+            widget: list
+            summary: "{{ten}}"
+            fields:
+              - { label: Tên khu vực, name: ten, widget: string }
+              - { label: Ảnh, name: anh, widget: image, required: false }
+
+      - name: cam
+        label: Bé Cam (nhân vật hướng dẫn)
+        file: src/data/cam.json
+        fields:
+          - { label: Hiện bé Cam trên web, name: bat, widget: boolean, default: true }
+          - { label: Câu ở trang chủ (kèm nút Chó / Mèo), name: trang_chu, widget: text }
+          - { label: Câu khi đọc bài tư vấn, name: bai_viet, widget: text }
+          - { label: Câu ở trang Dịch vụ, name: dich_vu, widget: text }
+          - { label: Câu ở Nhật ký ca bệnh, name: ca_benh, widget: text }
+          - { label: Câu ở trang Đặt lịch, name: dat_lich, widget: text }
+          - { label: Câu ở các trang khác, name: trang_khac, widget: text }
+          - { label: Câu khi ngoài giờ 8:00 – 21:00 (ưu tiên mọi trang), name: ngoai_gio, widget: text }

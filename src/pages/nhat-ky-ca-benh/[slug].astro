@@ -1,0 +1,65 @@
+---
+// Trang một ca bệnh: album ảnh + tóm tắt. Ảnh nhạy cảm bị làm mờ cho tới khi khách bấm xem.
+import { render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Icon from '../../components/Icon.astro';
+import CaseCard from '../../components/CaseCard.astro';
+import tt from '../../data/thong_tin.json';
+import { u, ngay, caBenh } from '../../lib/site';
+
+export async function getStaticPaths() {
+  const ds = await caBenh();
+  return ds.map((ca) => ({ params: { slug: ca.id }, props: { ca, ds } }));
+}
+const { ca, ds } = Astro.props;
+const d = ca.data;
+const { Content } = await render(ca);
+const anh = d.anh.length > 0 ? d.anh : d.image ? [{ src: d.image, chu_thich: '' }] : [];
+const khac = ds.filter((c) => c.id !== ca.id).slice(0, 3);
+---
+<Layout title={d.title} description={d.tom_tat || `Ca bệnh ${d.loai.toLowerCase()} điều trị tại ${tt.ten}.`} image={d.nhay_cam ? undefined : (d.image || anh[0]?.src)} cam="ca_benh" article>
+  <section class="pagehead"><div class="wrap">
+    <nav class="crumb" aria-label="Đường dẫn"><a href={u('/')}>Trang chủ</a><span aria-hidden="true">›</span><a href={u('/nhat-ky-ca-benh/')}>Nhật ký ca bệnh</a></nav>
+    <span class={`kicker${d.loai === 'Chó' ? ' cho' : ''}`}>{d.loai}</span>
+    <h1>{d.title}</h1>
+    <div class="bai-meta"><span>{ngay(d.date)}</span>{d.bac_si && <span>· Bác sĩ phụ trách: {d.bac_si}</span>}</div>
+  </div></section>
+  <div class="wrap" style="max-width:1000px">
+    {d.tom_tat && <p class="lead" style="margin-top:12px">{d.tom_tat}</p>}
+    {d.nhay_cam && anh.length > 0 && (
+      <p class="ngoai-gio" style="padding:12px 16px"><Icon name="alert" size={18} /> Ca này có ảnh phẫu thuật hoặc vết thương. Ảnh đang được làm mờ, bấm vào từng ảnh để xem.</p>
+    )}
+    {anh.length > 0 && (
+      <div class="album">
+        {anh.map((a) => (
+          <figure>
+            {d.nhay_cam
+              ? <button type="button" class="anh-nc" aria-label={`Xem ảnh${a.chu_thich ? ': ' + a.chu_thich : ''}`} data-xem>
+                  <img src={u(a.src)} alt={a.chu_thich} loading="lazy" width="600" height="450">
+                  <span class="mo-nhan"><Icon name="eye" size={24} />Bấm để xem ảnh</span>
+                </button>
+              : <img src={u(a.src)} alt={a.chu_thich} loading="lazy" width="600" height="450">}
+            {a.chu_thich && <figcaption>{a.chu_thich}</figcaption>}
+          </figure>
+        ))}
+      </div>
+    )}
+    <div class="prose"><Content /></div>
+    <div class="ket-bai">
+      <div><h2>Bé nhà bạn có dấu hiệu tương tự?</h2><p>Đặt lịch để bác sĩ khám và tư vấn trực tiếp.</p></div>
+      <div class="dv-nut"><a class="btn btn-cta" href={u('/dat-lich/')}><Icon name="calendar" />Đặt lịch khám</a><a class="btn btn-line" href={`tel:${tt.dien_thoai_goi}`}><Icon name="phone" />Gọi</a></div>
+    </div>
+  </div>
+  {khac.length > 0 && (
+    <section class="s"><div class="wrap">
+      <div class="sh"><h2>Ca bệnh khác</h2><a href={u('/nhat-ky-ca-benh/')}>Xem tất cả <Icon name="arrow" size={16} /></a></div>
+      <div class="grid3">{khac.map((c) => <CaseCard ca={c} />)}</div>
+    </div></section>
+  )}
+</Layout>
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-xem]').forEach((b) => b.addEventListener('click', () => {
+    b.classList.add('da-xem');
+    b.setAttribute('aria-label', 'Ảnh đã hiện');
+  }));
+</script>

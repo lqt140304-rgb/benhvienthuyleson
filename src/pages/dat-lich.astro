@@ -1,0 +1,223 @@
+---
+// Đặt lịch: cách A (form → Google Sheet + email) và cách C (nhắn Zalo)
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import tt from '../data/thong_tin.json';
+import dv from '../data/dich_vu.json';
+import { u } from '../lib/site';
+
+const goiMuc = 'vui lòng gọi để biết mức';
+const phiKham = tt.phu_phi_kham_ngoai_gio || goiMuc;
+const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || goiMuc;
+---
+<Layout title="Đặt lịch khám" description={`Đặt lịch khám, tiêm phòng, spa, nội trú cho chó mèo tại ${tt.ten}. Điền form 1 phút hoặc nhắn Zalo.`} cam="dat_lich">
+  <section class="pagehead"><div class="wrap">
+    <nav class="crumb" aria-label="Đường dẫn"><a href={u('/')}>Trang chủ</a><span aria-hidden="true">›</span><span>Đặt lịch</span></nav>
+    <h1>Đặt lịch cho bé</h1>
+    <p class="lead">Điền form hoặc nhắn Zalo. Nhân viên sẽ gọi lại để xác nhận lịch hẹn.</p>
+  </div></section>
+
+  <section class="s" style="padding-top:16px">
+    <div class="wrap bai">
+      <div class="bai-chinh">
+        <form class="form" id="dat-lich" data-endpoint={tt.dia_chi_nhan_dat_lich} data-sdt={tt.dien_thoai} novalidate>
+          <div class="f">
+            <label for="f-ten">Tên chủ nuôi <span class="bb" aria-hidden="true">*</span></label>
+            <input id="f-ten" name="ten" autocomplete="name" required aria-describedby="e-ten" maxlength="80">
+            <p class="loi" id="e-ten" hidden>Vui lòng nhập tên của bạn.</p>
+          </div>
+          <div class="f">
+            <label for="f-sdt">Số điện thoại <span class="bb" aria-hidden="true">*</span></label>
+            <input id="f-sdt" name="dien_thoai" type="tel" inputmode="tel" autocomplete="tel" required aria-describedby="e-sdt" placeholder="09xx xxx xxx">
+            <p class="loi" id="e-sdt" hidden>Số điện thoại chưa đúng. Ví dụ: 0912 345 678.</p>
+          </div>
+          <fieldset class="f full radio-wrap" style="border:0;margin:0;padding:0">
+            <legend>Thú cưng</legend>
+            <div class="radio">
+              <label><input type="radio" name="thu_cung" value="Chó" checked> Chó</label>
+              <label><input type="radio" name="thu_cung" value="Mèo"> Mèo</label>
+              <label><input type="radio" name="thu_cung" value="Khác"> Khác</label>
+            </div>
+          </fieldset>
+          <div class="f full">
+            <label for="f-dv">Dịch vụ <span class="bb" aria-hidden="true">*</span></label>
+            <select id="f-dv" name="dich_vu" required aria-describedby="e-dv">
+              <option value="">-- Chọn dịch vụ --</option>
+              {dv.danh_sach.map((d) => <option value={d.ten}>{d.ten}</option>)}
+              <option value="Khác">Khác (ghi rõ ở phần ghi chú)</option>
+            </select>
+            <p class="loi" id="e-dv" hidden>Vui lòng chọn dịch vụ.</p>
+          </div>
+          <div class="f">
+            <label for="f-ngay">Ngày muốn đến <span class="bb" aria-hidden="true">*</span></label>
+            <input id="f-ngay" name="ngay" type="date" required aria-describedby="e-ngay">
+            <p class="loi" id="e-ngay" hidden>Vui lòng chọn ngày từ hôm nay trở đi.</p>
+          </div>
+          <div class="f">
+            <label for="f-gio">Giờ muốn đến <span class="bb" aria-hidden="true">*</span></label>
+            <input id="f-gio" name="gio" type="time" required aria-describedby="e-gio g-gio" value="09:00">
+            <p class="goi-y" id="g-gio">Nhận lịch từ 8:00 đến 21:00.</p>
+            <p class="loi" id="e-gio" hidden>Vui lòng chọn giờ.</p>
+          </div>
+
+          <div class="full ngoai-gio" id="ngoai-gio" role="alert" hidden>
+            <h2><Icon name="clock" />Giờ này ngoài giờ làm việc (8:00 – 21:00)</h2>
+            <p style="margin:0">Form không nhận lịch ngoài giờ. Bạn vui lòng gọi trực tiếp để bệnh viện sắp xếp:</p>
+            <ul>
+              <li>Phụ phí khám ngoài giờ: <b>{phiKham}</b></li>
+              <li>Phụ phí cấp cứu ngoài giờ: <b>{phiCapCuu}</b></li>
+            </ul>
+            <a class="btn btn-cta" href={`tel:${tt.dien_thoai_goi}`}><Icon name="phone" />Gọi ngay {tt.dien_thoai}</a>
+          </div>
+
+          <div class="f full">
+            <label for="f-ghichu">Ghi chú (tuổi, triệu chứng, yêu cầu…)</label>
+            <textarea id="f-ghichu" name="ghi_chu" maxlength="1000"></textarea>
+          </div>
+          <div class="bay" aria-hidden="true"><label for="f-web">Để trống ô này</label><input id="f-web" name="website" tabindex="-1" autocomplete="off"></div>
+          <p class="full loi-gui" id="loi-gui" role="alert" hidden></p>
+          <div class="full"><button class="btn btn-cta" id="gui" type="submit" style="width:100%"><Icon name="calendar" />Gửi yêu cầu đặt lịch</button></div>
+        </form>
+
+        <div class="ok" id="ok" tabindex="-1" hidden>
+          <h2><Icon name="check" />Đã gửi yêu cầu đặt lịch</h2>
+          <p id="ok-text"></p>
+          <p class="muted">Nếu cần gấp, bạn gọi {tt.dien_thoai}.</p>
+          <button class="btn btn-line" type="button" id="dat-them">Đặt thêm lịch khác</button>
+        </div>
+      </div>
+
+      <aside class="bai-phu">
+        {tt.zalo && (
+          <div class="cach">
+            <span class="kicker cho">Cách khác</span>
+            <h2>Nhắn Zalo cho bệnh viện</h2>
+            <p style="margin:0">Hỏi nhanh, gửi ảnh bé, hẹn giờ trực tiếp với nhân viên.</p>
+            <a class="btn btn-tim" href={tt.zalo} target="_blank" rel="noopener"><Icon name="chat" />Nhắn Zalo</a>
+          </div>
+        )}
+        <div class="ngoai-gio">
+          <h2><Icon name="heart-pulse" />Cấp cứu, ngoài giờ</h2>
+          <p style="margin:0">Trước 8:00 hoặc sau 21:00, vui lòng gọi trực tiếp:</p>
+          <ul>
+            <li>Phụ phí khám ngoài giờ: <b>{phiKham}</b></li>
+            <li>Phụ phí cấp cứu ngoài giờ: <b>{phiCapCuu}</b></li>
+          </ul>
+          <a class="btn btn-cta" href={`tel:${tt.dien_thoai_goi}`}><Icon name="phone" />{tt.dien_thoai}</a>
+        </div>
+        <div class="cach">
+          <h2>Sau khi gửi</h2>
+          <p style="margin:0">Nhân viên gọi lại để xác nhận giờ. Lịch chỉ chắc chắn khi bệnh viện đã gọi xác nhận.</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  // Kiểm tra form đặt lịch và gửi tới Google Apps Script (xem apps-script/Code.gs)
+  const form = document.getElementById('dat-lich') as HTMLFormElement | null;
+  if (form) {
+    const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+    const GIO_MO = 8 * 60, GIO_DONG = 21 * 60;
+    const sdtBV = form.dataset.sdt || '';
+
+    // Ngày hôm nay theo giờ Việt Nam
+    const homNay = () => new Date(Date.now() + 7 * 3600_000).toISOString().slice(0, 10);
+    // Bỏ khoảng trắng, dấu chấm, gạch, ngoặc; đổi +84/84 thành 0
+    const sachSdt = (v: string) => {
+      let s = (v || '').replace(/[\s.\-()]/g, '');
+      if (s.startsWith('+84')) s = '0' + s.slice(3);
+      else if (s.startsWith('84') && s.length >= 11) s = '0' + s.slice(2);
+      return s;
+    };
+    const sdtDung = (v: string) => /^0\d{9,10}$/.test(sachSdt(v));
+    const ngoaiGio = (t: string) => {
+      if (!t) return false;
+      const [h, m] = t.split(':').map(Number);
+      const p = h * 60 + m;
+      return p < GIO_MO || p > GIO_DONG;
+    };
+    const baoLoi = (id: string, co: boolean, o: HTMLElement) => {
+      $(id).hidden = !co;
+      o.setAttribute('aria-invalid', co ? 'true' : 'false');
+    };
+
+    const ten = $<HTMLInputElement>('f-ten'), sdt = $<HTMLInputElement>('f-sdt'), dv = $<HTMLSelectElement>('f-dv');
+    const ngay = $<HTMLInputElement>('f-ngay'), gio = $<HTMLInputElement>('f-gio'), gui = $<HTMLButtonElement>('gui');
+    ngay.min = homNay();
+    if (!ngay.value) ngay.value = homNay();
+
+    // Chọn sẵn dịch vụ khi đến từ trang Dịch vụ (?dv=...)
+    const dvUrl = new URLSearchParams(location.search).get('dv');
+    if (dvUrl && [...dv.options].some((o) => o.value === dvUrl)) dv.value = dvUrl;
+
+    const xetGio = () => {
+      const ngoai = ngoaiGio(gio.value);
+      $('ngoai-gio').hidden = !ngoai;
+      gui.disabled = ngoai;
+    };
+    gio.addEventListener('input', xetGio);
+    gio.addEventListener('change', xetGio);
+    xetGio();
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      $('loi-gui').hidden = true;
+      const loi = {
+        ten: !ten.value.trim(),
+        sdt: !sdtDung(sdt.value),
+        dv: !dv.value,
+        ngay: !ngay.value || ngay.value < homNay(),
+        gio: !gio.value,
+      };
+      baoLoi('e-ten', loi.ten, ten);
+      baoLoi('e-sdt', loi.sdt, sdt);
+      baoLoi('e-dv', loi.dv, dv);
+      baoLoi('e-ngay', loi.ngay, ngay);
+      baoLoi('e-gio', loi.gio, gio);
+      xetGio();
+      const dau = loi.ten ? ten : loi.sdt ? sdt : loi.dv ? dv : loi.ngay ? ngay : loi.gio || ngoaiGio(gio.value) ? gio : null;
+      if (dau) { dau.focus(); return; }
+      if ($<HTMLInputElement>('f-web').value) return; // ô bẫy chống tin rác
+
+      const diaChi = form.dataset.endpoint;
+      if (!diaChi) {
+        $('loi-gui').textContent = `Form đặt lịch online đang được kết nối. Vui lòng gọi ${sdtBV} hoặc nhắn Zalo để đặt lịch.`;
+        $('loi-gui').hidden = false;
+        return;
+      }
+
+      const thuCung = (form.querySelector('input[name="thu_cung"]:checked') as HTMLInputElement | null)?.value || '';
+      const data = new URLSearchParams({
+        ten: ten.value.trim(), dien_thoai: sachSdt(sdt.value), thu_cung: thuCung, dich_vu: dv.value,
+        ngay: ngay.value, gio: gio.value, ghi_chu: $<HTMLTextAreaElement>('f-ghichu').value.trim(), website: '',
+      });
+      gui.disabled = true;
+      try {
+        // Apps Script không cho đọc phản hồi từ web khác (no-cors); máy chủ kiểm tra lại dữ liệu.
+        await fetch(diaChi, { method: 'POST', mode: 'no-cors', body: data });
+        const [y, m, d] = ngay.value.split('-');
+        $('ok-text').textContent = `Cảm ơn ${ten.value.trim()}. Nhân viên sẽ gọi số ${sachSdt(sdt.value)} để xác nhận lịch ngày ${d}/${m}/${y} lúc ${gio.value}.`;
+        form.hidden = true;
+        $('ok').hidden = false;
+        $('ok').focus();
+      } catch {
+        $('loi-gui').textContent = `Chưa gửi được, có thể do mất mạng. Vui lòng thử lại hoặc gọi ${sdtBV}.`;
+        $('loi-gui').hidden = false;
+      } finally {
+        gui.disabled = false;
+      }
+    });
+
+    $('dat-them').addEventListener('click', () => {
+      form.reset();
+      ngay.value = homNay();
+      gio.value = '09:00';
+      xetGio();
+      $('ok').hidden = true;
+      form.hidden = false;
+      ten.focus();
+    });
+  }
+</script>

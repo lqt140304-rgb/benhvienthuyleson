@@ -1,0 +1,21 @@
+---
+// Thẻ ca bệnh trong Nhật ký ca bệnh. Ảnh nhạy cảm hiện mờ ở danh sách.
+import type { CollectionEntry } from 'astro:content';
+import Icon from './Icon.astro';
+import { u, ngay } from '../lib/site';
+interface Props { ca: CollectionEntry<'caBenh'> }
+const { ca } = Astro.props;
+const d = ca.data;
+const bia = d.image || d.anh[0]?.src || '';
+---
+<a class="card ca" href={u(`/nhat-ky-ca-benh/${ca.id}/`)} data-loai={d.loai}>
+  <div class={`anh-wrap${d.nhay_cam ? ' mo-anh' : ''}`}>
+    {bia
+      ? <img src={u(bia)} alt="" loading="lazy" width="400" height="300">
+      : <div class="cho-trong" style="height:100%" aria-hidden="true">Chưa có ảnh</div>}
+    {d.nhay_cam && <span class="mo-nhan"><Icon name="eye" size={22} />Ảnh phẫu thuật/vết thương<br>Bấm để xem ca bệnh</span>}
+  </div>
+  <span class={`kicker${d.loai === 'Chó' ? ' cho' : ''}`}>{d.loai}</span>
+  <h3>{d.title}</h3>
+  <span class="meta">{ngay(d.date)}{d.anh.length > 0 ? ` · ${d.anh.length} ảnh` : ''}</span>
+</a>

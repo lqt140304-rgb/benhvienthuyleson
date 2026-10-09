@@ -1,0 +1,71 @@
+---
+// Trang một bài tư vấn
+import { render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Icon from '../../components/Icon.astro';
+import PostCard from '../../components/PostCard.astro';
+import tt from '../../data/thong_tin.json';
+import { u, ngay, phutDoc, baiTuVan } from '../../lib/site';
+
+export async function getStaticPaths() {
+  const ds = await baiTuVan();
+  return ds.map((bai) => ({ params: { slug: bai.id }, props: { bai, ds } }));
+}
+const { bai, ds } = Astro.props;
+const d = bai.data;
+const { Content } = await render(bai);
+const lienQuan = ds.filter((b) => b.id !== bai.id && b.data.chuyen_muc === d.chuyen_muc).slice(0, 3);
+const href = d.chuyen_muc === 'Chó' ? '/tu-van/cho/' : '/tu-van/meo/';
+const schema = {
+  '@context': 'https://schema.org', '@type': 'Article', headline: d.title, datePublished: d.date.toISOString(),
+  author: d.tac_gia ? { '@type': 'Person', name: d.tac_gia } : { '@type': 'Organization', name: tt.ten },
+  publisher: { '@type': 'Organization', name: tt.ten }, ...(d.image ? { image: new URL(u(d.image), Astro.site).href } : {}),
+};
+---
+<Layout title={d.title} description={d.description} image={d.image} cam="bai_viet" article>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)}></script>
+  <section class="pagehead"><div class="wrap">
+    <nav class="crumb" aria-label="Đường dẫn"><a href={u('/')}>Trang chủ</a><span aria-hidden="true">›</span><a href={u('/tu-van/')}>Tư vấn</a><span aria-hidden="true">›</span><a href={u(href)}>{d.chuyen_muc}</a></nav>
+  </div></section>
+  <div class="wrap bai">
+    <article class="bai-chinh">
+      <span class={`kicker${d.chuyen_muc === 'Chó' ? ' cho' : ''}`}>{d.chuyen_muc}</span>
+      <h1 style="font-size:clamp(30px,4.2vw,42px);margin:8px 0 12px">{d.title}</h1>
+      {d.description && <p class="lead">{d.description}</p>}
+      <div class="bai-meta">{d.tac_gia && <span>{d.tac_gia}</span>}<span>{ngay(d.date)}</span><span>· {phutDoc(bai.body)} phút đọc</span></div>
+      {d.image && <img class="bai-anh" src={u(d.image)} alt="" width="1200" height="675">}
+      <div class="prose"><Content /></div>
+      {d.dau_hieu_nguy_hiem.length > 0 && (
+        <aside class="canh-bao">
+          <h2><Icon name="alert" />Khi nào cần đưa bé đến bệnh viện ngay</h2>
+          <ul>{d.dau_hieu_nguy_hiem.map((x) => <li>{x}</li>)}</ul>
+        </aside>
+      )}
+      <div class="ket-bai">
+        <div><h2>Bé có dấu hiệu bất thường?</h2><p>Đặt lịch để bác sĩ khám trực tiếp, hoặc gọi ngay nếu khẩn cấp.</p></div>
+        <div class="dv-nut"><a class="btn btn-cta" href={u('/dat-lich/')}><Icon name="calendar" />Đặt lịch khám</a><a class="btn btn-line" href={`tel:${tt.dien_thoai_goi}`}><Icon name="phone" />Gọi</a></div>
+      </div>
+      <p class="luu-y" style="margin-top:20px">Bài viết mang tính tham khảo, không thay thế việc khám trực tiếp. Mỗi bé có tình trạng khác nhau, hãy hỏi bác sĩ trước khi dùng thuốc.</p>
+    </article>
+    <aside class="bai-phu">
+      <div class="box-tim">
+        <h2>Cần bác sĩ tư vấn trực tiếp?</h2>
+        <p>Bệnh viện mở cửa {tt.gio_mo_cua}, trực cấp cứu 24/24.</p>
+        <a class="btn btn-cta" href={u('/dat-lich/')}>Đặt lịch khám</a>
+        {tt.zalo && <a class="btn btn-trang" href={tt.zalo} target="_blank" rel="noopener">Nhắn Zalo</a>}
+      </div>
+      {lienQuan.length > 0 && (
+        <div>
+          <h2 class="side-h">Bài cùng chuyên mục</h2>
+          <div class="side-list">{lienQuan.map((b) => <a href={u(`/tu-van/${b.id}/`)}><b>{b.data.title}</b></a>)}</div>
+        </div>
+      )}
+    </aside>
+  </div>
+  {lienQuan.length > 0 && (
+    <section class="s"><div class="wrap">
+      <div class="sh"><h2>Đọc thêm về {d.chuyen_muc.toLowerCase()}</h2><a href={u(href)}>Xem tất cả <Icon name="arrow" size={16} /></a></div>
+      <div class="grid3">{lienQuan.map((b) => <PostCard bai={b} />)}</div>
+    </div></section>
+  )}
+</Layout>

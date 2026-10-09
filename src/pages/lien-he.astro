@@ -1,0 +1,27 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import tt from '../data/thong_tin.json';
+import { u } from '../lib/site';
+const banDo = 'https://www.google.com/maps?q=' + encodeURIComponent('Bệnh viện thú y Lê Sơn, ' + tt.dia_chi) + '&output=embed';
+---
+<Layout title="Liên hệ" description={`Địa chỉ ${tt.ten}: ${tt.dia_chi}. Điện thoại ${tt.dien_thoai}. Mở cửa ${tt.gio_mo_cua}, trực cấp cứu 24/24.`}>
+  <section class="pagehead"><div class="wrap">
+    <nav class="crumb" aria-label="Đường dẫn"><a href={u('/')}>Trang chủ</a><span aria-hidden="true">›</span><span>Liên hệ</span></nav>
+    <h1>Liên hệ và chỉ đường</h1>
+  </div></section>
+  <section class="s" style="padding-top:8px"><div class="wrap cols2">
+    <div>
+      <div class="lh-dong"><Icon name="pin" size={22} /><div><b>Địa chỉ</b><br>{tt.dia_chi}</div></div>
+      <div class="lh-dong"><Icon name="clock" size={22} /><div><b>Giờ làm việc</b><br>{tt.gio_mo_cua} hằng ngày · Trực cấp cứu 24/24</div></div>
+      <div class="lh-dong"><Icon name="phone" size={22} /><div><b>Điện thoại</b><br><a href={`tel:${tt.dien_thoai_goi}`}>{tt.dien_thoai}</a></div></div>
+      {tt.zalo && <div class="lh-dong"><Icon name="chat" size={22} /><div><b>Zalo</b><br><a href={tt.zalo} target="_blank" rel="noopener">Nhắn Zalo cho bệnh viện</a></div></div>}
+      {tt.facebook && <div class="lh-dong"><Icon name="facebook" size={22} /><div><b>Facebook</b><br><a href={tt.facebook} target="_blank" rel="noopener">Trang Facebook của bệnh viện</a></div></div>}
+      <div class="dv-nut" style="margin-top:20px">
+        <a class="btn btn-tim" href={tt.ban_do} target="_blank" rel="noopener"><Icon name="map" />Chỉ đường Google Maps</a>
+        <a class="btn btn-cta" href={u('/dat-lich/')}>Đặt lịch khám</a>
+      </div>
+    </div>
+    <iframe class="ban-do" src={banDo} title={`Bản đồ đến ${tt.ten}`} loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </div></section>
+</Layout>

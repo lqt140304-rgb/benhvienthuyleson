@@ -1,0 +1,63 @@
+---
+import { marked } from 'marked';
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import tt from '../data/thong_tin.json';
+import bs from '../data/bac_si.json';
+import csvc from '../data/co_so_vat_chat.json';
+import dv from '../data/dich_vu.json';
+import { u } from '../lib/site';
+const gioiThieu = tt.gioi_thieu ? await marked.parse(tt.gioi_thieu) : '';
+const bacSi = bs.danh_sach.length > 0 ? bs.danh_sach : null;
+---
+<Layout title="Giới thiệu bệnh viện" description={`Giới thiệu ${tt.ten}: đội ngũ bác sĩ, cơ sở vật chất, dịch vụ khám chữa bệnh cho chó mèo tại ${tt.dia_chi}.`}>
+  <section class="pagehead"><div class="wrap">
+    <nav class="crumb" aria-label="Đường dẫn"><a href={u('/')}>Trang chủ</a><span aria-hidden="true">›</span><span>Giới thiệu</span></nav>
+    <h1>{tt.ten}</h1>
+    <p class="lead">{tt.gioi_thieu_ngan || `Bệnh viện thú y chuyên chó mèo tại ${tt.dia_chi}.`}</p>
+  </div></section>
+
+  <section class="s" style="padding-top:8px"><div class="wrap">
+    <div class="so-lieu">
+      <div><b>24/24</b>Trực cấp cứu mọi ngày</div>
+      <div><b>{tt.gio_mo_cua}</b>Khám trong giờ hằng ngày</div>
+      {tt.so_nam_hoat_dong && <div><b>{tt.so_nam_hoat_dong} năm</b>Hoạt động</div>}
+      <div><b>{dv.danh_sach.length}</b>Nhóm dịch vụ</div>
+    </div>
+    <div class="cols2" style="align-items:start">
+      {tt.anh_tap_the
+        ? <img src={u(tt.anh_tap_the)} alt={`Đội ngũ ${tt.ten}`} width="600" height="400" style="aspect-ratio:3/2;object-fit:cover;width:100%">
+        : <div class="cho-trong" style="aspect-ratio:3/2">Ảnh tập thể bác sĩ, nhân viên (đang cập nhật)</div>}
+      <div class="prose">
+        {gioiThieu ? <Fragment set:html={gioiThieu} /> : <p class="muted">Phần giới thiệu chi tiết về bệnh viện đang được cập nhật.</p>}
+      </div>
+    </div>
+  </div></section>
+
+  <section class="s s-tim"><div class="wrap">
+    <div class="sh"><h2>Đội ngũ bác sĩ</h2></div>
+    <div class="grid4">
+      {bacSi
+        ? bacSi.map((b: any) => (
+            <div class="bs">
+              {b.anh ? <img class="anh" src={u(b.anh)} alt={b.ten} loading="lazy" width="300" height="300"> : <div class="anh cho-trong" aria-hidden="true">Ảnh</div>}
+              <b>{b.ten}</b>{b.chuc_vu && <span class="muted">{b.chuc_vu}</span>}
+            </div>
+          ))
+        : [1, 2, 3, 4].map(() => <div class="bs"><div class="anh cho-trong" aria-hidden="true">Ảnh bác sĩ</div><b class="muted">Đang cập nhật</b></div>)}
+    </div>
+  </div></section>
+
+  <section class="s"><div class="wrap">
+    <div class="sh"><h2>Cơ sở vật chất</h2></div>
+    <div class="grid3">
+      {csvc.danh_sach.map((c) => (
+        <figure class="card" style="margin:0">
+          {c.anh ? <img class="anh" src={u(c.anh)} alt={c.ten} loading="lazy" width="400" height="300"> : <div class="anh cho-trong" aria-hidden="true">Ảnh {c.ten.toLowerCase()} (đang cập nhật)</div>}
+          <figcaption><h3>{c.ten}</h3></figcaption>
+        </figure>
+      ))}
+    </div>
+    <p style="margin-top:28px"><a class="btn btn-cta" href={u('/dat-lich/')}><Icon name="calendar" />Đặt lịch khám</a></p>
+  </div></section>
+</Layout>

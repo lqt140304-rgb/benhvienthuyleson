@@ -1,0 +1,16 @@
+---
+// Thẻ bài tư vấn (ảnh + chuyên mục + tiêu đề)
+import type { CollectionEntry } from 'astro:content';
+import { u, ngay } from '../lib/site';
+interface Props { bai: CollectionEntry<'tuVan'>; anh?: boolean }
+const { bai, anh = true } = Astro.props;
+const d = bai.data;
+---
+<a class="card" href={u(`/tu-van/${bai.id}/`)}>
+  {anh && (d.image
+    ? <img class="anh" src={u(d.image)} alt="" loading="lazy" width="400" height="300">
+    : <div class={`anh cho-trong${d.chuyen_muc === 'Chó' ? ' ngoc' : ''}`} aria-hidden="true">{d.chuyen_muc}</div>)}
+  <span class={`kicker${d.chuyen_muc === 'Chó' ? ' cho' : ''}`}>{d.chuyen_muc}</span>
+  <h3>{d.title}</h3>
+  <span class="meta">{d.tac_gia ? `${d.tac_gia} · ` : ''}{ngay(d.date)}</span>
+</a>

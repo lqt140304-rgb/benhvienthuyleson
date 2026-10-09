@@ -1,0 +1,43 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import CaseCard from '../../components/CaseCard.astro';
+import { u, caBenh } from '../../lib/site';
+const ds = await caBenh();
+---
+<Layout title="Nhật ký ca bệnh" description="Hình ảnh và câu chuyện các ca chó mèo được khám, phẫu thuật và điều trị tại Bệnh viện thú y Lê Sơn." cam="ca_benh">
+  <section class="pagehead"><div class="wrap">
+    <nav class="crumb" aria-label="Đường dẫn"><a href={u('/')}>Trang chủ</a><span aria-hidden="true">›</span><span>Nhật ký ca bệnh</span></nav>
+    <h1>Nhật ký ca bệnh</h1>
+    <p class="lead">Các bé đã được khám và điều trị tại viện, kể lại bằng hình ảnh.</p>
+  </div></section>
+  <section class="s" style="padding-top:16px"><div class="wrap">
+    {ds.length > 0 ? (
+      <>
+        <div class="loc" role="group" aria-label="Lọc theo loài">
+          <button type="button" data-loc="" aria-pressed="true">Tất cả</button>
+          <button type="button" data-loc="Chó" aria-pressed="false">Chó</button>
+          <button type="button" data-loc="Mèo" aria-pressed="false">Mèo</button>
+        </div>
+        <div class="grid3" id="ds-ca">{ds.map((c) => <CaseCard ca={c} />)}</div>
+        <p class="empty" id="ca-trong" hidden>Chưa có ca nào trong mục này.</p>
+      </>
+    ) : <p class="empty">Hình ảnh các ca bệnh được điều trị tại viện sẽ sớm được cập nhật.</p>}
+    <p class="luu-y" style="margin-top:28px">Ảnh được đăng khi có sự đồng ý của chủ nuôi. Web không hiển thị thông tin cá nhân của chủ nuôi.</p>
+  </div></section>
+</Layout>
+<script>
+  // Lọc ca bệnh theo loài
+  const nut = document.querySelectorAll<HTMLButtonElement>('[data-loc]');
+  nut.forEach((b) => b.addEventListener('click', () => {
+    const loai = b.dataset.loc;
+    nut.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    let con = 0;
+    document.querySelectorAll<HTMLElement>('#ds-ca [data-loai]').forEach((c) => {
+      const hien = !loai || c.dataset.loai === loai;
+      c.hidden = !hien;
+      if (hien) con++;
+    });
+    const trong = document.getElementById('ca-trong');
+    if (trong) trong.hidden = con > 0;
+  }));
+</script>

@@ -1,0 +1,150 @@
+---
+// Khung chung mọi trang: thẻ SEO, đầu trang kiểu báo, chân trang, thanh nút điện thoại, bé Cam
+import '../styles/global.css';
+import Icon from '../components/Icon.astro';
+import Cam from '../components/Cam.astro';
+import tt from '../data/thong_tin.json';
+import { u } from '../lib/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+  cam?: string;
+  article?: boolean;
+}
+const { title, description, image, noindex = false, cam = 'trang_khac', article = false } = Astro.props;
+
+const tieuDe = title ? `${title} | ${tt.ten}` : `${tt.ten} – Khám chữa bệnh, tư vấn chăm sóc chó mèo`;
+const moTa = description || `Khám, tiêm phòng, phẫu thuật, spa, nội trú và cấp cứu 24/24 cho chó mèo tại ${tt.dia_chi}. Đọc bài tư vấn chăm sóc từ bác sĩ thú y.`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const anh = new URL(image ? u(image) : u('/img/og.jpg'), Astro.site);
+const path = Astro.url.pathname;
+const dangO = (p: string) => (p === '/' ? path === u('/') : path.startsWith(u(p)));
+
+const menu = [
+  { href: '/', ten: 'Trang chủ' },
+  { href: '/tu-van/cho/', ten: 'Chó' },
+  { href: '/tu-van/meo/', ten: 'Mèo' },
+  { href: '/nhat-ky-ca-benh/', ten: 'Nhật ký ca bệnh' },
+  { href: '/dich-vu/', ten: 'Dịch vụ & giá' },
+  { href: '/gioi-thieu/', ten: 'Giới thiệu' },
+  { href: '/lien-he/', ten: 'Liên hệ' },
+];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'VeterinaryCare',
+  name: tt.ten,
+  telephone: tt.dien_thoai_goi,
+  address: { '@type': 'PostalAddress', streetAddress: '101 Khuất Duy Tiến', addressLocality: 'Thanh Xuân', addressRegion: 'Hà Nội', addressCountry: 'VN' },
+  openingHours: 'Mo-Su 08:00-21:00',
+  url: new URL(u('/'), Astro.site).href,
+  image: new URL(u('/img/logo.jpg'), Astro.site).href,
+  hasMap: tt.ban_do,
+};
+---
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{tieuDe}</title>
+<meta name="description" content={moTa}>
+<link rel="canonical" href={canonical.href}>
+{noindex && <meta name="robots" content="noindex">}
+<meta property="og:type" content={article ? 'article' : 'website'}>
+<meta property="og:site_name" content={tt.ten}>
+<meta property="og:locale" content="vi_VN">
+<meta property="og:title" content={title || tt.ten}>
+<meta property="og:description" content={moTa}>
+<meta property="og:url" content={canonical.href}>
+<meta property="og:image" content={anh.href}>
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#67236C">
+<link rel="icon" type="image/png" href={u('/img/favicon.png')}>
+<link rel="apple-touch-icon" href={u('/img/apple-touch-icon.png')}>
+<link rel="sitemap" href={u('/sitemap-index.xml')}>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script type="application/ld+json" set:html={JSON.stringify(schema)}></script>
+</head>
+<body>
+<a class="skip" href="#noi-dung">Bỏ qua menu</a>
+
+<header class="head">
+  <div class="wrap">
+    <div class="head-top">
+      <span class="head-info"><Icon name="clock" size={16} />Mở cửa {tt.gio_mo_cua} · Trực cấp cứu 24/24 · <a href={`tel:${tt.dien_thoai_goi}`}>{tt.dien_thoai}</a></span>
+      <a class="btn btn-cta btn-sm head-cta" href={u('/dat-lich/')}><Icon name="calendar" size={18} />Đặt lịch khám</a>
+    </div>
+    <div class="masthead">
+      <a class="brand" href={u('/')}>
+        <img src={u('/img/logo.jpg')} alt="" width="56" height="56">
+        <span class="brand-name">Bệnh viện thú y Lê Sơn</span>
+      </a>
+      <span class="brand-tag">Kiến thức chăm sóc chó mèo từ bác sĩ thú y</span>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu-chinh" data-menu>
+        <Icon name="menu" size={22} /><span>Menu</span>
+      </button>
+    </div>
+    <nav class="nav" id="menu-chinh" aria-label="Menu chính">
+      {menu.map((m) => <a href={u(m.href)} aria-current={dangO(m.href) ? 'page' : undefined}>{m.ten}</a>)}
+    </nav>
+  </div>
+</header>
+
+<main id="noi-dung">
+  <slot />
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-cols">
+    <div>
+      <p class="foot-name">{tt.ten}</p>
+      <p>{tt.dia_chi}</p>
+      <a class="foot-link" href={tt.ban_do} target="_blank" rel="noopener">Chỉ đường Google Maps <Icon name="arrow" size={16} /></a>
+    </div>
+    <div>
+      <p class="foot-h">Giờ làm việc</p>
+      <p>{tt.gio_mo_cua} hằng ngày<br>Trực cấp cứu 24/24</p>
+      <a class="foot-link" href={`tel:${tt.dien_thoai_goi}`}><Icon name="phone" size={16} />{tt.dien_thoai}</a>
+    </div>
+    <div>
+      <p class="foot-h">Kết nối</p>
+      <ul class="foot-list">
+        {tt.zalo && <li><a href={tt.zalo} target="_blank" rel="noopener">Nhắn Zalo</a></li>}
+        {tt.facebook && <li><a href={tt.facebook} target="_blank" rel="noopener">Facebook</a></li>}
+        <li><a href={u('/dat-lich/')}>Đặt lịch khám</a></li>
+        <li><button type="button" class="linklike" data-cam-bat hidden>Gọi bé Cam</button></li>
+        <li><a class="foot-muted" href={u('/nhan-vien/')}>Khu nhân viên</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap foot-copy">© {new Date().getFullYear()} {tt.ten}</div>
+</footer>
+
+<nav class="mbar" aria-label="Liên hệ nhanh">
+  <a href={`tel:${tt.dien_thoai_goi}`}><Icon name="phone" size={22} />Gọi</a>
+  <a class="mbar-cta" href={u('/dat-lich/')}><Icon name="calendar" size={22} />Đặt lịch</a>
+  {tt.zalo
+    ? <a href={tt.zalo} target="_blank" rel="noopener"><Icon name="chat" size={22} />Zalo</a>
+    : <a href={tt.ban_do} target="_blank" rel="noopener"><Icon name="map" size={22} />Bản đồ</a>}
+</nav>
+
+<Cam trang={cam} />
+
+<script>
+  // Menu trên điện thoại
+  const nut = document.querySelector<HTMLButtonElement>('[data-menu]');
+  const nav = document.getElementById('menu-chinh');
+  nut?.addEventListener('click', () => {
+    const mo = nut.getAttribute('aria-expanded') !== 'true';
+    nut.setAttribute('aria-expanded', String(mo));
+    nav?.classList.toggle('mo', mo);
+  });
+</script>
+</body>
+</html>

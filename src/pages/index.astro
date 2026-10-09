@@ -1,0 +1,108 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import PostCard from '../components/PostCard.astro';
+import CaseCard from '../components/CaseCard.astro';
+import tt from '../data/thong_tin.json';
+import dv from '../data/dich_vu.json';
+import { u, ngay, baiTuVan, caBenh } from '../lib/site';
+
+const bai = await baiTuVan();
+const noiBat = bai.find((b) => b.data.noi_bat) ?? bai[0];
+const moiDang = bai.filter((b) => b !== noiBat).slice(0, 4);
+const cho = bai.filter((b) => b.data.chuyen_muc === 'Chó').slice(0, 2);
+const meo = bai.filter((b) => b.data.chuyen_muc === 'Mèo').slice(0, 2);
+const ca = (await caBenh()).slice(0, 4);
+---
+<Layout cam="trang_chu">
+
+<section class="s-tight">
+  <div class="wrap feature">
+    <div class="feature-main">
+      {noiBat ? (
+        <a class="feat" href={u(`/tu-van/${noiBat.id}/`)}>
+          {noiBat.data.image
+            ? <img class="anh" src={u(noiBat.data.image)} alt="" width="1200" height="675" fetchpriority="high">
+            : <div class="anh cho-trong" aria-hidden="true">{noiBat.data.chuyen_muc}</div>}
+          <span class={`kicker${noiBat.data.chuyen_muc === 'Chó' ? ' cho' : ''}`}>{noiBat.data.chuyen_muc}</span>
+          <h1>{noiBat.data.title}</h1>
+          {noiBat.data.description && <p class="lead" style="margin:0">{noiBat.data.description}</p>}
+          <span class="muted">{noiBat.data.tac_gia ? `${noiBat.data.tac_gia} · ` : ''}{ngay(noiBat.data.date)}</span>
+        </a>
+      ) : (
+        <div class="feat">
+          <span class="kicker">Bệnh viện thú y · Thanh Xuân, Hà Nội</span>
+          <h1>Chăm sóc chó mèo tận tâm, như người nhà</h1>
+          <p class="lead">Khám chữa bệnh, tiêm phòng, phẫu thuật, spa và nội trú cho chó mèo. Các bài tư vấn của bác sĩ đang được chuẩn bị và sẽ sớm có mặt tại đây.</p>
+          <div class="dv-nut"><a class="btn btn-cta" href={u('/dat-lich/')}>Đặt lịch khám</a><a class="btn btn-line" href={`tel:${tt.dien_thoai_goi}`}><Icon name="phone" />{tt.dien_thoai}</a></div>
+        </div>
+      )}
+    </div>
+    <aside class="feature-side">
+      {moiDang.length > 0 && (
+        <div>
+          <h2 class="side-h">Mới đăng</h2>
+          <div class="side-list">
+            {moiDang.map((b) => (
+              <a href={u(`/tu-van/${b.id}/`)}><span class={`kicker${b.data.chuyen_muc === 'Chó' ? ' cho' : ''}`}>{b.data.chuyen_muc}</span><b>{b.data.title}</b></a>
+            ))}
+          </div>
+        </div>
+      )}
+      <div class="box-tim">
+        <h2>Bé cần khám?</h2>
+        <p>Đặt lịch online hoặc nhắn Zalo. Bệnh viện sẽ gọi lại xác nhận.</p>
+        <a class="btn btn-cta" href={u('/dat-lich/')}>Đặt lịch khám</a>
+        {tt.zalo && <a class="btn btn-trang" href={tt.zalo} target="_blank" rel="noopener">Nhắn Zalo</a>}
+        <p style="font-size:15px">Cấp cứu 24/24: <a href={`tel:${tt.dien_thoai_goi}`} style="color:#FFC9A6;font-weight:800">{tt.dien_thoai}</a></p>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<section class="s">
+  <div class="wrap cols2">
+    {[{ ten: 'Chó', ds: cho, href: '/tu-van/cho/' }, { ten: 'Mèo', ds: meo, href: '/tu-van/meo/' }].map((m) => (
+      <div>
+        <div class="sh"><h2>{m.ten}</h2><a href={u(m.href)}>Xem tất cả <Icon name="arrow" size={16} /></a></div>
+        {m.ds.length > 0
+          ? <div class="grid2">{m.ds.map((b) => <PostCard bai={b} />)}</div>
+          : <p class="empty">Bài viết về {m.ten.toLowerCase()} đang được bác sĩ chuẩn bị.</p>}
+      </div>
+    ))}
+  </div>
+</section>
+
+<section class="s s-tim">
+  <div class="wrap">
+    <div class="sh"><h2>Nhật ký ca bệnh</h2><a href={u('/nhat-ky-ca-benh/')}>Xem tất cả <Icon name="arrow" size={16} /></a></div>
+    {ca.length > 0
+      ? <div class="grid4">{ca.map((c) => <CaseCard ca={c} />)}</div>
+      : <p class="empty">Hình ảnh các ca bệnh được điều trị tại viện sẽ sớm được cập nhật.</p>}
+  </div>
+</section>
+
+<section class="s">
+  <div class="wrap cols2" style="align-items:center">
+    {tt.anh_tap_the
+      ? <img src={u(tt.anh_tap_the)} alt={`Đội ngũ ${tt.ten}`} loading="lazy" width="600" height="400" style="aspect-ratio:3/2;object-fit:cover;width:100%">
+      : <div class="cho-trong" style="aspect-ratio:3/2">Ảnh tập thể bác sĩ, nhân viên (đang cập nhật)</div>}
+    <div>
+      <span class="kicker">Về chúng tôi</span>
+      <h2 style="font-size:32px;margin:6px 0 12px">{tt.ten}</h2>
+      <p class="muted">{tt.gioi_thieu_ngan || `Bệnh viện thú y chuyên chó mèo tại ${tt.dia_chi}. Mở cửa ${tt.gio_mo_cua} hằng ngày và trực cấp cứu 24/24.`}</p>
+      <a class="btn btn-line" href={u('/gioi-thieu/')}>Xem thêm về bệnh viện <Icon name="arrow" size={18} /></a>
+    </div>
+  </div>
+</section>
+
+<section class="s" style="padding-top:0">
+  <div class="wrap">
+    <div class="sh"><h2>Dịch vụ tại bệnh viện</h2><a href={u('/dich-vu/')}>Bảng giá <Icon name="arrow" size={16} /></a></div>
+    <div class="dv-list">
+      {dv.danh_sach.map((d) => <div class={d.cap_cuu ? 'cc' : ''}><b>{d.ten}</b><span>{d.mo_ta}</span></div>)}
+    </div>
+  </div>
+</section>
+
+</Layout>

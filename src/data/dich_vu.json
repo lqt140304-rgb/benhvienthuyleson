@@ -1,0 +1,16 @@
+{
+  "danh_sach": [
+    { "ten": "Khám và điều trị", "icon": "stethoscope", "mo_ta": "Khám tổng quát, chẩn đoán và điều trị các bệnh thường gặp ở chó mèo.", "cap_cuu": false,
+      "hang_muc": [ { "ten": "Khám tổng quát", "gia": "" } ] },
+    { "ten": "Tiêm phòng vaccine", "icon": "syringe", "mo_ta": "Lịch tiêm phòng đầy đủ cho chó con, mèo con và thú trưởng thành.", "cap_cuu": false,
+      "hang_muc": [ { "ten": "Vaccine cho chó", "gia": "" }, { "ten": "Vaccine cho mèo", "gia": "" } ] },
+    { "ten": "Phẫu thuật", "icon": "cross", "mo_ta": "Phẫu thuật có khám, tư vấn trước và theo dõi sau mổ bởi bác sĩ thú y.", "cap_cuu": false,
+      "hang_muc": [ { "ten": "Phẫu thuật (báo giá sau khi khám)", "gia": "" } ] },
+    { "ten": "Spa thú cưng", "icon": "scissors", "mo_ta": "Tắm, cắt tỉa lông cho chó mèo, nhẹ nhàng và sạch sẽ.", "cap_cuu": false,
+      "hang_muc": [ { "ten": "Tắm", "gia": "" }, { "ten": "Cắt tỉa lông", "gia": "" } ] },
+    { "ten": "Nội trú", "icon": "bed", "mo_ta": "Chỗ ở an toàn, được theo dõi sức khỏe trong thời gian gửi hoặc điều trị.", "cap_cuu": false,
+      "hang_muc": [ { "ten": "Nội trú theo ngày", "gia": "" } ] },
+    { "ten": "Cấp cứu 24/24", "icon": "heart-pulse", "mo_ta": "Luôn có người trực. Gọi trước để bệnh viện chuẩn bị đón bé.", "cap_cuu": true,
+      "hang_muc": [ { "ten": "Khám cấp cứu trong giờ (8:00 – 21:00)", "gia": "" } ] }
+  ]
+}

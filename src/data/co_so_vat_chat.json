@@ -1,0 +1,9 @@
+{
+  "danh_sach": [
+    { "ten": "Phòng khám", "anh": "" },
+    { "ten": "Phòng mổ", "anh": "" },
+    { "ten": "Khu spa", "anh": "" },
+    { "ten": "Khu nội trú", "anh": "" },
+    { "ten": "Mặt tiền bệnh viện", "anh": "" }
+  ]
+}

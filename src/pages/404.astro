@@ -1,0 +1,12 @@
+---
+import Layout from '../layouts/Layout.astro';
+import tt from '../data/thong_tin.json';
+import { u } from '../lib/site';
+---
+<Layout title="Không tìm thấy trang" noindex>
+  <section class="pagehead"><div class="wrap" style="max-width:720px">
+    <h1>Không tìm thấy trang này</h1>
+    <p class="lead">Đường dẫn có thể đã thay đổi. Bạn quay về trang chủ hoặc gọi {tt.dien_thoai} nếu cần hỗ trợ.</p>
+    <p class="dv-nut"><a class="btn btn-cta" href={u('/')}>Về trang chủ</a><a class="btn btn-line" href={u('/tu-van/')}>Đọc bài tư vấn</a></p>
+  </div></section>
+</Layout>
