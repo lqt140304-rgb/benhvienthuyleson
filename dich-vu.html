@@ -1,0 +1,34 @@
+---
+title: Dịch vụ và bảng giá
+description: Khám và điều trị, tiêm phòng vaccine, phẫu thuật, spa, nội trú và cấp cứu 24/24 cho chó mèo tại Bệnh viện thú y Lê Sơn, Thanh Xuân, Hà Nội.
+permalink: /dich-vu/
+---
+{% assign tt = site.data.thong_tin %}
+<section class="pagehead"><div class="wrap">
+<nav class="crumb" aria-label="Đường dẫn"><a href="{{ '/' | relative_url }}">Trang chủ</a><span aria-hidden="true">›</span><span>Dịch vụ</span></nav>
+<h1>Dịch vụ và bảng giá</h1>
+<p class="lead">Giá chưa có trên bảng đang được cập nhật. Gọi {{ tt.dien_thoai }} để được báo giá theo tình trạng của bé.</p>
+</div></section>
+
+<div class="wrap"><div class="svclist">
+{% for dv in site.data.dich_vu %}
+<div class="svcbig">
+<div>
+<h2><span class="ic">{% include icon.html name=dv.icon %}</span>{{ dv.ten }}</h2>
+<p>{{ dv.mo_ta }}</p>
+{% if dv.cap_cuu %}<a class="btn btn-cta" style="margin-top:16px" href="tel:{{ tt.dien_thoai_goi }}">{% include icon.html name="phone" %}Gọi {{ tt.dien_thoai }}</a>
+{% else %}<a class="more" href="{{ '/dat-lich/' | relative_url }}">{{ dv.nut | default: "Đặt lịch" }} →</a>{% endif %}
+</div>
+<table class="ptable">
+<thead><tr><th scope="col">Hạng mục</th><th scope="col" class="p">Giá</th></tr></thead>
+<tbody>
+{% for hm in dv.hang_muc %}<tr><td>{{ hm.ten }}</td><td class="p">{% if hm.gia and hm.gia != blank %}{{ hm.gia }}{% else %}Đang cập nhật{% endif %}</td></tr>{% endfor %}
+{% if dv.cap_cuu %}
+<tr><td>Khám ngoài giờ<span class="badge">Có phụ phí</span></td><td class="p">{% if tt.phu_phi_kham_ngoai_gio != blank %}{{ tt.phu_phi_kham_ngoai_gio }}{% else %}Gọi để biết mức{% endif %}</td></tr>
+<tr><td>Cấp cứu ngoài giờ<span class="badge">Có phụ phí</span></td><td class="p">{% if tt.phu_phi_cap_cuu_ngoai_gio != blank %}{{ tt.phu_phi_cap_cuu_ngoai_gio }}{% else %}Gọi để biết mức{% endif %}</td></tr>
+{% endif %}
+</tbody>
+</table>
+</div>
+{% endfor %}
+</div></div>

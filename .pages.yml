@@ -1,0 +1,99 @@
+# Cấu hình Pages CMS (https://app.pagescms.org) – nơi soạn bài và sửa thông tin web không cần code
+media:
+  input: assets/uploads
+  output: /assets/uploads
+  extensions: [jpg, jpeg, png, webp]
+
+content:
+  - name: bai-tu-van
+    label: Bài tư vấn
+    type: collection
+    path: _posts
+    filename: "{year}-{month}-{day}-{primary}.md"
+    view:
+      fields: [title, chuyen_muc, date]
+      sort: [date]
+      default: { sort: date, order: desc }
+    fields:
+      - name: title
+        label: Tiêu đề bài
+        type: string
+        required: true
+      - name: date
+        label: Ngày đăng
+        type: date
+        required: true
+      - name: chuyen_muc
+        label: Chuyên mục
+        type: select
+        required: true
+        options:
+          values: [Chó, Mèo]
+      - name: description
+        label: Mô tả ngắn (1–2 câu, hiện trên Google)
+        type: text
+      - name: anh
+        label: Ảnh đầu bài (ảnh ngang)
+        type: image
+      - name: tac_gia
+        label: Tác giả (ví dụ BS. Nguyễn Văn A)
+        type: string
+      - name: dau_hieu_nguy_hiem
+        label: Dấu hiệu cần đưa bé đi khám ngay (mỗi dòng một dấu hiệu, có thể bỏ trống)
+        type: string
+        list: true
+      - name: body
+        label: Nội dung bài
+        type: rich-text
+
+  - name: thong-tin
+    label: Thông tin bệnh viện
+    type: file
+    path: _data/thong_tin.yml
+    fields:
+      - { name: dien_thoai, label: Số điện thoại hiển thị, type: string }
+      - { name: dien_thoai_goi, label: Số điện thoại để bấm gọi (viết liền), type: string }
+      - { name: dia_chi, label: Địa chỉ, type: string }
+      - { name: gio_mo_cua, label: Giờ mở cửa, type: string }
+      - { name: ban_do, label: Link Google Maps, type: string }
+      - { name: zalo, label: "Link Zalo (ví dụ https://zalo.me/0973555105) – để trống thì ẩn nút", type: string }
+      - { name: facebook, label: Link trang Facebook – để trống thì ẩn nút, type: string }
+      - { name: phu_phi_kham_ngoai_gio, label: "Phụ phí khám ngoài giờ (ví dụ 100.000đ)", type: string }
+      - { name: phu_phi_cap_cuu_ngoai_gio, label: "Phụ phí cấp cứu ngoài giờ", type: string }
+      - { name: gioi_thieu, label: Đoạn giới thiệu bệnh viện (trang chủ), type: text }
+      - { name: so_nam_hoat_dong, label: Số năm hoạt động, type: string }
+      - { name: anh_trang_chu, label: Ảnh lớn đầu trang chủ, type: image }
+      - { name: dia_chi_nhan_dat_lich, label: "Địa chỉ nhận form đặt lịch (Google Apps Script) – không sửa nếu không chắc", type: string }
+
+  - name: dich-vu
+    label: Dịch vụ và bảng giá
+    type: file
+    path: _data/dich_vu.yml
+    list: true
+    fields:
+      - { name: ten, label: Tên dịch vụ, type: string, required: true }
+      - name: icon
+        label: Biểu tượng
+        type: select
+        options:
+          values: [stethoscope, syringe, medical, bath, bed, ambulance]
+      - { name: mo_ta, label: Mô tả ngắn, type: text }
+      - { name: nut, label: Chữ trên nút đặt lịch, type: string }
+      - { name: cap_cuu, label: Là mục cấp cứu (hiện nút gọi và phụ phí ngoài giờ), type: boolean }
+      - name: hang_muc
+        label: Bảng giá
+        type: object
+        list: true
+        fields:
+          - { name: ten, label: Hạng mục, type: string }
+          - { name: gia, label: "Giá (để trống = Đang cập nhật)", type: string }
+
+  - name: bac-si
+    label: Đội ngũ bác sĩ
+    type: file
+    path: _data/bac_si.yml
+    list: true
+    fields:
+      - { name: ten, label: Họ tên, type: string, required: true }
+      - { name: chuc_vu, label: Chức vụ / chuyên môn, type: string }
+      - { name: anh, label: Ảnh chân dung (ảnh vuông), type: image }

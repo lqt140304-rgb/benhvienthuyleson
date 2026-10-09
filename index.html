@@ -1,0 +1,90 @@
+---
+title: Bệnh viện thú y Lê Sơn – Khám chữa bệnh chó mèo tại Thanh Xuân, Hà Nội
+---
+{% assign tt = site.data.thong_tin %}
+<section class="hero"><div class="wrap">
+<div>
+<span class="pill">{% include icon.html name="siren" px="16" %}Trực cấp cứu 24/24</span>
+<h1>Chăm sóc <em>thú cưng</em> của bạn như người nhà</h1>
+<p class="lead">Khám bệnh, tiêm phòng, phẫu thuật, spa và nội trú cho chó mèo tại Thanh Xuân, Hà Nội, do bác sĩ thú y trực tiếp thăm khám.</p>
+<div class="acts">
+<a class="btn btn-cta" href="{{ '/dat-lich/' | relative_url }}">{% include icon.html name="calendar" %}Đặt lịch khám</a>
+<a class="btn btn-line" href="tel:{{ tt.dien_thoai_goi }}">{% include icon.html name="phone" %}Gọi {{ tt.dien_thoai }}</a>
+</div>
+</div>
+{% if tt.anh_trang_chu != blank %}<img src="{{ tt.anh_trang_chu | relative_url }}" alt="Bệnh viện thú y Lê Sơn" style="width:100%;aspect-ratio:5/4;object-fit:cover;border-radius:28px">{% else %}<div class="ph">Ảnh bệnh viện sẽ được bổ sung</div>{% endif %}
+</div></section>
+
+<section class="info"><div class="wrap"><div class="grid">
+<div class="icard"><div class="ic">{% include icon.html name="clock" %}</div><div><h2 style="font-size:17px;font-weight:800;color:#67236C">Giờ khám {{ tt.gio_mo_cua }}</h2><p>Mỗi ngày. Có thể đặt lịch trước trên web.</p></div></div>
+<div class="icard"><div class="ic">{% include icon.html name="siren" %}</div><div><h2 style="font-size:17px;font-weight:800;color:#67236C">Cấp cứu trực 24/24</h2><p>Ngoài giờ có phụ phí, vui lòng gọi trước.</p></div></div>
+<div class="icard"><div class="ic">{% include icon.html name="pin" %}</div><div><h2 style="font-size:17px;font-weight:800;color:#67236C">101 Khuất Duy Tiến</h2><p>Thanh Xuân, Hà Nội.</p></div></div>
+</div></div></section>
+
+<section class="s" id="gioi-thieu"><div class="wrap">
+<div class="sh"><div><h2>Về Bệnh viện thú y Lê Sơn</h2><p>Đội ngũ bác sĩ tận tâm và cơ sở vật chất dành riêng cho chó mèo.</p></div></div>
+<div class="about">
+<div class="txt">
+{% if tt.gioi_thieu != blank %}<p>{{ tt.gioi_thieu }}</p>{% else %}<p class="fill">Phần giới thiệu bệnh viện đang được cập nhật.</p>{% endif %}
+<div class="pills"><span class="pill">Chuyên chó và mèo</span><span class="pill">Trực cấp cứu 24/24</span>{% if tt.so_nam_hoat_dong != blank %}<span class="pill">{{ tt.so_nam_hoat_dong }} năm hoạt động</span>{% endif %}</div>
+</div>
+<div class="ph" style="aspect-ratio:16/10">Ảnh tập thể bác sĩ và nhân viên sẽ được bổ sung</div>
+</div>
+
+<h3 class="subh">{% include icon.html name="stethoscope" %}Đội ngũ bác sĩ</h3>
+<div class="grid-auto">
+{% if site.data.bac_si.size > 0 %}
+{% for bs in site.data.bac_si %}
+<div class="doc">{% if bs.anh %}<img src="{{ bs.anh | relative_url }}" alt="{{ bs.ten }}" loading="lazy">{% else %}<div class="ph">Ảnh bác sĩ</div>{% endif %}<div class="b"><p class="n">{{ bs.ten }}</p><p class="r">{{ bs.chuc_vu }}</p></div></div>
+{% endfor %}
+{% else %}
+{% for i in (1..4) %}<div class="doc"><div class="ph">Ảnh bác sĩ</div><div class="b"><p class="n">Đang cập nhật</p><p class="r">Bác sĩ thú y</p></div></div>{% endfor %}
+{% endif %}
+</div>
+
+<h3 class="subh">{% include icon.html name="hospital" %}Cơ sở vật chất</h3>
+<div class="grid-auto">
+<figure class="fac"><div class="ph">Ảnh sẽ được bổ sung</div><figcaption>Phòng khám</figcaption></figure>
+<figure class="fac"><div class="ph">Ảnh sẽ được bổ sung</div><figcaption>Phòng phẫu thuật</figcaption></figure>
+<figure class="fac"><div class="ph">Ảnh sẽ được bổ sung</div><figcaption>Khu spa</figcaption></figure>
+<figure class="fac"><div class="ph">Ảnh sẽ được bổ sung</div><figcaption>Khu nội trú</figcaption></figure>
+</div>
+</div></section>
+
+<section class="s" id="dich-vu"><div class="wrap">
+<div class="sh"><div><h2>Dịch vụ của bệnh viện</h2><p>Từ khám định kỳ đến cấp cứu, mọi thứ cho thú cưng ở cùng một nơi.</p></div><a class="more" href="{{ '/dich-vu/' | relative_url }}">Xem tất cả dịch vụ →</a></div>
+<div class="cards3">
+{% for dv in site.data.dich_vu %}
+<a class="svc" href="{{ '/dich-vu/' | relative_url }}"><div class="ic">{% include icon.html name=dv.icon %}</div><h3>{{ dv.ten }}</h3><p>{{ dv.mo_ta }}</p></a>
+{% endfor %}
+</div>
+</div></section>
+
+<section class="s" id="tu-van"><div class="wrap">
+<div class="sh"><div><h2>Tư vấn chăm sóc thú cưng</h2><p>Bài viết do bác sĩ thú y biên soạn.</p></div><a class="more" href="{{ '/tu-van/' | relative_url }}">Xem tất cả bài tư vấn →</a></div>
+{% if site.posts.size > 0 %}
+<div class="cards3">{% for p in site.posts limit:3 %}{% include article-card.html post=p %}{% endfor %}</div>
+{% else %}
+<div class="empty">Các bài tư vấn đầu tiên sẽ sớm được đăng.</div>
+{% endif %}
+</div></section>
+
+<section class="book" id="dat-lich"><div class="wrap">
+<div>
+<h2>Đặt lịch khám cho bé chỉ trong 1 phút</h2>
+<p>Điền tên, số điện thoại và giờ muốn đến. Nhân viên sẽ gọi lại xác nhận với bạn.</p>
+<a class="btn btn-cta" href="{{ '/dat-lich/' | relative_url }}">Đặt lịch khám</a>
+</div>
+<div class="note"><b>Cần khám ngoài {{ tt.gio_mo_cua }}?</b>Vui lòng gọi trực tiếp, bệnh viện trực 24/24. Khám và cấp cứu ngoài giờ có phụ phí, nhân viên sẽ báo mức cụ thể khi bạn gọi.<br><a class="tel" href="tel:{{ tt.dien_thoai_goi }}">{% include icon.html name="phone" %}{{ tt.dien_thoai }}</a></div>
+</div></section>
+
+<section class="s loc" id="lien-he"><div class="wrap"><div class="grid">
+<div>
+<h2>Địa chỉ bệnh viện</h2>
+<div class="row">{% include icon.html name="pin" %}<p>{{ tt.dia_chi }}</p></div>
+<div class="row">{% include icon.html name="clock" %}<p>{{ tt.gio_mo_cua }} hằng ngày · Trực cấp cứu 24/24</p></div>
+<div class="row">{% include icon.html name="phone" %}<p><a href="tel:{{ tt.dien_thoai_goi }}">{{ tt.dien_thoai }}</a></p></div>
+<a class="btn btn-line" href="{{ tt.ban_do }}" target="_blank" rel="noopener">{% include icon.html name="navigation" %}Chỉ đường trên Google Maps</a>
+</div>
+<div class="ph">Ảnh mặt tiền bệnh viện sẽ được bổ sung</div>
+</div></div></section>

@@ -1,0 +1,22 @@
+---
+title: Tư vấn chăm sóc chó mèo
+description: Bài tư vấn chăm sóc sức khỏe chó mèo do bác sĩ Bệnh viện thú y Lê Sơn biên soạn.
+---
+<section class="pagehead"><div class="wrap">
+<nav class="crumb" aria-label="Đường dẫn"><a href="{{ '/' | relative_url }}">Trang chủ</a><span aria-hidden="true">›</span><span>Tư vấn</span></nav>
+<h1>Tư vấn chăm sóc chó mèo</h1>
+<p class="lead">Bài viết do bác sĩ thú y Bệnh viện Lê Sơn biên soạn. Bé có dấu hiệu bất thường, hãy đặt lịch để bác sĩ khám trực tiếp.</p>
+</div></section>
+
+<section class="s" style="padding-top:40px"><div class="wrap">
+{% if site.posts.size > 0 %}
+<div class="filters" role="group" aria-label="Lọc theo chuyên mục">
+<button type="button" data-filter="all" aria-pressed="true">Tất cả</button>
+<button type="button" data-filter="Chó" aria-pressed="false">Chó</button>
+<button type="button" data-filter="Mèo" aria-pressed="false">Mèo</button>
+</div>
+<div class="cards3">{% for p in site.posts %}{% include article-card.html post=p %}{% endfor %}</div>
+{% else %}
+<div class="empty">Các bài tư vấn đầu tiên sẽ sớm được đăng.</div>
+{% endif %}
+</div></section>

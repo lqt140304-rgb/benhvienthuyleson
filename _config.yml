@@ -1,0 +1,35 @@
+# Cấu hình web Bệnh viện thú y Lê Sơn
+title: Bệnh viện thú y Lê Sơn
+description: Khám, tiêm phòng, phẫu thuật, spa và nội trú cho chó mèo tại 101 Khuất Duy Tiến, Thanh Xuân, Hà Nội. Trực cấp cứu 24/24.
+lang: vi_VN
+locale: vi_VN
+timezone: Asia/Ho_Chi_Minh
+
+# Địa chỉ tạm trên GitHub Pages.
+# Khi có tên miền benhvienthuyleson.com: đổi url thành "https://benhvienthuyleson.com" và baseurl thành ""
+url: "https://lqt140304-rgb.github.io"
+baseurl: "/benhvienthuyleson"
+
+logo: /assets/img/logo.jpg
+image: /assets/img/og.jpg
+
+permalink: /tu-van/:title/
+markdown: kramdown
+
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+defaults:
+  - scope: { path: "", type: "posts" }
+    values: { layout: post }
+  - scope: { path: "" }
+    values: { layout: default }
+
+exclude:
+  - README.md
+  - apps-script/
+  - HUONG-DAN.md
+  - Gemfile
+  - Gemfile.lock
+  - vendor/

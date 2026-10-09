@@ -1,0 +1,76 @@
+---
+title: Đặt lịch khám
+description: Đặt lịch khám, tiêm phòng, spa hoặc nội trú cho chó mèo tại Bệnh viện thú y Lê Sơn. Nhân viên sẽ gọi lại xác nhận.
+permalink: /dat-lich/
+---
+{% assign tt = site.data.thong_tin %}
+{% capture phu_phi %}{% if tt.phu_phi_kham_ngoai_gio != blank or tt.phu_phi_cap_cuu_ngoai_gio != blank %}{% if tt.phu_phi_kham_ngoai_gio != blank %}khám ngoài giờ {{ tt.phu_phi_kham_ngoai_gio }}{% endif %}{% if tt.phu_phi_kham_ngoai_gio != blank and tt.phu_phi_cap_cuu_ngoai_gio != blank %}; {% endif %}{% if tt.phu_phi_cap_cuu_ngoai_gio != blank %}cấp cứu ngoài giờ {{ tt.phu_phi_cap_cuu_ngoai_gio }}{% endif %}.{% else %}vui lòng gọi để biết mức.{% endif %}{% endcapture %}
+<section class="pagehead"><div class="wrap">
+<nav class="crumb" aria-label="Đường dẫn"><a href="{{ '/' | relative_url }}">Trang chủ</a><span aria-hidden="true">›</span><span>Đặt lịch khám</span></nav>
+<h1>Đặt lịch khám</h1>
+<p class="lead">Điền thông tin bên dưới, nhân viên bệnh viện sẽ gọi lại để xác nhận giờ khám. Cấp cứu vui lòng gọi ngay <a href="tel:{{ tt.dien_thoai_goi }}" style="color:#A2228E;font-weight:800">{{ tt.dien_thoai }}</a>.</p>
+</div></section>
+
+<div class="wrap"><div class="bookgrid">
+<div>
+<div class="okbox" id="ok" hidden tabindex="-1">
+<h2>Đã nhận yêu cầu đặt lịch</h2>
+<p id="ok-text">Nhân viên sẽ gọi lại để xác nhận lịch khám.</p>
+<button class="btn btn-line" type="button" id="again" style="margin-top:20px">Đặt thêm lịch khác</button>
+</div>
+
+<form class="form" id="dat-lich" novalidate data-endpoint="{{ tt.dia_chi_nhan_dat_lich }}">
+<div class="field"><label for="f-name">Tên chủ nuôi <span aria-hidden="true">*</span></label>
+<input id="f-name" name="ten" type="text" autocomplete="name" required maxlength="80" placeholder="Ví dụ: Nguyễn Văn An" aria-describedby="e-name">
+<span class="err" id="e-name" hidden>Vui lòng nhập tên.</span></div>
+
+<div class="field"><label for="f-phone">Số điện thoại <span aria-hidden="true">*</span></label>
+<input id="f-phone" name="dien_thoai" type="tel" inputmode="tel" autocomplete="tel" required maxlength="20" placeholder="Ví dụ: 0912 345 678" aria-describedby="e-phone">
+<span class="err" id="e-phone" hidden>Số điện thoại chưa đúng. Nhập 10–11 số, bắt đầu bằng 0 (hoặc +84).</span></div>
+
+<div class="two">
+<div class="field"><label for="f-pet">Thú cưng <span aria-hidden="true">*</span></label>
+<select id="f-pet" name="thu_cung"><option>Chó</option><option>Mèo</option><option>Khác</option></select></div>
+<div class="field"><label for="f-svc">Dịch vụ <span aria-hidden="true">*</span></label>
+<select id="f-svc" name="dich_vu" required aria-describedby="e-svc"><option value="">Chọn dịch vụ</option>{% for dv in site.data.dich_vu %}{% unless dv.cap_cuu %}<option>{{ dv.ten }}</option>{% endunless %}{% endfor %}</select>
+<span class="err" id="e-svc" hidden>Vui lòng chọn dịch vụ.</span></div>
+</div>
+
+<div class="two">
+<div class="field"><label for="f-date">Ngày muốn đến <span aria-hidden="true">*</span></label>
+<input id="f-date" name="ngay" type="date" required aria-describedby="e-date">
+<span class="err" id="e-date" hidden>Vui lòng chọn ngày từ hôm nay trở đi.</span></div>
+<div class="field"><label for="f-time">Giờ muốn đến <span aria-hidden="true">*</span></label>
+<input id="f-time" name="gio" type="time" required value="09:00" aria-describedby="h-time">
+<span class="hint" id="h-time">Giờ khám thường: {{ tt.gio_mo_cua }}</span></div>
+</div>
+
+<div class="alert" id="ngoai-gio" role="alert" hidden><b>Giờ này ngoài giờ khám thường ({{ tt.gio_mo_cua }})</b>Không thể đặt lịch online cho khung giờ này. Bệnh viện vẫn trực 24/24, vui lòng gọi trực tiếp. Khám và cấp cứu ngoài giờ có phụ phí: {{ phu_phi | strip }}<br>
+<a class="tel" href="tel:{{ tt.dien_thoai_goi }}">{% include icon.html name="phone" %}Gọi {{ tt.dien_thoai }}</a></div>
+
+<div class="field"><label for="f-note">Triệu chứng hoặc ghi chú</label>
+<textarea id="f-note" name="ghi_chu" maxlength="1000" placeholder="Ví dụ: bé bỏ ăn 2 ngày, nôn…"></textarea></div>
+
+<div class="hp" aria-hidden="true"><label for="f-web">Bỏ trống ô này</label><input id="f-web" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+
+<div class="formmsg err" id="loi-gui" role="alert" hidden></div>
+
+<button class="btn btn-cta" type="submit" id="gui">{% include icon.html name="calendar" %}Gửi yêu cầu đặt lịch</button>
+<span class="hint" style="font-size:14px;color:#6B4B6E">Đây là yêu cầu đặt lịch, lịch chỉ chắc chắn khi nhân viên gọi xác nhận. Thông tin của bạn chỉ dùng để liên hệ đặt lịch.</span>
+</form>
+</div>
+
+<aside class="side">
+<div class="sbox"><h2 style="font-size:17px;font-weight:800;color:#67236C;margin:0 0 12px">Đặt lịch diễn ra thế nào?</h2>
+<div class="steps">
+<div class="step"><span class="n">1</span><p>Bạn điền form và gửi yêu cầu.</p></div>
+<div class="step"><span class="n">2</span><p>Nhân viên gọi lại xác nhận giờ khám.</p></div>
+<div class="step"><span class="n">3</span><p>Bạn đưa bé đến bệnh viện đúng giờ hẹn.</p></div>
+</div></div>
+<div class="sbox dark"><h2 style="font-size:17px;font-weight:800;margin:0 0 12px">Cấp cứu hoặc ngoài giờ?</h2><p>Bệnh viện trực 24/24. Gọi ngay để được hướng dẫn, ngoài {{ tt.gio_mo_cua }} có phụ phí.</p><a class="btn btn-cta" href="tel:{{ tt.dien_thoai_goi }}">Gọi {{ tt.dien_thoai }}</a></div>
+<div class="sbox"><h2 style="font-size:17px;font-weight:800;color:#67236C;margin:0 0 12px">Địa chỉ</h2><p>{{ tt.dia_chi }}</p><a class="more" href="{{ tt.ban_do }}" target="_blank" rel="noopener">Chỉ đường trên Google Maps →</a></div>
+</aside>
+</div></div>
+
+<script>window.LS_PHONE = "{{ tt.dien_thoai }}";</script>
+<script src="{{ '/assets/js/dat-lich.js' | relative_url }}" defer></script>

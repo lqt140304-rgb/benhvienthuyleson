@@ -1,0 +1,23 @@
+{% assign tt = site.data.thong_tin %}
+<footer><div class="wrap">
+<div class="cols">
+<div>
+<div class="fb"><img src="{{ '/assets/img/logo.jpg' | relative_url }}" alt="" width="48" height="48" loading="lazy"><span>Bệnh viện thú y Lê Sơn</span></div>
+<p>{{ tt.dia_chi }}<br>Mở cửa {{ tt.gio_mo_cua }} · Trực 24/24</p>
+<div class="soc">
+{% if tt.zalo != blank %}<a href="{{ tt.zalo }}" target="_blank" rel="noopener">{% include icon.html name="chat" %}Chat Zalo</a>{% endif %}
+{% if tt.facebook != blank %}<a href="{{ tt.facebook }}" target="_blank" rel="noopener">{% include icon.html name="facebook" %}Facebook</a>{% endif %}
+<a href="tel:{{ tt.dien_thoai_goi }}">{% include icon.html name="phone" %}Gọi {{ tt.dien_thoai }}</a>
+</div>
+</div>
+<div class="lk"><h2>Khám phá</h2><a href="{{ '/dich-vu/' | relative_url }}">Dịch vụ</a><a href="{{ '/tu-van/' | relative_url }}">Tư vấn chăm sóc</a><a href="{{ '/#gioi-thieu' | relative_url }}">Giới thiệu bệnh viện</a><a href="{{ '/dat-lich/' | relative_url }}">Đặt lịch khám</a></div>
+<div class="lk"><h2>Liên hệ</h2><a href="tel:{{ tt.dien_thoai_goi }}">{{ tt.dien_thoai }}</a><a href="{{ tt.ban_do }}" target="_blank" rel="noopener">Chỉ đường</a><a href="{{ '/#lien-he' | relative_url }}">Địa chỉ</a></div>
+</div>
+<div class="bot"><span>© {{ site.time | date: "%Y" }} Bệnh viện thú y Lê Sơn</span><a href="{{ '/nhan-vien/' | relative_url }}">Đăng nhập nhân viên</a></div>
+</div></footer>
+
+<div class="sticky">
+<a href="tel:{{ tt.dien_thoai_goi }}">{% include icon.html name="phone" %}Gọi</a>
+<a class="c" href="{{ '/dat-lich/' | relative_url }}">{% include icon.html name="calendar" %}Đặt lịch khám</a>
+{% if tt.zalo != blank %}<a href="{{ tt.zalo }}" target="_blank" rel="noopener">{% include icon.html name="chat" %}Zalo</a>{% else %}<a href="{{ tt.ban_do }}" target="_blank" rel="noopener">{% include icon.html name="navigation" %}Bản đồ</a>{% endif %}
+</div>

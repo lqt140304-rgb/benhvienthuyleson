@@ -1,0 +1,48 @@
+# Danh sách dịch vụ và bảng giá. Sửa được trong Pages CMS (mục "Dịch vụ và bảng giá").
+# gia để trống thì web hiện "Đang cập nhật".
+- ten: Khám và điều trị
+  icon: stethoscope
+  mo_ta: Khám tổng quát, chẩn đoán và điều trị các bệnh thường gặp ở chó mèo.
+  nut: Đặt lịch khám
+  hang_muc:
+    - ten: Khám tổng quát
+      gia: ""
+- ten: Tiêm phòng vaccine
+  icon: syringe
+  mo_ta: Lịch tiêm phòng đầy đủ cho chó con, mèo con và thú trưởng thành.
+  nut: Đặt lịch tiêm
+  hang_muc:
+    - ten: Vaccine cho chó
+      gia: ""
+    - ten: Vaccine cho mèo
+      gia: ""
+- ten: Phẫu thuật
+  icon: medical
+  mo_ta: Phẫu thuật có theo dõi trước và sau mổ bởi bác sĩ thú y. Cần khám và tư vấn trước.
+  nut: Đặt lịch tư vấn
+  hang_muc:
+    - ten: Phẫu thuật (báo giá sau khi khám)
+      gia: ""
+- ten: Spa thú cưng
+  icon: bath
+  mo_ta: Tắm, cắt tỉa lông cho chó mèo, nhẹ nhàng và sạch sẽ.
+  nut: Đặt lịch spa
+  hang_muc:
+    - ten: Tắm
+      gia: ""
+    - ten: Cắt tỉa lông
+      gia: ""
+- ten: Nội trú
+  icon: bed
+  mo_ta: Chỗ ở an toàn, được theo dõi sức khỏe trong thời gian gửi hoặc điều trị.
+  nut: Đặt chỗ nội trú
+  hang_muc:
+    - ten: Nội trú theo ngày
+      gia: ""
+- ten: Cấp cứu 24/24
+  icon: ambulance
+  mo_ta: Luôn có người trực. Gọi trước để bệnh viện chuẩn bị đón bé.
+  cap_cuu: true
+  hang_muc:
+    - ten: Khám trong giờ (8:00 – 21:00)
+      gia: ""

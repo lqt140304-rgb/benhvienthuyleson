@@ -1,0 +1,9 @@
+{% assign p = include.post %}
+<a class="art" href="{{ p.url | relative_url }}" data-cat="{{ p.chuyen_muc }}">
+{% if p.anh %}<img class="cover" src="{{ p.anh | relative_url }}" alt="" loading="lazy">{% else %}<div class="ph">Bệnh viện thú y Lê Sơn</div>{% endif %}
+<div class="b">
+{% if p.chuyen_muc == "Mèo" %}<span class="tag">{% include icon.html name="cat" %}Mèo</span>{% elsif p.chuyen_muc == "Chó" %}<span class="tag cat">{% include icon.html name="dog" %}Chó</span>{% endif %}
+<h3>{{ p.title }}</h3>
+<p class="d">{{ p.date | date: "%d/%m/%Y" }} · {{ p.content | number_of_words | divided_by: 200 | plus: 1 | floor }} phút đọc</p>
+</div>
+</a>
