@@ -201,7 +201,7 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết 
       selDv.replaceChildren(opt('', n ? '-- Chọn dịch vụ --' : '-- Chọn nhóm trước --'));
       selDv.disabled = !n;
       if (n) {
-        n.bang.cot.forEach((c, j) => { if (n.bang.dong.some((r) => !khongCo(r.gia[j]))) selDv.append(opt('c' + j, c)); });
+        n.bang.cot.forEach((c, j) => { if (n.bang.dong.some((r) => !khongCo(r.gia[j]))) selDv.append(opt('c' + j, n.bang.cot.length === 1 ? n.ten : c)); });
         n.hang_muc.forEach((h, i) => selDv.append(opt('h' + i, h.gia ? `${h.ten} – ${hienGia(h.gia)}` : h.ten)));
         if (selDv.options.length === 2) selDv.selectedIndex = 1;
       }
@@ -227,7 +227,7 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết 
       if (v.startsWith('c')) {
         const j = +v.slice(1);
         const r = selKg.value === '' ? null : n.bang.dong[+selKg.value];
-        chinh = `${n.ten} – ${n.bang.cot[j]}`;
+        chinh = n.bang.cot.length === 1 ? n.ten : `${n.ten} – ${n.bang.cot[j]}`;
         if (r) { kg = r.nhan; dong.push({ ten: `${chinh} · ${r.nhan}`, tien: so(r.gia[j]), chu: hienGia(r.gia[j]) }); }
         else dong.push({ ten: chinh, tien: null, chu: 'Chọn cân nặng' });
       } else {
