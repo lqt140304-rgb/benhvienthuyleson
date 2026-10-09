@@ -169,6 +169,7 @@ p { margin: 0 0 1em; }
 .dv-list .dv-ic { margin-bottom: 6px; }
 .dv-list b { font-family: var(--tieu-de); font-size: 22px; line-height: 1.25; color: var(--tieu); }
 .dv-list span { color: var(--phu); font-size: 16px; }
+.dv-list > a > span:nth-of-type(2) { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
 .dv-list .dv-gia { margin-top: auto; padding-top: 6px; font-weight: 700; color: var(--tim); font-variant-numeric: tabular-nums; }
 .dv-list .cc b { color: #B4500F; }
 .dv-list a:hover b { color: var(--tim); }
@@ -190,7 +191,9 @@ p { margin: 0 0 1em; }
 
 /* Bảng giá nhiều cột theo cân nặng */
 .bang-wrap { overflow-x: auto; margin: 10px 0 14px; border: 1.5px solid var(--vien); border-radius: var(--bo-nho); background: var(--trang); }
-.bang-gia { border-collapse: collapse; width: 100%; font-size: 16px; min-width: 440px; font-variant-numeric: tabular-nums; }
+.bang-tieu-de { font-family: var(--than); font-size: 17px; font-weight: 800; color: var(--tim); margin: 18px 0 8px; }
+.bang-gia { border-collapse: collapse; width: 100%; font-size: 16px; min-width: 440px; font-variant-numeric: tabular-nums; table-layout: fixed; }
+.bang-gia thead th:first-child { width: 128px; }
 .bang-gia th, .bang-gia td { padding: 12px 14px; border-bottom: 1px solid var(--vien); text-align: right; white-space: nowrap; }
 .bang-gia thead th { background: var(--tim); color: var(--trang); font-weight: 700; font-size: 15px; white-space: normal; vertical-align: bottom; }
 .bang-gia th[scope="row"], .bang-gia thead th:first-child { text-align: left; }

@@ -176,7 +176,7 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết 
   // Form đặt lịch: kiểm tra dữ liệu, tính hoá đơn tham khảo + phụ phí tự động, gửi tới Google Apps Script
   type Gia = { tu: string; den: string; gia: string };
   type Nhom = {
-    id: string; ten: string; spa: boolean; phu_phi_gio: string; ngay_le: boolean; theo_ngay: boolean;
+    id: string; ten: string; spa: boolean; phu_phi_gio: string; phu_phi_cot: string[]; ngay_le: boolean; theo_ngay: boolean;
     bang: { cot: string[]; dong: { nhan: string; gia: string[] }[] };
     hang_muc: { ten: string; gia: string; ghi_chu: string; phu_phi?: string }[];
     giam_dai_ngay: { nhan: string; tu_ngay: number; giam: number }[];
@@ -288,9 +288,10 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết 
           dong.push({ ten: `Phí đi lại khám tại nhà (theo giờ hẹn ${gio.value})`, tien: so(k.gia), chu: hienGia(k.gia), tuDong: true });
         }
       }
-      if (n.phu_phi_gio && gio.value) {
-        const k = trongKhung(pp[n.phu_phi_gio] || [], gio.value);
-        if (k) dong.push({ ten: `Phụ phí spa ${n.phu_phi_gio === 'spa_tam' ? 'tắm' : 'cắt tỉa'} sau ${k.tu} (theo giờ hẹn ${gio.value})`, tien: so(k.gia), chu: hienGia(k.gia), tuDong: true });
+      const loaiPP = (v.startsWith('c') && n.phu_phi_cot?.[+v.slice(1)]) || n.phu_phi_gio;
+      if (loaiPP && gio.value) {
+        const k = trongKhung(pp[loaiPP] || [], gio.value);
+        if (k) dong.push({ ten: `Phụ phí spa ${loaiPP === 'spa_tam' ? 'tắm' : 'cắt tỉa'} sau ${k.tu} (theo giờ hẹn ${gio.value})`, tien: so(k.gia), chu: hienGia(k.gia), tuDong: true });
       }
       if (n.ngay_le && (pp.ngay_le || []).includes(ngay.value)) {
         dong.push({ ten: 'Phụ phí ngày lễ', tien: so(pp.ngay_le_gia), chu: hienGia(pp.ngay_le_gia), tuDong: true });

@@ -154,129 +154,24 @@
       "theo_ngay": false
     },
     {
-      "ten": "Tắm",
-      "icon": "bath",
-      "mo_ta": "Tắm, sấy khô cho chó mèo theo cân nặng và loại lông.",
-      "ghi_chu": "Spa nhận lịch đến 19:00. Hẹn sau 17:00, sau 18:00 và ngày lễ có phụ phí, tự cộng vào hoá đơn tham khảo khi đặt lịch.",
+      "ten": "Grooming - Spa",
+      "icon": "scissors",
+      "mo_ta": "Tắm, sấy, cắt tỉa, cạo lông cho chó mèo theo cân nặng và loại lông.",
+      "ghi_chu": "Gói cắt tỉa, cạo lông trọn gói gồm: tắm, sấy, thoa dầu dưỡng lông, cắt tỉa / tạo kiểu, vệ sinh tai, cắt móng, vắt tuyến hôi. Spa nhận lịch đến 19:00. Hẹn sau 17:00, sau 18:00 và ngày lễ có phụ phí, tự cộng vào hoá đơn tham khảo khi đặt lịch.",
       "cap_cuu": false,
       "dat_lich": true,
       "spa": true,
       "phu_phi_gio": "spa_tam",
       "ngay_le": true,
+      "theo_ngay": false,
       "bang": {
         "tieu_de_dong": "Cân nặng",
         "cot": [
-          "Chó lông ngắn",
-          "Chó lông dài",
-          "Mèo lông ngắn",
-          "Mèo lông dài",
-          "Tắm nấm (chó, mèo)"
-        ],
-        "dong": [
-          {
-            "nhan": "Dưới 2 kg",
-            "gia": [
-              "90.000",
-              "105.000",
-              "105.000",
-              "115.000",
-              "35.000"
-            ]
-          },
-          {
-            "nhan": "2 – 3 kg",
-            "gia": [
-              "110.000",
-              "120.000",
-              "130.000",
-              "140.000",
-              "35.000"
-            ]
-          },
-          {
-            "nhan": "3 – 5 kg",
-            "gia": [
-              "120.000",
-              "140.000",
-              "150.000",
-              "160.000",
-              "45.000"
-            ]
-          },
-          {
-            "nhan": "5 – 7 kg",
-            "gia": [
-              "140.000",
-              "160.000",
-              "180.000",
-              "190.000",
-              "55.000"
-            ]
-          },
-          {
-            "nhan": "7 – 10 kg",
-            "gia": [
-              "160.000",
-              "180.000",
-              "205.000",
-              "220.000",
-              "65.000"
-            ]
-          },
-          {
-            "nhan": "10 – 15 kg",
-            "gia": [
-              "180.000",
-              "200.000",
-              "–",
-              "–",
-              "85.000"
-            ]
-          },
-          {
-            "nhan": "15 – 20 kg",
-            "gia": [
-              "210.000",
-              "230.000",
-              "–",
-              "–",
-              "115.000"
-            ]
-          },
-          {
-            "nhan": "Trên 20 kg",
-            "gia": [
-              "từ 250.000",
-              "từ 250.000",
-              "–",
-              "–",
-              "145.000"
-            ]
-          }
-        ]
-      },
-      "hang_muc": [
-        {
-          "ten": "Tắm khô",
-          "gia": "105.000",
-          "ghi_chu": ""
-        }
-      ],
-      "theo_ngay": false
-    },
-    {
-      "ten": "Cắt tỉa và cạo lông (trọn gói)",
-      "icon": "scissors",
-      "mo_ta": "Trọn gói gồm: tắm, sấy, thoa dầu dưỡng lông, cắt tỉa / tạo kiểu, vệ sinh tai, cắt móng, vắt tuyến hôi.",
-      "ghi_chu": "Spa nhận lịch đến 19:00. Hẹn sau 17:00, sau 18:00 và ngày lễ có phụ phí, tự cộng vào hoá đơn tham khảo khi đặt lịch.",
-      "cap_cuu": false,
-      "dat_lich": true,
-      "spa": true,
-      "phu_phi_gio": "spa_cat",
-      "ngay_le": true,
-      "bang": {
-        "tieu_de_dong": "Cân nặng",
-        "cot": [
+          "Tắm chó lông ngắn",
+          "Tắm chó lông dài",
+          "Tắm mèo lông ngắn",
+          "Tắm mèo lông dài",
+          "Tắm nấm (chó, mèo)",
           "Cắt tỉa chó",
           "Cắt tỉa mèo",
           "Cắt tỉa mèo lông dài",
@@ -286,6 +181,11 @@
           {
             "nhan": "Dưới 2 kg",
             "gia": [
+              "90.000",
+              "105.000",
+              "105.000",
+              "115.000",
+              "35.000",
               "210.000",
               "205.000",
               "220.000",
@@ -295,6 +195,11 @@
           {
             "nhan": "2 – 3 kg",
             "gia": [
+              "110.000",
+              "120.000",
+              "130.000",
+              "140.000",
+              "35.000",
               "235.000",
               "235.000",
               "250.000",
@@ -304,6 +209,11 @@
           {
             "nhan": "3 – 5 kg",
             "gia": [
+              "120.000",
+              "140.000",
+              "150.000",
+              "160.000",
+              "45.000",
               "265.000",
               "265.000",
               "280.000",
@@ -313,6 +223,11 @@
           {
             "nhan": "5 – 7 kg",
             "gia": [
+              "140.000",
+              "160.000",
+              "180.000",
+              "190.000",
+              "55.000",
               "295.000",
               "295.000",
               "310.000",
@@ -322,6 +237,11 @@
           {
             "nhan": "7 – 10 kg",
             "gia": [
+              "160.000",
+              "180.000",
+              "205.000",
+              "220.000",
+              "65.000",
               "325.000",
               "325.000",
               "340.000",
@@ -331,6 +251,11 @@
           {
             "nhan": "10 – 15 kg",
             "gia": [
+              "180.000",
+              "200.000",
+              "–",
+              "–",
+              "85.000",
               "360.000",
               "–",
               "–",
@@ -340,6 +265,11 @@
           {
             "nhan": "15 – 20 kg",
             "gia": [
+              "210.000",
+              "230.000",
+              "–",
+              "–",
+              "115.000",
               "390.000",
               "–",
               "–",
@@ -349,6 +279,11 @@
           {
             "nhan": "Trên 20 kg",
             "gia": [
+              "từ 250.000",
+              "từ 250.000",
+              "–",
+              "–",
+              "145.000",
               "từ 430.000",
               "–",
               "–",
@@ -357,62 +292,24 @@
           }
         ]
       },
-      "hang_muc": [],
-      "theo_ngay": false
-    },
-    {
-      "ten": "Dịch vụ lẻ",
-      "icon": "comb",
-      "mo_ta": "Chăm sóc nhanh, không cần tắm.",
-      "ghi_chu": "",
-      "cap_cuu": false,
-      "dat_lich": true,
-      "spa": true,
-      "phu_phi_gio": "",
-      "ngay_le": false,
-      "bang": {
-        "tieu_de_dong": "",
-        "cot": [],
-        "dong": []
-      },
+      "phu_phi_cot": [
+        "spa_tam",
+        "spa_tam",
+        "spa_tam",
+        "spa_tam",
+        "spa_tam",
+        "spa_cat",
+        "spa_cat",
+        "spa_cat",
+        "spa_cat"
+      ],
       "hang_muc": [
         {
-          "ten": "Cắt móng",
-          "gia": "25.000",
-          "ghi_chu": ""
-        },
-        {
-          "ten": "Vệ sinh tai",
-          "gia": "30.000",
-          "ghi_chu": ""
-        },
-        {
-          "ten": "Combo vệ sinh tai + cắt móng",
-          "gia": "50.000",
-          "ghi_chu": ""
-        },
-        {
-          "ten": "Vắt tuyến hôi",
-          "gia": "30.000",
-          "ghi_chu": ""
-        },
-        {
-          "ten": "Đánh răng",
-          "gia": "35.000",
-          "ghi_chu": ""
-        },
-        {
-          "ten": "Gỡ rối lông",
-          "gia": "90.000 – 200.000",
-          "ghi_chu": "Tuỳ độ rối"
-        },
-        {
-          "ten": "Lấy cao răng",
-          "gia": "từ 410.000",
+          "ten": "Tắm khô",
+          "gia": "105.000",
           "ghi_chu": ""
         }
-      ],
-      "theo_ngay": false
+      ]
     },
     {
       "ten": "Triệt sản (combo trọn gói)",

@@ -32,7 +32,7 @@ export const HINH: Record<string, string> = {
   scissors: `<g class="im-keo-tren"><path d="M22 24 42 8" ${W} stroke-width="3.2"/><path d="M22 24 42 8" stroke="#C9D3DD" stroke-width="1.4" stroke-linecap="round"/><circle cx="13" cy="33" r="7" fill="#F79A3E" ${W}/><circle cx="13" cy="33" r="3" fill="#FFF7EE"/><path d="M18 28l4-4" ${W}/></g>
     <g class="im-keo-duoi"><path d="M22 24 42 40" ${W} stroke-width="3.2"/><path d="M22 24 42 40" stroke="#C9D3DD" stroke-width="1.4" stroke-linecap="round"/><circle cx="13" cy="15" r="7" fill="#B98AD3" ${W}/><circle cx="13" cy="15" r="3" fill="#FFF7EE"/><path d="M18 20l4 4" ${W}/></g>
     <circle cx="22" cy="24" r="2" fill="${V}"/>`,
-  // Dịch vụ lẻ (cắt móng, vệ sinh tai, gỡ rối): lược chải lông, lấp lánh
+  // Lược chải lông, lấp lánh (để dành cho dịch vụ chăm sóc lông)
   comb: `<g class="im-chai"><path d="M6 20h36a3 3 0 0 1 3 3v3a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-3a3 3 0 0 1 3-3z" fill="#F7B5C9" ${W}/>
     <path d="M9 29v11M14 29v11M19 29v11M24 29v11M29 29v11M34 29v11M39 29v11" ${W} stroke-width="2.6"/></g>
     <path class="im-sao" d="M33 5l1.6 4.4L39 11l-4.4 1.6L33 17l-1.6-4.4L27 11l4.4-1.6z" fill="#FFC94D" ${W} stroke-width="1.6"/>

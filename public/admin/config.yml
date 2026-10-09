@@ -135,7 +135,7 @@ collections:
                   - { label: "Ống tiêm (tiêm phòng)", value: syringe }
                   - { label: "Bồn tắm (tắm)", value: bath }
                   - { label: "Kéo (cắt tỉa)", value: scissors }
-                  - { label: "Lược chải (dịch vụ lẻ)", value: comb }
+                  - { label: "Lược chải", value: comb }
                   - { label: "Băng cá nhân (triệt sản)", value: bandage }
                   - { label: "Dao mổ (phẫu thuật)", value: scalpel }
                   - { label: "Chữ thập y tế", value: cross }
@@ -152,6 +152,11 @@ collections:
                 options:
                   - { label: "Phụ phí tắm", value: spa_tam }
                   - { label: "Phụ phí cắt tỉa / cạo", value: spa_cat }
+              - label: "Phụ phí spa riêng cho từng cột bảng giá (theo đúng thứ tự cột; để trống = dùng phụ phí ở trên)"
+                name: phu_phi_cot
+                widget: list
+                required: false
+                field: { label: Phụ phí của cột, name: loai, widget: select, options: [{ label: "Phụ phí tắm", value: spa_tam }, { label: "Phụ phí cắt tỉa / cạo", value: spa_cat }] }
               - { label: Tính phụ phí ngày lễ, name: ngay_le, widget: boolean, default: false, required: false }
               - { label: "Tính theo số ngày (nội trú: hỏi thêm ngày đón, giờ đón)", name: theo_ngay, widget: boolean, default: false, required: false }
               - label: "Giảm giá gửi dài ngày (chỉ dùng cho nhóm tính theo số ngày)"
