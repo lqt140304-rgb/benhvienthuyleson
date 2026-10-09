@@ -84,8 +84,7 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết 
           <div class="f" id="o-gio-don" hidden>
             <label for="f-gio-don">Giờ đón <span class="bb" aria-hidden="true">*</span></label>
             <input id="f-gio-don" type="time" value="17:00" aria-describedby="e-gio-don">
-            <p class="goi-y">Đón trong giờ 8:00 – 21:00.</p>
-            <p class="loi" id="e-gio-don" hidden>Vui lòng chọn giờ đón trong khoảng 8:00 – 21:00.</p>
+            <p class="loi" id="e-gio-don" hidden>Vui lòng chọn giờ đón.</p>
           </div>
 
           <div class="full ngoai-gio" id="ngoai-gio" role="alert" hidden>
@@ -101,6 +100,12 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết 
             <h2><Icon name="clock" />Spa nhận lịch online đến {pp.spa_nhan_den}</h2>
             <p style="margin:0 0 12px">Sau {pp.spa_nhan_den}, bạn vui lòng gọi trước để bệnh viện sắp xếp nhân viên.</p>
             <a class="btn btn-cta" href={`tel:${tt.dien_thoai_goi}`}><Icon name="phone" />Gọi {tt.dien_thoai}</a>
+          </div>
+
+          <div class="full ngoai-gio" id="noi-tru-ngoai-gio" role="alert" hidden>
+            <h2><Icon name="clock" />Gửi / đón nội trú ngoài giờ làm việc</h2>
+            <p style="margin:0 0 12px">Bệnh viện vẫn nhận gửi và trả bé ngoài 8:00 – 21:00, nhưng bạn cần <b>gọi điện hẹn trước</b> để có người đón bé.</p>
+            <a class="btn btn-cta" href={`tel:${tt.dien_thoai_goi}`}><Icon name="phone" />Gọi hẹn {tt.dien_thoai}</a>
           </div>
 
           <div class="full hoa-don" id="hoa-don" aria-live="polite" hidden>
@@ -283,9 +288,10 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết 
     function capNhat(tuNguoiDung: boolean) {
       const t = gio.value;
       const n = nhomDangChon();
-      const ngoai = ngoaiGio(t);
+      const noiTruNgoai = !!n?.theo_ngay && (ngoaiGio(t) || ngoaiGio(gioDon.value));
+      const ngoai = ngoaiGio(t) && !n?.theo_ngay;
       const g = $('g-gio');
-      g.textContent = n?.spa ? (g.dataset.spa || '') : 'Nhận lịch 8:00 – 21:00.';
+      g.textContent = n?.spa ? (g.dataset.spa || '') : n?.theo_ngay ? 'Ngoài 8:00 – 21:00 vui lòng gọi hẹn trước.' : 'Nhận lịch 8:00 – 21:00.';
       const noiTru = !!n?.theo_ngay;
       $('o-ngay-don').hidden = !noiTru;
       $('o-gio-don').hidden = !noiTru;
@@ -295,8 +301,9 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết 
       $('o-loai').hidden = thuCung() !== 'Khác';
       const spaMuon = !ngoai && !!n?.spa && !!t && phut(t) >= SPA_DEN;
       $('ngoai-gio').hidden = !ngoai;
+      $('noi-tru-ngoai-gio').hidden = !noiTruNgoai;
       $('spa-muon').hidden = !spaMuon;
-      gui.disabled = ngoai || spaMuon;
+      gui.disabled = ngoai || spaMuon || noiTruNgoai;
 
       const hd = tinh();
       $('hoa-don').hidden = !hd;
@@ -374,13 +381,13 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết 
         kg: canKg && selKg.value === '', ngay: !ngay.value || ngay.value < homNay(), gio: !gio.value,
         loai: thuCung() === 'Khác' && !loai.value.trim(),
         ngayDon: !!n?.theo_ngay && (!ngayDon.value || ngayDon.value < ngay.value),
-        gioDon: !!n?.theo_ngay && (!gioDon.value || ngoaiGio(gioDon.value)),
+        gioDon: !!n?.theo_ngay && !gioDon.value,
       };
       baoLoi('e-loai', loi.loai, loai); baoLoi('e-ngay-don', loi.ngayDon, ngayDon); baoLoi('e-gio-don', loi.gioDon, gioDon);
       baoLoi('e-ten', loi.ten, ten); baoLoi('e-sdt', loi.sdt, sdt); baoLoi('e-nhom', loi.nhom, selNhom);
       baoLoi('e-dv', loi.dv, selDv); baoLoi('e-kg', loi.kg, selKg); baoLoi('e-ngay', loi.ngay, ngay); baoLoi('e-gio', loi.gio, gio);
       capNhat(false);
-      const dau = loi.ten ? ten : loi.sdt ? sdt : loi.loai ? loai : loi.nhom ? selNhom : loi.dv ? selDv : loi.kg ? selKg : loi.ngay ? ngay : loi.gio || gui.disabled ? gio : loi.ngayDon ? ngayDon : loi.gioDon ? gioDon : null;
+      const dau = loi.ten ? ten : loi.sdt ? sdt : loi.loai ? loai : loi.nhom ? selNhom : loi.dv ? selDv : loi.kg ? selKg : loi.ngay ? ngay : loi.gio ? gio : loi.ngayDon ? ngayDon : loi.gioDon ? gioDon : gui.disabled ? ($('noi-tru-ngoai-gio').hidden ? gio : (ngoaiGio(gio.value) ? gio : gioDon)) : null;
       if (dau) { dau.focus(); return; }
       if ($<HTMLInputElement>('f-web').value) return; // ô bẫy chống tin rác
 
