@@ -2,6 +2,7 @@
 import TrangTri from '../components/TrangTri.astro';
 import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
+import IconMau from '../components/IconMau.astro';
 import tt from '../data/thong_tin.json';
 import pp from '../data/phu_phi.json';
 import { u, gia, neo, dsDichVu } from '../lib/site';
@@ -20,7 +21,7 @@ const dv = { danh_sach: dsDichVu() };
     <div class="wrap" style="max-width:960px">
       {dv.danh_sach.map((d) => (
         <article class={`dv${d.cap_cuu ? ' cc' : ''}`} id={neo(d.ten)}>
-          <span class="dv-ic"><Icon name={d.icon} size={26} /></span>
+          <span class={`dv-ic n-${d.icon}`}><IconMau name={d.icon} size={52} /></span>
           <h2>{d.ten}</h2>
           <p class="muted" style="margin:0">{d.mo_ta}</p>
           <div style="min-width:0">
