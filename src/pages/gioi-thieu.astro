@@ -5,8 +5,8 @@ import Icon from '../components/Icon.astro';
 import tt from '../data/thong_tin.json';
 import bs from '../data/bac_si.json';
 import csvc from '../data/co_so_vat_chat.json';
-import dv from '../data/dich_vu.json';
-import { u } from '../lib/site';
+import { u, dsDichVu } from '../lib/site';
+const dv = { danh_sach: dsDichVu() };
 const gioiThieu = tt.gioi_thieu ? await marked.parse(tt.gioi_thieu) : '';
 const bacSi = bs.danh_sach.length > 0 ? bs.danh_sach : null;
 ---

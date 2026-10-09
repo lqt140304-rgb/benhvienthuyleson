@@ -1,16 +1,582 @@
 {
   "danh_sach": [
-    { "ten": "Khám và điều trị", "icon": "stethoscope", "mo_ta": "Khám tổng quát, chẩn đoán và điều trị các bệnh thường gặp ở chó mèo.", "cap_cuu": false,
-      "hang_muc": [ { "ten": "Khám tổng quát", "gia": "" } ] },
-    { "ten": "Tiêm phòng vaccine", "icon": "syringe", "mo_ta": "Lịch tiêm phòng đầy đủ cho chó con, mèo con và thú trưởng thành.", "cap_cuu": false,
-      "hang_muc": [ { "ten": "Vaccine cho chó", "gia": "" }, { "ten": "Vaccine cho mèo", "gia": "" } ] },
-    { "ten": "Phẫu thuật", "icon": "cross", "mo_ta": "Phẫu thuật có khám, tư vấn trước và theo dõi sau mổ bởi bác sĩ thú y.", "cap_cuu": false,
-      "hang_muc": [ { "ten": "Phẫu thuật (báo giá sau khi khám)", "gia": "" } ] },
-    { "ten": "Spa thú cưng", "icon": "scissors", "mo_ta": "Tắm, cắt tỉa lông cho chó mèo, nhẹ nhàng và sạch sẽ.", "cap_cuu": false,
-      "hang_muc": [ { "ten": "Tắm", "gia": "" }, { "ten": "Cắt tỉa lông", "gia": "" } ] },
-    { "ten": "Nội trú", "icon": "bed", "mo_ta": "Chỗ ở an toàn, được theo dõi sức khỏe trong thời gian gửi hoặc điều trị.", "cap_cuu": false,
-      "hang_muc": [ { "ten": "Nội trú theo ngày", "gia": "" } ] },
-    { "ten": "Cấp cứu 24/24", "icon": "heart-pulse", "mo_ta": "Luôn có người trực. Gọi trước để bệnh viện chuẩn bị đón bé.", "cap_cuu": true,
-      "hang_muc": [ { "ten": "Khám cấp cứu trong giờ (8:00 – 21:00)", "gia": "" } ] }
+    {
+      "ten": "Khám và chẩn đoán",
+      "icon": "stethoscope",
+      "mo_ta": "Khám tổng quát, siêu âm, X-quang. Phí khám khi bé có bệnh (tiêu chảy, bỏ ăn, nôn…) bác sĩ báo sau khi khám, tuỳ tình trạng và xét nghiệm cần làm.",
+      "ghi_chu": "",
+      "cap_cuu": false,
+      "dat_lich": true,
+      "spa": false,
+      "phu_phi_gio": "",
+      "ngay_le": false,
+      "bang": {
+        "tieu_de_dong": "",
+        "cot": [],
+        "dong": []
+      },
+      "hang_muc": [
+        {
+          "ten": "Gói khám sức khoẻ tổng quát",
+          "gia": "300.000",
+          "ghi_chu": "Gồm: bác sĩ khám trực tiếp (hỏi bệnh sử, kiểm tra toàn thân), xét nghiệm công thức máu 18 chỉ số, siêu âm tổng quát, soi da, soi tai. Nên dùng khi kiểm tra sức khoẻ định kỳ, mới đón bé về nuôi, trước khi triệt sản."
+        },
+        {
+          "ten": "Khám bệnh (bé có triệu chứng)",
+          "gia": "",
+          "ghi_chu": "Bác sĩ báo phí sau khi khám"
+        },
+        {
+          "ten": "Khám tại nhà",
+          "gia": "",
+          "ghi_chu": "Phí đi lại 50.000đ (hẹn sau 18:00: 100.000đ, sau 19:00: 150.000đ, sau 20:00: 200.000đ) được cộng thẳng vào hoá đơn",
+          "phu_phi": "kham_nha"
+        },
+        {
+          "ten": "Siêu âm ổ bụng",
+          "gia": "150.000",
+          "ghi_chu": ""
+        },
+        {
+          "ten": "Siêu âm tim",
+          "gia": "180.000",
+          "ghi_chu": ""
+        },
+        {
+          "ten": "Siêu âm thai",
+          "gia": "120.000",
+          "ghi_chu": ""
+        },
+        {
+          "ten": "Chụp X-quang",
+          "gia": "290.000",
+          "ghi_chu": ""
+        }
+      ]
+    },
+    {
+      "ten": "Xét nghiệm",
+      "icon": "flask",
+      "mo_ta": "Các xét nghiệm thường dùng. Xét nghiệm chuyên sâu khác (điện giải đồ, tuyến giáp, chỉ số tim, thận, dị ứng, sinh thiết…) bác sĩ chỉ định và báo giá khi khám.",
+      "ghi_chu": "",
+      "cap_cuu": false,
+      "dat_lich": true,
+      "spa": false,
+      "phu_phi_gio": "",
+      "ngay_le": false,
+      "bang": {
+        "tieu_de_dong": "",
+        "cot": [],
+        "dong": []
+      },
+      "hang_muc": [
+        {
+          "ten": "Xét nghiệm máu tổng quát (18 chỉ số huyết học + 16 sinh hoá)",
+          "gia": "590.000",
+          "ghi_chu": ""
+        },
+        {
+          "ten": "Xét nghiệm máu tổng quát (18 chỉ số huyết học + 27 sinh hoá)",
+          "gia": "650.000",
+          "ghi_chu": ""
+        },
+        {
+          "ten": "Công thức máu 18 chỉ số",
+          "gia": "150.000",
+          "ghi_chu": ""
+        },
+        {
+          "ten": "Ký sinh trùng máu (Babesia, E. canis, Anaplasma)",
+          "gia": "320.000",
+          "ghi_chu": ""
+        },
+        {
+          "ten": "Test FIV – FeLV (mèo)",
+          "gia": "250.000",
+          "ghi_chu": ""
+        },
+        {
+          "ten": "Test 3 bệnh FPV – FCoV – Giardia",
+          "gia": "280.000",
+          "ghi_chu": ""
+        },
+        {
+          "ten": "Xét nghiệm FIP (mèo)",
+          "gia": "300.000",
+          "ghi_chu": ""
+        },
+        {
+          "ten": "Soi da",
+          "gia": "50.000",
+          "ghi_chu": ""
+        },
+        {
+          "ten": "Soi phân",
+          "gia": "90.000",
+          "ghi_chu": ""
+        },
+        {
+          "ten": "Xét nghiệm nước tiểu",
+          "gia": "50.000",
+          "ghi_chu": ""
+        }
+      ]
+    },
+    {
+      "ten": "Tiêm phòng vaccine",
+      "icon": "syringe",
+      "mo_ta": "Lịch tiêm phòng đầy đủ cho chó con, mèo con và thú trưởng thành.",
+      "ghi_chu": "",
+      "cap_cuu": false,
+      "dat_lich": true,
+      "spa": false,
+      "phu_phi_gio": "",
+      "ngay_le": false,
+      "bang": {
+        "tieu_de_dong": "",
+        "cot": [],
+        "dong": []
+      },
+      "hang_muc": [
+        {
+          "ten": "Vaccine cho chó",
+          "gia": "",
+          "ghi_chu": ""
+        },
+        {
+          "ten": "Vaccine cho mèo",
+          "gia": "",
+          "ghi_chu": ""
+        }
+      ]
+    },
+    {
+      "ten": "Tắm",
+      "icon": "bath",
+      "mo_ta": "Tắm, sấy khô cho chó mèo theo cân nặng và loại lông.",
+      "ghi_chu": "Spa nhận lịch đến 19:00. Hẹn sau 17:00, sau 18:00 và ngày lễ có phụ phí, tự cộng vào hoá đơn tham khảo khi đặt lịch.",
+      "cap_cuu": false,
+      "dat_lich": true,
+      "spa": true,
+      "phu_phi_gio": "spa_tam",
+      "ngay_le": true,
+      "bang": {
+        "tieu_de_dong": "Cân nặng",
+        "cot": [
+          "Chó lông ngắn",
+          "Chó lông dài",
+          "Mèo lông ngắn",
+          "Mèo lông dài",
+          "Tắm nấm (chó, mèo)"
+        ],
+        "dong": [
+          {
+            "nhan": "Dưới 2 kg",
+            "gia": [
+              "90.000",
+              "105.000",
+              "105.000",
+              "115.000",
+              "35.000"
+            ]
+          },
+          {
+            "nhan": "2 – 3 kg",
+            "gia": [
+              "110.000",
+              "120.000",
+              "130.000",
+              "140.000",
+              "35.000"
+            ]
+          },
+          {
+            "nhan": "3 – 5 kg",
+            "gia": [
+              "120.000",
+              "140.000",
+              "150.000",
+              "160.000",
+              "45.000"
+            ]
+          },
+          {
+            "nhan": "5 – 7 kg",
+            "gia": [
+              "140.000",
+              "160.000",
+              "180.000",
+              "190.000",
+              "55.000"
+            ]
+          },
+          {
+            "nhan": "7 – 10 kg",
+            "gia": [
+              "160.000",
+              "180.000",
+              "205.000",
+              "220.000",
+              "65.000"
+            ]
+          },
+          {
+            "nhan": "10 – 15 kg",
+            "gia": [
+              "180.000",
+              "200.000",
+              "–",
+              "–",
+              "85.000"
+            ]
+          },
+          {
+            "nhan": "15 – 20 kg",
+            "gia": [
+              "210.000",
+              "230.000",
+              "–",
+              "–",
+              "115.000"
+            ]
+          },
+          {
+            "nhan": "Trên 20 kg",
+            "gia": [
+              "từ 250.000",
+              "từ 250.000",
+              "–",
+              "–",
+              "145.000"
+            ]
+          }
+        ]
+      },
+      "hang_muc": [
+        {
+          "ten": "Tắm khô",
+          "gia": "105.000",
+          "ghi_chu": ""
+        }
+      ]
+    },
+    {
+      "ten": "Cắt tỉa và cạo lông (trọn gói)",
+      "icon": "scissors",
+      "mo_ta": "Trọn gói gồm: tắm, sấy, thoa dầu dưỡng lông, cắt tỉa / tạo kiểu, vệ sinh tai, cắt móng, vắt tuyến hôi.",
+      "ghi_chu": "Spa nhận lịch đến 19:00. Hẹn sau 17:00, sau 18:00 và ngày lễ có phụ phí, tự cộng vào hoá đơn tham khảo khi đặt lịch.",
+      "cap_cuu": false,
+      "dat_lich": true,
+      "spa": true,
+      "phu_phi_gio": "spa_cat",
+      "ngay_le": true,
+      "bang": {
+        "tieu_de_dong": "Cân nặng",
+        "cot": [
+          "Cắt tỉa chó",
+          "Cắt tỉa mèo",
+          "Cắt tỉa mèo lông dài",
+          "Cạo lông chó"
+        ],
+        "dong": [
+          {
+            "nhan": "Dưới 2 kg",
+            "gia": [
+              "210.000",
+              "205.000",
+              "220.000",
+              "180.000"
+            ]
+          },
+          {
+            "nhan": "2 – 3 kg",
+            "gia": [
+              "235.000",
+              "235.000",
+              "250.000",
+              "180.000"
+            ]
+          },
+          {
+            "nhan": "3 – 5 kg",
+            "gia": [
+              "265.000",
+              "265.000",
+              "280.000",
+              "205.000"
+            ]
+          },
+          {
+            "nhan": "5 – 7 kg",
+            "gia": [
+              "295.000",
+              "295.000",
+              "310.000",
+              "225.000"
+            ]
+          },
+          {
+            "nhan": "7 – 10 kg",
+            "gia": [
+              "325.000",
+              "325.000",
+              "340.000",
+              "250.000"
+            ]
+          },
+          {
+            "nhan": "10 – 15 kg",
+            "gia": [
+              "360.000",
+              "–",
+              "–",
+              "280.000"
+            ]
+          },
+          {
+            "nhan": "15 – 20 kg",
+            "gia": [
+              "390.000",
+              "–",
+              "–",
+              "280.000"
+            ]
+          },
+          {
+            "nhan": "Trên 20 kg",
+            "gia": [
+              "từ 430.000",
+              "–",
+              "–",
+              "từ 310.000"
+            ]
+          }
+        ]
+      },
+      "hang_muc": []
+    },
+    {
+      "ten": "Dịch vụ lẻ",
+      "icon": "scissors",
+      "mo_ta": "Chăm sóc nhanh, không cần tắm.",
+      "ghi_chu": "",
+      "cap_cuu": false,
+      "dat_lich": true,
+      "spa": true,
+      "phu_phi_gio": "",
+      "ngay_le": false,
+      "bang": {
+        "tieu_de_dong": "",
+        "cot": [],
+        "dong": []
+      },
+      "hang_muc": [
+        {
+          "ten": "Cắt móng",
+          "gia": "25.000",
+          "ghi_chu": ""
+        },
+        {
+          "ten": "Vệ sinh tai",
+          "gia": "30.000",
+          "ghi_chu": ""
+        },
+        {
+          "ten": "Combo vệ sinh tai + cắt móng",
+          "gia": "50.000",
+          "ghi_chu": ""
+        },
+        {
+          "ten": "Vắt tuyến hôi",
+          "gia": "30.000",
+          "ghi_chu": ""
+        },
+        {
+          "ten": "Đánh răng",
+          "gia": "35.000",
+          "ghi_chu": ""
+        },
+        {
+          "ten": "Gỡ rối lông",
+          "gia": "90.000 – 200.000",
+          "ghi_chu": "Tuỳ độ rối"
+        },
+        {
+          "ten": "Lấy cao răng",
+          "gia": "từ 410.000",
+          "ghi_chu": ""
+        }
+      ]
+    },
+    {
+      "ten": "Triệt sản (combo trọn gói)",
+      "icon": "cross",
+      "mo_ta": "Combo gồm phẫu thuật, xét nghiệm máu, loa chống liếm, sát khuẩn. Mèo cái có thêm tiêm hậu phẫu 5 ngày và nội trú nửa ngày; chó đực có thuốc uống hậu phẫu.",
+      "ghi_chu": "",
+      "cap_cuu": false,
+      "dat_lich": true,
+      "spa": false,
+      "phu_phi_gio": "",
+      "ngay_le": false,
+      "bang": {
+        "tieu_de_dong": "Cân nặng",
+        "cot": [
+          "Mèo đực",
+          "Mèo cái",
+          "Chó đực",
+          "Chó cái"
+        ],
+        "dong": [
+          {
+            "nhan": "Dưới 3 kg",
+            "gia": [
+              "490.000",
+              "850.000",
+              "690.000",
+              "950.000"
+            ]
+          },
+          {
+            "nhan": "3 – 5 kg",
+            "gia": [
+              "540.000",
+              "890.000",
+              "790.000",
+              "1.050.000"
+            ]
+          },
+          {
+            "nhan": "5 – 10 kg",
+            "gia": [
+              "590.000",
+              "950.000",
+              "850.000",
+              "1.100.000"
+            ]
+          },
+          {
+            "nhan": "10 – 20 kg",
+            "gia": [
+              "–",
+              "–",
+              "950.000",
+              "1.200.000"
+            ]
+          },
+          {
+            "nhan": "20 – 30 kg",
+            "gia": [
+              "–",
+              "–",
+              "1.050.000",
+              "1.350.000"
+            ]
+          }
+        ]
+      },
+      "hang_muc": []
+    },
+    {
+      "ten": "Phẫu thuật",
+      "icon": "cross",
+      "mo_ta": "Phẫu thuật có khám, tư vấn trước và theo dõi sau mổ bởi bác sĩ thú y.",
+      "ghi_chu": "",
+      "cap_cuu": false,
+      "dat_lich": true,
+      "spa": false,
+      "phu_phi_gio": "",
+      "ngay_le": false,
+      "bang": {
+        "tieu_de_dong": "",
+        "cot": [],
+        "dong": []
+      },
+      "hang_muc": [
+        {
+          "ten": "Phẫu thuật khác (báo giá sau khi khám)",
+          "gia": "",
+          "ghi_chu": ""
+        }
+      ]
+    },
+    {
+      "ten": "Gửi nội trú (khách sạn thú cưng)",
+      "icon": "bed",
+      "mo_ta": "Chỗ ở an toàn, được theo dõi sức khỏe trong thời gian gửi.",
+      "ghi_chu": "Gửi dài ngày: trên 5 ngày giảm 10%, 7 ngày giảm 15%, trên 10 ngày giảm 20%, trên 20 ngày giảm 30%, trên 30 ngày giảm 50%.",
+      "cap_cuu": false,
+      "dat_lich": true,
+      "spa": false,
+      "phu_phi_gio": "",
+      "ngay_le": false,
+      "bang": {
+        "tieu_de_dong": "Cân nặng",
+        "cot": [
+          "Giá / ngày"
+        ],
+        "dong": [
+          {
+            "nhan": "Dưới 2 kg",
+            "gia": [
+              "85.000"
+            ]
+          },
+          {
+            "nhan": "2 – 3 kg",
+            "gia": [
+              "95.000"
+            ]
+          },
+          {
+            "nhan": "3 – 5 kg",
+            "gia": [
+              "110.000"
+            ]
+          },
+          {
+            "nhan": "5 – 7 kg",
+            "gia": [
+              "125.000"
+            ]
+          },
+          {
+            "nhan": "7 – 10 kg",
+            "gia": [
+              "140.000"
+            ]
+          },
+          {
+            "nhan": "10 – 20 kg",
+            "gia": [
+              "155.000"
+            ]
+          },
+          {
+            "nhan": "Trên 20 kg",
+            "gia": [
+              "từ 180.000"
+            ]
+          }
+        ]
+      },
+      "hang_muc": []
+    },
+    {
+      "ten": "Cấp cứu 24/24",
+      "icon": "heart-pulse",
+      "mo_ta": "Luôn có người trực. Gọi trước để bệnh viện chuẩn bị đón bé.",
+      "ghi_chu": "",
+      "cap_cuu": true,
+      "dat_lich": false,
+      "spa": false,
+      "phu_phi_gio": "",
+      "ngay_le": false,
+      "bang": {
+        "tieu_de_dong": "",
+        "cot": [],
+        "dong": []
+      },
+      "hang_muc": []
+    }
   ]
 }

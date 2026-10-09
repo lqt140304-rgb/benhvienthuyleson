@@ -120,22 +120,75 @@ collections:
         label: Dịch vụ và bảng giá
         file: src/data/dich_vu.json
         fields:
-          - label: Dịch vụ
+          - label: Nhóm dịch vụ
             name: danh_sach
             widget: list
             summary: "{{ten}}"
             fields:
-              - { label: Tên dịch vụ, name: ten, widget: string }
-              - { label: Biểu tượng, name: icon, widget: select, options: [stethoscope, syringe, cross, scissors, bed, heart-pulse] }
-              - { label: Mô tả ngắn, name: mo_ta, widget: text }
-              - { label: Là mục cấp cứu (hiện nút gọi và phụ phí ngoài giờ), name: cap_cuu, widget: boolean, default: false, required: false }
-              - label: Bảng giá
+              - { label: Tên nhóm, name: ten, widget: string }
+              - { label: Biểu tượng, name: icon, widget: select, options: [stethoscope, flask, syringe, bath, scissors, cross, bed, heart-pulse] }
+              - { label: Mô tả ngắn, name: mo_ta, widget: text, required: false }
+              - { label: Ghi chú dưới bảng giá, name: ghi_chu, widget: text, required: false }
+              - { label: Cho đặt lịch online, name: dat_lich, widget: boolean, default: true, required: false }
+              - { label: "Là dịch vụ spa (không nhận online sau giờ spa)", name: spa, widget: boolean, default: false, required: false }
+              - label: Phụ phí spa theo giờ hẹn
+                name: phu_phi_gio
+                widget: select
+                required: false
+                options:
+                  - { label: "Phụ phí tắm", value: spa_tam }
+                  - { label: "Phụ phí cắt tỉa / cạo", value: spa_cat }
+              - { label: Tính phụ phí ngày lễ, name: ngay_le, widget: boolean, default: false, required: false }
+              - { label: "Là mục cấp cứu (hiện nút gọi và phụ phí ngoài giờ)", name: cap_cuu, widget: boolean, default: false, required: false }
+              - label: "Bảng giá theo cân nặng (để trống nếu không dùng)"
+                name: bang
+                widget: object
+                required: false
+                fields:
+                  - { label: Tiêu đề cột đầu, name: tieu_de_dong, widget: string, default: Cân nặng, required: false }
+                  - { label: "Các cột (ví dụ Chó lông ngắn)", name: cot, widget: list, required: false, field: { label: Cột, name: cot, widget: string } }
+                  - label: Các dòng
+                    name: dong
+                    widget: list
+                    required: false
+                    summary: "{{nhan}}"
+                    fields:
+                      - { label: "Dòng (ví dụ 3 – 5 kg)", name: nhan, widget: string }
+                      - { label: "Giá theo từng cột, đúng thứ tự cột (– là không có)", name: gia, widget: list, field: { label: Giá, name: gia, widget: string } }
+              - label: Danh sách giá
                 name: hang_muc
                 widget: list
+                required: false
                 summary: "{{ten}} – {{gia}}"
                 fields:
                   - { label: Hạng mục, name: ten, widget: string }
-                  - { label: "Giá (để trống = Đang cập nhật)", name: gia, widget: string, required: false }
+                  - { label: "Giá (ví dụ 120.000, từ 250.000; trống = Đang cập nhật)", name: gia, widget: string, required: false }
+                  - { label: Ghi chú, name: ghi_chu, widget: text, required: false }
+                  - label: Phí tự động
+                    name: phu_phi
+                    widget: select
+                    required: false
+                    options:
+                      - { label: "Phí đi lại khám tại nhà (theo giờ hẹn)", value: kham_nha }
+
+      - name: phu_phi
+        label: Phụ phí tự động và ngày lễ
+        file: src/data/phu_phi.json
+        fields:
+          - { label: "Spa nhận lịch online đến (giờ:phút)", name: spa_nhan_den, widget: string }
+          - label: Phụ phí tắm theo giờ hẹn
+            name: spa_tam
+            widget: list
+            summary: "{{tu}} – {{den}}: {{gia}}"
+            fields: &khung
+              - { label: "Từ (giờ:phút)", name: tu, widget: string }
+              - { label: "Đến trước (giờ:phút)", name: den, widget: string }
+              - { label: "Phí (ví dụ 50.000)", name: gia, widget: string }
+          - { label: Phụ phí cắt tỉa / cạo theo giờ hẹn, name: spa_cat, widget: list, summary: "{{tu}} – {{den}}: {{gia}}", fields: *khung }
+          - { label: "Phụ phí spa ngày lễ (ví dụ 30.000)", name: ngay_le_gia, widget: string }
+          - { label: Các ngày lễ, name: ngay_le, widget: list, required: false, field: { label: Ngày, name: ngay, widget: datetime, time_format: false, format: "YYYY-MM-DD", date_format: "DD/MM/YYYY" } }
+          - { label: Phí đi lại khám tại nhà theo giờ hẹn, name: kham_nha, widget: list, summary: "{{tu}} – {{den}}: {{gia}}", fields: *khung }
+          - { label: "Phụ phí khám ngoài giờ (chỉ hiển thị, ngoài giờ không nhận đặt online)", name: kham_ngoai_gio, widget: list, summary: "{{tu}} – {{den}}: {{gia}}", fields: *khung }
 
       - name: bac_si
         label: Đội ngũ bác sĩ

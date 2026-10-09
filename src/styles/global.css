@@ -288,3 +288,28 @@ p { margin: 0 0 1em; }
   .grid2 { grid-template-columns: 1fr; }
   .brand-name { font-size: 19px; }
 }
+
+/* Bảng giá nhiều cột theo cân nặng */
+.bang-wrap { overflow-x: auto; margin: 8px 0 10px; border: 1px solid var(--vien); border-radius: 4px; background: #fff; }
+.bang-gia { border-collapse: collapse; width: 100%; font-size: 16px; min-width: 420px; }
+.bang-gia th, .bang-gia td { padding: 9px 12px; border-bottom: 1px solid var(--vien); text-align: right; white-space: nowrap; }
+.bang-gia thead th { background: var(--tim); color: #fff; font-weight: 800; font-size: 15px; white-space: normal; vertical-align: bottom; }
+.bang-gia th[scope="row"], .bang-gia thead th:first-child { text-align: left; }
+.bang-gia th[scope="row"] { background: var(--nen-tim); font-weight: 700; position: sticky; left: 0; }
+.bang-gia tbody tr:last-child > * { border-bottom: 0; }
+.gia-note { display: block; font-size: 15px; color: var(--phu); margin-top: 2px; }
+.gia td:first-child { padding-right: 12px; }
+
+/* Hoá đơn tham khảo */
+.hoa-don { border: 2px solid var(--chu); border-radius: 4px; background: #fff; padding: 18px 20px; }
+.hoa-don h2 { font-family: var(--sans); font-size: 19px; font-weight: 800; margin-bottom: 8px; }
+.hoa-don table { width: 100%; border-collapse: collapse; }
+.hoa-don td { padding: 8px 0; border-bottom: 1px dotted var(--vien); vertical-align: top; }
+.hoa-don td:last-child { text-align: right; white-space: nowrap; padding-left: 12px; font-weight: 800; }
+.hoa-don .tu-dong td:first-child { color: #8A3A0C; }
+.hoa-don .tong td { border-bottom: 0; border-top: 2px solid var(--chu); font-size: 19px; font-weight: 800; padding-top: 10px; }
+.nhan-tu-dong { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 800; background: #FFE9DC; color: #8A3A0C; border-radius: 999px; padding: 1px 8px; margin-left: 6px; vertical-align: 1px; }
+.tb-phu-phi { border: 0; border-radius: 6px; padding: 0; max-width: min(460px, calc(100vw - 32px)); box-shadow: 0 20px 60px rgba(35,26,36,.35); }
+.tb-phu-phi::backdrop { background: rgba(35,26,36,.45); }
+.tb-phu-phi > div { padding: 22px 22px 18px; }
+.tb-phu-phi h2 { font-family: var(--sans); font-size: 20px; font-weight: 800; color: #8A3A0C; display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }

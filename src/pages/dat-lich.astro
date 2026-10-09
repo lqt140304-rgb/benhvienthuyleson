@@ -1,20 +1,21 @@
 ---
-// Đặt lịch: cách A (form → Google Sheet + email) và cách C (nhắn Zalo)
+// Đặt lịch: cách A (form → Google Sheet + email, kèm hoá đơn tham khảo) và cách C (nhắn Zalo)
 import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
 import tt from '../data/thong_tin.json';
-import dv from '../data/dich_vu.json';
-import { u } from '../lib/site';
+import pp from '../data/phu_phi.json';
+import { u, gia, neo, dsDichVu } from '../lib/site';
+const dv = { danh_sach: dsDichVu() };
 
-const goiMuc = 'vui lòng gọi để biết mức';
-const phiKham = tt.phu_phi_kham_ngoai_gio || goiMuc;
-const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || goiMuc;
+const nhom = dv.danh_sach.filter((d) => d.dat_lich).map((d) => ({ ...d, id: neo(d.ten) }));
+const duLieu = JSON.stringify({ nhom, pp }).replace(/</g, '\\u003c');
+const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết mức';
 ---
-<Layout title="Đặt lịch khám" description={`Đặt lịch khám, tiêm phòng, spa, nội trú cho chó mèo tại ${tt.ten}. Điền form 1 phút hoặc nhắn Zalo.`} cam="dat_lich">
+<Layout title="Đặt lịch khám" description={`Đặt lịch khám, tắm, cắt tỉa, triệt sản, gửi nội trú cho chó mèo tại ${tt.ten}. Xem trước hoá đơn tham khảo.`} cam="dat_lich">
   <section class="pagehead"><div class="wrap">
     <nav class="crumb" aria-label="Đường dẫn"><a href={u('/')}>Trang chủ</a><span aria-hidden="true">›</span><span>Đặt lịch</span></nav>
     <h1>Đặt lịch cho bé</h1>
-    <p class="lead">Điền form hoặc nhắn Zalo. Nhân viên sẽ gọi lại để xác nhận lịch hẹn.</p>
+    <p class="lead">Chọn dịch vụ và giờ hẹn, web tự tính hoá đơn tham khảo. Nhân viên sẽ gọi lại để xác nhận.</p>
   </div></section>
 
   <section class="s" style="padding-top:16px">
@@ -31,7 +32,7 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || goiMuc;
             <input id="f-sdt" name="dien_thoai" type="tel" inputmode="tel" autocomplete="tel" required aria-describedby="e-sdt" placeholder="09xx xxx xxx">
             <p class="loi" id="e-sdt" hidden>Số điện thoại chưa đúng. Ví dụ: 0912 345 678.</p>
           </div>
-          <fieldset class="f full radio-wrap" style="border:0;margin:0;padding:0">
+          <fieldset class="f full" style="border:0;margin:0;padding:0">
             <legend>Thú cưng</legend>
             <div class="radio">
               <label><input type="radio" name="thu_cung" value="Chó" checked> Chó</label>
@@ -39,14 +40,25 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || goiMuc;
               <label><input type="radio" name="thu_cung" value="Khác"> Khác</label>
             </div>
           </fieldset>
-          <div class="f full">
+          <div class="f">
+            <label for="f-nhom">Nhóm dịch vụ <span class="bb" aria-hidden="true">*</span></label>
+            <select id="f-nhom" required aria-describedby="e-nhom">
+              <option value="">-- Chọn nhóm --</option>
+              {nhom.map((n, i) => <option value={String(i)} data-id={n.id}>{n.ten}</option>)}
+            </select>
+            <p class="loi" id="e-nhom" hidden>Vui lòng chọn nhóm dịch vụ.</p>
+          </div>
+          <div class="f">
             <label for="f-dv">Dịch vụ <span class="bb" aria-hidden="true">*</span></label>
-            <select id="f-dv" name="dich_vu" required aria-describedby="e-dv">
-              <option value="">-- Chọn dịch vụ --</option>
-              {dv.danh_sach.map((d) => <option value={d.ten}>{d.ten}</option>)}
-              <option value="Khác">Khác (ghi rõ ở phần ghi chú)</option>
+            <select id="f-dv" required aria-describedby="e-dv" disabled>
+              <option value="">-- Chọn nhóm trước --</option>
             </select>
             <p class="loi" id="e-dv" hidden>Vui lòng chọn dịch vụ.</p>
+          </div>
+          <div class="f full" id="o-can-nang" hidden>
+            <label for="f-kg">Cân nặng của bé <span class="bb" aria-hidden="true">*</span></label>
+            <select id="f-kg" aria-describedby="e-kg"></select>
+            <p class="loi" id="e-kg" hidden>Vui lòng chọn cân nặng để tính giá.</p>
           </div>
           <div class="f">
             <label for="f-ngay">Ngày muốn đến <span class="bb" aria-hidden="true">*</span></label>
@@ -56,18 +68,29 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || goiMuc;
           <div class="f">
             <label for="f-gio">Giờ muốn đến <span class="bb" aria-hidden="true">*</span></label>
             <input id="f-gio" name="gio" type="time" required aria-describedby="e-gio g-gio" value="09:00">
-            <p class="goi-y" id="g-gio">Nhận lịch từ 8:00 đến 21:00.</p>
+            <p class="goi-y" id="g-gio">Nhận lịch 8:00 – 21:00 (spa đến {pp.spa_nhan_den}).</p>
             <p class="loi" id="e-gio" hidden>Vui lòng chọn giờ.</p>
           </div>
 
           <div class="full ngoai-gio" id="ngoai-gio" role="alert" hidden>
             <h2><Icon name="clock" />Giờ này ngoài giờ làm việc (8:00 – 21:00)</h2>
-            <p style="margin:0">Form không nhận lịch ngoài giờ. Bạn vui lòng gọi trực tiếp để bệnh viện sắp xếp:</p>
+            <p style="margin:0">Form không nhận lịch ngoài giờ. Bạn vui lòng gọi trực tiếp để bệnh viện sắp xếp.</p>
             <ul>
-              <li>Phụ phí khám ngoài giờ: <b>{phiKham}</b></li>
+              <li>Phụ phí khám ngoài giờ (cộng thêm): {pp.kham_ngoai_gio.map((k, i) => <>{i > 0 && ' · '}{k.tu}–{k.den}: <b>{gia(k.gia)}</b></>)}</li>
               <li>Phụ phí cấp cứu ngoài giờ: <b>{phiCapCuu}</b></li>
             </ul>
             <a class="btn btn-cta" href={`tel:${tt.dien_thoai_goi}`}><Icon name="phone" />Gọi ngay {tt.dien_thoai}</a>
+          </div>
+          <div class="full ngoai-gio" id="spa-muon" role="alert" hidden>
+            <h2><Icon name="clock" />Spa nhận lịch online đến {pp.spa_nhan_den}</h2>
+            <p style="margin:0 0 12px">Sau {pp.spa_nhan_den}, bạn vui lòng gọi trước để bệnh viện sắp xếp nhân viên.</p>
+            <a class="btn btn-cta" href={`tel:${tt.dien_thoai_goi}`}><Icon name="phone" />Gọi {tt.dien_thoai}</a>
+          </div>
+
+          <div class="full hoa-don" id="hoa-don" aria-live="polite" hidden>
+            <h2>Hoá đơn tham khảo</h2>
+            <table><tbody id="hd-dong"></tbody></table>
+            <p class="luu-y" style="margin:10px 0 0">Đây là <b>hoá đơn tham khảo</b>, chưa gồm thuốc, vật tư phát sinh. Các dòng <b>phụ phí tự động</b> được tính theo dịch vụ và giờ/ngày hẹn theo bảng giá của bệnh viện, không chỉnh sửa được. Giá chính xác nhân viên xác nhận khi gọi lại và khi bé đến bệnh viện.</p>
           </div>
 
           <div class="f full">
@@ -98,9 +121,9 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || goiMuc;
         )}
         <div class="ngoai-gio">
           <h2><Icon name="heart-pulse" />Cấp cứu, ngoài giờ</h2>
-          <p style="margin:0">Trước 8:00 hoặc sau 21:00, vui lòng gọi trực tiếp:</p>
+          <p style="margin:0">Trước 8:00 hoặc sau 21:00, vui lòng gọi trực tiếp. Phụ phí khám ngoài giờ (cộng thêm):</p>
           <ul>
-            <li>Phụ phí khám ngoài giờ: <b>{phiKham}</b></li>
+            {pp.kham_ngoai_gio.map((k) => <li>{k.tu} – {k.den}: <b>{gia(k.gia)}</b></li>)}
             <li>Phụ phí cấp cứu ngoài giờ: <b>{phiCapCuu}</b></li>
           </ul>
           <a class="btn btn-cta" href={`tel:${tt.dien_thoai_goi}`}><Icon name="phone" />{tt.dien_thoai}</a>
@@ -112,19 +135,46 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || goiMuc;
       </aside>
     </div>
   </section>
+
+  <dialog class="tb-phu-phi" id="tb-phu-phi" aria-labelledby="tb-tieu-de">
+    <div>
+      <h2 id="tb-tieu-de"><Icon name="info" />Lưu ý phụ phí</h2>
+      <div id="tb-noi-dung"></div>
+      <p class="muted" style="margin:8px 0 16px">Khoản này đã được tự động cộng vào hoá đơn tham khảo.</p>
+      <button type="button" class="btn btn-cta" id="tb-dong" style="width:100%">Tôi đã hiểu</button>
+    </div>
+  </dialog>
+
+  <script type="application/json" id="du-lieu-gia" set:html={duLieu}></script>
 </Layout>
 
 <script>
-  // Kiểm tra form đặt lịch và gửi tới Google Apps Script (xem apps-script/Code.gs)
+  // Form đặt lịch: kiểm tra dữ liệu, tính hoá đơn tham khảo + phụ phí tự động, gửi tới Google Apps Script
+  type Gia = { tu: string; den: string; gia: string };
+  type Nhom = {
+    id: string; ten: string; spa: boolean; phu_phi_gio: string; ngay_le: boolean;
+    bang: { cot: string[]; dong: { nhan: string; gia: string[] }[] };
+    hang_muc: { ten: string; gia: string; ghi_chu: string; phu_phi?: string }[];
+  };
+  type Dong = { ten: string; tien: number | null; chu: string; tuDong?: boolean };
+
   const form = document.getElementById('dat-lich') as HTMLFormElement | null;
-  if (form) {
+  const raw = document.getElementById('du-lieu-gia')?.textContent;
+  if (form && raw) {
+    const { nhom, pp } = JSON.parse(raw) as { nhom: Nhom[]; pp: Record<string, any> };
     const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
     const GIO_MO = 8 * 60, GIO_DONG = 21 * 60;
     const sdtBV = form.dataset.sdt || '';
+    const phut = (t: string) => { const [h, m] = (t || '').split(':').map(Number); return h * 60 + (m || 0); };
+    const SPA_DEN = phut(pp.spa_nhan_den || '19:00');
 
-    // Ngày hôm nay theo giờ Việt Nam
+    // Giá nhập dạng "120.000", "từ 250.000", "90.000 – 200.000"
+    const so = (s: string) => { const m = (s || '').match(/\d{1,3}(?:\.\d{3})+|\d+/); return m ? parseInt(m[0].replace(/\./g, ''), 10) : null; };
+    const tien = (n: number) => n.toLocaleString('vi-VN').replace(/,/g, '.') + 'đ';
+    const hienGia = (s: string) => { const t = (s || '').trim(); return !t ? 'Báo sau' : /\d$/.test(t) ? t + 'đ' : t; };
+    const khongCo = (s: string) => !s || s.trim() === '–';
+
     const homNay = () => new Date(Date.now() + 7 * 3600_000).toISOString().slice(0, 10);
-    // Bỏ khoảng trắng, dấu chấm, gạch, ngoặc; đổi +84/84 thành 0
     const sachSdt = (v: string) => {
       let s = (v || '').replace(/[\s.\-()]/g, '');
       if (s.startsWith('+84')) s = '0' + s.slice(3);
@@ -132,52 +182,158 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || goiMuc;
       return s;
     };
     const sdtDung = (v: string) => /^0\d{9,10}$/.test(sachSdt(v));
-    const ngoaiGio = (t: string) => {
-      if (!t) return false;
-      const [h, m] = t.split(':').map(Number);
-      const p = h * 60 + m;
-      return p < GIO_MO || p > GIO_DONG;
-    };
-    const baoLoi = (id: string, co: boolean, o: HTMLElement) => {
-      $(id).hidden = !co;
-      o.setAttribute('aria-invalid', co ? 'true' : 'false');
-    };
+    const ngoaiGio = (t: string) => !!t && (phut(t) < GIO_MO || phut(t) > GIO_DONG);
+    const baoLoi = (id: string, co: boolean, o: HTMLElement) => { $(id).hidden = !co; o.setAttribute('aria-invalid', co ? 'true' : 'false'); };
+    const trongKhung = (ds: Gia[], t: string) => ds.find((k) => phut(t) >= phut(k.tu) && phut(t) < phut(k.den));
 
-    const ten = $<HTMLInputElement>('f-ten'), sdt = $<HTMLInputElement>('f-sdt'), dv = $<HTMLSelectElement>('f-dv');
+    const ten = $<HTMLInputElement>('f-ten'), sdt = $<HTMLInputElement>('f-sdt');
+    const selNhom = $<HTMLSelectElement>('f-nhom'), selDv = $<HTMLSelectElement>('f-dv'), selKg = $<HTMLSelectElement>('f-kg');
     const ngay = $<HTMLInputElement>('f-ngay'), gio = $<HTMLInputElement>('f-gio'), gui = $<HTMLButtonElement>('gui');
+    const tb = $<HTMLDialogElement>('tb-phu-phi');
     ngay.min = homNay();
     if (!ngay.value) ngay.value = homNay();
 
-    // Chọn sẵn dịch vụ khi đến từ trang Dịch vụ (?dv=...)
-    const dvUrl = new URLSearchParams(location.search).get('dv');
-    if (dvUrl && [...dv.options].some((o) => o.value === dvUrl)) dv.value = dvUrl;
+    const opt = (v: string, t: string) => { const o = document.createElement('option'); o.value = v; o.textContent = t; return o; };
+    const nhomDangChon = () => (selNhom.value === '' ? null : nhom[+selNhom.value]);
 
-    const xetGio = () => {
-      const ngoai = ngoaiGio(gio.value);
+    function doiNhom() {
+      const n = nhomDangChon();
+      selDv.replaceChildren(opt('', n ? '-- Chọn dịch vụ --' : '-- Chọn nhóm trước --'));
+      selDv.disabled = !n;
+      if (n) {
+        n.bang.cot.forEach((c, j) => { if (n.bang.dong.some((r) => !khongCo(r.gia[j]))) selDv.append(opt('c' + j, c)); });
+        n.hang_muc.forEach((h, i) => selDv.append(opt('h' + i, h.gia ? `${h.ten} – ${hienGia(h.gia)}` : h.ten)));
+        if (selDv.options.length === 2) selDv.selectedIndex = 1;
+      }
+      doiDv();
+    }
+    function doiDv() {
+      const n = nhomDangChon();
+      const v = selDv.value;
+      const cot = n && v.startsWith('c') ? +v.slice(1) : -1;
+      $('o-can-nang').hidden = cot < 0;
+      selKg.replaceChildren(opt('', '-- Chọn cân nặng --'));
+      if (n && cot >= 0) n.bang.dong.forEach((r, i) => { if (!khongCo(r.gia[cot])) selKg.append(opt(String(i), `${r.nhan} – ${hienGia(r.gia[cot])}`)); });
+      capNhat(true);
+    }
+
+    // Tính hoá đơn tham khảo: dòng dịch vụ chính + các dòng phụ phí tự động
+    function tinh(): { dong: Dong[]; chinh: string; kg: string } | null {
+      const n = nhomDangChon();
+      const v = selDv.value;
+      if (!n || !v) return null;
+      const dong: Dong[] = [];
+      let chinh = '', kg = '';
+      if (v.startsWith('c')) {
+        const j = +v.slice(1);
+        const r = selKg.value === '' ? null : n.bang.dong[+selKg.value];
+        chinh = `${n.ten} – ${n.bang.cot[j]}`;
+        if (r) { kg = r.nhan; dong.push({ ten: `${chinh} · ${r.nhan}`, tien: so(r.gia[j]), chu: hienGia(r.gia[j]) }); }
+        else dong.push({ ten: chinh, tien: null, chu: 'Chọn cân nặng' });
+      } else {
+        const h = n.hang_muc[+v.slice(1)];
+        chinh = `${n.ten} – ${h.ten}`;
+        dong.push({ ten: h.ten, tien: so(h.gia), chu: h.gia ? hienGia(h.gia) : 'Báo sau khi khám' });
+        if (h.phu_phi === 'kham_nha' && gio.value) {
+          const k = trongKhung(pp.kham_nha, gio.value) || pp.kham_nha[pp.kham_nha.length - 1];
+          dong.push({ ten: `Phí đi lại khám tại nhà (theo giờ hẹn ${gio.value})`, tien: so(k.gia), chu: hienGia(k.gia), tuDong: true });
+        }
+      }
+      if (n.phu_phi_gio && gio.value) {
+        const k = trongKhung(pp[n.phu_phi_gio] || [], gio.value);
+        if (k) dong.push({ ten: `Phụ phí spa ${n.phu_phi_gio === 'spa_tam' ? 'tắm' : 'cắt tỉa'} sau ${k.tu} (theo giờ hẹn ${gio.value})`, tien: so(k.gia), chu: hienGia(k.gia), tuDong: true });
+      }
+      if (n.ngay_le && (pp.ngay_le || []).includes(ngay.value)) {
+        dong.push({ ten: 'Phụ phí ngày lễ', tien: so(pp.ngay_le_gia), chu: hienGia(pp.ngay_le_gia), tuDong: true });
+      }
+      return { dong, chinh, kg };
+    }
+
+    let daBao = '';
+    function capNhat(tuNguoiDung: boolean) {
+      const t = gio.value;
+      const n = nhomDangChon();
+      const ngoai = ngoaiGio(t);
+      const spaMuon = !ngoai && !!n?.spa && !!t && phut(t) >= SPA_DEN;
       $('ngoai-gio').hidden = !ngoai;
-      gui.disabled = ngoai;
-    };
-    gio.addEventListener('input', xetGio);
-    gio.addEventListener('change', xetGio);
-    xetGio();
+      $('spa-muon').hidden = !spaMuon;
+      gui.disabled = ngoai || spaMuon;
+
+      const hd = tinh();
+      $('hoa-don').hidden = !hd;
+      if (!hd) return;
+      const body = $('hd-dong');
+      body.replaceChildren();
+      for (const d of hd.dong) {
+        const tr = document.createElement('tr');
+        if (d.tuDong) tr.className = 'tu-dong';
+        const a = document.createElement('td'), b = document.createElement('td');
+        a.textContent = d.ten;
+        if (d.tuDong) { const s = document.createElement('span'); s.className = 'nhan-tu-dong'; s.textContent = 'Tự động'; a.append(s); }
+        b.textContent = d.tuDong && d.tien ? '+' + tien(d.tien) : d.chu;
+        tr.append(a, b);
+        body.append(tr);
+      }
+      const chinh = hd.dong[0];
+      const tong = hd.dong.reduce((s, d) => s + (d.tien || 0), 0);
+      const tr = document.createElement('tr');
+      tr.className = 'tong';
+      const a = document.createElement('td'), b = document.createElement('td');
+      a.textContent = 'Tổng tạm tính';
+      const tu = /từ|–/.test(chinh.chu) ? 'từ ' : '';
+      b.textContent = chinh.tien === null ? (tong ? tien(tong) + ' + phí khám (báo sau)' : 'Báo sau') : tu + tien(tong);
+      tr.append(a, b);
+      body.append(tr);
+
+      // Thông báo khi có phụ phí mới do giờ/ngày hẹn
+      const tuDong = hd.dong.filter((d) => d.tuDong);
+      const khoa = tuDong.map((d) => d.ten.replace(/\(theo giờ hẹn.*\)/, '') + d.tien).join('|');
+      if (!tuNguoiDung) return; // đang gõ giờ: chưa báo, chờ khách chọn xong
+      if (khoa && khoa !== daBao && !gui.disabled) {
+        const nd = $('tb-noi-dung');
+        nd.replaceChildren();
+        for (const d of tuDong) {
+          const p = document.createElement('p');
+          p.style.margin = '0 0 8px';
+          p.textContent = `Lịch hẹn ${t ? 'lúc ' + t : ''} ${ngay.value ? 'ngày ' + ngay.value.split('-').reverse().join('/') : ''}: ${d.ten.replace(/ \(theo giờ hẹn.*\)/, '')} là ${d.tien ? tien(d.tien) : d.chu} theo bảng giá của bệnh viện.`;
+          nd.append(p);
+        }
+        if (n?.phu_phi_gio) {
+          const dau = (pp[n.phu_phi_gio] || [])[0];
+          if (dau) { const p = document.createElement('p'); p.style.margin = '0'; p.textContent = `Muốn tránh phụ phí theo giờ, bạn có thể chọn giờ trước ${dau.tu}.`; nd.append(p); }
+        }
+        if (typeof tb.showModal === 'function') tb.showModal();
+      }
+      daBao = khoa;
+    }
+
+    $('tb-dong').addEventListener('click', () => tb.close());
+    selNhom.addEventListener('change', doiNhom);
+    selDv.addEventListener('change', doiDv);
+    selKg.addEventListener('change', () => capNhat(true));
+    gio.addEventListener('change', () => capNhat(true));
+    gio.addEventListener('input', () => capNhat(false));
+    ngay.addEventListener('change', () => capNhat(true));
+
+    // Chọn sẵn nhóm khi đến từ trang Dịch vụ (?nhom=...)
+    const nhomUrl = new URLSearchParams(location.search).get('nhom');
+    const viTri = nhom.findIndex((x) => x.id === nhomUrl);
+    if (viTri >= 0) selNhom.value = String(viTri);
+    doiNhom();
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       $('loi-gui').hidden = true;
+      const n = nhomDangChon();
+      const canKg = !$('o-can-nang').hidden;
       const loi = {
-        ten: !ten.value.trim(),
-        sdt: !sdtDung(sdt.value),
-        dv: !dv.value,
-        ngay: !ngay.value || ngay.value < homNay(),
-        gio: !gio.value,
+        ten: !ten.value.trim(), sdt: !sdtDung(sdt.value), nhom: !n, dv: !!n && !selDv.value,
+        kg: canKg && selKg.value === '', ngay: !ngay.value || ngay.value < homNay(), gio: !gio.value,
       };
-      baoLoi('e-ten', loi.ten, ten);
-      baoLoi('e-sdt', loi.sdt, sdt);
-      baoLoi('e-dv', loi.dv, dv);
-      baoLoi('e-ngay', loi.ngay, ngay);
-      baoLoi('e-gio', loi.gio, gio);
-      xetGio();
-      const dau = loi.ten ? ten : loi.sdt ? sdt : loi.dv ? dv : loi.ngay ? ngay : loi.gio || ngoaiGio(gio.value) ? gio : null;
+      baoLoi('e-ten', loi.ten, ten); baoLoi('e-sdt', loi.sdt, sdt); baoLoi('e-nhom', loi.nhom, selNhom);
+      baoLoi('e-dv', loi.dv, selDv); baoLoi('e-kg', loi.kg, selKg); baoLoi('e-ngay', loi.ngay, ngay); baoLoi('e-gio', loi.gio, gio);
+      capNhat(false);
+      const dau = loi.ten ? ten : loi.sdt ? sdt : loi.nhom ? selNhom : loi.dv ? selDv : loi.kg ? selKg : loi.ngay ? ngay : loi.gio || gui.disabled ? gio : null;
       if (dau) { dau.focus(); return; }
       if ($<HTMLInputElement>('f-web').value) return; // ô bẫy chống tin rác
 
@@ -187,18 +343,21 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || goiMuc;
         $('loi-gui').hidden = false;
         return;
       }
-
+      const hd = tinh()!;
+      const tongText = ($('hd-dong').lastElementChild?.lastElementChild?.textContent || '').trim();
+      const hoaDon = hd.dong.map((d) => `${d.tuDong ? '[Tự động] ' : ''}${d.ten}: ${d.tuDong && d.tien ? '+' + tien(d.tien) : d.chu}`).join('\n');
       const thuCung = (form.querySelector('input[name="thu_cung"]:checked') as HTMLInputElement | null)?.value || '';
       const data = new URLSearchParams({
-        ten: ten.value.trim(), dien_thoai: sachSdt(sdt.value), thu_cung: thuCung, dich_vu: dv.value,
-        ngay: ngay.value, gio: gio.value, ghi_chu: $<HTMLTextAreaElement>('f-ghichu').value.trim(), website: '',
+        ten: ten.value.trim(), dien_thoai: sachSdt(sdt.value), thu_cung: thuCung, dich_vu: hd.chinh, can_nang: hd.kg,
+        ngay: ngay.value, gio: gio.value, ghi_chu: $<HTMLTextAreaElement>('f-ghichu').value.trim(),
+        hoa_don: hoaDon, tong_tam_tinh: tongText, website: '',
       });
       gui.disabled = true;
       try {
         // Apps Script không cho đọc phản hồi từ web khác (no-cors); máy chủ kiểm tra lại dữ liệu.
         await fetch(diaChi, { method: 'POST', mode: 'no-cors', body: data });
         const [y, m, d] = ngay.value.split('-');
-        $('ok-text').textContent = `Cảm ơn ${ten.value.trim()}. Nhân viên sẽ gọi số ${sachSdt(sdt.value)} để xác nhận lịch ngày ${d}/${m}/${y} lúc ${gio.value}.`;
+        $('ok-text').textContent = `Cảm ơn ${ten.value.trim()}. Nhân viên sẽ gọi số ${sachSdt(sdt.value)} để xác nhận lịch ngày ${d}/${m}/${y} lúc ${gio.value}. Tổng tạm tính: ${tongText}.`;
         form.hidden = true;
         $('ok').hidden = false;
         $('ok').focus();
@@ -214,7 +373,8 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || goiMuc;
       form.reset();
       ngay.value = homNay();
       gio.value = '09:00';
-      xetGio();
+      daBao = '';
+      doiNhom();
       $('ok').hidden = true;
       form.hidden = false;
       ten.focus();

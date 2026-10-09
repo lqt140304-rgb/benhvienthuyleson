@@ -18,7 +18,9 @@ Web dựng bằng Astro, GitHub tự dựng lại web mỗi khi nhánh `main` th
 5. Sao chép **URL ứng dụng web** (dạng `https://script.google.com/macros/s/.../exec`).
 6. Vào trang quản trị (mục 3) → **Thông tin & cài đặt → Thông tin bệnh viện** → dán URL vào ô "Địa chỉ nhận form đặt lịch" → **Lưu**.
 
-Mỗi lượt đặt lịch: thêm một dòng vào Sheet (cột "Trạng thái" = Mới, nhân viên sửa thành "Đã gọi") và gửi email báo.
+Nếu đã dán mã trước ngày 10/10/2026: dán lại bản mới của `Code.gs`, rồi **Triển khai → Quản lý các bản triển khai → sửa (bút chì) → Phiên bản: Phiên bản mới → Triển khai** (đường link giữ nguyên).
+
+Mỗi lượt đặt lịch: thêm một dòng vào Sheet (cột "Trạng thái" = Mới, nhân viên sửa thành "Đã gọi") và gửi email báo, kèm cân nặng và **hoá đơn tham khảo** khách đã xem.
 Giờ ngoài 8:00–21:00 form không nhận; khách thấy số điện thoại và phụ phí ngoài giờ.
 
 ## 3. Đăng nhập trang quản trị
@@ -43,7 +45,8 @@ Giờ ngoài 8:00–21:00 form không nhận; khách thấy số điện thoại
   - Xin phép chủ nuôi trước khi đăng; không ghi tên, số điện thoại chủ nuôi.
 - **Thông tin & cài đặt**:
   - *Thông tin bệnh viện*: điện thoại, Zalo, Facebook, phụ phí ngoài giờ, giới thiệu, số năm hoạt động, ảnh tập thể, địa chỉ nhận form.
-  - *Dịch vụ và bảng giá*: giá từng hạng mục (để trống = "Đang cập nhật").
+  - *Dịch vụ và bảng giá*: mỗi nhóm có **bảng giá theo cân nặng** (các cột như "Chó lông ngắn", mỗi dòng một mức cân nặng, giá nhập đúng thứ tự cột, "–" là không có) và/hoặc **danh sách giá**. Giá viết như `120.000`, `từ 250.000`; để trống = "Đang cập nhật".
+  - *Phụ phí tự động và ngày lễ*: giờ spa nhận lịch online (hiện 19:00), phụ phí tắm / cắt tỉa theo giờ hẹn, phí đi lại khám tại nhà, phụ phí khám ngoài giờ, **danh sách ngày lễ** (thêm ngày trước mỗi dịp lễ, tết). Form đặt lịch tự cộng các phí này vào **hoá đơn tham khảo** cho khách xem trước.
   - *Đội ngũ bác sĩ*: tên, chức vụ, ảnh vuông.
   - *Ảnh cơ sở vật chất*: phòng khám, phòng mổ, spa, nội trú, mặt tiền.
   - *Bé Cam*: sửa câu nói của bé Cam ở từng trang, hoặc tắt bé Cam.

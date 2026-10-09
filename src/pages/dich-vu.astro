@@ -2,40 +2,62 @@
 import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
 import tt from '../data/thong_tin.json';
-import dv from '../data/dich_vu.json';
-import { u } from '../lib/site';
-const goiMuc = 'Vui lòng gọi để biết mức';
+import pp from '../data/phu_phi.json';
+import { u, gia, neo, dsDichVu } from '../lib/site';
+const dv = { danh_sach: dsDichVu() };
 ---
-<Layout title="Dịch vụ và bảng giá" description={`Khám chữa bệnh, tiêm phòng, phẫu thuật, spa, nội trú và cấp cứu 24/24 cho chó mèo tại ${tt.ten}. Bảng giá tham khảo.`} cam="dich_vu">
+<Layout title="Dịch vụ và bảng giá" description={`Bảng giá khám, xét nghiệm, tắm, cắt tỉa, triệt sản, gửi nội trú cho chó mèo tại ${tt.ten}.`} cam="dich_vu">
   <section class="pagehead"><div class="wrap">
     <nav class="crumb" aria-label="Đường dẫn"><a href={u('/')}>Trang chủ</a><span aria-hidden="true">›</span><span>Dịch vụ & bảng giá</span></nav>
     <h1>Dịch vụ và bảng giá</h1>
-    <p class="lead">Giá mang tính tham khảo; chi phí chính xác bác sĩ sẽ báo sau khi khám.</p>
+    <p class="lead">Giá tham khảo; chưa gồm thuốc, vật tư phát sinh. Khi đặt lịch online, web tự tính hoá đơn tham khảo kèm phụ phí (nếu có).</p>
+    <nav class="loc" aria-label="Nhóm dịch vụ" style="margin-top:16px">
+      {dv.danh_sach.map((d) => <a href={`#${neo(d.ten)}`}>{d.ten}</a>)}
+    </nav>
   </div></section>
   <section class="s" style="padding-top:8px">
-    <div class="wrap" style="max-width:900px">
+    <div class="wrap" style="max-width:960px">
       {dv.danh_sach.map((d) => (
-        <article class={`dv${d.cap_cuu ? ' cc' : ''}`} id={d.ten.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/gi, 'd').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}>
+        <article class={`dv${d.cap_cuu ? ' cc' : ''}`} id={neo(d.ten)}>
           <span class="dv-ic"><Icon name={d.icon} size={26} /></span>
           <h2>{d.ten}</h2>
           <p class="muted" style="margin:0">{d.mo_ta}</p>
-          <div>
+          <div style="min-width:0">
+            {d.bang.cot.length > 0 && (
+              <div class="bang-wrap">
+                <table class="bang-gia">
+                  <thead><tr><th scope="col">{d.bang.tieu_de_dong || 'Cân nặng'}</th>{d.bang.cot.map((c) => <th scope="col">{c}</th>)}</tr></thead>
+                  <tbody>{d.bang.dong.map((r) => <tr><th scope="row">{r.nhan}</th>{r.gia.map((g) => <td>{g === '–' ? '–' : gia(g)}</td>)}</tr>)}</tbody>
+                </table>
+              </div>
+            )}
             {d.hang_muc.length > 0 && (
               <table class="gia">
                 <tbody>
-                  {d.hang_muc.map((h) => <tr><td>{h.ten}</td><td class={h.gia ? '' : 'cho-gia'}>{h.gia || 'Đang cập nhật'}</td></tr>)}
-                  {d.cap_cuu && <>
-                    <tr><td>Phụ phí khám ngoài giờ (trước 8:00, sau 21:00)</td><td class={tt.phu_phi_kham_ngoai_gio ? '' : 'cho-gia'}>{tt.phu_phi_kham_ngoai_gio || goiMuc}</td></tr>
-                    <tr><td>Phụ phí cấp cứu ngoài giờ</td><td class={tt.phu_phi_cap_cuu_ngoai_gio ? '' : 'cho-gia'}>{tt.phu_phi_cap_cuu_ngoai_gio || goiMuc}</td></tr>
-                  </>}
+                  {d.hang_muc.map((h) => (
+                    <tr>
+                      <td>{h.ten}{h.ghi_chu && <span class="gia-note">{h.ghi_chu}</span>}</td>
+                      <td class={h.gia ? '' : 'cho-gia'}>{h.gia ? gia(h.gia) : (h.phu_phi ? 'Xem ghi chú' : (/báo giá|báo phí/i.test(h.ten + h.ghi_chu) ? 'Báo sau khi khám' : 'Đang cập nhật'))}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             )}
+            {d.cap_cuu && (
+              <>
+                <p style="margin:12px 0 4px"><b>Phụ phí khám ngoài giờ</b> (cộng thêm vào phí khám):</p>
+                <table class="gia"><tbody>
+                  {pp.kham_ngoai_gio.map((k) => <tr><td>{k.tu} – {k.den}</td><td>+{gia(k.gia)}</td></tr>)}
+                  <tr><td>Phụ phí cấp cứu ngoài giờ</td><td class={tt.phu_phi_cap_cuu_ngoai_gio ? '' : 'cho-gia'}>{tt.phu_phi_cap_cuu_ngoai_gio || 'Vui lòng gọi để biết mức'}</td></tr>
+                </tbody></table>
+              </>
+            )}
+            {d.ghi_chu && <p class="luu-y" style="margin:10px 0 14px">{d.ghi_chu}</p>}
             <div class="dv-nut">
               {d.cap_cuu
                 ? <a class="btn btn-cta" href={`tel:${tt.dien_thoai_goi}`}><Icon name="phone" />Gọi cấp cứu {tt.dien_thoai}</a>
-                : <a class="btn btn-cta btn-sm" href={u(`/dat-lich/?dv=${encodeURIComponent(d.ten)}`)}>Đặt lịch {d.ten.toLowerCase()}</a>}
-              {tt.zalo && <a class="btn btn-line btn-sm" href={tt.zalo} target="_blank" rel="noopener">Hỏi giá qua Zalo</a>}
+                : d.dat_lich && <a class="btn btn-cta btn-sm" href={u(`/dat-lich/?nhom=${encodeURIComponent(neo(d.ten))}`)}>Đặt lịch {d.ten.toLowerCase().replace(/ \(.*\)$/, '')}</a>}
+              {tt.zalo && <a class="btn btn-line btn-sm" href={tt.zalo} target="_blank" rel="noopener">Hỏi qua Zalo</a>}
             </div>
           </div>
         </article>
