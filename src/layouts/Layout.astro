@@ -25,8 +25,7 @@ const dangO = (p: string) => (p === '/' ? path === u('/') : path.startsWith(u(p)
 
 const menu = [
   { href: '/', ten: 'Trang chủ' },
-  { href: '/tu-van/cho/', ten: 'Chó' },
-  { href: '/tu-van/meo/', ten: 'Mèo' },
+  { href: '/tu-van/', ten: 'Cẩm nang thú cưng' },
   { href: '/nhat-ky-ca-benh/', ten: 'Nhật ký ca bệnh' },
   { href: '/dich-vu/', ten: 'Dịch vụ & giá' },
   { href: '/gioi-thieu/', ten: 'Giới thiệu' },
@@ -49,6 +48,7 @@ const schema = {
 <html lang="vi">
 <head>
 <meta charset="utf-8">
+<script is:inline>if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('js');</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{tieuDe}</title>
 <meta name="description" content={moTa}>
@@ -135,6 +135,25 @@ const schema = {
 </nav>
 
 <Cam trang={cam} />
+
+<script is:inline>
+  // Hiện dần các khối nội dung khi khách cuộn tới; thẻ cùng hàng hiện lần lượt
+  (function () {
+    if (!document.documentElement.classList.contains('js')) return;
+    var ds = document.querySelectorAll('main .sh, main .card, main .dv, main .dv-list > div, main .cols2 > *, main .empty, main .bang-wrap, main .pagehead, main .lo-hien');
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('hien'); io.unobserve(e.target); } });
+    }, { rootMargin: '0px 0px -8% 0px' });
+    ds.forEach(function (el) {
+      if (el.closest('.s-tight') || el.parentElement.closest('.lo')) return;
+      var anh = el.parentElement ? Array.prototype.filter.call(el.parentElement.children, function (c) { return c.matches('.card, .dv-list > div, .cols2 > *'); }) : [];
+      var i = anh.indexOf(el);
+      if (i > 0) el.style.transitionDelay = (i % 4) * 90 + 'ms';
+      el.classList.add('lo');
+      io.observe(el);
+    });
+  })();
+</script>
 
 <script>
   // Menu trên điện thoại

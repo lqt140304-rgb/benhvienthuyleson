@@ -315,3 +315,55 @@ p { margin: 0 0 1em; }
 .tb-phu-phi::backdrop { background: rgba(35,26,36,.45); }
 .tb-phu-phi > div { padding: 22px 22px 18px; }
 .tb-phu-phi h2 { font-family: var(--sans); font-size: 20px; font-weight: 800; color: #8A3A0C; display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+
+/* Hiệu ứng chuyển động (tự tắt khi máy bật "giảm chuyển động") */
+@media (prefers-reduced-motion: no-preference) {
+  /* Chuyển trang mượt: đầu trang, thanh dưới, bé Cam đứng yên; nội dung mờ dần rồi trồi lên */
+  @view-transition { navigation: auto; }
+  .head { view-transition-name: dau-trang; }
+  .mbar { view-transition-name: thanh-duoi; }
+  .cam { view-transition-name: be-cam; }
+  ::view-transition-old(root) { animation: mo-ra .18s ease-in both; }
+  ::view-transition-new(root) { animation: hien-len .35s cubic-bezier(.2,.8,.3,1) both; }
+
+  /* Hiện dần khi cuộn tới (lớp .lo do script trong Layout gắn) */
+  .js .lo { opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s cubic-bezier(.2,.8,.3,1); }
+  .js .lo.hien { opacity: 1; transform: none; }
+
+  /* Phần đầu trang chủ */
+  .s-tight .feature-main { animation: truot-trai .7s cubic-bezier(.2,.8,.3,1) both; }
+  .s-tight .feature-side { animation: hien-len .7s .15s cubic-bezier(.2,.8,.3,1) both; }
+  .s-tight .btn-cta, .mbar-cta { animation: phat-sang 3.2s 1.2s ease-in-out infinite; }
+
+  /* Rê chuột, bấm */
+  .btn { transition: background-color .2s, color .2s, transform .2s, box-shadow .2s; }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(103, 35, 108, .18); }
+  .btn:active { transform: translateY(1px); box-shadow: none; }
+  .card { transition: transform .3s cubic-bezier(.2,.8,.3,1); }
+  .card:hover { transform: translateY(-4px); }
+  .card .anh, .ca .anh-wrap img { transition: transform .5s cubic-bezier(.2,.8,.3,1), filter .25s; }
+  .card:hover .anh, .ca:hover .anh-wrap img { transform: scale(1.04); }
+  .ca .anh-wrap.mo-anh img { transform: scale(1.1); }
+  .card h3, .side-list b, .feat h1, .feat h2 { transition: color .2s; }
+  .nav a:not([aria-current]) { background: linear-gradient(var(--cam), var(--cam)) center bottom / 0 2px no-repeat; transition: background-size .25s, color .2s; }
+  .nav a:not([aria-current]):hover { background-size: 100% 2px; }
+  .sh a svg, .foot-link svg, .btn-line svg { transition: transform .2s; }
+  .sh a:hover svg, .foot-link:hover svg, .btn-line:hover svg { transform: translateX(4px); }
+  .dv-ic { transition: transform .3s cubic-bezier(.2,.9,.3,1.4); }
+  .dv:hover .dv-ic { transform: rotate(-8deg) scale(1.08); }
+  .brand img { transition: transform .4s cubic-bezier(.2,.9,.3,1.4); }
+  .brand:hover img { transform: rotate(-10deg) scale(1.06); }
+
+  /* Thanh dưới điện thoại: biểu tượng gọi rung nhẹ */
+  .mbar a:first-child svg { animation: rung 4s 2s ease-in-out infinite; transform-origin: 50% 60%; }
+
+  /* Hoá đơn tham khảo */
+  .hoa-don:not([hidden]) { animation: hien-len .4s cubic-bezier(.2,.8,.3,1) both; }
+  .hoa-don tr.moi td { animation: loe 1.2s ease-out; }
+}
+@keyframes mo-ra { to { opacity: 0; } }
+@keyframes hien-len { from { opacity: 0; transform: translateY(16px); } }
+@keyframes truot-trai { from { opacity: 0; transform: translateX(-24px); } }
+@keyframes phat-sang { 0%, 70%, 100% { box-shadow: 0 0 0 0 rgba(247, 134, 66, 0); } 80% { box-shadow: 0 0 0 6px rgba(247, 134, 66, .35); } 90% { box-shadow: 0 0 0 12px rgba(247, 134, 66, 0); } }
+@keyframes rung { 0%, 86%, 100% { transform: rotate(0); } 88% { transform: rotate(-14deg); } 90% { transform: rotate(12deg); } 92% { transform: rotate(-10deg); } 94% { transform: rotate(8deg); } 96% { transform: rotate(0); } }
+@keyframes loe { from { background: #FFE2C9; } to { background: transparent; } }

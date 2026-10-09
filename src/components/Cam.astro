@@ -16,9 +16,9 @@ const goi: Record<string, { cau: string; nut: NutCam[] }> = {
   trang_chu: { cau: cam.trang_chu, nut: [{ ten: 'Bé là chó', href: u('/tu-van/cho/'), chinh: true }, { ten: 'Bé là mèo', href: u('/tu-van/meo/'), chinh: true }] },
   bai_viet: { cau: cam.bai_viet, nut: [{ ten: 'Đặt lịch khám', href: u('/dat-lich/'), chinh: true }, { ten: 'Gọi bệnh viện', href: tel }] },
   dich_vu: { cau: cam.dich_vu, nut: tt.zalo ? [{ ten: 'Nhắn Zalo', href: tt.zalo, chinh: true, ngoai: true }, { ten: 'Gọi bệnh viện', href: tel }] : [{ ten: 'Gọi bệnh viện', href: tel, chinh: true }] },
-  ca_benh: { cau: cam.ca_benh, nut: [{ ten: 'Đọc bài tư vấn', href: u('/tu-van/') }] },
+  ca_benh: { cau: cam.ca_benh, nut: [{ ten: 'Cẩm nang thú cưng', href: u('/tu-van/') }] },
   dat_lich: { cau: cam.dat_lich, nut: [] },
-  trang_khac: { cau: cam.trang_khac, nut: [{ ten: 'Đặt lịch khám', href: u('/dat-lich/'), chinh: true }, { ten: 'Đọc bài tư vấn', href: u('/tu-van/') }, { ten: 'Gọi', href: tel }] },
+  trang_khac: { cau: cam.trang_khac, nut: [{ ten: 'Đặt lịch khám', href: u('/dat-lich/'), chinh: true }, { ten: 'Cẩm nang thú cưng', href: u('/tu-van/') }, { ten: 'Gọi', href: tel }] },
 };
 const loai = goi[trang] ? trang : 'trang_khac';
 const hien = ['ngoai_gio', loai];

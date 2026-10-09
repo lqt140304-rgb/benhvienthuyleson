@@ -298,6 +298,7 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết 
     }
 
     let daBao = '';
+    let dongTruoc = new Set<string>();
     function capNhat(tuNguoiDung: boolean) {
       const t = gio.value;
       const n = nhomDangChon();
@@ -324,10 +325,14 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết 
       if (!hd) return;
       const body = $('hd-dong');
       body.replaceChildren();
+      const daCo = dongTruoc;
+      dongTruoc = new Set(hd.dong.map((d) => d.ten.replace(/\(.*\)/, '')));
       for (const d of hd.dong) {
         const tr = document.createElement('tr');
         if (d.tuDong) tr.className = 'tu-dong';
         if (d.giam) tr.className = 'giam';
+        // Dòng phụ phí / giảm giá mới xuất hiện: loé màu nhẹ cho khách để ý
+        if ((d.tuDong || d.giam) && !daCo.has(d.ten.replace(/\(.*\)/, ''))) tr.classList.add('moi');
         const a = document.createElement('td'), b = document.createElement('td');
         a.textContent = d.ten;
         if (d.tuDong) { const s = document.createElement('span'); s.className = 'nhan-tu-dong'; s.textContent = 'Tự động'; a.append(s); }
