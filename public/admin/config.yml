@@ -126,7 +126,21 @@ collections:
             summary: "{{ten}}"
             fields:
               - { label: Tên nhóm, name: ten, widget: string }
-              - { label: Biểu tượng, name: icon, widget: select, options: [stethoscope, flask, syringe, bath, scissors, cross, bed, heart-pulse] }
+              - label: Biểu tượng
+                name: icon
+                widget: select
+                options:
+                  - { label: "Ống nghe (khám)", value: stethoscope }
+                  - { label: "Bình thí nghiệm (xét nghiệm)", value: flask }
+                  - { label: "Ống tiêm (tiêm phòng)", value: syringe }
+                  - { label: "Bồn tắm (tắm)", value: bath }
+                  - { label: "Kéo (cắt tỉa)", value: scissors }
+                  - { label: "Lược chải (dịch vụ lẻ)", value: comb }
+                  - { label: "Băng cá nhân (triệt sản)", value: bandage }
+                  - { label: "Dao mổ (phẫu thuật)", value: scalpel }
+                  - { label: "Chữ thập y tế", value: cross }
+                  - { label: "Ổ nệm (nội trú)", value: bed }
+                  - { label: "Tim (cấp cứu)", value: heart-pulse }
               - { label: Mô tả ngắn, name: mo_ta, widget: text, required: false }
               - { label: Ghi chú dưới bảng giá, name: ghi_chu, widget: text, required: false }
               - { label: Cho đặt lịch online, name: dat_lich, widget: boolean, default: true, required: false }
@@ -224,6 +238,28 @@ collections:
             fields:
               - { label: Tên khu vực, name: ten, widget: string }
               - { label: Ảnh, name: anh, widget: image, required: false }
+
+      - name: danh_gia
+        label: Đánh giá của khách (Google, Facebook)
+        file: src/data/danh_gia.json
+        fields:
+          - { label: "Điểm trên Google Maps (ví dụ 4,9)", name: diem_google, widget: string, required: false }
+          - { label: "Số lượt đánh giá trên Google Maps (ví dụ 128)", name: so_danh_gia_google, widget: string, required: false }
+          - { label: "Link trang đánh giá Google Maps (để trống = dùng link bản đồ)", name: link_google, widget: string, required: false }
+          - { label: "Điểm trên Facebook (ví dụ 5)", name: diem_facebook, widget: string, required: false }
+          - { label: "Số lượt đánh giá trên Facebook", name: so_danh_gia_facebook, widget: string, required: false }
+          - { label: "Link trang đánh giá Facebook (để trống = dùng link Facebook)", name: link_facebook, widget: string, required: false }
+          - label: "Đánh giá hiển thị trên trang chủ (chép nguyên văn từ Google / Facebook)"
+            name: danh_sach
+            widget: list
+            summary: "{{ten}} · {{sao}} sao · {{nguon}}"
+            fields:
+              - { label: Tên người đánh giá, name: ten, widget: string }
+              - { label: Số sao, name: sao, widget: number, value_type: int, min: 1, max: 5, default: 5 }
+              - { label: Nội dung đánh giá, name: noi_dung, widget: text }
+              - { label: Nguồn, name: nguon, widget: select, options: [Google, Facebook], default: Google }
+              - { label: "Thời gian (ví dụ: 2 tuần trước, 10/2026)", name: thoi_gian, widget: string, required: false }
+              - { label: "Tên bé / dịch vụ (không bắt buộc)", name: be, widget: string, required: false }
 
       - name: cam
         label: Bé Cam (nhân vật hướng dẫn)

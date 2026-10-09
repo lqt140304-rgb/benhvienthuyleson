@@ -6,6 +6,7 @@ import PostCard from '../components/PostCard.astro';
 import CaseCard from '../components/CaseCard.astro';
 import TrangTri from '../components/TrangTri.astro';
 import tt from '../data/thong_tin.json';
+import dg from '../data/danh_gia.json';
 import { u, ngay, neo, giaTu, baiTuVan, caBenh, dsDichVu } from '../lib/site';
 const dv = dsDichVu();
 
@@ -14,6 +15,15 @@ const noiBat = bai.find((b) => b.data.noi_bat);
 const moiDang = bai.filter((b) => b !== noiBat).slice(0, 3);
 const soBai = (loai: string) => bai.filter((b) => b.data.chuyen_muc === loai).length;
 const ca = (await caBenh()).slice(0, 4);
+// Đánh giá của khách: chép nguyên văn từ Google Maps / Facebook trong trang quản trị
+const linkGoogle = dg.link_google || tt.ban_do;
+const linkFb = dg.link_facebook || (tt.facebook ? tt.facebook.split('?')[0].replace(/\/$/, '') + '/reviews' : '');
+const danhGia = (dg.danh_sach as any[]).filter((d) => d && d.ten && d.noi_dung);
+const nguonDg = [
+  { ten: 'Google Maps', icon: 'pin', diem: dg.diem_google, so: dg.so_danh_gia_google, link: linkGoogle },
+  { ten: 'Facebook', icon: 'facebook', diem: dg.diem_facebook, so: dg.so_danh_gia_facebook, link: linkFb },
+].filter((n) => n.link);
+const soSao = (d: string) => Math.max(0, Math.min(5, parseFloat(String(d).replace(',', '.')) || 0));
 ---
 <Layout cam="trang_chu">
 
@@ -112,6 +122,46 @@ const ca = (await caBenh()).slice(0, 4);
           <span class="dv-gia">{d.cap_cuu ? `Gọi ${tt.dien_thoai}` : giaTu(d) || 'Xem bảng giá'}</span>
         </a>
       ))}
+    </div>
+  </div>
+</section>
+
+<section class="s danh-gia-khu">
+  <div class="wrap">
+    <div class="sh"><h2>Khách hàng nói gì về Lê Sơn</h2></div>
+    <div class="dg-tong">
+      {nguonDg.map((n) => (
+        <a class="dg-nguon" href={n.link} target="_blank" rel="noopener">
+          <span class={`dg-nguon-ic ${n.icon}`}><Icon name={n.icon} size={26} /></span>
+          <span>
+            <b>{n.ten}</b>
+            {n.diem
+              ? <span class="dg-diem"><strong>{n.diem}</strong><span class="sao" style={`--sao:${soSao(n.diem)}`} aria-label={`${n.diem} trên 5 sao`}></span>{n.so && <small>{n.so} đánh giá</small>}</span>
+              : <span class="muted">Xem và viết đánh giá</span>}
+          </span>
+          <Icon name="arrow" size={18} />
+        </a>
+      ))}
+    </div>
+    {danhGia.length > 0 ? (
+      <div class="dg-hang" tabindex="0" aria-label="Các đánh giá của khách hàng, cuộn ngang để xem thêm">
+        {danhGia.map((d) => (
+          <figure class="dg-the">
+            <span class="sao" style={`--sao:${Math.max(1, Math.min(5, Number(d.sao) || 5))}`} aria-label={`${d.sao || 5} sao`}></span>
+            <blockquote>{d.noi_dung}</blockquote>
+            <figcaption>
+              <span class="dg-chu" aria-hidden="true">{String(d.ten).trim().charAt(0).toUpperCase()}</span>
+              <span><b>{d.ten}</b><small>{[d.be, d.nguon, d.thoi_gian].filter(Boolean).join(' · ')}</small></span>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    ) : (
+      <p class="empty">Đánh giá thật của khách hàng trên Google Maps và Facebook sẽ được hiển thị tại đây. Bạn đã đưa bé đến Lê Sơn? Hãy để lại vài lời nhé!</p>
+    )}
+    <div class="dv-nut dg-nut">
+      <a class="btn btn-cta" href={linkGoogle} target="_blank" rel="noopener"><Icon name="pin" />Đánh giá trên Google Maps</a>
+      {linkFb && <a class="btn btn-line" href={linkFb} target="_blank" rel="noopener"><Icon name="facebook" />Đánh giá trên Facebook</a>}
     </div>
   </div>
 </section>

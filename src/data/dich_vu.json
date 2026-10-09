@@ -362,7 +362,7 @@
     },
     {
       "ten": "Dịch vụ lẻ",
-      "icon": "scissors",
+      "icon": "comb",
       "mo_ta": "Chăm sóc nhanh, không cần tắm.",
       "ghi_chu": "",
       "cap_cuu": false,
@@ -416,7 +416,7 @@
     },
     {
       "ten": "Triệt sản (combo trọn gói)",
-      "icon": "cross",
+      "icon": "bandage",
       "mo_ta": "Combo gồm phẫu thuật, xét nghiệm máu, loa chống liếm, sát khuẩn. Mèo cái có thêm tiêm hậu phẫu 5 ngày và nội trú nửa ngày; chó đực có thuốc uống hậu phẫu.",
       "ghi_chu": "",
       "cap_cuu": false,
@@ -485,7 +485,7 @@
     },
     {
       "ten": "Phẫu thuật",
-      "icon": "cross",
+      "icon": "scalpel",
       "mo_ta": "Phẫu thuật có khám, tư vấn trước và theo dõi sau mổ bởi bác sĩ thú y.",
       "ghi_chu": "",
       "cap_cuu": false,

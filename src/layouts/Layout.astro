@@ -140,7 +140,7 @@ const schema = {
   // Hiện dần các khối nội dung khi khách cuộn tới; thẻ cùng hàng hiện lần lượt
   (function () {
     if (!document.documentElement.classList.contains('js')) return;
-    var ds = document.querySelectorAll('main .sh, main .card, main .dv, main .dv-list > *, main .loai > a, main .ve > *, main .cols2 > *, main .empty, main .bang-wrap, main .so-lieu > div, main .lo-hien');
+    var ds = document.querySelectorAll('main .sh, main .card, main .dv, main .dv-list > *, main .loai > a, main .ve > *, main .cols2 > *, main .empty, main .bang-wrap, main .so-lieu > div, main .dg-nguon, main .dg-the, main .lo-hien');
     var io = new IntersectionObserver(function (es) {
       es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('hien'); io.unobserve(e.target); } });
     }, { rootMargin: '0px 0px -8% 0px' });
@@ -155,7 +155,7 @@ const schema = {
     }, { passive: true });
     ds.forEach(function (el) {
       if (el.closest('.hero') || el.parentElement.closest('.lo')) return;
-      var anh = el.parentElement ? Array.prototype.filter.call(el.parentElement.children, function (c) { return c.matches('.card, .dv-list > *, .loai > a, .cols2 > *, .so-lieu > div'); }) : [];
+      var anh = el.parentElement ? Array.prototype.filter.call(el.parentElement.children, function (c) { return c.matches('.card, .dv-list > *, .loai > a, .cols2 > *, .so-lieu > div, .dg-nguon, .dg-the'); }) : [];
       var i = anh.indexOf(el);
       if (i > 0) el.style.transitionDelay = (i % 4) * 90 + 'ms';
       el.classList.add('lo');
