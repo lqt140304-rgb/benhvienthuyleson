@@ -2,5 +2,3 @@ node_modules/
 dist/
 .astro/
 .DS_Store
-# Đánh giá Google lấy tự động lúc dựng web (scripts/lay-danh-gia.mjs)
-src/data/danh_gia_google.json

@@ -248,9 +248,7 @@ collections:
         label: Đánh giá của khách (Google, Facebook)
         file: src/data/danh_gia.json
         fields:
-          - { label: "Tự lấy đánh giá Google Maps mỗi ngày (cần mã khoá Google trong GitHub)", name: tu_dong_google, widget: boolean, default: true, required: false }
-          - { label: "Mã địa điểm Google (Place ID, để trống thì tự tìm)", name: google_place_id, widget: string, required: false }
-          - { label: "Điểm trên Google Maps khi chưa lấy tự động (ví dụ 4,9)", name: diem_google, widget: string, required: false }
+          - { label: "Điểm trên Google Maps (ví dụ 4,9)", name: diem_google, widget: string, required: false }
           - { label: "Số lượt đánh giá trên Google Maps (ví dụ 128)", name: so_danh_gia_google, widget: string, required: false }
           - { label: "Link trang đánh giá Google Maps (để trống = dùng link bản đồ)", name: link_google, widget: string, required: false }
           - { label: "Điểm trên Facebook (ví dụ 5)", name: diem_facebook, widget: string, required: false }

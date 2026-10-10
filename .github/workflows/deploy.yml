@@ -1,13 +1,11 @@
 # Tự dựng web bằng Astro và đưa lên GitHub Pages mỗi khi nhánh main thay đổi
-# (kể cả khi lưu bài từ trang quản trị /admin), và mỗi sáng 6:00 (giờ Việt Nam) để cập nhật đánh giá Google.
+# (kể cả khi lưu bài từ trang quản trị /admin).
 name: Dựng và đưa web lên
 
 on:
   push:
     branches: [main]
   workflow_dispatch:
-  schedule:
-    - cron: '0 23 * * *'
 
 permissions:
   contents: read
@@ -28,10 +26,6 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - name: Lấy đánh giá Google Maps
-        run: node scripts/lay-danh-gia.mjs
-        env:
-          GOOGLE_PLACES_KEY: ${{ secrets.GOOGLE_PLACES_KEY }}
       - run: npm run build
       - uses: actions/upload-pages-artifact@v5
         with:

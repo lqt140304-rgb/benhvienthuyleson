@@ -543,9 +543,6 @@ p { margin: 0 0 1em; }
 .dg-the figcaption { display: flex; align-items: center; gap: 12px; }
 .dg-the figcaption > span:last-child { display: grid; min-width: 0; }
 .dg-the figcaption small { color: var(--phu); font-size: 14px; }
-.dg-ten { color: var(--chu); text-decoration: none; }
-.dg-ten:hover { color: var(--tim); text-decoration: underline; }
-.dg-xem { font-size: 14px; font-weight: 700; margin-top: -6px; }
 .dg-chu { flex: none; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; font-family: var(--tieu-de); font-weight: 700; font-size: 20px; background: var(--tim); color: var(--trang); }
 .dg-the:nth-child(3n+2) .dg-chu { background: var(--cam-dam); }
 .dg-the:nth-child(3n+3) .dg-chu { background: var(--ngoc); }
