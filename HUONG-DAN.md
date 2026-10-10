@@ -53,5 +53,17 @@ Giờ ngoài 8:00–21:00 form không nhận; khách thấy số điện thoại
 - Ảnh tải lên được tự thu nhỏ và chuyển sang WebP để web nhanh.
 - Lỡ sửa sai: mọi thay đổi đều có lịch sử trong GitHub, báo Claude để khôi phục.
 
-## 5. Khi đã mua tên miền benhvienthuyleson.com
+## 5. Bật tự lấy đánh giá Google Maps (làm một lần, ~15 phút)
+Mỗi sáng 6:00 và mỗi lần web thay đổi, web tự lấy điểm sao, số lượt đánh giá và tối đa 5 đánh giá trên Google Maps (Google tự chọn) để hiện ở cuối trang chủ. Đánh giá Facebook vẫn nhập tay trong trang quản trị.
+1. Mở https://console.cloud.google.com bằng tài khoản Google của bệnh viện → tạo dự án mới tên `Le Son Web`.
+2. Vào **Thanh toán (Billing)** → gắn thẻ ngân hàng cho dự án. Mỗi tháng web chỉ gọi khoảng 30–60 lần, nằm trong phần miễn phí của Google.
+3. Vào **Ngân sách và cảnh báo (Budgets & alerts)** → tạo cảnh báo khoảng 20.000đ (1 USD) để Google gửi email nếu có phát sinh.
+4. Vào **API và dịch vụ → Thư viện**, tìm **Places API (New)** → bấm **Bật (Enable)**.
+5. Vào **API và dịch vụ → Thông tin xác thực → Tạo thông tin xác thực → Khoá API**. Bấm vào khoá vừa tạo → **Hạn chế khoá → Places API (New)** → Lưu. Sao chép khoá.
+6. Mở https://github.com/lqt140304-rgb/benhvienthuyleson/settings/secrets/actions → **New repository secret** → Name: `GOOGLE_PLACES_KEY`, Secret: dán khoá → **Add secret**. Không gửi khoá này cho ai.
+7. Báo Claude để chạy thử và lưu mã địa điểm (Place ID). Từ đó web tự cập nhật.
+
+Tắt tạm: trang quản trị → **Thông tin & cài đặt → Đánh giá của khách** → bỏ chọn "Tự lấy đánh giá Google Maps mỗi ngày". Lưu ý: nếu kho không có thay đổi nào trong 60 ngày, GitHub tự dừng lịch chạy hằng ngày; sửa một chữ bất kỳ trong trang quản trị là chạy lại.
+
+## 6. Khi đã mua tên miền benhvienthuyleson.com
 Báo Claude để cấu hình: đổi `site`/`base` trong `astro.config.mjs`, thêm file `public/CNAME`, sửa địa chỉ trong `public/admin/config.yml`; sau đó trỏ DNS (4 bản ghi A tới 185.199.108.153, 185.199.109.153, 185.199.110.153, 185.199.111.153 và `www` CNAME `lqt140304-rgb.github.io`), vào Settings → Pages → Custom domain, bật **Enforce HTTPS**.

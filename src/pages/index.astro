@@ -15,12 +15,18 @@ const noiBat = bai.find((b) => b.data.noi_bat);
 const moiDang = bai.filter((b) => b !== noiBat).slice(0, 3);
 const soBai = (loai: string) => bai.filter((b) => b.data.chuyen_muc === loai).length;
 const ca = (await caBenh()).slice(0, 4);
-// Đánh giá của khách: chép nguyên văn từ Google Maps / Facebook trong trang quản trị
-const linkGoogle = dg.link_google || tt.ban_do;
+// Đánh giá của khách: Google Maps lấy tự động lúc dựng web (scripts/lay-danh-gia.mjs, có thể chưa có file),
+// cộng với đánh giá nhập tay trong trang quản trị (Facebook...)
+const gg: any = Object.values(import.meta.glob('../data/danh_gia_google.json', { eager: true, import: 'default' }))[0] ?? {};
+const ggBat = (dg as any).tu_dong_google !== false;
+const linkGoogle = (ggBat && gg.link) || dg.link_google || tt.ban_do;
 const linkFb = dg.link_facebook || (tt.facebook ? tt.facebook.split('?')[0].replace(/\/$/, '') + '/reviews' : '');
-const danhGia = (dg.danh_sach as any[]).filter((d) => d && d.ten && d.noi_dung);
+const danhGia = [
+  ...(ggBat ? (gg.danh_sach ?? []).map((d: any) => ({ ...d, nguon: 'Google', tu_dong: true })) : []),
+  ...(dg.danh_sach as any[]),
+].filter((d) => d && d.ten && d.noi_dung);
 const nguonDg = [
-  { ten: 'Google Maps', icon: 'pin', diem: dg.diem_google, so: dg.so_danh_gia_google, link: linkGoogle },
+  { ten: 'Google Maps', icon: 'pin', diem: (ggBat && gg.diem) || dg.diem_google, so: (ggBat && gg.so) || dg.so_danh_gia_google, link: linkGoogle },
   { ten: 'Facebook', icon: 'facebook', diem: dg.diem_facebook, so: dg.so_danh_gia_facebook, link: linkFb },
 ].filter((n) => n.link);
 const soSao = (d: string) => Math.max(0, Math.min(5, parseFloat(String(d).replace(',', '.')) || 0));
@@ -149,9 +155,13 @@ const soSao = (d: string) => Math.max(0, Math.min(5, parseFloat(String(d).replac
           <figure class="dg-the">
             <span class="sao" style={`--sao:${Math.max(1, Math.min(5, Number(d.sao) || 5))}`} aria-label={`${d.sao || 5} sao`}></span>
             <blockquote>{d.noi_dung}</blockquote>
+            {d.tu_dong && d.link && <a class="dg-xem" href={d.link} target="_blank" rel="noopener">Xem trên Google Maps</a>}
             <figcaption>
               <span class="dg-chu" aria-hidden="true">{String(d.ten).trim().charAt(0).toUpperCase()}</span>
-              <span><b>{d.ten}</b><small>{[d.be, d.nguon, d.thoi_gian].filter(Boolean).join(' · ')}</small></span>
+              <span>
+                {d.link_nguoi ? <a class="dg-ten" href={d.link_nguoi} target="_blank" rel="noopener nofollow"><b>{d.ten}</b></a> : <b>{d.ten}</b>}
+                <small>{d.tu_dong ? ['Đánh giá trên Google', d.thoi_gian].filter(Boolean).join(' · ') : [d.be, d.nguon, d.thoi_gian].filter(Boolean).join(' · ')}</small>
+              </span>
             </figcaption>
           </figure>
         ))}
