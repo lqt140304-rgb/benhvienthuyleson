@@ -1,0 +1,53 @@
+{
+  "mo_ta": "Danh sách nội dung CHƯA được chủ dự án xác nhận. File này tách riêng khỏi dữ liệu nguồn (src/data/*.json): prototype chỉ đọc file này để gắn nhãn 'Chờ xác nhận' tại chỗ hiển thị, không sửa dữ liệu gốc. Khi chủ dự án xác nhận mục nào, đổi trang_thai thành 'da-xac-nhan' và dựng lại.",
+  "muc": [
+    {
+      "ma": "cap-cuu-24-24",
+      "noi_dung": "Tên nhóm “Cấp cứu 24/24” và mô tả “Luôn có người trực. Gọi trước để bệnh viện chuẩn bị đón bé.”",
+      "nguon": "src/data/dich_vu.json (nhóm có cap_cuu = true)",
+      "hien_thi": "Tab và panel nhóm Cấp cứu trong Bảng giá",
+      "trang_thai": "cho-xac-nhan",
+      "ghi_chu_hien": "Thông tin trực cấp cứu 24/24 đang chờ bệnh viện xác nhận."
+    },
+    {
+      "ma": "gio-ngay-le",
+      "noi_dung": "Giờ mở cửa 8:00 – 21:00 có áp dụng cả ngày lễ, Tết hay không",
+      "nguon": "src/data/thong_tin.json (gio_mo_cua); website thật đang ghi “hằng ngày”",
+      "hien_thi": "Khu Liên hệ (dòng ghi chú); hero, footer, Bé Cam chỉ ghi khung giờ, đã bỏ chữ “hằng ngày”",
+      "trang_thai": "cho-xac-nhan",
+      "ghi_chu_hien": "Ngày lễ, Tết: chờ bệnh viện xác nhận."
+    },
+    {
+      "ma": "link-danh-gia",
+      "noi_dung": "Link trang đánh giá Google Maps và Facebook",
+      "nguon": "src/data/danh_gia.json (link_google, link_facebook đang để trống)",
+      "hien_thi": "Dải “Lắng nghe ý kiến từ chủ nuôi”: hai ô ở trạng thái chờ bổ sung link, không bấm được",
+      "trang_thai": "cho-bo-sung",
+      "ghi_chu_hien": "Chờ bổ sung link"
+    },
+    {
+      "ma": "doi-ngu",
+      "noi_dung": "Thông tin, hình ảnh bác sĩ và nhân viên",
+      "nguon": "Chưa có dữ liệu",
+      "hien_thi": "Khu Đội ngũ (khung ảnh chờ, không có hồ sơ)",
+      "trang_thai": "cho-bo-sung",
+      "ghi_chu_hien": ""
+    },
+    {
+      "ma": "hoa-don-tham-khao",
+      "noi_dung": "Câu “đặt lịch online có hoá đơn tham khảo”",
+      "nguon": "Website thật có tính năng này ở src/pages/dat-lich.astro; form prototype không có",
+      "hien_thi": "Đã bỏ khỏi prototype (mục 03 Giới thiệu)",
+      "trang_thai": "da-bo-khoi-prototype",
+      "ghi_chu_hien": ""
+    },
+    {
+      "ma": "ghi-chu-hoa-don-trong-bang-gia",
+      "noi_dung": "Ghi chú gốc nhóm Grooming - Spa: “…phụ phí, tự cộng vào hoá đơn tham khảo khi đặt lịch.”",
+      "nguon": "src/data/dich_vu.json (ghi_chu nhóm Grooming - Spa)",
+      "hien_thi": "Bảng giá, ghi chú dưới bảng Grooming (giữ nguyên vì là dữ liệu nguồn)",
+      "trang_thai": "cho-xac-nhan",
+      "ghi_chu_hien": ""
+    }
+  ]
+}

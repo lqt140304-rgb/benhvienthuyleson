@@ -1,0 +1,55 @@
+// Bộ biểu tượng và hoạ tiết của giao diện mới (chuyển từ prototype VET-002). Lucide (ISC) + nét vẽ riêng; chỉ dùng cho trang trí / nhận biết, luôn aria-hidden.
+export const L: Record<string, string> = {
+  // R3.3 · Một bộ icon: lưới 24, nét 1.9 bo tròn, mỗi icon tối đa một mảng tô mềm (ic-to = cam, ic-to-n = ngọc, ic-to-t = tím nhạt)
+  phone: '<path class="ic-to-n" d="M8.6 3.2 6 3a2.2 2.2 0 0 0-2.3 2.4c.5 8 6.9 14.4 14.9 14.9A2.2 2.2 0 0 0 21 18l-.2-2.6a1.6 1.6 0 0 0-1.2-1.4l-3-.8a1.6 1.6 0 0 0-1.6.5l-1.1 1.3a12 12 0 0 1-5-5L10.2 9a1.6 1.6 0 0 0 .5-1.6l-.8-3a1.6 1.6 0 0 0-1.3-1.2Z"/><path d="M8.6 3.2 6 3a2.2 2.2 0 0 0-2.3 2.4c.5 8 6.9 14.4 14.9 14.9A2.2 2.2 0 0 0 21 18l-.2-2.6a1.6 1.6 0 0 0-1.2-1.4l-3-.8a1.6 1.6 0 0 0-1.6.5l-1.1 1.3a12 12 0 0 1-5-5L10.2 9a1.6 1.6 0 0 0 .5-1.6l-.8-3a1.6 1.6 0 0 0-1.3-1.2Z"/>',
+  calendar: '<path class="ic-to-t" d="M3.5 9.5V7a2.5 2.5 0 0 1 2.5-2.5h12A2.5 2.5 0 0 1 20.5 7v2.5Z"/><rect x="3.5" y="4.5" width="17" height="16" rx="2.5"/><path d="M8 2.5v4M16 2.5v4M3.5 9.5h17"/><circle class="ic-to" cx="8.5" cy="14.5" r="1.6"/>',
+  clock: '<circle class="ic-to-n" cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 2"/>',
+  pin: '<path class="ic-to" d="M12 21.5s7-6.1 7-11.5a7 7 0 0 0-14 0c0 5.4 7 11.5 7 11.5Z"/><path d="M12 21.5s7-6.1 7-11.5a7 7 0 0 0-14 0c0 5.4 7 11.5 7 11.5Z"/><circle cx="12" cy="10" r="2.6"/>',
+  arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
+  ngoai: '<path d="M7 17 17 7M8.5 7H17v8.5"/>',
+  phai: '<path d="m9 18 6-6-6-6"/>',
+  trai: '<path d="m15 18-6-6 6-6"/>',
+  xuong: '<path d="m6 9 6 6 6-6"/>',
+  chat: '<path class="ic-to-n" d="M12 3.5c4.7 0 8.5 3.3 8.5 7.4s-3.8 7.4-8.5 7.4c-1 0-2-.1-2.9-.4L4.5 20l1.2-3.8a7 7 0 0 1-2.2-5.3c0-4.1 3.8-7.4 8.5-7.4Z"/><path d="M12 3.5c4.7 0 8.5 3.3 8.5 7.4s-3.8 7.4-8.5 7.4c-1 0-2-.1-2.9-.4L4.5 20l1.2-3.8a7 7 0 0 1-2.2-5.3c0-4.1 3.8-7.4 8.5-7.4Z"/><path d="M8.5 11h.01M12 11h.01M15.5 11h.01"/>',
+  menu: '<path d="M4 7h16M4 12h16M4 17h10"/>',
+  close: '<path d="M18 6 6 18M6 6l12 12"/>',
+  camera: '<path class="ic-to-t" d="M4.5 7.5h3l1.6-2.3a1.5 1.5 0 0 1 1.2-.7h3.4a1.5 1.5 0 0 1 1.2.7l1.6 2.3h3A2 2 0 0 1 21.5 9.5v8a2 2 0 0 1-2 2h-15a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2Z"/><path d="M4.5 7.5h3l1.6-2.3a1.5 1.5 0 0 1 1.2-.7h3.4a1.5 1.5 0 0 1 1.2.7l1.6 2.3h3A2 2 0 0 1 21.5 9.5v8a2 2 0 0 1-2 2h-15a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2Z"/><circle cx="12" cy="13.5" r="3.3"/>',
+  book: '<path class="ic-to-n" d="M12 6.5c-1.6-1.3-4-2-7.5-2v13c3.5 0 5.9.7 7.5 2Z"/><path d="M12 6.5c-1.6-1.3-4-2-7.5-2v13c3.5 0 5.9.7 7.5 2m0-13c1.6-1.3 4-2 7.5-2v13c-3.5 0-5.9.7-7.5 2m0-13v13"/>',
+  info: '<circle class="ic-to-n" cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="9"/><path d="M12 16.5v-5M12 7.8h.01"/>',
+  loi: '<circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/>',
+  check: '<path d="M20 6 9 17l-5-5"/>',
+  facebook: '<path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>',
+  tag: '<path class="ic-to" d="M3.5 4.8v6a1.5 1.5 0 0 0 .4 1l8.3 8.3a1.6 1.6 0 0 0 2.2 0l5.8-5.8a1.6 1.6 0 0 0 0-2.2L11.9 3.9a1.5 1.5 0 0 0-1-.4h-6a1.3 1.3 0 0 0-1.4 1.3Z"/><path d="M3.5 4.8v6a1.5 1.5 0 0 0 .4 1l8.3 8.3a1.6 1.6 0 0 0 2.2 0l5.8-5.8a1.6 1.6 0 0 0 0-2.2L11.9 3.9a1.5 1.5 0 0 0-1-.4h-6a1.3 1.3 0 0 0-1.4 1.3Z"/><circle cx="8" cy="8" r="1.3"/>',
+  dinhvi: '<path class="ic-to" d="M3.5 10.8 20.5 3.5l-7.3 17-2.3-7.4Z"/><path d="M3.5 10.8 20.5 3.5l-7.3 17-2.3-7.4Z"/>',
+  luoi: '<rect class="ic-to" x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/>',
+  users: '<circle class="ic-to-n" cx="9" cy="8" r="3.5"/><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.8a3.5 3.5 0 0 1 0 6.4M18.5 14.5a6.5 6.5 0 0 1 3 5.5"/>',
+  chan: '<ellipse class="ic-to" cx="12" cy="15.5" rx="4.5" ry="3.8"/><ellipse cx="12" cy="15.5" rx="4.5" ry="3.8"/><ellipse cx="5.6" cy="10.2" rx="1.8" ry="2.3"/><ellipse cx="9.4" cy="6.4" rx="1.8" ry="2.4"/><ellipse cx="14.6" cy="6.4" rx="1.8" ry="2.4"/><ellipse cx="18.4" cy="10.2" rx="1.8" ry="2.3"/>',
+  'trich-dan': '<path class="ic-to" d="M6.5 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM15.5 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M9.5 10.5a3 3 0 1 0-3 3c0 2.2-1.2 4-3 5M18.5 10.5a3 3 0 1 0-3 3c0 2.2-1.2 4-3 5"/>',
+  'lap-lanh': '<path class="ic-to" d="M10 3.5 11.6 8a3 3 0 0 0 1.9 1.9L18 11.5l-4.5 1.6a3 3 0 0 0-1.9 1.9L10 19.5 8.4 15a3 3 0 0 0-1.9-1.9L2 11.5l4.5-1.6A3 3 0 0 0 8.4 8Z"/><path d="M10 3.5 11.6 8a3 3 0 0 0 1.9 1.9L18 11.5l-4.5 1.6a3 3 0 0 0-1.9 1.9L10 19.5 8.4 15a3 3 0 0 0-1.9-1.9L2 11.5l4.5-1.6A3 3 0 0 0 8.4 8ZM18.5 3v4M16.5 5h4"/>',
+  dung: '<rect class="ic-to-t" x="6" y="5" width="4" height="14" rx="1.5"/><rect class="ic-to-t" x="14" y="5" width="4" height="14" rx="1.5"/><rect x="6" y="5" width="4" height="14" rx="1.5"/><rect x="14" y="5" width="4" height="14" rx="1.5"/>',
+  chay: '<path class="ic-to-t" d="M7 5.6v12.8a1.2 1.2 0 0 0 1.8 1l10.3-6.4a1.2 1.2 0 0 0 0-2L8.8 4.6A1.2 1.2 0 0 0 7 5.6Z"/><path d="M7 5.6v12.8a1.2 1.2 0 0 0 1.8 1l10.3-6.4a1.2 1.2 0 0 0 0-2L8.8 4.6A1.2 1.2 0 0 0 7 5.6Z"/>',
+  // dịch vụ y tế: hình dễ nhận biết + một chi tiết màu
+  stethoscope: '<path d="M6 3H5a1.5 1.5 0 0 0-1.5 1.5V9a5 5 0 0 0 10 0V4.5A1.5 1.5 0 0 0 12 3h-1"/><path d="M8.5 14v1.5a5.5 5.5 0 0 0 11 0V13"/><circle class="ic-to-n" cx="19.5" cy="10.5" r="2.5"/><circle cx="19.5" cy="10.5" r="2.5"/>',
+  flask: '<path class="ic-to-n" d="M6.3 15h11.4l2.2 4a1.8 1.8 0 0 1-1.6 2.5H5.7A1.8 1.8 0 0 1 4.1 19Z"/><path d="M9.5 2.5h5M10 2.5v6L4.1 19a1.8 1.8 0 0 0 1.6 2.5h12.6a1.8 1.8 0 0 0 1.6-2.5L14 8.5v-6M6.3 15h11.4"/><circle class="ic-to" cx="13.5" cy="18.3" r="1.1"/>',
+  syringe: '<path class="ic-to" d="m11 9.2 3.8 3.8-6.1 6.1a2.3 2.3 0 0 1-3.2 0l-.6-.6a2.3 2.3 0 0 1 0-3.2Z"/><path d="m18 2 4 4M17 7l3-3M19 9 8.7 19.3a2.3 2.3 0 0 1-3.2 0l-.8-.8a2.3 2.3 0 0 1 0-3.2L15 5M9 11l4 4M5 19l-3 3M14 4l6 6"/>',
+  scissors: '<circle class="ic-to" cx="6" cy="6" r="3"/><circle class="ic-to" cx="6" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.2 8.2 12 12M20 4 8.2 15.8M14.8 14.8 20 20"/>',
+  bed: '<path class="ic-to-n" d="M6.5 8.5h13a2.5 2.5 0 0 1 2.5 2.5v2.5H6.5Z"/><path d="M2.5 4.5v15M2.5 13.5h19.5M22 19.5V11a2.5 2.5 0 0 0-2.5-2.5h-13v5"/><circle class="ic-to" cx="13.2" cy="11.4" r="1.2"/><circle class="ic-to" cx="11.6" cy="9.9" r=".6"/><circle class="ic-to" cx="13.2" cy="9.4" r=".6"/><circle class="ic-to" cx="14.8" cy="9.9" r=".6"/>',
+  bandage: '<rect class="ic-to" x="7" y="6.5" width="10" height="11"/><rect x="2.5" y="6.5" width="19" height="11" rx="3"/><path d="M7 6.5v11M17 6.5v11M10.5 10.5h.01M13.5 10.5h.01M10.5 13.5h.01M13.5 13.5h.01"/>',
+  scalpel: '<path class="ic-to-n" d="M11.5 12.5 3 21h5l7-7Z"/><path d="m21 3-9.5 9.5M11.5 12.5 3 21h5l7-7M14 10l3 3"/>',
+  'heart-pulse': '<path class="ic-to" d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7Z"/><path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7Z"/><path class="ic-net-cam" d="M3.5 12H8.5l1-1.5 2 4 2-6.5 1.5 4h5"/>',
+  // thú cưng: tai tròn, má hồng, mũi cam
+  dog: '<path class="ic-to" d="M6.4 4.2C4.3 4 2.6 6.8 2.6 9.6c0 1.5 1 2.4 2.3 2.2L7.6 7.6c.3-2-.1-3.3-1.2-3.4ZM17.6 4.2c2.1-.2 3.8 2.6 3.8 5.4 0 1.5-1 2.4-2.3 2.2l-2.7-4.2c-.3-2 .1-3.3 1.2-3.4Z"/><path d="M6.4 4.2C4.3 4 2.6 6.8 2.6 9.6c0 1.5 1 2.4 2.3 2.2M17.6 4.2c2.1-.2 3.8 2.6 3.8 5.4 0 1.5-1 2.4-2.3 2.2"/><path d="M6.6 4.8A8 8 0 0 1 12 3a8 8 0 0 1 5.4 1.8c1.3 1.3 1.9 3.3 1.9 5.7v2.5c0 4.5-3.2 8-7.3 8s-7.3-3.5-7.3-8v-2.5c0-2.4.6-4.4 1.9-5.7Z"/><circle cx="9" cy="11.5" r=".9" fill="currentColor" stroke="none"/><circle cx="15" cy="11.5" r=".9" fill="currentColor" stroke="none"/><path class="ic-to" d="M10.6 14.6h2.8L12 16.2Z"/><path d="M10.6 14.6h2.8L12 16.2ZM12 16.2v1.2"/>',
+  cat: '<path class="ic-to" d="M4.3 9.2 4 3.6a.8.8 0 0 1 1.3-.6l4 3.1M19.7 9.2l.3-5.6a.8.8 0 0 0-1.3-.6l-4 3.1"/><path d="M4.3 9.2 4 3.6a.8.8 0 0 1 1.3-.6l4 3.1a9.4 9.4 0 0 1 5.4 0l4-3.1a.8.8 0 0 1 1.3.6l-.3 5.6A8 8 0 0 1 20.5 13c0 4.6-3.8 7.5-8.5 7.5S3.5 17.6 3.5 13a8 8 0 0 1 .8-3.8Z"/><circle cx="9" cy="12.5" r=".9" fill="currentColor" stroke="none"/><circle cx="15" cy="12.5" r=".9" fill="currentColor" stroke="none"/><path class="ic-to" d="M10.8 15h2.4L12 16.4Z"/><path d="M10.8 15h2.4L12 16.4ZM12 16.4c-.4 1-1.4 1.3-2.2.9M12 16.4c.4 1 1.4 1.3 2.2.9"/>',
+  // Biểu tượng của bộ cũ còn dùng ở các trang phụ (nét đơn giản, không tô mảng)
+  minus: '<path d="M5 12h14"/>',
+  alert: '<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4M12 17h.01"/>',
+  lock: '<rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+  eye: '<path d="M2.06 12.35a1 1 0 0 1 0-.7 10.75 10.75 0 0 1 19.88 0 1 1 0 0 1 0 .7 10.75 10.75 0 0 1-19.88 0"/><circle cx="12" cy="12" r="3"/>',
+};
+
+export const HT: Record<string, string> = {
+  chan: '<ellipse cx="24" cy="31" rx="9.5" ry="8"/><ellipse cx="12" cy="19.5" rx="4.2" ry="5.4" transform="rotate(-18 12 19.5)"/><ellipse cx="19" cy="11.5" rx="4" ry="5.4" transform="rotate(-8 19 11.5)"/><ellipse cx="29.4" cy="11.5" rx="4" ry="5.4" transform="rotate(8 29.4 11.5)"/><ellipse cx="36.4" cy="19.5" rx="4.2" ry="5.4" transform="rotate(18 36.4 19.5)"/>',
+  len: '<g class="ht35-xoay"><circle cx="24" cy="24" r="15"/><path class="ht-net" d="M11.5 16.5c7 1 15 6 19.5 15M14 30.5c6-6 14-9.5 22.5-8.5M19 10.3c-1 7 1.5 15 7.5 22.5M28.5 10c2.5 5 2.5 11-.5 17"/></g><path class="ht-net" d="M36 34c3 3 7 4 10 2"/>',
+  xuong: '<path transform="rotate(-35 24 24)" d="M14 21h20a4.6 4.6 0 1 1 3.8 3 4.6 4.6 0 1 1-3.8 3H14a4.6 4.6 0 1 1-3.8-3A4.6 4.6 0 1 1 14 21Z"/>',
+  'trai-tim': '<path d="M24 40 9.5 26A8.5 8.5 0 0 1 24 14.2 8.5 8.5 0 0 1 38.5 26Z"/>',
+};
