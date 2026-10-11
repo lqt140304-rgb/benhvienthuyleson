@@ -11,12 +11,17 @@
  },
  {
   "tt": "MỤC",
-  "ten": "2. Dữ liệu giá, logo, dữ liệu nguồn so với commit 24d5057",
+  "ten": "2. Dữ liệu giá, logo, dữ liệu nguồn so với bản gốc (commit 24d5057)",
   "ct": ""
  },
  {
   "tt": "ĐẠT",
-  "ten": "10 tệp dữ liệu / logo giống hệt bản gốc (SHA-256)",
+  "ten": "11/11 tệp dữ liệu và logo (src/data/*.json, logo, og, favicon) giống hệt bản gốc (SHA-256 theo bảng du-lieu-goc.sha256)",
+  "ct": "khác: -; thiếu: -; tệp dữ liệu mới không có trong bản gốc: -"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "Bảng SHA-256 khớp với lịch sử git: 11/11 tệp đã đọc từ commit 24d5057 và so được",
   "ct": ""
  },
  {
@@ -252,7 +257,7 @@
  {
   "tt": "ĐẠT",
   "ten": "[1440x900] \"Xem dịch vụ\" cuộn tới khu Dịch vụ ở trang chủ, focus ở tiêu đề (không rơi về BODY)",
-  "ct": "{\"foc\":\"H2\",\"tren\":227}"
+  "ct": "{\"foc\":\"H2\",\"tren\":193}"
  },
  {
   "tt": "ĐẠT",
@@ -272,7 +277,7 @@
  {
   "tt": "ĐẠT",
   "ten": "[390x844] \"Xem dịch vụ\" cuộn tới khu Dịch vụ ở trang chủ, focus ở tiêu đề (không rơi về BODY)",
-  "ct": "{\"foc\":\"H2\",\"tren\":269}"
+  "ct": "{\"foc\":\"H2\",\"tren\":313}"
  },
  {
   "tt": "ĐẠT",
@@ -387,7 +392,7 @@
  {
   "tt": "ĐẠT",
   "ten": "[nhận thật] Đúng 1 yêu cầu, POST, Content-Type text/plain (không gây bước kiểm tra trước), JSON có đủ trường và ma_yeu_cau",
-  "ct": "{\"ten_khach\":\"Khách thử nghiệm\",\"dien_thoai\":\"0912345678\",\"ten_thu_cung\":\"Bé Thử\",\"loai\":\"Chó\",\"loai_khac\":\"\",\"dich_vu\":\"Khám và chẩn đoán\",\"dich_vu_ma\":\"kham-va-chan-doan\",\"ngay\":\"2026-10-13\",\"gio\":\"09:00\",\"ngay_don\":\"\",\"ghi_chu\":\"ghi chú thử\",\"website\":\"\",\"ma_yeu_cau\":\"510901e6-b626-494d-b76e-60a9d33b6af1\",\"nguon\":\"/benhvienthuyleson/dat-lich/\",\"gui_luc\":\"2026-10-11T10:52:54.678Z\"}"
+  "ct": "{\"ten_khach\":\"Khách thử nghiệm\",\"dien_thoai\":\"0912345678\",\"ten_thu_cung\":\"Bé Thử\",\"loai\":\"Chó\",\"loai_khac\":\"\",\"dich_vu\":\"Khám và chẩn đoán\",\"dich_vu_ma\":\"kham-va-chan-doan\",\"ngay\":\"2026-10-13\",\"gio\":\"09:00\",\"ngay_don\":\"\",\"ghi_chu\":\"ghi chú thử\",\"website\":\"\",\"ma_yeu_cau\":\"0601a0c8-9106-46b3-b887-9905d5117177\",\"nguon\":\"/benhvienthuyleson/dat-lich/\",\"gui_luc\":\"2026-10-11T11:18:48.920Z\"}"
  },
  {
   "tt": "ĐẠT",
@@ -447,12 +452,12 @@
  {
   "tt": "ĐẠT",
   "ten": "[chống trùng] \"Gửi lại\" nguyên nội dung dùng lại CÙNG mã yêu cầu (máy chủ nhờ đó bỏ qua bản trùng)",
-  "ct": "8a3a82c3-4e0a-4f22-b8eb-747fcd073653 / 8a3a82c3-4e0a-4f22-b8eb-747fcd073653"
+  "ct": "b0f0bf82-7709-45fc-b057-11127ca168a1 / b0f0bf82-7709-45fc-b057-11127ca168a1"
  },
  {
   "tt": "ĐẠT",
   "ten": "[chống trùng] Đổi nội dung rồi gửi: mã yêu cầu MỚI; máy chủ trả trùng thì vẫn hiện đã nhận",
-  "ct": "8a3a82c3-4e0a-4f22-b8eb-747fcd073653 / 9700f488-66a0-4e27-97a7-aeef69153507"
+  "ct": "b0f0bf82-7709-45fc-b057-11127ca168a1 / bc8c70fb-ee72-4207-a433-af859182ea48"
  },
  {
   "tt": "ĐẠT",
@@ -462,6 +467,31 @@
  {
   "tt": "ĐẠT",
   "ten": "Chế độ \"cu\" (quay lại biểu mẫu cũ): trang Đặt lịch có biểu mẫu cũ #dat-lich, không có biểu mẫu mới; trang chủ chỉ còn lối vào /dat-lich/",
+  "ct": ""
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "kiem-tra-che-do: bản mặc định (dist) ĐÚNG \"gia-lap\" (mã thoát 0)",
+  "ct": "CHẾ ĐỘ BẢN XUẤT: gia-lap  (thư mục dist)\n{\"bieuMauMoi\":true,\"bieuMauCu\":false,\"dongXemTruoc\":true,\"diaChiNhan\":\"\",\"trangChuCoBieuMauMoi\":true,\"trangChuCoBieuMauCu\":false}\nĐÚNG chế độ \"gia-lap\". Web KHÔNG nhận lịch qua biểu mẫu (xem docs/DAT-LICH-DANH-GIA.md mục 5).\n"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "kiem-tra-che-do: bản mặc định mà \"mong\" chế độ that thì BÁO LỆCH (mã thoát 1, có chữ KHÔNG NÊN PHÁT HÀNH): không phát hành nhầm",
+  "ct": "LỆCH CHẾ ĐỘ, KHÔNG NÊN PHÁT HÀNH: chế độ thực tế là \"gia-lap\", mong muốn \"that\"; chế độ nhận thật phải có biểu mẫu mới, không có dòng \"xem trước\" và có địa chỉ nhận script.google.com/macros/s/…/exec\n"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "kiem-tra-che-do: dist-that ĐÚNG \"that\" (có địa chỉ nhận script.google.com), dist-cu ĐÚNG \"cu\"; dist-cu mà mong gia-lap thì lệch",
+  "ct": "CHẾ ĐỘ BẢN XUẤT: that  (thư mục dist-that)\n{\"bieuMauMoi\":true,\"bieuMauCu\":false,\"dongXemTruoc\":false,\"diaChiNhan\":\"https://script.google.com/macros/s/AKfycbzf5eQ3pWBwXk7l7KaWoayMk1F8J4fmZRmR4MEjyLGLULWADD13x8zETSt75ITHHjEE/exec\",\"trangChuCoBieuMauMoi\":true,\"trangChuCoBieuMauCu\":false}\nĐÚNG chế độ \"t"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "Biểu mẫu cũ thật (chế độ \"cu\") gửi đúng 1 yêu cầu tới địa chỉ nhận (đã chặn, trả lời giả), dạng form-urlencoded, có \"· đón … lúc …\" trong dịch vụ",
+  "ct": "1 yêu cầu, application/x-www-form-urlencoded;charset=UTF-8, ten=Khách cũ thử nghiệm&dien_thoai=0912345678&thu_cung=Khác (thỏ)&dich_vu=Gửi nội trú (khách sạn thú cưng) · đón 16/10/2026 lúc 17:00&can_nang=Dưới 2 kg&ngay=2026-10-13&gio=09:00&ghi_chu=ghi chú cũ&hoa_don=Gửi nội trú (k"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "Logic Code.v2.gs bằng đối tượng giả của Google, gồm BODY của biểu mẫu cũ thật vừa bắt được (không gọi Google): ĐẠT 39 · KHÔNG ĐẠT 0 · CHƯA XÁC MINH 1",
   "ct": ""
  },
  {

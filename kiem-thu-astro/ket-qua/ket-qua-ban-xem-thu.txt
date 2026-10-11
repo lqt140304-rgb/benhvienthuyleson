@@ -1,0 +1,30 @@
+Kiểm tra bản xem thử đặt ở thư mục lạ (/mot/thu-muc/la/ban-xem-thu/) · Chromium Playwright · 2026-10-11T11:21:12.794Z
+ĐẠT 25 · KHÔNG ĐẠT 0
+
+[ĐẠT] [1440x900] Trang chính (bọc khung, đặt ở thư mục lạ): CSS áp dụng (biến màu --tim, header cố định), JavaScript chạy (hai dải thẻ khởi tạo), đủ 11 khu
+[ĐẠT] [1440x900] Mọi ảnh trên trang chính tải được (logo, ảnh sản phẩm minh hoạ…): 8 ảnh
+[ĐẠT] [1440x900] Không có canonical trỏ về địa chỉ thật; có noindex
+[ĐẠT] [1440x900] Menu: 7 mục dẫn tới đúng trang (…/index.html), mỗi trang có CSS, đúng một H1, logo hiện, mục menu hiện tại đúng
+[ĐẠT] [1440x900] Từ trang con bấm logo: về trang chủ (home/index.html), có đủ khu
+[ĐẠT] [1440x900] Trang Bảng giá: bấm tab đổi nhóm (JavaScript chạy)
+[ĐẠT] [1440x900] Thẻ giá ở trang chủ dẫn tới trang Bảng giá (…/bang-gia/index.html#nhom-…)
+[ĐẠT] [1440x900] Bé Cam: "Tra cứu bảng giá" dẫn đúng (đường dẫn tương đối) tới trang Bảng giá
+[ĐẠT] [1440x900] Khu Sản phẩm: chọn ảnh nhỏ đổi nhóm; ảnh sản phẩm tải được
+[ĐẠT] [1440x900] Trang chủ không cuộn ngang
+[ĐẠT] [1440x900] Không lỗi JavaScript, không tệp nào bị hỏng khi duyệt hết các trang
+[ĐẠT] [390x844] Trang chính (bọc khung, đặt ở thư mục lạ): CSS áp dụng (biến màu --tim, header cố định), JavaScript chạy (hai dải thẻ khởi tạo), đủ 11 khu
+[ĐẠT] [390x844] Mọi ảnh trên trang chính tải được (logo, ảnh sản phẩm minh hoạ…): 8 ảnh
+[ĐẠT] [390x844] Không có canonical trỏ về địa chỉ thật; có noindex
+[ĐẠT] [390x844] Menu: 7 mục dẫn tới đúng trang (…/index.html), mỗi trang có CSS, đúng một H1, logo hiện, mục menu hiện tại đúng
+[ĐẠT] [390x844] Từ trang con bấm logo: về trang chủ (home/index.html), có đủ khu
+[ĐẠT] [390x844] Trang Bảng giá: bấm tab đổi nhóm (JavaScript chạy)
+[ĐẠT] [390x844] Thẻ giá ở trang chủ dẫn tới trang Bảng giá (…/bang-gia/index.html#nhom-…)
+[ĐẠT] [390x844] Bé Cam: "Tra cứu bảng giá" dẫn đúng (đường dẫn tương đối) tới trang Bảng giá
+[ĐẠT] [390x844] Khu Sản phẩm: chọn ảnh nhỏ đổi nhóm; ảnh sản phẩm tải được
+[ĐẠT] [390x844] Trang chủ không cuộn ngang
+[ĐẠT] [390x844] Không lỗi JavaScript, không tệp nào bị hỏng khi duyệt hết các trang
+[ĐẠT] Bản xem thử giữ biểu mẫu ở chế độ GIẢ LẬP: không có địa chỉ nhận, có dòng "chưa gửi dữ liệu thật"
+[ĐẠT] Chỉ có phông chữ Google (và liên kết ra ngoài như Zalo, Facebook, bản đồ khi bấm) bị gọi; không máy chủ lạ nào
+[ĐẠT] Không có yêu cầu nào tới đường dẫn tuyệt đối "/benhvienthuyleson/" hoặc tệp không tồn tại (404)
+
+[CHƯA XÁC MINH] Máy chủ xem thử THẬT (claude.ai): khung bọc trang chính, cách giải đường dẫn tương đối, Content-Security-Policy và việc có giữ "#nhom-…" khi chuyển trang chưa kiểm được từ đây

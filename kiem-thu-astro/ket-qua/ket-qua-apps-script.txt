@@ -1,5 +1,5 @@
-Thử logic Code.v2.gs bằng đối tượng giả (không gọi Google) · 2026-10-11T11:13:47.086Z
-ĐẠT 38 · KHÔNG ĐẠT 0 · CHƯA XÁC MINH 2
+Thử logic Code.v2.gs bằng đối tượng giả (không gọi Google) · 2026-10-11T11:19:04.792Z
+ĐẠT 39 · KHÔNG ĐẠT 0 · CHƯA XÁC MINH 1
 
 
 -- 1. Biểu mẫu mới: lưu, chống trùng, email
@@ -32,7 +32,7 @@ Thử logic Code.v2.gs bằng đối tượng giả (không gọi Google) · 202
 [ĐẠT] Dữ liệu mẫu của hàm thuNghiem() trong Code.gs cũ (Tắm) được nhận
 [ĐẠT] Biểu mẫu cũ vẫn bị từ chối khi lỗi LÕI (số điện thoại, tên, giờ, ngày, ngày đón trước ngày gửi) như Code.gs cũ
 [ĐẠT] Giờ đón của biểu mẫu cũ sai định dạng: vẫn lưu lịch, gắn "Cần kiểm tra" (giờ đón)
-[CHƯA XÁC MINH] Từ đầu đến cuối với body biểu mẫu cũ thật  → Chưa có ket-qua/body-bieu-mau-cu.txt: chạy kiem-thu-astro.cjs trước (nó ghi body từ trình duyệt thật), rồi chạy lại tệp này
+[ĐẠT] Từ đầu đến cuối: BODY do biểu mẫu cũ thật gửi trong trình duyệt (bản dựng chế độ "cu") được Code.v2.gs nhận và lưu đúng
 
 -- 5. Mã tra cứu đủ dài và duy nhất
 [ĐẠT] Cặp mã gửi request-240 / request-382 đã từng trùng mã bản cũ (cùng 4 ký tự đầu của MD5)
