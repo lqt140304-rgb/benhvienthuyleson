@@ -20,6 +20,8 @@
  *    cột còn thiếu được THÊM VÀO CUỐI. Không bao giờ ghi đè, dời hay xoá ô/dòng/tiêu đề đã có. Dòng mới được ghi đúng cột theo tên.
  *  - Gửi lại email không còn trùng: mỗi dòng được "giữ chỗ" (Email báo = "ĐANG GỬI <giờ>") trong khoá TRƯỚC khi gửi; lần chạy khác thấy dòng đang gửi thì bỏ qua.
  *    Kết quả được ghi theo Mã yêu cầu (không theo số dòng, nên nhân viên chèn/xoá dòng cũng không ghi nhầm). Giữ chỗ quá CHO_GUI_PHUT phút mà không có kết quả thì coi là treo và mới được thử lại.
+ *  - Chống trùng theo NỘI DUNG: cùng số điện thoại + tên thú cưng + dịch vụ + ngày + giờ trong CHONG_TRUNG_PHUT (60) phút = cùng một yêu cầu, dù mã gửi khác nhau
+ *    (ví dụ khách bấm "Gửi yêu cầu khác" rồi điền lại y hệt): không thêm dòng, không gửi thêm email, vẫn trả mã cũ. Đổi bất kỳ trường nào trong 5 trường đó hoặc quá 60 phút = yêu cầu mới.
  *  - Muốn thử trên Sheet RIÊNG trước khi dùng thật: chạy kiemTraTrenSheetRieng() (xem docs/BAT-CHE-DO-THAT.md).
  * Cách cài: xem HUONG-DAN-NHAN-LICH.md. KHÔNG dán đè lên bản đang chạy khi chưa thử nghiệm.
  */
@@ -30,6 +32,7 @@ var CAU_HINH = {
   GIO_MO: 8 * 60,               // 8:00
   GIO_DONG: 21 * 60,            // 21:00
   MUI_GIO: 'Asia/Ho_Chi_Minh',
+  CHONG_TRUNG_PHUT: 60,         // cùng số điện thoại + tên thú cưng + dịch vụ + ngày + giờ trong ngần ấy phút = CÙNG MỘT yêu cầu (không thêm dòng, không gửi thêm email)
   CHO_GUI_PHUT: 5,              // dòng "ĐANG GỬI" quá số phút này mà chưa có kết quả thì coi là treo và được thử lại
   EMAIL_NHAN: '',               // địa chỉ nhận email báo (nhiều địa chỉ cách nhau bằng dấu phẩy). Để trống = chủ tài khoản đã triển khai script
   MAU_LOI_EMAIL: '#FDE3C8'      // màu nền dòng có email lỗi
@@ -52,6 +55,8 @@ function doPost(e) {
     kq = voiKhoa_(function () {
       var tr = moTrang_(), bang = docMa_(tr), cu = bang.theoGui[du.ma_yeu_cau];
       if (cu) return { ma: cu, trung: true };
+      var tn = timTrungNoiDung_(tr, du, new Date()); // khách bấm "Gửi yêu cầu khác" rồi điền lại y hệt: mã gửi khác nhưng nội dung trùng
+      if (tn) return { ma: tn, trung: true };
       var ma = taoMaDuyNhat_(du.ma_yeu_cau, new Date(), bang.daDung);
       if (!ma) return { loi: 'Chưa tạo được mã yêu cầu, vui lòng thử lại.' };
       // "Giữ chỗ" gửi email NGAY khi ghi dòng (cùng một lần ghi, trong khoá): lần chạy khác thấy ĐANG GỬI thì không gửi lại
@@ -191,6 +196,21 @@ function docMa_(tr) {
   var theoGui = {}, daDung = {}, ma = cotGiaTri_(tr, 'Mã yêu cầu'), gui = cotGiaTri_(tr, 'Mã gửi từ trình duyệt');
   for (var i = 0; i < ma.length; i++) { if (!ma[i]) continue; daDung[ma[i]] = true; if (gui[i]) theoGui[gui[i]] = ma[i]; }
   return { theoGui: theoGui, daDung: daDung };
+}
+// Tìm yêu cầu đã có CÙNG nội dung (SĐT + tên thú cưng + dịch vụ + ngày + giờ) vừa nhận trong CHONG_TRUNG_PHUT phút. Trả mã cũ hoặc ''.
+// Chỉ xét dòng có "Thời gian nhận" là ngày giờ thật (dòng cũ ghi chữ hoặc không có tên thú cưng thì bỏ qua: không bao giờ bị coi là trùng).
+function timTrungNoiDung_(tr, du, now) {
+  var n = tr.sh.getLastRow(); if (n < 2) return '';
+  var cot = function (ten) { return tr.sh.getRange(2, tr.map[ten], n - 1, 1).getValues(); };
+  var tg = cot('Thời gian nhận'), sdt = cot('Số điện thoại'), thu = cot('Tên thú cưng'), dv = cot('Dịch vụ'), ng = cot('Ngày mong muốn / gửi'), gio = cot('Giờ'), ma = cot('Mã yêu cầu');
+  var khoa = function (a, b, c, d, e) { return [chuanSdt_(chu_(a)), chuanHoaTen_(chu_(b)), chuanHoaTen_(chu_(c)), ngayChu_(d), gioChu_(e)].join('|'); };
+  var moi = khoa(du.dien_thoai, du.ten_thu_cung, du.dich_vu, du.ngay, du.gio);
+  for (var i = n - 2; i >= 0; i--) {
+    var t = tg[i][0]; if (Object.prototype.toString.call(t) !== '[object Date]') continue;
+    var d = now.getTime() - t.getTime(); if (d < -60000 || d > CAU_HINH.CHONG_TRUNG_PHUT * 60000) continue;
+    if (String(ma[i][0]) && khoa(sdt[i][0], thu[i][0], dv[i][0], ng[i][0], gio[i][0]) === moi) return String(ma[i][0]);
+  }
+  return '';
 }
 // Tìm số dòng THEO MÃ YÊU CẦU (không dựa vào số dòng đã nhớ: nhân viên có thể đã chèn/xoá dòng). 0 nếu không thấy.
 function timHang_(tr, ma) { var v = cotGiaTri_(tr, 'Mã yêu cầu'); for (var i = 0; i < v.length; i++) if (v[i] === ma) return i + 2; return 0; }

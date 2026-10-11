@@ -6,6 +6,8 @@
 
 > **Làm thêm theo `docs/BAT-CHE-DO-THAT.md`:** chạy hàm `kiemTraTrenSheetRieng` và `apps-script/thu-nhan-lich.html` trên Sheet THỬ. Chế độ `'that'` chỉ được bật sau khi đạt 3 điều: lưu đúng 1 dòng, email tới đúng hộp thư, gửi lại không trùng.
 
+> **Mỗi lần script thay đổi** (kể cả bản chống trùng theo nội dung): dán lại mã, rồi **Triển khai → Quản lý bản triển khai → biểu tượng bút → Phiên bản: Mới → Triển khai**. Không làm bước này thì địa chỉ `/exec` vẫn chạy mã cũ.
+
 ## A. Việc bạn làm (khoảng 15 phút)
 1. Đăng nhập Google bằng tài khoản của bệnh viện, tạo một **Google Sheet thử**, đặt tên "Thử đặt lịch".
 2. Trong Sheet: **Tiện ích mở rộng → Apps Script**.

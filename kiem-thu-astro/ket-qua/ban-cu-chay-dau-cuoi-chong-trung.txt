@@ -1,0 +1,2 @@
+ĐẠT 13 · KHÔNG ĐẠT 1
+[KHÔNG ĐẠT] [E gửi yêu cầu khác rồi điền y hệt] Trình duyệt gửi 2 mã gửi KHÁC nhau, nhưng Sheet vẫn đúng 1 dòng, đúng 1 email; khách thấy "Đã nhận" với cùng mã  → 2 dòng · 2 email · LS-261011-HZJJPD/LS-261011-KBPD46

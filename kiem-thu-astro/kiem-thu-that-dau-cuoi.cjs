@@ -23,8 +23,8 @@ const cong = (n) => { const v = new Date(Date.now() + 7 * 3600e3), d = new Date(
     });
     await p.goto(URLT + '/dat-lich/', { waitUntil: 'load' }); p.__ds = ds; return p;
   };
-  const dien = async (p, ten = 'THỬ NGHIỆM') => {
-    await p.fill('#m-ten', ten); await p.fill('#m-sdt', '0912 345 678'); await p.fill('#m-thu', 'Bé Thử');
+  const dien = async (p, ten = 'THỬ NGHIỆM', thu = 'Bé Thử') => {
+    await p.fill('#m-ten', ten); await p.fill('#m-sdt', '0912 345 678'); await p.fill('#m-thu', thu);
     const dv = await p.evaluate(() => [...document.getElementById('m-dv').options].map((o) => o.value).find((v) => v && !/noi-tru|bed/i.test(v)));
     await p.selectOption('#m-dv', dv); await p.fill('#m-ngay', cong(2)); await p.selectOption('#m-gio', '09:00'); await p.fill('#m-ghi', 'Dòng thử tự động');
   };
@@ -60,9 +60,16 @@ const cong = (n) => { const v = new Date(Date.now() + 7 * 3600e3), d = new Date(
     await p.waitForFunction(() => document.getElementById('m-gui').textContent.trim() === 'Gửi lại' && !document.getElementById('m-gui').disabled); await p.click('#m-gui'); await nhan(p);
     ok('[C gửi lại] Có mạng lại, bấm "Gửi lại": đúng 1 dòng, đúng 1 email, hiện "Đã nhận"', env.st.rows.length === 2 && env.st.emails.length === 1 && /Đã nhận yêu cầu/.test(await chu(p, '#dl-nhan')), `${env.st.rows.length - 1} dòng · ${env.st.emails.length} email`); await p.context().close(); }
 
-  // D. Hai yêu cầu khác nhau → hai dòng, hai email; rồi gửi lặp nhanh không nhân đôi
-  { const env = taoMoiTruong(), p = await mo(env, () => 'qua'); await dien(p, 'THỬ NGHIỆM 1'); await gui(p); await nhan(p); await p.click('#dl-lam-lai'); await dien(p, 'THỬ NGHIỆM 2'); await gui(p); await nhan(p);
-    ok('[D hai yêu cầu khác nhau] Đúng 2 dòng, 2 email, 2 mã khác nhau', env.st.rows.length === 3 && env.st.emails.length === 2 && env.o(1)['Mã yêu cầu'] !== env.o(2)['Mã yêu cầu'], `${env.st.rows.length - 1} dòng`); await p.context().close(); }
+  // D. Hai yêu cầu khác nhau (khác tên thú cưng) → hai dòng, hai email
+  { const env = taoMoiTruong(), p = await mo(env, () => 'qua'); await dien(p, 'THỬ NGHIỆM 1', 'Bé Một'); await gui(p); await nhan(p); await p.click('#dl-lam-lai'); await dien(p, 'THỬ NGHIỆM 2', 'Bé Hai'); await gui(p); await nhan(p);
+    ok('[D hai yêu cầu khác nhau] Khác tên thú cưng: đúng 2 dòng, 2 email, 2 mã khác nhau', env.st.rows.length === 3 && env.st.emails.length === 2 && env.o(1)['Mã yêu cầu'] !== env.o(2)['Mã yêu cầu'], `${env.st.rows.length - 1} dòng`); await p.context().close(); }
+
+  // E. Đúng thao tác của chủ dự án: gửi thành công → "Gửi yêu cầu khác" → điền Y HỆT → gửi (mã gửi từ trình duyệt khác nhau)
+  { const env = taoMoiTruong(), p = await mo(env, () => 'qua'); await dien(p); await gui(p); await nhan(p); const ma1 = (await chu(p, '#dl-nhan')).match(/LS-\d{6}-[0-9A-Z]{6}/)[0];
+    await p.click('#dl-lam-lai'); await dien(p); await gui(p); await nhan(p); const ma2 = (await chu(p, '#dl-nhan')).match(/LS-\d{6}-[0-9A-Z]{6}/)[0];
+    const g1 = JSON.parse(p.__ds[0].body).ma_yeu_cau, g2 = JSON.parse(p.__ds[1].body).ma_yeu_cau;
+    ok('[E gửi yêu cầu khác rồi điền y hệt] Trình duyệt gửi 2 mã gửi KHÁC nhau, nhưng Sheet vẫn đúng 1 dòng, đúng 1 email; khách thấy "Đã nhận" với cùng mã', g1 !== g2 && p.__ds.length === 2 && ma1 === ma2 && env.st.rows.length === 2 && env.st.emails.length === 1, `${env.st.rows.length - 1} dòng · ${env.st.emails.length} email · ${ma1}/${ma2}`);
+    ok('[E] Không lỗi JavaScript', p.__loi.length === 0, p.__loi.join('|')); await p.context().close(); }
 
   await b.close(); may.kill();
   const dem = (t) => kq.filter((x) => x.tt === t).length, dong = kq.map((x) => `[${x.tt}] ${x.ten}${x.tt !== 'ĐẠT' && x.ct ? '  → ' + x.ct : ''}`);

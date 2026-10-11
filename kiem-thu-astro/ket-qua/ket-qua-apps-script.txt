@@ -1,5 +1,5 @@
-Thử logic Code.v2.gs bằng đối tượng giả (không gọi Google) · 2026-10-11T12:15:24.812Z
-ĐẠT 72 · KHÔNG ĐẠT 0 · CHƯA XÁC MINH 1
+Thử logic Code.v2.gs bằng đối tượng giả (không gọi Google) · 2026-10-11T12:34:50.743Z
+ĐẠT 80 · KHÔNG ĐẠT 0 · CHƯA XÁC MINH 1
 
 
 -- 1. Biểu mẫu mới: lưu, chống trùng, email
@@ -93,5 +93,15 @@ Thử logic Code.v2.gs bằng đối tượng giả (không gọi Google) · 202
 [ĐẠT] Đúng MỘT dòng trong trang đặt lịch và đúng 2 email thử (1 lần đầu + 1 lần sau khi giả lập lỗi), tới chủ tài khoản
 [ĐẠT] Email hỏng (hết hạn mức): bộ thử BÁO KHÔNG ĐẠT, không báo ĐẠT giả
 [ĐẠT] GUI_EMAIL = false: bộ thử vẫn đạt phần lưu 1 dòng và gửi lại không trùng, không gửi email
+
+-- 11. Cùng SĐT + tên thú cưng + dịch vụ + ngày + giờ trong 60 phút = một yêu cầu
+[ĐẠT] Đúng cảnh khách đã gặp (2 mã gửi khác nhau, nội dung y hệt): chỉ 1 dòng, 1 email; lần 2 trả LẠI mã của lần 1 với trung: true
+[ĐẠT] Khác hoa-thường, khoảng trắng, +84 so với 0…: vẫn nhận ra là trùng
+[ĐẠT] Đổi MỘT trong 5 trường (SĐT / tên thú cưng / dịch vụ / ngày / giờ): là yêu cầu MỚI, có dòng mới và email mới
+[ĐẠT] Cách 59 phút: vẫn trùng (không thêm dòng); cách 61 phút: là yêu cầu mới (thêm dòng, thêm email)
+[ĐẠT] Email của lần 1 bị lỗi: lần điền lại y hệt cũng không tạo dòng mới (vẫn 1 dòng LỖI để gửi lại tự động)
+[ĐẠT] Trang cũ có dòng cùng SĐT/dịch vụ/ngày/giờ (dòng cũ không có "tên thú cưng", thời gian dạng chữ): dòng cũ KHÔNG bị coi là trùng, yêu cầu được nhận và dòng cũ giữ nguyên
+[ĐẠT] Biểu mẫu cũ bấm gửi 2 lần (mỗi lần sinh mã riêng): chỉ 1 dòng, 1 email
+[ĐẠT] Điền y hệt 3 lần liên tiếp: vẫn 1 dòng, 1 email; khoá cân bằng
 
 [CHƯA XÁC MINH] Chạy thật trên Google (cấp quyền, email tới, hạn mức email, phản hồi JSON đọc được từ trình duyệt github.io)  → cần chủ dự án thử theo HUONG-DAN-NHAN-LICH.md

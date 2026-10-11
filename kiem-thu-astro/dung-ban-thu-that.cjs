@@ -19,7 +19,8 @@ Bản này gửi lịch tới **Sheet thử** của bạn (không phải Sheet t
 
 ## Việc cần thử (ghi lại kết quả cho tôi)
 1. **Gửi thành công:** điền 1 lịch (tên "THỬ NGHIỆM"), bấm gửi. Phải thấy "Đã nhận yêu cầu đặt lịch…" kèm mã \`LS-…\`. Mở Sheet thử: đúng **1 dòng**; hộp thư nhận: đúng **1 thư** "Lịch mới LS-…".
-2. **Gửi lại không trùng:** ngay sau đó bấm gửi lại cùng nội dung (hoặc tải lại trang rồi gửi đúng nội dung đó bằng nút "Gửi lại" nếu có). Sheet vẫn **1 dòng**, hộp thư vẫn **1 thư**.
+2. **Gửi lại không trùng:** ngay sau đó bấm "Gửi yêu cầu khác" rồi điền **y hệt** (cùng SĐT, tên thú cưng, dịch vụ, ngày, giờ) và gửi. Khách vẫn thấy "Đã nhận" với **cùng mã**, Sheet vẫn **1 dòng**, hộp thư vẫn **1 thư**. (Đổi một trong 5 thông tin đó thì là lịch mới, ra dòng mới.)
+   *Cần dán lại script mới và Triển khai "Phiên bản: Mới" trước khi thử (xem docs/BAT-CHE-DO-THAT.md).*
 3. **Lỗi mạng:** tắt wifi/mạng rồi bấm gửi. Phải hiện "Chưa nhận được xác nhận…", **không** báo thành công. Bật mạng, bấm "Gửi lại": Sheet có **đúng 1 dòng** cho lịch đó (không 2).
 4. Báo tôi: số dòng trong Sheet, số thư nhận, và màn hình hiện gì ở mỗi bước (nếu được, chụp ảnh).
 `);

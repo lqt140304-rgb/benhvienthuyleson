@@ -36,3 +36,10 @@ Quyền khi cấp lần đầu, email thực sự tới, hạn mức email/ngày
 - Dựng: `node kiem-thu-astro/dung-ban-thu-that.cjs <địa chỉ /exec của Sheet thử>` → thư mục `ban-thu-that/` (**git bỏ qua**, địa chỉ chỉ nằm trong bản dựng thử; `src/data/thong_tin.json` và `modeDatLich` của nhánh **không đổi**). Hướng dẫn chạy cho người không lập trình: `ban-thu-that/README-THU.md`.
 - Kiểm thử bằng máy (trình duyệt thật + `Code.v2.gs` + Trang tính **giả**, không gọi Google): `node kiem-thu-astro/kiem-thu-that-dau-cuoi.cjs` → `kiem-thu-astro/ket-qua/ket-qua-that-dau-cuoi.txt` (gửi thành công; mất phản hồi sau khi đã lưu rồi gửi lại; lỗi mạng rồi gửi lại; hai yêu cầu khác nhau; không có hoá đơn / tổng tạm tính).
 - Phần Google thật (email tới đúng hộp thư, Sheet thử đúng 1 dòng, trình duyệt đọc được phản hồi từ `script.google.com`) **chỉ bạn xác nhận được** bằng README-THU.md.
+
+## Chống trùng theo NỘI DUNG (thêm sau lần thử đầu trên Google thật)
+Lần thử đầu cho 2 dòng và 2 email: khách bấm **"Gửi yêu cầu khác"** rồi điền lại y hệt, trình duyệt sinh mã gửi mới (`adc8dfbc…` / `4a689dd0…`) nên máy chủ coi là 2 yêu cầu (đúng thiết kế cũ: chỉ chống trùng theo mã gửi). Nay `Code.v2.gs` còn nhận ra **cùng SĐT + tên thú cưng + dịch vụ + ngày + giờ trong 60 phút** (`CAU_HINH.CHONG_TRUNG_PHUT`) là một yêu cầu: không thêm dòng, không gửi thêm email, vẫn báo "Đã nhận" với mã cũ.
+- Đổi bất kỳ trường nào trong 5 trường, hoặc quá 60 phút, là yêu cầu mới. Dòng cũ của trang "Đặt lịch" (không có tên thú cưng, thời gian dạng chữ) không bao giờ bị coi là trùng.
+- **Sau khi sửa script phải dán lại VÀ triển khai PHIÊN BẢN MỚI** (Triển khai → Quản lý bản triển khai → biểu tượng bút → Phiên bản: Mới → Triển khai), nếu không `/exec` vẫn chạy mã cũ.
+- Dòng thừa đã có trong Sheet thử: xoá tay.
+- Kiểm thử: `kiem-thu-apps-script.cjs` mục 11 và `kiem-thu-that-dau-cuoi.cjs` mục E (mô phỏng đúng thao tác trên); bản trước khi sửa: `ket-qua/ban-cu-chay-bo-thu-chong-trung.txt` (6 KHÔNG ĐẠT).

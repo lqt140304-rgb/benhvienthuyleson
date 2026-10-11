@@ -1,0 +1,20 @@
+Thử logic Code.v2.gs bằng đối tượng giả (không gọi Google) · BẢN THỬ: /tmp/Code.v2.truoc-chong-trung.gs · 2026-10-11T12:30:54.668Z
+ĐẠT 74 · KHÔNG ĐẠT 6 · CHƯA XÁC MINH 1
+-- 1. Biểu mẫu mới: lưu, chống trùng, email
+-- 2. Kiểm tra dữ liệu phía máy chủ
+-- 3. Bảo vệ (ô bẫy, công thức, độ dài)
+-- 4. Tương thích biểu mẫu cũ (form-urlencoded, đúng định dạng FormDatLichCu gửi, không đọc được phản hồi)
+-- 5. Mã tra cứu đủ dài và duy nhất
+-- 6. Nơi nhận: lỗi email không còn im lặng
+-- 7. Dữ liệu lạ
+-- 8. Trang tính cũ: ghi theo TÊN cột, giữ nguyên dữ liệu cũ (tiêu đề + dòng cũ)
+-- 9. Gửi lại email: không gửi trùng khi chạy chồng nhau
+-- 10. kiemTraTrenSheetRieng(): bộ thử cho Sheet riêng
+-- 11. Cùng SĐT + tên thú cưng + dịch vụ + ngày + giờ trong 60 phút = một yêu cầu
+[KHÔNG ĐẠT] Đúng cảnh khách đã gặp (2 mã gửi khác nhau, nội dung y hệt): chỉ 1 dòng, 1 email; lần 2 trả LẠI mã của lần 1 với trung: true  → [{"ok":true,"ma":"LS-261011-B26SEB","trung":false},{"ok":true,"ma":"LS-261011-XSS2EW","trung":false},2,2]
+[KHÔNG ĐẠT] Khác hoa-thường, khoảng trắng, +84 so với 0…: vẫn nhận ra là trùng  → {"ok":true,"ma":"LS-261011-2ZG5F1","trung":false}
+[KHÔNG ĐẠT] Cách 59 phút: vẫn trùng (không thêm dòng); cách 61 phút: là yêu cầu mới (thêm dòng, thêm email)  → [{"ok":true,"ma":"LS-261011-F39MT9","trung":false},{"ok":true,"ma":"LS-261011-S1EGQ4","trung":false},3]
+[KHÔNG ĐẠT] Email của lần 1 bị lỗi: lần điền lại y hệt cũng không tạo dòng mới (vẫn 1 dòng LỖI để gửi lại tự động)  → [{"ok":true,"ma":"LS-261011-JXPEZ5","trung":false},2]
+[KHÔNG ĐẠT] Biểu mẫu cũ bấm gửi 2 lần (mỗi lần sinh mã riêng): chỉ 1 dòng, 1 email  → [{"ok":true,"ma":"LS-261011-D879TS","trung":false},{"ok":true,"ma":"LS-261011-J6TVCZ","trung":false},2]
+[KHÔNG ĐẠT] Điền y hệt 3 lần liên tiếp: vẫn 1 dòng, 1 email; khoá cân bằng  → 3 dòng, 3 email
+ĐẠT 74 · KHÔNG ĐẠT 6 · CHƯA XÁC MINH 1

@@ -1,5 +1,5 @@
-Đầu-cuối bản thử "that" (trình duyệt thật + Code.v2.gs + Trang tính GIẢ; KHÔNG gọi Google thật) · 2026-10-11T12:16:12.289Z
-ĐẠT 12 · KHÔNG ĐẠT 0
+Đầu-cuối bản thử "that" (trình duyệt thật + Code.v2.gs + Trang tính GIẢ; KHÔNG gọi Google thật) · 2026-10-11T12:31:30.709Z
+ĐẠT 14 · KHÔNG ĐẠT 0
 [ĐẠT] Bản thử: data-mode="that", có địa chỉ script.google.com/macros/s/…/exec, KHÔNG còn dòng "chưa gửi dữ liệu thật"
 [ĐẠT] Form mới không có ô hoá đơn tham khảo / phụ phí tự động / tổng tạm tính
 [ĐẠT] [A thành công] Hiện "Đã nhận yêu cầu đặt lịch…" kèm mã LS-…; Sheet đúng 1 dòng; đúng 1 email
@@ -11,5 +11,7 @@
 [ĐẠT] [B gửi lại] Không lỗi JavaScript
 [ĐẠT] [C lỗi mạng] Mạng đứt trước khi tới máy chủ: báo chưa nhận được xác nhận, Sheet 0 dòng, 0 email, dữ liệu form còn nguyên
 [ĐẠT] [C gửi lại] Có mạng lại, bấm "Gửi lại": đúng 1 dòng, đúng 1 email, hiện "Đã nhận"
-[ĐẠT] [D hai yêu cầu khác nhau] Đúng 2 dòng, 2 email, 2 mã khác nhau
+[ĐẠT] [D hai yêu cầu khác nhau] Khác tên thú cưng: đúng 2 dòng, 2 email, 2 mã khác nhau
+[ĐẠT] [E gửi yêu cầu khác rồi điền y hệt] Trình duyệt gửi 2 mã gửi KHÁC nhau, nhưng Sheet vẫn đúng 1 dòng, đúng 1 email; khách thấy "Đã nhận" với cùng mã
+[ĐẠT] [E] Không lỗi JavaScript
 [CHƯA XÁC MINH] Google thật: email tới hộp thư, Sheet thử đúng 1 dòng, trình duyệt đọc được phản hồi từ script.google.com  → chủ dự án thử theo ban-thu-that/README-THU.md
