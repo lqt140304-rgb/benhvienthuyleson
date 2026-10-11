@@ -69,11 +69,19 @@ function kiemDuLieu() {
   if (!fs.existsSync(tepBang)) { chuaXm('Đối chiếu dữ liệu / logo với bản gốc', 'Thiếu kiem-thu-astro/du-lieu-goc.sha256 (bảng SHA-256 của bản gốc): chưa đối chiếu được'); return; }
   const bang = fs.readFileSync(tepBang, 'utf8').split('\n').filter(Boolean).map((l) => { const m = /^([0-9a-f]{64})\s+(.+)$/.exec(l); return m && [m[2], m[1]]; }).filter(Boolean);
   const sha = (b) => crypto.createHash('sha256').update(b).digest('hex');
+  // Thay đổi dữ liệu ĐƯỢC CHỦ DỰ ÁN CHO PHÉP (11/10/2026): bỏ mệnh đề sai trong ghi chú nhóm Grooming ("tự cộng vào hoá đơn tham khảo khi đặt lịch", vì đã bỏ hoá đơn và phụ phí tự động).
+  // Tệp này phải khớp SHA-256 đã chốt dưới đây VÀ chỉ khác bản gốc đúng ở mệnh đề đó (kiểm bên dưới). Mọi tệp khác vẫn phải giống hệt bản gốc.
+  const MENH_DE_BO = ', tự cộng vào hoá đơn tham khảo khi đặt lịch', DUOC_PHEP = { 'src/data/dich_vu.json': '475288fd877e35c6974e48756d8adfe83a521f3e8f1509a94e75553c57ac211c' };
   const khac = [], thieu = [];
-  for (const [t, h] of bang) { const f = path.join(GOC, t); if (!fs.existsSync(f)) { thieu.push(t); continue; } if (sha(fs.readFileSync(f)) !== h) khac.push(t); }
+  for (const [t, h] of bang) { const f = path.join(GOC, t); if (!fs.existsSync(f)) { thieu.push(t); continue; } if (sha(fs.readFileSync(f)) !== (DUOC_PHEP[t] || h)) khac.push(t); }
   const moi = fs.readdirSync(path.join(GOC, 'src/data')).map((f) => 'src/data/' + f).filter((t) => !bang.some(([x]) => x === t));
   const soSanh = bang.length - thieu.length;
-  ok(`${soSanh}/${bang.length} tệp dữ liệu và logo (src/data/*.json, logo, og, favicon) giống hệt bản gốc (SHA-256 theo bảng du-lieu-goc.sha256)`, khac.length === 0 && thieu.length === 0 && moi.length === 0, `khác: ${khac.join(',') || '-'}; thiếu: ${thieu.join(',') || '-'}; tệp dữ liệu mới không có trong bản gốc: ${moi.join(',') || '-'}`);
+  ok(`${soSanh}/${bang.length} tệp dữ liệu và logo (src/data/*.json, logo, og, favicon) giống hệt bản gốc (SHA-256 theo bảng du-lieu-goc.sha256; ngoại lệ được phép: dich_vu.json, xem mục kế)`, khac.length === 0 && thieu.length === 0 && moi.length === 0, `khác: ${khac.join(',') || '-'}; thiếu: ${thieu.join(',') || '-'}; tệp dữ liệu mới không có trong bản gốc: ${moi.join(',') || '-'}`);
+  { let gocDv = null; try { gocDv = cp.execSync(`git show ${COMMIT_GOC}:src/data/dich_vu.json`, { cwd: GOC, maxBuffer: 1 << 26, stdio: ['ignore', 'pipe', 'ignore'] }).toString('utf8'); } catch { /* không có git */ }
+    const nay = fs.readFileSync(path.join(GOC, 'src/data/dich_vu.json'), 'utf8'); let j = null; try { j = JSON.parse(nay); } catch { /* sẽ báo */ }
+    const dv = JSON.stringify(j); const ghiChu = (j && JSON.stringify(j).match(/Spa nhận lịch đến 19:00[^"]*/) || [''])[0];
+    ok('Sửa dữ liệu được phép (dich_vu.json): JSON hợp lệ; ghi chú Grooming không còn "hoá đơn tham khảo" nhưng vẫn giữ "Spa nhận lịch đến 19:00. Hẹn sau 17:00, sau 18:00 và ngày lễ có phụ phí."', !!j && !/tự cộng vào hoá đơn tham khảo/.test(dv) && ghiChu.startsWith('Spa nhận lịch đến 19:00. Hẹn sau 17:00, sau 18:00 và ngày lễ có phụ phí.'), ghiChu.slice(0, 120));
+    if (gocDv) ok('Sửa dữ liệu được phép (dich_vu.json): so với bản gốc CHỈ khác đúng mệnh đề ", tự cộng vào hoá đơn tham khảo khi đặt lịch" (không đổi giá hay nội dung khác)', gocDv.split(MENH_DE_BO).length === 2 && gocDv.replace(MENH_DE_BO, '') === nay, 'khác ngoài mệnh đề được phép'); else chuaXm('So dich_vu.json với bản gốc từng ký tự', 'Không có lịch sử git'); }
   // Đối chiếu chéo: bảng băm có đúng là của commit gốc không (chỉ làm được khi có lịch sử git)
   let coGit = true; try { cp.execSync(`git cat-file -e ${COMMIT_GOC}^{commit}`, { cwd: GOC, stdio: 'ignore' }); } catch { coGit = false; }
   if (!coGit) { chuaXm('Đối chiếu chéo bảng SHA-256 với lịch sử git', `Không có .git hoặc không có commit ${COMMIT_GOC}: chỉ đối chiếu được theo bảng băm đi kèm, chưa kiểm tra bảng băm có đúng là của bản gốc`); return; }

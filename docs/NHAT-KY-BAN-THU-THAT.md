@@ -42,6 +42,6 @@ Hiện: Mã yêu cầu (để đối chiếu với email), Thời gian nhận, T
 
 ## 7. Còn chờ bạn
 - Thử lại trên Google thật theo `README-THU.md` và báo: số dòng Sheet, số thư, màn hình hiện gì mỗi bước.
-- Cho phép sửa ghi chú Grooming trong `src/data/dich_vu.json` (nói "hoá đơn tham khảo" nay không đúng).
+- ~~Cho phép sửa ghi chú Grooming~~ **ĐÃ SỬA (bạn cho phép, 11/10/2026):** trong `src/data/dich_vu.json` chỉ bỏ mệnh đề ", tự cộng vào hoá đơn tham khảo khi đặt lịch"; câu còn lại: "…Spa nhận lịch đến 19:00. Hẹn sau 17:00, sau 18:00 và ngày lễ có phụ phí." Bộ kiểm thử ghi nhận đây là ngoại lệ duy nhất so với dữ liệu gốc và kiểm chỉ khác đúng mệnh đề đó.
 - Thời điểm bật `'that'` cho web thật: cần script thật đã nâng lên `Code.v2.gs` (địa chỉ nhận trong `src/data/thong_tin.json` hiện vẫn là script cũ đang chạy thật); gộp `main` chỉ khi bạn đồng ý.
 - Có xoá hẳn biểu mẫu cũ sau khi nhận thật ổn định không.
