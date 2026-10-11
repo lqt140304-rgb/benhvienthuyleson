@@ -1,0 +1,24 @@
+---
+// Đầu trang: logo, menu chính (thanh tím trượt dưới mục đang xem), nút Đặt lịch, nút Menu trên điện thoại
+import Icon from '../Icon.astro';
+import tt from '../../data/thong_tin.json';
+import { u } from '../../lib/site';
+import { menuChinh } from '../../lib/menu';
+interface Props { trang: 'chu' | 'khac'; hienTai?: string }
+const { trang, hienTai = '' } = Astro.props;
+const chu = trang === 'chu';
+const menu = menuChinh();
+---
+<header class="dau" id="dau">
+  <div class="khung-rong dau-in">
+    <a class="logo" href={chu ? '#top' : u('/')} aria-label={`${tt.ten} – ${chu ? 'về đầu trang' : 'về trang chủ'}`}><img src={u('/img/logo.jpg')} alt="" width="44" height="44"><span><small>Bệnh viện thú y</small><b>Lê Sơn</b></span></a>
+    <nav class="menu" id="menu" aria-label="Menu chính">
+      {menu.map((m) => {
+        const ht = chu && m.khoa === 'trang-chu' ? 'page' : hienTai === m.khoa ? 'page' : undefined;
+        return <a href={chu && m.hrefChu ? m.hrefChu : m.href} aria-current={ht}>{m.ten}</a>;
+      })}
+    </nav>
+    <a class="nut nut-chinh nut-nho nut-dau" href={u('/dat-lich/')}>Đặt lịch khám</a>
+    <button class="nut-menu" type="button" aria-expanded="false" aria-controls="menu" aria-label="Mở menu" id="nut-menu"><span class="ic-mo"><Icon name="menu" size={22} /></span><span class="ic-dong"><Icon name="close" size={22} /></span><span class="nut-menu-chu">Menu</span></button>
+  </div>
+</header>

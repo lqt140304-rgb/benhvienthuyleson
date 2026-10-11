@@ -1,0 +1,7 @@
+---
+// Khung chờ ảnh thật: khi bệnh viện cung cấp ảnh, chỉ cần thay bằng <img>. Luôn có nhãn "Ảnh thực tế · sắp cập nhật".
+import Icon from '../Icon.astro';
+interface Props { class?: string; goiY: string; chip?: string; hien?: boolean }
+const { class: cls = '', goiY, chip = 'Ảnh thực tế · sắp cập nhật', hien = false } = Astro.props;
+---
+<figure class={`anh-cho ${cls}`.trim()} data-hien={hien ? '' : undefined}><span class="anh-giua"><span class="anh-vong"><Icon name="camera" size={22} /></span><span class="anh-mota">{goiY}</span></span><span class="anh-chip">{chip}</span><slot /></figure>

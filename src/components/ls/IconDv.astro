@@ -1,0 +1,8 @@
+---
+// Icon dịch vụ (lưới 48) có chuyển động từng phần: chạy một lần khi vào màn hình / rê chuột / focus (xem .cd-* trong le-son.css)
+import { icDv, ICON_DV } from '../../lib/icon-dv.mjs';
+interface Props { icon: string; size?: number }
+const { icon, size = 40 } = Astro.props;
+const k = (ICON_DV as Record<string, string>)[icon];
+---
+{k && <Fragment set:html={icDv(k, size)} />}

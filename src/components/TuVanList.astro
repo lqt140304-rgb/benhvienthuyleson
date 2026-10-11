@@ -1,7 +1,7 @@
 ---
-import TrangTri from './TrangTri.astro';
 // Danh sách bài tư vấn, dùng chung cho /tu-van/, /tu-van/cho/, /tu-van/meo/
 import Layout from '../layouts/Layout.astro';
+import TrangDau from './ls/TrangDau.astro';
 import PostCard from './PostCard.astro';
 import { u, baiTuVan } from '../lib/site';
 interface Props { loai?: 'Chó' | 'Mèo' }
@@ -9,17 +9,18 @@ const { loai } = Astro.props;
 const ds = (await baiTuVan()).filter((b) => !loai || b.data.chuyen_muc === loai);
 const tieuDe = loai ? `Cẩm nang chăm sóc ${loai.toLowerCase()}` : 'Cẩm nang thú cưng';
 const tabs = [{ ten: 'Tất cả', href: '/tu-van/', on: !loai }, { ten: 'Chó', href: '/tu-van/cho/', on: loai === 'Chó' }, { ten: 'Mèo', href: '/tu-van/meo/', on: loai === 'Mèo' }];
+const crumbs = loai
+  ? [{ ten: 'Trang chủ', href: u('/') }, { ten: 'Cẩm nang thú cưng', href: u('/tu-van/') }, { ten: loai }]
+  : [{ ten: 'Trang chủ', href: u('/') }, { ten: 'Cẩm nang thú cưng' }];
 ---
-<Layout title={tieuDe} description={`Bài tư vấn ${loai ? 'chăm sóc ' + loai.toLowerCase() : 'chăm sóc chó mèo'} do bác sĩ Bệnh viện thú y Lê Sơn biên soạn: phòng bệnh, dinh dưỡng, dấu hiệu cần đi khám.`} cam="trang_khac">
-  <section class="pagehead"><TrangTri kieu="dau-trang" /><div class="wrap">
-    <nav class="crumb" aria-label="Đường dẫn"><a href={u('/')}>Trang chủ</a><span aria-hidden="true">›</span>{loai ? <><a href={u('/tu-van/')}>Cẩm nang thú cưng</a><span aria-hidden="true">›</span><span>{loai}</span></> : <span>Cẩm nang thú cưng</span>}</nav>
-    <h1>{tieuDe}</h1>
-    <p class="lead">Kiến thức chăm sóc do bác sĩ bệnh viện biên soạn, viết dễ hiểu cho chủ nuôi.</p>
-  </div></section>
-  <section class="s" style="padding-top:16px"><div class="wrap">
-    <nav class="loc" aria-label="Chuyên mục">{tabs.map((t) => <a href={u(t.href)} aria-current={t.on ? 'page' : undefined}>{t.ten}</a>)}</nav>
-    {ds.length > 0
-      ? <div class="grid3">{ds.map((b) => <PostCard bai={b} />)}</div>
-      : <p class="empty">Bài viết đang được bác sĩ chuẩn bị. Bạn quay lại sau nhé!</p>}
-  </div></section>
+<Layout title={tieuDe} description={`Bài tư vấn ${loai ? 'chăm sóc ' + loai.toLowerCase() : 'chăm sóc chó mèo'} do bác sĩ Bệnh viện thú y Lê Sơn biên soạn: phòng bệnh, dinh dưỡng, dấu hiệu cần đi khám.`} hienTai="cam-nang" cam="trang_khac">
+  <TrangDau crumbs={crumbs} nhan="Cẩm nang" tieuDe={tieuDe} moTa="Kiến thức chăm sóc do bác sĩ bệnh viện biên soạn, viết dễ hiểu cho chủ nuôi." />
+  <section class="khoi" style="padding-top:24px">
+    <div class="khung">
+      <nav class="tp-loc" aria-label="Chuyên mục">{tabs.map((t) => <a href={u(t.href)} aria-current={t.on ? 'page' : undefined}>{t.ten}</a>)}</nav>
+      {ds.length > 0
+        ? <div class="tp-luoi">{ds.map((b) => <PostCard bai={b} />)}</div>
+        : <p class="tp-rong">Bài viết đang được bác sĩ chuẩn bị. Bạn quay lại sau nhé!</p>}
+    </div>
+  </section>
 </Layout>

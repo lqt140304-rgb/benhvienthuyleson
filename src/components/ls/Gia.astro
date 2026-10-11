@@ -1,0 +1,8 @@
+---
+// Giá hiển thị: chữ "từ" nhỏ để số tiền nổi bật; "–" là không áp dụng. Không đổi dữ liệu.
+import { giaHien } from '../../lib/ls';
+interface Props { g: string }
+const { g } = Astro.props;
+const h = giaHien(g);
+---
+{g === '–' ? <span class="trong" aria-label="không áp dụng">–</span> : <>{h.tu && <small class="tu">từ </small>}{h.so}</>}

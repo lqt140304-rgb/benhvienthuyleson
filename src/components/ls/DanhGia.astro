@@ -1,0 +1,56 @@
+---
+// Ý kiến chủ nuôi: đánh giá thật nhập tay trong trang quản trị (src/data/danh_gia.json); chưa có thì 4 thẻ MẪU ghi rõ "đánh giá mẫu". Không tự bịa tên, sao, điểm.
+import Icon from '../Icon.astro';
+import dg from '../../data/danh_gia.json';
+import tt from '../../data/thong_tin.json';
+import { choXn } from '../../lib/ls';
+const that = ((dg as any).danh_sach as any[]).filter((d) => d && d.ten && d.noi_dung);
+const mau = [
+  'Nhân viên hướng dẫn rõ từng bước khi đặt lịch, mình biết trước cần chuẩn bị gì cho bé trước khi đến.',
+  'Khu chờ gọn gàng, sạch sẽ.',
+  'Được giải thích chi phí trước khi làm dịch vụ.',
+  'Gọi điện hẹn lịch nhanh, giờ hẹn rõ ràng.',
+];
+// Link đánh giá: ưu tiên link nhập trong trang quản trị; chưa có thì dùng link Google Maps / Facebook của bệnh viện (như website cũ)
+const linkGoogle = (dg as any).link_google || tt.ban_do;
+const linkFb = (dg as any).link_facebook || (tt.facebook ? tt.facebook.split('?')[0].replace(/\/$/, '') + '/reviews' : '');
+const nguon: [string, string, string, string, string][] = [
+  ['Google Maps', 'pin', linkGoogle, (dg as any).diem_google, (dg as any).so_danh_gia_google],
+  ['Facebook', 'facebook', linkFb, (dg as any).diem_facebook, (dg as any).so_danh_gia_facebook],
+];
+const sao = (n: any) => Math.max(1, Math.min(5, Number(n) || 5));
+---
+<section class="khoi khoi-dg" id="danh-gia">
+  <div class="khung">
+    <div class="dau-khoi hang">
+      <div><p class="nhan">Ý kiến chủ nuôi</p><h2>Lắng nghe ý kiến từ chủ nuôi</h2></div>
+      {that.length ? <p class="dan-nho">Đánh giá do chủ nuôi chia sẻ, được bệnh viện nhập lại nguyên văn.</p> : <p class="dan-nho">Các thẻ dưới đây là <b>đánh giá mẫu</b> để duyệt bố cục, không phải đánh giá thật của khách hàng.</p>}
+    </div>
+    <div class="dg-luoi">
+      {that.length
+        ? that.map((d, i) => (
+            <figure class={`dg-the${i === 0 ? ' dg-noi-bat' : ''}`} data-hien>
+              <span class="dg-nhay"><Icon name="trich-dan" size={i === 0 ? 30 : 22} /></span>
+              <span class="dg-sao" role="img" aria-label={`${sao(d.sao)} trên 5 sao`}>{'★'.repeat(sao(d.sao))}{'☆'.repeat(5 - sao(d.sao))}</span>
+              <blockquote>{d.noi_dung}</blockquote>
+              <figcaption><span class="dg-nguoi"><Icon name="chan" size={16} />{d.ten}</span>{[d.be, d.nguon, d.thoi_gian].filter(Boolean).length > 0 && <span class="dg-meta">{[d.be, d.nguon, d.thoi_gian].filter(Boolean).join(' · ')}</span>}</figcaption>
+            </figure>
+          ))
+        : mau.map((t, i) => (
+            <figure class={`dg-the${i === 0 ? ' dg-noi-bat' : ''}`} data-hien>
+              <span class="dg-nhay"><Icon name="trich-dan" size={i === 0 ? 30 : 22} /></span>
+              <blockquote>{t}</blockquote>
+              <figcaption><span class="dg-nguoi"><Icon name="chan" size={16} />Chủ nuôi (mẫu)</span><span class="dg-mau-chip">Đánh giá mẫu · chỉ minh họa giao diện</span></figcaption>
+            </figure>
+          ))}
+    </div>
+    <div class="dg-that">
+      <p><b>Viết hoặc xem đánh giá thật</b><span>Chia sẻ trải nghiệm của bạn để Lê Sơn phục vụ các bé tốt hơn.</span></p>
+      <div class="dg-nut">
+        {nguon.map(([ten, icon, link, diem, so]) => link
+          ? <a class="dg-o" href={link} target="_blank" rel="noopener"><span class="dg-ic"><Icon name={icon} size={20} /></span><span><b>{ten}</b><small>{diem ? `${diem} sao${so ? ` · ${so} đánh giá` : ''} · Viết hoặc xem đánh giá` : 'Viết hoặc xem đánh giá'}</small></span><Icon name="ngoai" size={18} /></a>
+          : <span class="dg-o dg-cho" aria-disabled="true"><span class="dg-ic"><Icon name={icon} size={20} /></span><span><b>{ten}</b><small>{choXn('link-danh-gia')?.ghi_chu_hien || 'Chờ bổ sung link'}</small></span></span>)}
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,43 @@
+---
+// Sản phẩm nổi bật: khu giới thiệu + liên hệ tư vấn (không giỏ hàng, không thanh toán). ẢNH MINH HOẠ, chưa có nhãn hiệu, giá, tồn kho, công dụng hay số lượng bán.
+// Đổi tiêu đề thành "Sản phẩm bán chạy" chỉ khi bệnh viện xác nhận danh sách thật.
+import Icon from '../Icon.astro';
+import { u } from '../../lib/site';
+const sp = [
+  { ten: 'Thức ăn', tieu_de: 'Thức ăn cho thú cưng', mo_ta: 'Khám phá sản phẩm phù hợp cho bé.', tep: 'sp-thuc-an', alt: 'Ảnh minh hoạ: túi thức ăn và bát trên bệ trưng bày' },
+  { ten: 'Chăm sóc', tieu_de: 'Sản phẩm chăm sóc', mo_ta: 'Gợi ý sản phẩm chăm sóc theo nhu cầu của bé.', tep: 'sp-cham-soc', alt: 'Ảnh minh hoạ: chai chăm sóc, khăn và lược' },
+  { ten: 'Đồ chơi', tieu_de: 'Đồ chơi cho thú cưng', mo_ta: 'Gợi ý đồ chơi phù hợp với từng bé.', tep: 'sp-do-choi', alt: 'Ảnh minh hoạ: dây thừng và khúc xương đồ chơi' },
+];
+const anh = (t: string, nho = false) => u(`/img/san-pham-minh-hoa/${t}${nho ? '-nho' : ''}.jpg`);
+const dem = (i: number) => String(i).padStart(2, '0');
+---
+<section class="khoi khoi-sp" id="san-pham" aria-labelledby="sp-tieu-de">
+  <div class="khung">
+    <div class="sp-dau">
+      <span class="sp-nhan">Dành cho thú cưng</span>
+      <h2 id="sp-tieu-de">Sản phẩm nổi bật</h2>
+      <p class="sp-ghi"><Icon name="info" size={16} />Mẫu minh hoạ · chờ bệnh viện xác nhận danh sách sản phẩm</p>
+    </div>
+    <div class="sp-bang">
+      {sp.map((p, i) => (
+        <div class="sp-panel" role="tabpanel" id={`sp-p-${i}`} aria-labelledby={`sp-t-${i}`} data-sp={i}>
+          <figure class="sp-anh"><img src={anh(p.tep)} alt={p.alt} width="960" height="600" loading="lazy" decoding="async"><figcaption class="sp-chip">Ảnh minh hoạ</figcaption></figure>
+          <div class="sp-tin">
+            <p class="sp-dem"><b>{dem(i + 1)}</b> / {dem(sp.length)}</p>
+            <h3>{p.tieu_de}</h3>
+            <p class="sp-mo">{p.mo_ta}</p>
+            <a class="nut nut-chinh sp-cta" href={u('/lien-he/')}>Liên hệ tư vấn <Icon name="arrow" size={18} /></a>
+            <div class="sp-dk" role="group" aria-label="Chuyển sản phẩm">
+              <button type="button" class="nut-tron" data-sp-truoc aria-label="Sản phẩm trước"><Icon name="trai" size={20} /></button>
+              <span class="sp-cham" aria-hidden="true">{sp.map((_, k) => <i class={k === i ? 'on' : undefined}></i>)}</span>
+              <button type="button" class="nut-tron" data-sp-sau aria-label="Sản phẩm sau"><Icon name="phai" size={20} /></button>
+            </div>
+          </div>
+        </div>
+      ))}
+      <div class="sp-chon" role="tablist" aria-label="Chọn nhóm sản phẩm">
+        {sp.map((p, i) => <button type="button" class="sp-tab" role="tab" id={`sp-t-${i}`} aria-controls={`sp-p-${i}`} aria-selected={String(i === 0)} tabindex={i === 0 ? 0 : -1}><img src={anh(p.tep, true)} alt="" width="360" height="142" loading="lazy" decoding="async"><span>{p.ten}</span></button>)}
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,16 @@
+---
+// Đầu các trang phụ: đường dẫn, nhãn nhỏ, tiêu đề H1, mô tả ngắn. Là mục tiêu của "Bỏ qua đến nội dung".
+interface Props { crumbs: { ten: string; href?: string }[]; tieuDe: string; nhan?: string; moTa?: string }
+const { crumbs, tieuDe, nhan, moTa } = Astro.props;
+---
+<section class="trang-gia-dau trang-dau" id="noi-dung">
+  <div class="khung">
+    <nav class="duong-dan" aria-label="Vị trí trang">
+      {crumbs.map((c, i) => <>{i > 0 && <span aria-hidden="true">/</span>}{c.href ? <a href={c.href}>{c.ten}</a> : <span aria-current="page">{c.ten}</span>}</>)}
+    </nav>
+    {nhan && <p class="nhan">{nhan}</p>}
+    <h1 tabindex="-1">{tieuDe}</h1>
+    {moTa && <p class="dan-nho">{moTa}</p>}
+    <slot />
+  </div>
+</section>

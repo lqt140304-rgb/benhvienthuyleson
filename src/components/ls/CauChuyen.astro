@@ -1,0 +1,47 @@
+---
+// Câu chuyện điều trị: ca bệnh thật từ src/content/ca-benh (ca mới nhất làm chính, tối đa 2 ca phụ). Chưa có ca nào thì giữ khung "Chờ bổ sung".
+import Icon from '../Icon.astro';
+import { u, ngay, caBenh } from '../../lib/site';
+const ca = (await caBenh()).slice(0, 3);
+const [chinh, ...phu] = ca;
+const bia = chinh ? (chinh.data.nhay_cam ? '' : chinh.data.image || chinh.data.anh[0]?.src || '') : '';
+---
+<section class="khoi khoi-tim co-vet" id="dieu-tri">
+  <div class="khung">
+    <div class="dt">
+      {chinh && bia
+        ? <figure class="dt-anh anh-that" data-hien><img src={u(bia)} alt="" loading="lazy" width="600" height="450"></figure>
+        : (
+          <div class="dt-anh anh-cho" data-hien>
+            <span class="anh-chip">{chinh ? 'Ảnh trong trang chi tiết' : 'Chờ bổ sung'}</span>
+            <span class="anh-giua"><span class="anh-vong"><Icon name="heart-pulse" size={24} /></span><span class="anh-mota">{chinh ? 'Ca này có ảnh phẫu thuật hoặc vết thương: xem trong trang chi tiết' : <>Ảnh câu chuyện điều trị đầu tiên<br>(khi có ca bệnh được chủ nuôi cho phép chia sẻ)</>}</span></span>
+          </div>
+        )}
+      <div class="dt-chu">
+        <p class="nhan">Câu chuyện điều trị</p>
+        <h2>Câu chuyện điều trị tại Lê Sơn</h2>
+        {chinh
+          ? <>
+              <p class="dan-nho"><b>{chinh.data.title}</b>{chinh.data.tom_tat ? ` · ${chinh.data.tom_tat}` : ''}</p>
+              <p class="dan-nho dt-ngay">{chinh.data.loai} · {ngay(chinh.data.date)}{chinh.data.bac_si ? ` · Bác sĩ phụ trách: ${chinh.data.bac_si}` : ''}</p>
+              <a class="nut nut-chinh" href={u(`/nhat-ky-ca-benh/${chinh.id}/`)}>Đọc câu chuyện <Icon name="arrow" size={18} /></a>
+              <a class="nut nut-vien" href={u('/nhat-ky-ca-benh/')}>Xem các ca bệnh <Icon name="arrow" size={18} /></a>
+            </>
+          : <>
+              <p class="dan-nho">Chưa có câu chuyện nào được đăng. Câu chuyện chỉ được chia sẻ khi chủ nuôi đồng ý và bác sĩ cung cấp thông tin.</p>
+              <ul class="dt-cau-truc" aria-label="Mỗi câu chuyện sẽ gồm">
+                <li><Icon name="info" size={18} />Tình trạng khi bé đến viện</li>
+                <li><Icon name="stethoscope" size={18} />Quá trình thăm khám và điều trị</li>
+                <li><Icon name="check" size={18} />Kết quả, do bác sĩ xác nhận</li>
+              </ul>
+              <a class="nut nut-vien" href={u('/nhat-ky-ca-benh/')}>Xem các ca bệnh <Icon name="arrow" size={18} /></a>
+            </>}
+      </div>
+    </div>
+    <div class="dt-phu" aria-label="Câu chuyện phụ">
+      {phu.length
+        ? phu.map((c) => <a class="dt-o" data-hien href={u(`/nhat-ky-ca-benh/${c.id}/`)}><span class="dt-o-ic"><Icon name="book" size={20} /></span><span><b>{c.data.title}</b><small>{c.data.loai} · {ngay(c.data.date)}</small></span></a>)
+        : [1, 2].map(() => <div class="dt-o" data-hien><span class="dt-o-ic"><Icon name="book" size={20} /></span><span><b>Câu chuyện phụ</b><small>Chờ bổ sung khi có dữ liệu</small></span></div>)}
+    </div>
+  </div>
+</section>

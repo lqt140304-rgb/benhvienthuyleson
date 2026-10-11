@@ -1,0 +1,12 @@
+---
+// Ô đỡ icon: icon dịch vụ mới nếu có trong ánh xạ, ngược lại icon thường
+import Icon from '../Icon.astro';
+import IconDv from './IconDv.astro';
+import { ICON_DV } from '../../lib/icon-dv.mjs';
+interface Props { name: string; dv?: boolean; class?: string }
+const { name, dv = false, class: cls = '' } = Astro.props;
+const laDv = dv && (ICON_DV as Record<string, string>)[name];
+---
+{laDv
+  ? <span class={`o-ic o-ic-dv ${cls}`.trim()}><IconDv icon={name} /></span>
+  : <span class={`o-ic ${cls}`.trim()}><Icon name={name} size={22} /></span>}

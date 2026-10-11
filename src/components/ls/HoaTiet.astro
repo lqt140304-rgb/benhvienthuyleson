@@ -1,0 +1,10 @@
+---
+// Hoạ tiết thú cưng trang trí: aria-hidden, không nhận chuột / Tab; mỗi vật một kiểu chuyển động (.ht35-*)
+import { HT } from '../../lib/ls-icons';
+interface Props { loai: 'chan' | 'len' | 'xuong' | 'trai-tim' | 'duong'; mau?: string; class?: string }
+const { loai, mau = 'tim', class: cls = '' } = Astro.props;
+const buoc = [[0, 92, -60], [44, 70, -50], [92, 62, -60], [136, 36, -50], [182, 26, -60]];
+---
+{loai === 'duong'
+  ? <span class={`hoa-tiet ht35 ht35-duong ht-ngoc ${cls}`} aria-hidden="true"><svg viewBox="0 0 220 120" focusable="false">{buoc.map(([x, y, r], i) => <g class="ht35-buoc" style={`--i:${i}`} transform={`translate(${x} ${y}) rotate(${r + 90} 12 12) scale(.5)`} set:html={HT.chan} />)}</svg></span>
+  : <span class={`hoa-tiet ht35 ht35-${loai} ht-${mau} ${cls}`} aria-hidden="true"><svg viewBox="0 0 48 48" focusable="false" set:html={HT[loai]}></svg></span>}

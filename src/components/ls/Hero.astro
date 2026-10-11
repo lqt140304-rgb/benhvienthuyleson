@@ -1,0 +1,35 @@
+---
+// Hero trang chủ: tiêu đề, hai nút, dải thông tin, ô chờ ảnh nền, hoạ tiết trang trí
+import Icon from '../Icon.astro';
+import OIc from './OIc.astro';
+import HoaTiet from './HoaTiet.astro';
+import tt from '../../data/thong_tin.json';
+import { u } from '../../lib/site';
+---
+<section class="hero" id="noi-dung">
+  <div class="hero-khoi">
+    <figure class="hero-nen" aria-label="Chỗ đặt ảnh nền hero (chờ ảnh thật)">
+      <span class="anh-chip">Ảnh thực tế · sắp cập nhật</span>
+      <span class="hero-nen-ghi"><span class="anh-vong"><Icon name="camera" size={22} /></span><span>Ảnh nền hero · chờ ảnh bệnh viện cung cấp</span></span>
+    </figure>
+    <div class="hero-in">
+      <div class="hero-chu">
+        <p class="nhan">Bệnh viện thú y chó mèo<span class="an-dt"> · Thanh Xuân, Hà Nội</span></p>
+        <h1>Chăm sóc tận tâm,<br> <span class="lien">đồng hành</span> <span class="lien">cùng thú cưng.</span></h1>
+        <p class="dan">Tìm hiểu dịch vụ tại Lê Sơn và lựa chọn lịch thăm khám phù hợp với nhu cầu của bạn.</p>
+        <div class="hang-nut">
+          <a class="nut nut-chinh" href={u('/dat-lich/')}>Đặt lịch khám</a>
+          <a class="nut nut-vien" href={u('/bang-gia/')}>Xem bảng giá</a>
+        </div>
+      </div>
+      <dl class="dai-tt">
+        <div class="tt-gio"><Icon name="clock" size={20} /><dt>Giờ mở cửa</dt><dd>{tt.gio_mo_cua}</dd></div>
+        <div class="tt-sdt"><Icon name="phone" size={20} /><dt>Hotline</dt><dd><a href={`tel:${tt.dien_thoai_goi}`}>{tt.dien_thoai}</a></dd></div>
+        <div class="tt-dc"><Icon name="pin" size={20} /><dt>Địa chỉ</dt><dd>{tt.dia_chi.split(',')[0]}</dd></div>
+      </dl>
+    </div>
+    <p class="anh-ghi hero-ghi"><OIc name="stethoscope" /><span><b>Chẩn đoán ngay tại viện</b><small>Khám · Siêu âm · X-quang · Xét nghiệm</small></span></p>
+    <HoaTiet loai="chan" mau="tim" class="ht35-hero-chinh" /><HoaTiet loai="trai-tim" mau="cam" class="ht35-hero-tim" /><HoaTiet loai="len" mau="ngoc" class="ht35-hero-len" />
+    <div class="hero-tt"><button type="button" class="nut-tt" data-nut-trang-tri aria-pressed="true" hidden><Icon name="lap-lanh" size={16} /><span>Hiệu ứng trang trí</span><span class="tt-trang-thai">Đang bật</span></button></div>
+  </div>
+</section>

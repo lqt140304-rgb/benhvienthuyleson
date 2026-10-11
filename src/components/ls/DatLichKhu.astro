@@ -1,0 +1,30 @@
+---
+// Khu "Đặt lịch" ở trang chủ: quy trình 3 bước + lối vào form đặt lịch thật (/dat-lich/)
+import Icon from '../Icon.astro';
+import tt from '../../data/thong_tin.json';
+import { u } from '../../lib/site';
+---
+<section class="khoi khoi-tim" id="dat-lich">
+  <div class="khung dl">
+    <div class="dl-chu">
+      <p class="nhan">Đặt lịch</p>
+      <h2>Đặt lịch khám cho bé</h2>
+      <h3 class="buoc-dau">Quy trình tiếp nhận lịch hẹn</h3>
+      <ol class="buoc">
+        <li><span>1</span><em class="dai">Gửi yêu cầu đặt lịch</em><em class="ngan">Gửi yêu cầu</em></li>
+        <li><span>2</span><em class="dai">Nhân viên liên hệ xác nhận</em><em class="ngan">Nhân viên xác nhận</em></li>
+        <li><span>3</span><em class="dai">Đưa bé đến đúng giờ hẹn</em><em class="ngan">Đưa bé đến</em></li>
+      </ol>
+      <p class="dl-luu"><Icon name="info" size={20} /><span>Yêu cầu đặt lịch sẽ được xác nhận sau khi nhân viên liên hệ.<span class="an-dt"> Lịch hẹn chưa được xác nhận chỉ bằng thao tác gửi biểu mẫu.</span></span></p>
+      <p class="dl-goi">Cần gấp? Gọi <a href={`tel:${tt.dien_thoai_goi}`}>{tt.dien_thoai}</a></p>
+    </div>
+    <div class="dl-form dl-loi-vao">
+      <h3>Gửi yêu cầu đặt lịch</h3>
+      <p>Điền biểu mẫu ngắn: tên, số điện thoại, thú cưng, dịch vụ và giờ mong muốn. Nhân viên sẽ liên hệ xác nhận.</p>
+      <div class="hang-nut">
+        <a class="nut nut-chinh" href={u('/dat-lich/')}><Icon name="calendar" size={18} />Mở biểu mẫu đặt lịch</a>
+        {tt.zalo && <a class="nut nut-vien" href={tt.zalo} target="_blank" rel="noopener"><Icon name="chat" size={18} />Nhắn Zalo</a>}
+      </div>
+    </div>
+  </div>
+</section>

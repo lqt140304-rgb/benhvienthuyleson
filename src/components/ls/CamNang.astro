@@ -1,0 +1,49 @@
+---
+// Cẩm nang: dải thẻ trượt. Gồm 2 chuyên mục thật (Chó, Mèo), bài viết thật từ src/content/tu-van (bài nổi bật đứng đầu); thiếu thì bù thẻ "Bài viết mẫu · chờ bổ sung" cho đủ dải.
+import Icon from '../Icon.astro';
+import HoaTiet from './HoaTiet.astro';
+import DaiNut from './DaiNut.astro';
+import { u, ngay, baiTuVan } from '../../lib/site';
+const bai = await baiTuVan();
+const sapXep = [...bai.filter((b) => b.data.noi_bat), ...bai.filter((b) => !b.data.noi_bat)].slice(0, 8);
+type The = { mau?: boolean; nhom: string; tieu_de: string; mo_ta: string; href: string; doc: string; icon: string; mau_nen: string; anh?: string };
+const the: The[] = [
+  { nhom: 'Chuyên mục', tieu_de: 'Chăm sóc chó', mo_ta: 'Phòng bệnh, dinh dưỡng, dấu hiệu cần đưa bé đi khám.', href: u('/tu-van/cho/'), doc: 'Xem chuyên mục', icon: 'dog', mau_nen: 'tim' },
+  { nhom: 'Chuyên mục', tieu_de: 'Chăm sóc mèo', mo_ta: 'Mèo con, mèo trưởng thành, tiêm phòng, triệt sản.', href: u('/tu-van/meo/'), doc: 'Xem chuyên mục', icon: 'cat', mau_nen: 'cam' },
+  ...sapXep.map((b): The => ({ nhom: `${b.data.noi_bat ? 'Bài nổi bật · ' : ''}${b.data.chuyen_muc}`, tieu_de: b.data.title, mo_ta: b.data.description || ngay(b.data.date), href: u(`/tu-van/${b.id}/`), doc: 'Đọc bài viết', icon: b.data.chuyen_muc === 'Chó' ? 'dog' : 'cat', mau_nen: b.data.chuyen_muc === 'Chó' ? 'ngoc' : 'cam', anh: b.data.image })),
+];
+const mau: [string, string, string][] = [['Tiêm phòng', 'syringe', 'ngoc'], ['Grooming', 'scissors', 'cam'], ['Triệt sản', 'scalpel', 'tim'], ['Gửi nội trú', 'bed', 'ngoc']];
+for (let i = 0; the.length < 6 && i < mau.length; i++) {
+  const [nhom, icon, mau_nen] = mau[i];
+  the.push({ mau: true, nhom, tieu_de: 'Bài viết đang chờ bổ sung', mo_ta: 'Nội dung sẽ do bệnh viện cung cấp.', href: u('/tu-van/'), doc: 'Xem trang Cẩm nang', icon, mau_nen });
+}
+const coMau = the.some((t) => t.mau);
+---
+<section class="khoi khoi-kem co-ht" id="cam-nang">
+  <HoaTiet loai="len" mau="cam" class="ht35-cn-len" />
+  <div class="khung">
+    <div class="dau-khoi hang cn-dau">
+      <div><p class="nhan">Cẩm nang</p><h2>Cẩm nang chăm sóc thú cưng</h2>{coMau && <p class="dan-nho">Các thẻ có nhãn “Bài viết mẫu” là chỗ dành cho bài viết sắp đăng.</p>}</div>
+      <DaiNut ma="cn" nhomNut="Điều khiển dải bài viết" truoc="Bài trước" sau="Bài sau" />
+    </div>
+  </div>
+  <div class="cn-dai" id="cn-dai" role="region" aria-roledescription="dải bài viết" aria-label="Bài viết cẩm nang">
+    <div class="cn-ray" id="cn-ray">
+      {the.map((b, i) => (
+        <article class={`cn-the${b.mau ? ' cn-mau' : ''}`} data-ma={`cn-${i}`}>
+          <div class={`cn-hinh cn-hinh-${b.mau_nen}`}>
+            {b.mau && <span class="cn-mau-chip">Bài viết mẫu · chờ bổ sung</span>}
+            {b.anh ? <img src={u(b.anh)} alt="" loading="lazy" width="400" height="300"> : <Icon name={b.icon} size={34} />}
+          </div>
+          <div class="cn-noi">
+            <small>{b.nhom}</small>
+            <h3>{b.tieu_de}</h3>
+            <p>{b.mo_ta}</p>
+            <a class="cn-doc" href={b.href}>{b.doc} <Icon name="arrow" size={16} /></a>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+  <div class="khung cn-cuoi"><a class="link-mui" href={u('/tu-van/')}>Tất cả bài viết cẩm nang <Icon name="arrow" size={18} /></a></div>
+</section>

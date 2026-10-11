@@ -1,0 +1,20 @@
+---
+// Chân trang: logo, liên kết nhanh, liên hệ, nút bật/tắt hiệu ứng trang trí
+import Icon from '../Icon.astro';
+import tt from '../../data/thong_tin.json';
+import { u } from '../../lib/site';
+import { menuChinh } from '../../lib/menu';
+interface Props { trang: 'chu' | 'khac' }
+const { trang } = Astro.props;
+const menu = menuChinh();
+---
+<footer class="chan">
+  <div class="khung chan-in">
+    <div class="chan-logo"><img src={u('/img/logo.jpg')} alt="" width="44" height="44"><div><small>Bệnh viện thú y</small><b>Lê Sơn</b><span>{tt.dia_chi}</span></div></div>
+    <nav class="chan-menu" aria-label="Liên kết chân trang">
+      {menu.map((m) => <a href={trang === 'chu' && m.hrefChu ? m.hrefChu : m.href}>{m.ten}</a>)}
+    </nav>
+    <div class="chan-lh"><b>Liên hệ</b><a href={`tel:${tt.dien_thoai_goi}`}>{tt.dien_thoai}</a><span>{tt.gio_mo_cua}</span>{tt.zalo && <a href={tt.zalo} target="_blank" rel="noopener">Zalo</a>}{tt.facebook && <a href={tt.facebook} target="_blank" rel="noopener">Facebook</a>}</div>
+  </div>
+  <div class="khung chan-ban"><p>© {new Date().getFullYear()} {tt.ten}<span class="chan-phap">Chính sách bảo mật · Điều khoản sử dụng: chờ bệnh viện cung cấp</span><a class="chan-nv" href={u('/nhan-vien/')}>Khu nhân viên</a></p><button type="button" class="nut-tt" data-nut-trang-tri aria-pressed="true" hidden><Icon name="lap-lanh" size={16} /><span>Hiệu ứng trang trí</span><span class="tt-trang-thai">Đang bật</span></button></div>
+</footer>

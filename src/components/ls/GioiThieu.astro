@@ -1,0 +1,26 @@
+---
+// Giới thiệu ngắn ở trang chủ: ảnh (chờ ảnh thật nếu chưa có) + 3 điểm nổi bật
+import Icon from '../Icon.astro';
+import AnhCho from './AnhCho.astro';
+import tt from '../../data/thong_tin.json';
+import { u } from '../../lib/site';
+const ngan = tt.gioi_thieu_ngan || 'Lê Sơn là bệnh viện thú y dành cho chó mèo tại Thanh Xuân, Hà Nội. Khám, chẩn đoán và chăm sóc được thực hiện tại cùng một nơi.';
+---
+<section class="khoi" id="gioi-thieu">
+  <div class="khung ve">
+    {tt.anh_tap_the
+      ? <figure class="anh-that ve-anh" data-hien><img src={u(tt.anh_tap_the)} alt={`Đội ngũ ${tt.ten}`} loading="lazy" width="600" height="450"></figure>
+      : <AnhCho class="ve-anh" goiY="Ảnh không gian đón tiếp, phòng khám" hien />}
+    <div class="ve-chu">
+      <p class="nhan">Giới thiệu</p>
+      <h2>Giới thiệu Bệnh viện thú y Lê Sơn</h2>
+      <p class="dan-nho">{ngan}</p>
+      <ol class="diem">
+        <li data-hien><span>01</span><div><b>Chẩn đoán tại viện</b><p>Siêu âm, X-quang và các xét nghiệm thường dùng.</p></div></li>
+        <li data-hien><span>02</span><div><b>Từ phòng bệnh đến phẫu thuật</b><p>Tiêm phòng, triệt sản, phẫu thuật và gửi nội trú.</p></div></li>
+        <li data-hien><span>03</span><div><b>Tham khảo chi phí trước khi đến</b><p>Bảng giá công khai theo nhóm dịch vụ và cân nặng.</p></div></li>
+      </ol>
+      <a class="link-mui" href={u('/gioi-thieu/')}>Tìm hiểu thêm về bệnh viện <Icon name="arrow" size={18} /></a>
+    </div>
+  </div>
+</section>

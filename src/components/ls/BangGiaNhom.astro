@@ -1,0 +1,48 @@
+---
+// Nội dung giá của một nhóm dịch vụ: bảng theo cân nặng (điện thoại: từng mức mở ra được), hạng mục, giảm gửi dài ngày, phụ phí ngoài giờ, ghi chú.
+import Icon from '../Icon.astro';
+import Gia from './Gia.astro';
+import pp from '../../data/phu_phi.json';
+import tt from '../../data/thong_tin.json';
+import { gia } from '../../lib/site';
+import { tachBang, nhanGiaMuc } from '../../lib/ls';
+import type { DV } from '../../lib/ls';
+interface Props { d: DV }
+const { d } = Astro.props;
+const bang = d.bang.cot.length ? tachBang(d) : [];
+---
+{bang.map((b) => (
+  <>
+    {b.tieu_de && <h4 class="bg-phu">{b.tieu_de}</h4>}
+    <div class="bg-bang"><table>
+      <thead><tr><th scope="col">{d.bang.tieu_de_dong || 'Cân nặng'}</th>{b.cot.map((j) => <th scope="col">{d.bang.cot[j]}</th>)}</tr></thead>
+      <tbody>{d.bang.dong.map((r) => <tr><th scope="row">{r.nhan}</th>{b.cot.map((j) => <td><Gia g={r.gia[j]} /></td>)}</tr>)}</tbody>
+    </table></div>
+    <div class="bg-the">{d.bang.dong.map((r) => (
+      <details class="bg-kg"><summary><span>{r.nhan}</span><Icon name="xuong" size={18} /></summary>
+        <dl>{b.cot.filter((j) => r.gia[j] !== '–').map((j) => <div><dt>{d.bang.cot[j]}</dt><dd><Gia g={r.gia[j]} /></dd></div>)}</dl>
+      </details>
+    ))}</div>
+  </>
+))}
+{d.hang_muc.length > 0 && (
+  <ul class="bg-ds">
+    {d.hang_muc.map((m) => (
+      <li><span class="bg-ten">{m.ten}</span>{m.gia ? <b class="gia"><Gia g={m.gia} /></b> : <span class="nhan-gia">{nhanGiaMuc(m)}</span>}{m.ghi_chu && <small class="bg-ghi-dong">{m.ghi_chu}</small>}</li>
+    ))}
+  </ul>
+)}
+{d.giam_dai_ngay.length > 0 && (
+  <div class="bg-giam"><b>Gửi dài ngày được giảm</b><ul>{d.giam_dai_ngay.map((g) => <li><span>{g.nhan}</span><b>−{g.giam}%</b></li>)}</ul></div>
+)}
+{d.cap_cuu && (
+  <>
+    <h4 class="bg-phu">Phụ phí khám ngoài giờ</h4>
+    <ul class="bg-ds">
+      {pp.kham_ngoai_gio.map((k) => <li><span class="bg-ten">Khám ngoài giờ {k.tu} – {k.den}</span><b class="gia">+{gia(k.gia)}</b></li>)}
+      <li><span class="bg-ten">Phụ phí cấp cứu ngoài giờ</span><span class="nhan-gia">{tt.phu_phi_cap_cuu_ngoai_gio || 'Gọi để biết mức'}</span></li>
+    </ul>
+  </>
+)}
+{!d.bang.cot.length && !d.hang_muc.length && !d.cap_cuu && <p class="nhan-gia">Đang cập nhật</p>}
+{d.ghi_chu && <p class="bg-ghi"><Icon name="info" size={18} /><span>{d.ghi_chu}</span></p>}

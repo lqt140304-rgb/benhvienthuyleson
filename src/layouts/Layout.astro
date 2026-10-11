@@ -1,7 +1,10 @@
 ---
-// Khung chung mọi trang: thẻ SEO, đầu trang kiểu báo, chân trang, thanh nút điện thoại, bé Cam
-import '../styles/global.css';
-import Icon from '../components/Icon.astro';
+// Khung chung mọi trang (giao diện mới): thẻ SEO, đầu trang, chân trang, thanh liên hệ nhanh, bé Cam, script giao diện.
+import '../styles/le-son.css';
+import '../styles/trang-phu.css';
+import Header from '../components/ls/Header.astro';
+import Footer from '../components/ls/Footer.astro';
+import ThanhDuoi from '../components/ls/ThanhDuoi.astro';
 import Cam from '../components/Cam.astro';
 import tt from '../data/thong_tin.json';
 import { u } from '../lib/site';
@@ -13,24 +16,17 @@ interface Props {
   noindex?: boolean;
   cam?: string;
   article?: boolean;
+  /** 'chu' = trang chủ (mục menu cuộn tới khu trong trang); 'khac' = các trang còn lại */
+  trang?: 'chu' | 'khac';
+  /** Mục menu của trang hiện tại (xem lib/menu.ts) */
+  hienTai?: string;
 }
-const { title, description, image, noindex = false, cam = 'trang_khac', article = false } = Astro.props;
+const { title, description, image, noindex = false, cam = 'trang_khac', article = false, trang = 'khac', hienTai = '' } = Astro.props;
 
 const tieuDe = title ? `${title} | ${tt.ten}` : `${tt.ten} – Khám chữa bệnh, tư vấn chăm sóc chó mèo`;
 const moTa = description || `Khám, tiêm phòng, phẫu thuật, spa, nội trú và cấp cứu 24/24 cho chó mèo tại ${tt.dia_chi}. Đọc bài tư vấn chăm sóc từ bác sĩ thú y.`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const anh = new URL(image ? u(image) : u('/img/og.jpg'), Astro.site);
-const path = Astro.url.pathname;
-const dangO = (p: string) => (p === '/' ? path === u('/') : path.startsWith(u(p)));
-
-const menu = [
-  { href: '/', ten: 'Trang chủ' },
-  { href: '/tu-van/', ten: 'Cẩm nang thú cưng' },
-  { href: '/nhat-ky-ca-benh/', ten: 'Nhật ký ca bệnh' },
-  { href: '/dich-vu/', ten: 'Dịch vụ & giá' },
-  { href: '/gioi-thieu/', ten: 'Giới thiệu' },
-  { href: '/lien-he/', ten: 'Liên hệ' },
-];
 
 const schema = {
   '@context': 'https://schema.org',
@@ -43,13 +39,18 @@ const schema = {
   image: new URL(u('/img/logo.jpg'), Astro.site).href,
   hasMap: tt.ban_do,
 };
+// Dữ liệu cho trợ lý Bé Cam (thông tin thật của bệnh viện + đường dẫn đã ghép base)
+const duLieuCam = {
+  dien_thoai: tt.dien_thoai, tel: `tel:${tt.dien_thoai_goi}`, gio: tt.gio_mo_cua, dia_chi: tt.dia_chi, ban_do: tt.ban_do,
+  href: { 'dich-vu': u('/dich-vu/'), 'bang-gia': u('/bang-gia/'), 'dat-lich': u('/dat-lich/'), 'lien-he': u('/lien-he/') },
+};
 ---
 <!doctype html>
 <html lang="vi">
 <head>
 <meta charset="utf-8">
-<script is:inline>if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('js');</script>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script is:inline>(function(){var h=document.documentElement;if('IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches){h.classList.add('co-hieu-ung');setTimeout(function(){if(!window.__hieuUngSan)h.classList.remove('co-hieu-ung');},3000);}})();</script>
 <title>{tieuDe}</title>
 <meta name="description" content={moTa}>
 <link rel="canonical" href={canonical.href}>
@@ -62,117 +63,25 @@ const schema = {
 <meta property="og:url" content={canonical.href}>
 <meta property="og:image" content={anh.href}>
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#67236C">
+<meta name="theme-color" content="#5A1E5E">
 <link rel="icon" type="image/png" href={u('/img/favicon.png')}>
 <link rel="apple-touch-icon" href={u('/img/apple-touch-icon.png')}>
 <link rel="sitemap" href={u('/sitemap-index.xml')}>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&display=swap">
 <script type="application/ld+json" set:html={JSON.stringify(schema)}></script>
 </head>
-<body>
-<a class="skip" href="#noi-dung">Bỏ qua menu</a>
-
-<div class="head-top">
-  <div class="wrap head-top-in">
-    <span class="head-info"><Icon name="clock" size={16} />Mở cửa {tt.gio_mo_cua} hằng ngày · Trực cấp cứu 24/24</span>
-    <a href={`tel:${tt.dien_thoai_goi}`}><Icon name="phone" size={16} />{tt.dien_thoai}</a>
-  </div>
-</div>
-<header class="head">
-  <div class="wrap head-in">
-    <a class="brand" href={u('/')}>
-      <img src={u('/img/logo.jpg')} alt="" width="56" height="56">
-      <span class="brand-name">Bệnh viện thú y Lê Sơn<small class="brand-tag">101 Khuất Duy Tiến · Thanh Xuân</small></span>
-    </a>
-    <nav class="nav" id="menu-chinh" aria-label="Menu chính">
-      {menu.map((m) => <a href={u(m.href)} aria-current={dangO(m.href) ? 'page' : undefined}>{m.ten}</a>)}
-    </nav>
-    <a class="btn btn-cta head-cta" href={u('/dat-lich/')}><Icon name="calendar" size={18} />Đặt lịch khám</a>
-    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu-chinh" data-menu>
-      <Icon name="menu" size={22} /><span>Menu</span>
-    </button>
-  </div>
-</header>
-
-<main id="noi-dung">
+<body data-trang={trang}>
+<a class="bo-qua" href="#noi-dung">Bỏ qua đến nội dung</a>
+<Header trang={trang} hienTai={hienTai} />
+<main id="top">
   <slot />
 </main>
-
-<footer class="foot">
-  <div class="wrap foot-cols">
-    <div>
-      <p class="foot-name">{tt.ten}</p>
-      <p>{tt.dia_chi}</p>
-      <a class="foot-link" href={tt.ban_do} target="_blank" rel="noopener">Chỉ đường Google Maps <Icon name="arrow" size={16} /></a>
-    </div>
-    <div>
-      <p class="foot-h">Giờ làm việc</p>
-      <p>{tt.gio_mo_cua} hằng ngày<br>Trực cấp cứu 24/24</p>
-      <a class="foot-link" href={`tel:${tt.dien_thoai_goi}`}><Icon name="phone" size={16} />{tt.dien_thoai}</a>
-    </div>
-    <div>
-      <p class="foot-h">Kết nối</p>
-      <ul class="foot-list">
-        {tt.zalo && <li><a href={tt.zalo} target="_blank" rel="noopener">Nhắn Zalo</a></li>}
-        {tt.facebook && <li><a href={tt.facebook} target="_blank" rel="noopener">Facebook</a></li>}
-        <li><a href={u('/dat-lich/')}>Đặt lịch khám</a></li>
-        <li><button type="button" class="linklike" data-cam-bat hidden>Gọi bé Cam</button></li>
-        <li><a class="foot-muted" href={u('/nhan-vien/')}>Khu nhân viên</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="wrap foot-copy">© {new Date().getFullYear()} {tt.ten}</div>
-</footer>
-
-<nav class="mbar" aria-label="Liên hệ nhanh">
-  <a href={`tel:${tt.dien_thoai_goi}`}><Icon name="phone" size={22} />Gọi</a>
-  <a class="mbar-cta" href={u('/dat-lich/')}><Icon name="calendar" size={22} />Đặt lịch</a>
-  {tt.zalo
-    ? <a href={tt.zalo} target="_blank" rel="noopener"><Icon name="chat" size={22} />Zalo</a>
-    : <a href={tt.ban_do} target="_blank" rel="noopener"><Icon name="map" size={22} />Bản đồ</a>}
-</nav>
-
+<Footer trang={trang} />
+<ThanhDuoi />
 <Cam trang={cam} />
-
-<script is:inline>
-  // Hiện dần các khối nội dung khi khách cuộn tới; thẻ cùng hàng hiện lần lượt
-  (function () {
-    if (!document.documentElement.classList.contains('js')) return;
-    var ds = document.querySelectorAll('main .sh, main .card, main .dv, main .dv-list > *, main .loai > a, main .ve > *, main .cols2 > *, main .empty, main .bang-wrap, main .so-lieu > div, main .dg-nguon, main .dg-the, main .lo-hien');
-    var io = new IntersectionObserver(function (es) {
-      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('hien'); io.unobserve(e.target); } });
-    }, { rootMargin: '0px 0px -8% 0px' });
-    // Cuộn nhanh có thể bỏ qua khối: khối nào đã nằm trên mép dưới màn hình thì cho hiện luôn
-    var cho = false;
-    addEventListener('scroll', function () {
-      if (cho) return; cho = true;
-      setTimeout(function () {
-        cho = false;
-        document.querySelectorAll('.lo:not(.hien)').forEach(function (el) { if (el.getBoundingClientRect().top < innerHeight) { el.classList.add('hien'); io.unobserve(el); } });
-      }, 150);
-    }, { passive: true });
-    ds.forEach(function (el) {
-      if (el.closest('.hero') || el.parentElement.closest('.lo')) return;
-      var anh = el.parentElement ? Array.prototype.filter.call(el.parentElement.children, function (c) { return c.matches('.card, .dv-list > *, .loai > a, .cols2 > *, .so-lieu > div, .dg-nguon, .dg-the'); }) : [];
-      var i = anh.indexOf(el);
-      if (i > 0) el.style.transitionDelay = (i % 4) * 90 + 'ms';
-      el.classList.add('lo');
-      io.observe(el);
-    });
-  })();
-</script>
-
-<script>
-  // Menu trên điện thoại
-  const nut = document.querySelector<HTMLButtonElement>('[data-menu]');
-  const nav = document.getElementById('menu-chinh');
-  nut?.addEventListener('click', () => {
-    const mo = nut.getAttribute('aria-expanded') !== 'true';
-    nut.setAttribute('aria-expanded', String(mo));
-    nav?.classList.toggle('mo', mo);
-  });
-</script>
+<script type="application/json" id="du-lieu-cam" set:html={JSON.stringify(duLieuCam).replace(/</g, '\\u003c')}></script>
+<script>import '../scripts/ui.js';</script>
 </body>
 </html>

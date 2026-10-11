@@ -1,0 +1,46 @@
+---
+// Dịch vụ nổi bật (bento): thẻ lớn Khám + 4 thẻ nhỏ + thẻ "Xem tất cả". Chọn theo trường icon trong dữ liệu dịch vụ.
+import Icon from '../Icon.astro';
+import OIc from './OIc.astro';
+import HoaTiet from './HoaTiet.astro';
+import Cong from './Cong.astro';
+import { u } from '../../lib/site';
+import { dichVuLS, chonTrangChu, cauDau } from '../../lib/ls';
+const { kham, nho, conLai, giaThe } = chonTrangChu(dichVuLS());
+const goiTen = conLai.map((d) => d.ten).join(', ');
+---
+<section class="khoi khoi-kem co-cong" id="dich-vu">
+  <Cong class="cong-tren" />
+  <HoaTiet loai="xuong" mau="cam" class="ht35-dv-xuong" /><HoaTiet loai="trai-tim" mau="tim" class="ht35-dv-tim" />
+  <div class="khung">
+    <div class="dau-khoi hang">
+      <div><p class="nhan">Dịch vụ</p><h2>Dịch vụ nổi bật</h2></div>
+      <p class="dan-nho">Giá tham khảo theo bảng giá hiện hành của bệnh viện.</p>
+    </div>
+    <div class="bento">
+      {kham && (
+        <a class="the-dv lon" data-hien href={u(`/bang-gia/#nhom-${kham.id}`)}>
+          <span class="lon-chu">
+            <OIc name={kham.icon} dv />
+            <h3>{kham.ten}</h3>
+            <p>{cauDau(kham.mo_ta)} Bác sĩ báo phí khám bệnh sau khi khám.</p>
+            <span class="dv-di">Xem bảng giá khám <Icon name="arrow" size={18} /></span>
+          </span>
+        </a>
+      )}
+      {nho.map((d) => (
+        <a class="the-dv nho" data-hien href={u(`/bang-gia/#nhom-${d.id}`)}>
+          <OIc name={d.icon} dv />
+          <h3>{d.ten}</h3>
+          <p>{cauDau(d.mo_ta)}</p>
+          <span class="dv-gia">{giaThe(d)}<Icon name="arrow" size={18} /></span>
+        </a>
+      ))}
+      <a class="the-dv tat-ca" data-hien href={u('/dich-vu/')}>
+        <span class="o-ic"><Icon name="luoi" size={22} /></span>
+        <span class="tc-chu"><b>Xem tất cả dịch vụ</b><small>{goiTen ? `${goiTen} cùng bảng giá đầy đủ` : 'Bảng giá đầy đủ'}</small></span>
+        <Icon name="arrow" size={22} />
+      </a>
+    </div>
+  </div>
+</section>

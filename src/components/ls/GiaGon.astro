@@ -1,0 +1,33 @@
+---
+// Bảng giá tham khảo rút gọn ở trang chủ: 5 nhóm, giá lấy NGUYÊN từ dữ liệu, kèm điều kiện ngắn để không hiểu sai
+import Icon from '../Icon.astro';
+import IconDv from './IconDv.astro';
+import { u } from '../../lib/site';
+import { ICON_DV } from '../../lib/icon-dv.mjs';
+import { dichVuLS, chonTrangChu } from '../../lib/ls';
+const { giaGon } = chonTrangChu(dichVuLS());
+---
+<section class="khoi" id="bang-gia">
+  <div class="khung">
+    <div class="dau-khoi hang">
+      <div><p class="nhan">Bảng giá</p><h2>Bảng giá tham khảo</h2></div>
+      <p class="dan-nho">Năm nhóm dịch vụ chính. Giá chi tiết theo cân nặng, loài và hạng mục có ở trang Bảng giá.</p>
+    </div>
+    <ul class="gia-gon">
+      {giaGon.map((g) => (
+        <li>
+          <a class="gia-gon-the" href={u(`/bang-gia/#nhom-${g.nhom.id}`)} aria-label={`${g.ten}${g.gia ? ', ' + g.gia : ''}: ${g.dk}. ${g.cta}`}>
+            <span class="gia-gon-ic">{(ICON_DV as Record<string, string>)[g.icon] ? <IconDv icon={g.icon} size={36} /> : <Icon name={g.icon} size={22} />}</span>
+            <span class="gia-gon-ten"><b>{g.ten}</b><small>{g.dk}</small></span>
+            <span class="gia-gon-phai">{g.gia && <b class="gia-gon-gia">{g.gia}</b>}<span class="gia-gon-cta"><span class="gia-gon-chu">{g.cta}</span> <Icon name="arrow" size={16} /></span></span>
+          </a>
+          {g.phu && <a class="gia-gon-phu" href={u(`/bang-gia/#nhom-${g.phu.nhom.id}`)}>{g.phu.chu} <Icon name="arrow" size={16} /></a>}
+        </li>
+      ))}
+    </ul>
+    <div class="bg-cuoi">
+      <p><Icon name="info" size={18} /><span>Chi phí thực tế phụ thuộc cân nặng, tình trạng của bé và chỉ định của bác sĩ. Chưa gồm thuốc, vật tư phát sinh.</span></p>
+      <a class="nut nut-chinh" href={u('/bang-gia/')}>Xem bảng giá đầy đủ <Icon name="arrow" size={18} /></a>
+    </div>
+  </div>
+</section>

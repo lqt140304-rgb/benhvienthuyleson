@@ -1,0 +1,6 @@
+---
+// Đường cong mềm ở ranh giới section (màu = nền section kề bên)
+interface Props { class?: string }
+const { class: cls = '' } = Astro.props;
+---
+<svg class={`cong ${cls}`} viewBox="0 0 1440 48" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M0 48V22C240 4 480 0 720 12s480 30 720 10v26Z"/></svg>

@@ -1,0 +1,16 @@
+---
+// Thanh liên hệ nhanh cố định ở đáy màn hình điện thoại / máy tính bảng
+import Icon from '../Icon.astro';
+import BeCamHinh from './BeCamHinh.astro';
+import cam from '../../data/cam.json';
+import tt from '../../data/thong_tin.json';
+import { u } from '../../lib/site';
+---
+<nav class="thanh-duoi" aria-label="Liên hệ nhanh">
+  <a href={`tel:${tt.dien_thoai_goi}`}><Icon name="phone" size={22} /><span>Gọi</span></a>
+  <a class="td-chinh" href={u('/dat-lich/')}><Icon name="calendar" size={22} /><span>Đặt lịch</span></a>
+  {tt.zalo
+    ? <a href={tt.zalo} target="_blank" rel="noopener"><Icon name="chat" size={22} /><span>Zalo</span></a>
+    : <a href={tt.ban_do} target="_blank" rel="noopener"><Icon name="dinhvi" size={22} /><span>Bản đồ</span></a>}
+  {cam.bat && <button type="button" class="td-cam" id="cam-nut-duoi" aria-expanded="false" aria-controls="cam-bang" aria-haspopup="dialog"><BeCamHinh /><span>Bé Cam</span></button>}
+</nav>

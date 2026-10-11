@@ -1,0 +1,42 @@
+---
+// Đội ngũ bác sĩ: dải thẻ trượt. Dữ liệu thật từ src/data/bac_si.json (họ tên, chức vụ, ảnh); chưa có thì 6 thẻ MẪU "chờ bổ sung" (không tên, không bằng cấp).
+import Icon from '../Icon.astro';
+import HoaTiet from './HoaTiet.astro';
+import VetChan from './VetChan.astro';
+import DaiNut from './DaiNut.astro';
+import bs from '../../data/bac_si.json';
+import { u } from '../../lib/site';
+const that = ((bs as any).danh_sach as any[]).filter((b) => b && b.ten).map((b) => ({ ten: b.ten, vai_tro: b.chuc_vu || '', mo_ta: '', anh: b.anh || '', mau: false }));
+const the = that.length ? that : [0, 1, 2, 3, 4, 5].map((i) => ({ mau: true, anh: '', ten: 'Chờ bổ sung tên', vai_tro: i % 3 === 2 ? 'Nhân viên chăm sóc (mẫu)' : 'Bác sĩ thú y (mẫu)', mo_ta: 'Thông tin chuyên môn sẽ cập nhật khi được xác nhận.' }));
+const nen = ['tim', 'cam', 'ngoc'];
+---
+<section class="khoi khoi-dn co-vet" id="doi-ngu">
+  <VetChan />
+  <HoaTiet loai="duong" class="ht35-dn-duong" />
+  <div class="khung">
+    <div class="dau-khoi hang cn-dau">
+      <div><p class="nhan">Đội ngũ</p><h2>Đội ngũ bác sĩ</h2><p class="dan-nho">Những người trực tiếp thăm khám, chăm sóc các bé mỗi ngày. {that.length ? '' : 'Ảnh và thông tin chuyên môn của từng người sẽ được cập nhật khi bệnh viện cung cấp và xác nhận.'}</p></div>
+      <DaiNut ma="dn" nhomNut="Điều khiển dải đội ngũ" truoc="Người trước" sau="Người sau" />
+    </div>
+  </div>
+  <div class="cn-dai dn-dai" id="dn-dai" role="region" aria-roledescription="dải thẻ" aria-label="Đội ngũ bác sĩ">
+    <div class="cn-ray" id="dn-ray">
+      {the.map((b, i) => (
+        <article class={`cn-the dn-the${b.mau ? ' dn-mau' : ''}`} data-ma={`dn-${i}`}>
+          <div class={`dn-chan-dung dn-nen-${nen[i % 3]}`}>
+            {b.anh
+              ? <img src={u(b.anh)} alt="" loading="lazy">
+              : <svg class="dn-hinh" viewBox="0 0 120 120" aria-hidden="true" focusable="false"><circle cx="60" cy="46" r="22" fill="#fff" fill-opacity=".85"/><path d="M22 112c4-24 20-36 38-36s34 12 38 36Z" fill="#fff" fill-opacity=".85"/><path d="M48 80v10a12 12 0 0 0 24 0" fill="none" stroke="#5A1E5E" stroke-width="3" stroke-linecap="round"/><circle cx="72" cy="96" r="4" fill="#7CC3BE"/></svg>}
+            {b.mau && <span class="cn-mau-chip">Bác sĩ mẫu · chờ bổ sung thông tin</span>}
+          </div>
+          <div class="cn-noi">
+            <small>{b.vai_tro}</small>
+            <h3>{b.ten}</h3>
+            <p>{b.mo_ta}</p>
+            <a class="cn-doc" href={u('/gioi-thieu/')}>Giới thiệu bệnh viện <Icon name="arrow" size={16} /></a>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

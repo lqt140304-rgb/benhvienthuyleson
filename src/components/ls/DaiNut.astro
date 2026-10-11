@@ -1,0 +1,11 @@
+---
+// Cụm nút điều khiển dải thẻ trượt: Trước · Tạm dừng / Tiếp tục (chỉ icon) · Sau
+import Icon from '../Icon.astro';
+interface Props { ma: string; nhomNut: string; truoc: string; sau: string }
+const { ma, nhomNut, truoc, sau } = Astro.props;
+---
+<div class="cn-dk" role="group" aria-label={nhomNut}>
+  <button type="button" class="nut-tron" id={`${ma}-truoc`} aria-label={truoc} aria-controls={`${ma}-ray`}><Icon name="trai" size={20} /></button>
+  <button type="button" class="nut-tron nut-dung" id={`${ma}-dung`} aria-controls={`${ma}-ray`}><span class="ic-dung"><Icon name="dung" size={18} /></span><span class="ic-chay"><Icon name="chay" size={18} /></span><span class="cn-dung-chu">Tạm dừng</span></button>
+  <button type="button" class="nut-tron" id={`${ma}-sau`} aria-label={sau} aria-controls={`${ma}-ray`}><Icon name="phai" size={20} /></button>
+</div>
