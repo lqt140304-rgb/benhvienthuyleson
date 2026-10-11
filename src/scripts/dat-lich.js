@@ -7,7 +7,8 @@
   var form = document.getElementById('form-dat-lich'); if (!form) return;
   var $ = function (id) { return document.getElementById(id); };
   var mode = form.dataset.mode === 'that' ? 'that' : 'gia-lap';
-  var diaChi = form.dataset.endpoint || '', thoiGianCho = parseInt(form.dataset.cho, 10) || 15000;
+  var diaChi = form.dataset.endpoint || '';
+  var thoiGianCho = function () { return parseInt(form.dataset.cho, 10) || 15000; }; // đọc lúc gửi (mặc định 15 giây)
   var sdtBV = form.dataset.sdt || '', telBV = form.dataset.tel || '';
   var gui = $('m-gui'), chuNut = gui.querySelector('.nut-chu'), chu = $('form-chu'), tb = $('dl-thong-bao'), the = $('dl-nhan');
   var itChuyenDong = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -214,7 +215,7 @@
     return thatBai('chua-xac-nhan'); // phản hồi không đọc được hoặc không đúng hợp đồng: KHÔNG báo thành công
   }
   function guiThat(du) {
-    var ctl = typeof AbortController === 'function' ? new AbortController() : null, hen = setTimeout(function () { if (ctl) ctl.abort(); else thatBai('chua-xac-nhan'); }, thoiGianCho), xong = false;
+    var ctl = typeof AbortController === 'function' ? new AbortController() : null, hen = setTimeout(function () { if (ctl) ctl.abort(); else thatBai('chua-xac-nhan'); }, thoiGianCho()), xong = false;
     var ketThuc = function (f) { if (xong) return; xong = true; clearTimeout(hen); f(); };
     fetch(diaChi, { method: 'POST', body: JSON.stringify(du), headers: { 'Content-Type': 'text/plain;charset=utf-8' }, signal: ctl ? ctl.signal : undefined, redirect: 'follow' })
       .then(function (res) { return res.text().then(function (t) { return { status: res.status, text: t }; }); })
