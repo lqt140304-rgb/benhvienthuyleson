@@ -1,8 +1,8 @@
 ---
-import TrangTri from '../components/TrangTri.astro';
 // Đặt lịch: cách A (form → Google Sheet + email, kèm hoá đơn tham khảo) và cách C (nhắn Zalo)
 import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
+import TrangDau from '../components/ls/TrangDau.astro';
 import tt from '../data/thong_tin.json';
 import pp from '../data/phu_phi.json';
 import { u, gia, neo, dsDichVu } from '../lib/site';
@@ -12,16 +12,12 @@ const nhom = dv.danh_sach.filter((d) => d.dat_lich).map((d) => ({ ...d, id: neo(
 const duLieu = JSON.stringify({ nhom, pp }).replace(/</g, '\\u003c');
 const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết mức';
 ---
-<Layout title="Đặt lịch khám" description={`Đặt lịch khám, tắm, cắt tỉa, triệt sản, gửi nội trú cho chó mèo tại ${tt.ten}. Xem trước hoá đơn tham khảo.`} cam="dat_lich">
-  <section class="pagehead"><TrangTri kieu="dau-trang" /><div class="wrap">
-    <nav class="crumb" aria-label="Đường dẫn"><a href={u('/')}>Trang chủ</a><span aria-hidden="true">›</span><span>Đặt lịch</span></nav>
-    <h1>Đặt lịch cho bé</h1>
-    <p class="lead">Chọn dịch vụ và giờ hẹn, web tự tính hoá đơn tham khảo. Nhân viên sẽ gọi lại để xác nhận.</p>
-  </div></section>
+<Layout title="Đặt lịch khám" description={`Đặt lịch khám, tắm, cắt tỉa, triệt sản, gửi nội trú cho chó mèo tại ${tt.ten}. Xem trước hoá đơn tham khảo.`} cam="dat_lich" hienTai="dat-lich">
+  <TrangDau crumbs={[{ ten: 'Trang chủ', href: u('/') }, { ten: 'Đặt lịch' }]} nhan="Đặt lịch" tieuDe="Đặt lịch cho bé" moTa="Chọn dịch vụ và giờ hẹn, web tự tính hoá đơn tham khảo. Nhân viên sẽ gọi lại để xác nhận." />
 
-  <section class="s" style="padding-top:16px">
-    <div class="wrap bai">
-      <div class="bai-chinh">
+  <section class="khoi dl-cu">
+    <div class="khung tp-bai">
+      <div class="tp-bai-chinh">
         <form class="form" id="dat-lich" data-endpoint={tt.dia_chi_nhan_dat_lich} data-sdt={tt.dien_thoai} novalidate>
           <div class="f">
             <label for="f-ten">Tên chủ nuôi <span class="bb" aria-hidden="true">*</span></label>
@@ -96,18 +92,18 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết 
               <li>Phụ phí khám ngoài giờ (cộng thêm): {pp.kham_ngoai_gio.map((k, i) => <>{i > 0 && ' · '}{k.tu}–{k.den}: <b>{gia(k.gia)}</b></>)}</li>
               <li>Phụ phí cấp cứu ngoài giờ: <b>{phiCapCuu}</b></li>
             </ul>
-            <a class="btn btn-cta" href={`tel:${tt.dien_thoai_goi}`}><Icon name="phone" />Gọi ngay {tt.dien_thoai}</a>
+            <a class="nut nut-chinh" href={`tel:${tt.dien_thoai_goi}`}><Icon name="phone" />Gọi ngay {tt.dien_thoai}</a>
           </div>
           <div class="full ngoai-gio" id="spa-muon" role="alert" hidden>
             <h2><Icon name="clock" />Spa nhận lịch online đến {pp.spa_nhan_den}</h2>
             <p style="margin:0 0 12px">Sau {pp.spa_nhan_den}, bạn vui lòng gọi trước để bệnh viện sắp xếp nhân viên.</p>
-            <a class="btn btn-cta" href={`tel:${tt.dien_thoai_goi}`}><Icon name="phone" />Gọi {tt.dien_thoai}</a>
+            <a class="nut nut-chinh" href={`tel:${tt.dien_thoai_goi}`}><Icon name="phone" />Gọi {tt.dien_thoai}</a>
           </div>
 
           <div class="full ngoai-gio" id="noi-tru-ngoai-gio" role="alert" hidden>
             <h2><Icon name="clock" />Gửi / đón nội trú ngoài giờ làm việc</h2>
             <p style="margin:0 0 12px">Bệnh viện vẫn nhận gửi và trả bé ngoài 8:00 – 21:00, nhưng bạn cần <b>gọi điện hẹn trước</b> để có người đón bé.</p>
-            <a class="btn btn-cta" href={`tel:${tt.dien_thoai_goi}`}><Icon name="phone" />Gọi hẹn {tt.dien_thoai}</a>
+            <a class="nut nut-chinh" href={`tel:${tt.dien_thoai_goi}`}><Icon name="phone" />Gọi hẹn {tt.dien_thoai}</a>
           </div>
 
           <div class="full hoa-don" id="hoa-don" aria-live="polite" hidden>
@@ -123,24 +119,24 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết 
           </div>
           <div class="bay" aria-hidden="true"><label for="f-web">Để trống ô này</label><input id="f-web" name="website" tabindex="-1" autocomplete="off"></div>
           <p class="full loi-gui" id="loi-gui" role="alert" hidden></p>
-          <div class="full"><button class="btn btn-cta" id="gui" type="submit" style="width:100%"><Icon name="calendar" />Gửi yêu cầu đặt lịch</button></div>
+          <div class="full"><button class="nut nut-chinh" id="gui" type="submit" style="width:100%"><Icon name="calendar" />Gửi yêu cầu đặt lịch</button></div>
         </form>
 
         <div class="ok" id="ok" tabindex="-1" hidden>
           <h2><Icon name="check" />Đã gửi yêu cầu đặt lịch</h2>
           <p id="ok-text"></p>
           <p class="muted">Nếu cần gấp, bạn gọi {tt.dien_thoai}.</p>
-          <button class="btn btn-line" type="button" id="dat-them">Đặt thêm lịch khác</button>
+          <button class="nut nut-vien" type="button" id="dat-them">Đặt thêm lịch khác</button>
         </div>
       </div>
 
-      <aside class="bai-phu">
+      <aside class="tp-phu">
         {tt.zalo && (
           <div class="cach">
-            <span class="kicker cho">Cách khác</span>
+            <span class="tp-nhan">Cách khác</span>
             <h2>Nhắn Zalo cho bệnh viện</h2>
             <p style="margin:0">Hỏi nhanh, gửi ảnh bé, hẹn giờ trực tiếp với nhân viên.</p>
-            <a class="btn btn-tim" href={tt.zalo} target="_blank" rel="noopener"><Icon name="chat" />Nhắn Zalo</a>
+            <a class="nut nut-vien" href={tt.zalo} target="_blank" rel="noopener"><Icon name="chat" />Nhắn Zalo</a>
           </div>
         )}
         <div class="ngoai-gio">
@@ -150,7 +146,7 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết 
             {pp.kham_ngoai_gio.map((k) => <li>{k.tu} – {k.den}: <b>{gia(k.gia)}</b></li>)}
             <li>Phụ phí cấp cứu ngoài giờ: <b>{phiCapCuu}</b></li>
           </ul>
-          <a class="btn btn-cta" href={`tel:${tt.dien_thoai_goi}`}><Icon name="phone" />{tt.dien_thoai}</a>
+          <a class="nut nut-chinh" href={`tel:${tt.dien_thoai_goi}`}><Icon name="phone" />{tt.dien_thoai}</a>
         </div>
         <div class="cach">
           <h2>Sau khi gửi</h2>
@@ -165,7 +161,7 @@ const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết 
       <h2 id="tb-tieu-de"><Icon name="info" />Lưu ý phụ phí</h2>
       <div id="tb-noi-dung"></div>
       <p class="muted" style="margin:8px 0 16px">Khoản này đã được tự động cộng vào hoá đơn tham khảo.</p>
-      <button type="button" class="btn btn-cta" id="tb-dong" style="width:100%">Tôi đã hiểu</button>
+      <button type="button" class="nut nut-chinh" id="tb-dong" style="width:100%">Tôi đã hiểu</button>
     </div>
   </dialog>
 

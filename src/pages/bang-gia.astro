@@ -1,0 +1,53 @@
+---
+// Bảng giá: tab theo nhóm dịch vụ, mở thẳng một nhóm bằng /bang-gia/#nhom-<mã>. Dữ liệu giá lấy nguyên từ src/data/dich_vu.json.
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import OIc from '../components/ls/OIc.astro';
+import BangGiaNhom from '../components/ls/BangGiaNhom.astro';
+import tt from '../data/thong_tin.json';
+import { u } from '../lib/site';
+import { dichVuLS, choXn, tenNgan } from '../lib/ls';
+const dv = dichVuLS();
+const capCuuCho = choXn('cap-cuu-24-24');
+const cho = (d: (typeof dv)[number]) => d.cap_cuu && capCuuCho;
+---
+<Layout title="Bảng giá dịch vụ" description={`Bảng giá khám, xét nghiệm, grooming, triệt sản, gửi nội trú cho chó mèo tại ${tt.ten}. Giá tham khảo theo cân nặng và hạng mục.`} trang="khac" hienTai="bang-gia" cam="dich_vu">
+  <section class="trang-gia-dau" id="noi-dung">
+    <div class="khung">
+      <nav class="duong-dan" aria-label="Vị trí trang"><a href={u('/')}>Trang chủ</a><span aria-hidden="true">/</span><span aria-current="page">Bảng giá</span></nav>
+      <div class="dau-khoi hang">
+        <div><p class="nhan">Bảng giá</p><h1 id="tieu-de-gia" tabindex="-1">Bảng giá dịch vụ</h1><p class="dan-nho">Chọn một nhóm dịch vụ để xem giá theo cân nặng và hạng mục.</p></div>
+        <a class="nut nut-vien" href={u('/')}><Icon name="trai" size={18} />Về trang chủ</a>
+      </div>
+    </div>
+  </section>
+  <section class="khoi khoi-gia" id="bang-gia">
+    <div class="khung">
+      <div class="bg-tab" role="tablist" aria-label="Nhóm dịch vụ">
+        {dv.map((d, i) => (
+          <button type="button" role="tab" id={`tab-${d.id}`} aria-controls={`p-${d.id}`} aria-selected={String(i === 0)} tabindex={i === 0 ? 0 : -1}><span class="tab-dau" aria-hidden="true"><Icon name="check" size={16} /></span>{tenNgan(d.ten)}{cho(d) && <><span class="tab-cho" aria-hidden="true"></span><span class="an-chu"> (chờ xác nhận)</span></>}</button>
+        ))}
+      </div>
+      <div class="bg-noi">
+        {dv.map((d, i) => (
+          <div class="bg-panel" role="tabpanel" id={`p-${d.id}`} aria-labelledby={`tab-${d.id}`} tabindex="0" hidden={i !== 0}>
+            <div class="bg-dau">
+              <OIc name={d.icon} dv />
+              <div>
+                <h3>{d.ten}{cho(d) && <> <span class="cho-xn">Chờ xác nhận</span></>}</h3>
+                <p>{d.mo_ta}</p>
+                {cho(d) && <p class="xn-ghi"><Icon name="info" size={16} />{capCuuCho.ghi_chu_hien}</p>}
+              </div>
+            </div>
+            <BangGiaNhom d={d} />
+            {d.dat_lich && <p class="bg-dat"><a class="link-mui" href={u(`/dat-lich/?nhom=${encodeURIComponent(d.id)}`)}>Đặt lịch {d.ten.toLowerCase().replace(/ \(.*\)$/, '')} <Icon name="arrow" size={18} /></a></p>}
+          </div>
+        ))}
+      </div>
+      <div class="bg-cuoi">
+        <p><Icon name="info" size={18} /><span>Chi phí thực tế phụ thuộc cân nặng, tình trạng của bé và chỉ định của bác sĩ. Chưa gồm thuốc, vật tư phát sinh.</span></p>
+        <a class="link-mui" href={u('/dat-lich/')}>Đặt lịch khám <Icon name="arrow" size={18} /></a>
+      </div>
+    </div>
+  </section>
+</Layout>

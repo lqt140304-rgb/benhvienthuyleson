@@ -1,88 +1,33 @@
 ---
-import TrangTri from '../components/TrangTri.astro';
+// Tất cả dịch vụ: mỗi nhóm một khối có mô tả, bảng giá đầy đủ (dữ liệu nguyên gốc) và nút đặt lịch
 import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
-import IconMau from '../components/IconMau.astro';
+import OIc from '../components/ls/OIc.astro';
+import TrangDau from '../components/ls/TrangDau.astro';
+import BangGiaNhom from '../components/ls/BangGiaNhom.astro';
 import tt from '../data/thong_tin.json';
-import pp from '../data/phu_phi.json';
-import { u, gia, neo, dsDichVu } from '../lib/site';
-const dv = { danh_sach: dsDichVu() };
-// Bảng có cột tính phụ phí khác nhau (tắm / cắt tỉa) thì tách thành từng bảng nhỏ cho vừa khung
-const TEN_PP: Record<string, string> = { spa_tam: 'Tắm', spa_cat: 'Cắt tỉa, cạo lông (trọn gói)' };
-function tachBang(d: ReturnType<typeof dsDichVu>[number]) {
-  const nhom: { tieu_de: string; cot: number[] }[] = [];
-  d.bang.cot.forEach((_, j) => {
-    const loai = d.phu_phi_cot[j] || '';
-    const g = nhom.find((x) => x.tieu_de === (TEN_PP[loai] ?? ''));
-    if (g) g.cot.push(j); else nhom.push({ tieu_de: TEN_PP[loai] ?? '', cot: [j] });
-  });
-  return nhom.length > 1 ? nhom : nhom.map((x) => ({ ...x, tieu_de: '' }));
-}
+import { u } from '../lib/site';
+import { dichVuLS } from '../lib/ls';
+const dv = dichVuLS();
 ---
-<Layout title="Dịch vụ và bảng giá" description={`Bảng giá khám, xét nghiệm, tắm, cắt tỉa, triệt sản, gửi nội trú cho chó mèo tại ${tt.ten}.`} cam="dich_vu">
-  <section class="pagehead"><TrangTri kieu="dau-trang" /><div class="wrap">
-    <nav class="crumb" aria-label="Đường dẫn"><a href={u('/')}>Trang chủ</a><span aria-hidden="true">›</span><span>Dịch vụ & bảng giá</span></nav>
-    <h1>Dịch vụ và bảng giá</h1>
-    <p class="lead">Giá tham khảo; chưa gồm thuốc, vật tư phát sinh. Khi đặt lịch online, web tự tính hoá đơn tham khảo kèm phụ phí (nếu có).</p>
-    <nav class="loc" aria-label="Nhóm dịch vụ" style="margin-top:16px">
-      {dv.danh_sach.map((d) => <a href={`#${neo(d.ten)}`}>{d.ten}</a>)}
-    </nav>
-  </div></section>
-  <section class="s" style="padding-top:8px">
-    <div class="wrap" style="max-width:960px">
-      {dv.danh_sach.map((d) => (
-        <article class={`dv${d.cap_cuu ? ' cc' : ''}`} id={neo(d.ten)}>
-          <span class={`dv-ic n-${d.icon}`}><IconMau name={d.icon} size={52} /></span>
-          <h2>{d.ten}</h2>
-          <p class="muted" style="margin:0">{d.mo_ta}</p>
-          <div style="min-width:0">
-            {tachBang(d).map((b) => (
-              <>
-                {b.tieu_de && <h3 class="bang-tieu-de">{b.tieu_de}</h3>}
-                <div class="bang-wrap">
-                  <table class="bang-gia">
-                    <thead><tr><th scope="col">{d.bang.tieu_de_dong || 'Cân nặng'}</th>{b.cot.map((j) => <th scope="col">{d.bang.cot[j]}</th>)}</tr></thead>
-                    <tbody>{d.bang.dong.map((r) => <tr><th scope="row">{r.nhan}</th>{b.cot.map((j) => <td>{r.gia[j] === '–' ? '–' : gia(r.gia[j])}</td>)}</tr>)}</tbody>
-                  </table>
-                </div>
-              </>
-            ))}
-            {d.hang_muc.length > 0 && (
-              <table class="gia">
-                <tbody>
-                  {d.hang_muc.map((h) => (
-                    <tr>
-                      <td>{h.ten}{h.ghi_chu && <span class="gia-note">{h.ghi_chu}</span>}</td>
-                      <td class={h.gia ? '' : 'cho-gia'}>{h.gia ? gia(h.gia) : (h.phu_phi ? 'Xem ghi chú' : (/báo giá|báo phí/i.test(h.ten + h.ghi_chu) ? 'Báo sau khi khám' : 'Đang cập nhật'))}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
-            {d.cap_cuu && (
-              <>
-                <p style="margin:12px 0 4px"><b>Phụ phí khám ngoài giờ</b> (cộng thêm vào phí khám):</p>
-                <table class="gia"><tbody>
-                  {pp.kham_ngoai_gio.map((k) => <tr><td>{k.tu} – {k.den}</td><td>+{gia(k.gia)}</td></tr>)}
-                  <tr><td>Phụ phí cấp cứu ngoài giờ</td><td class={tt.phu_phi_cap_cuu_ngoai_gio ? '' : 'cho-gia'}>{tt.phu_phi_cap_cuu_ngoai_gio || 'Vui lòng gọi để biết mức'}</td></tr>
-                </tbody></table>
-              </>
-            )}
-            {d.giam_dai_ngay.length > 0 && (
-              <>
-                <p style="margin:12px 0 4px"><b>Giảm giá gửi dài ngày</b> (tự trừ trong hoá đơn tham khảo khi đặt lịch):</p>
-                <table class="gia"><tbody>
-                  {d.giam_dai_ngay.map((g) => <tr><td>{g.nhan}</td><td>Giảm {g.giam}%</td></tr>)}
-                </tbody></table>
-              </>
-            )}
-            {d.ghi_chu && <p class="luu-y" style="margin:10px 0 14px">{d.ghi_chu}</p>}
-            <div class="dv-nut">
-              {d.cap_cuu
-                ? <a class="btn btn-cta" href={`tel:${tt.dien_thoai_goi}`}><Icon name="phone" />Gọi cấp cứu {tt.dien_thoai}</a>
-                : d.dat_lich && <a class="btn btn-cta btn-sm" href={u(`/dat-lich/?nhom=${encodeURIComponent(neo(d.ten))}`)}>Đặt lịch {/^grooming/i.test(d.ten) ? d.ten : d.ten.toLowerCase().replace(/ \(.*\)$/, '')}</a>}
-              {tt.zalo && <a class="btn btn-line btn-sm" href={tt.zalo} target="_blank" rel="noopener">Hỏi qua Zalo</a>}
-            </div>
+<Layout title="Dịch vụ và bảng giá" description={`Bảng giá khám, xét nghiệm, grooming, triệt sản, gửi nội trú cho chó mèo tại ${tt.ten}.`} hienTai="dich-vu" cam="dich_vu">
+  <TrangDau crumbs={[{ ten: 'Trang chủ', href: u('/') }, { ten: 'Dịch vụ & bảng giá' }]} nhan="Dịch vụ" tieuDe="Dịch vụ và bảng giá" moTa="Giá tham khảo; chưa gồm thuốc, vật tư phát sinh. Nhân viên báo chi phí cụ thể khi xác nhận lịch.">
+    <nav class="tp-loc" aria-label="Nhóm dịch vụ" style="margin:20px 0 0">{dv.map((d) => <a href={`#${d.id}`}>{d.ten}</a>)}</nav>
+  </TrangDau>
+  <section class="khoi" style="padding-top:24px">
+    <div class="khung" style="max-width:960px">
+      {dv.map((d) => (
+        <article class="dv-khoi" id={d.id}>
+          <div class="bg-dau">
+            <OIc name={d.icon} dv />
+            <div><h2>{d.ten}</h2><p>{d.mo_ta}</p></div>
+          </div>
+          <BangGiaNhom d={d} />
+          <div class="tp-cta-hang">
+            {d.cap_cuu
+              ? <a class="nut nut-chinh" href={`tel:${tt.dien_thoai_goi}`}><Icon name="phone" size={18} />Gọi {tt.dien_thoai}</a>
+              : d.dat_lich && <a class="nut nut-chinh" href={u(`/dat-lich/?nhom=${encodeURIComponent(d.id)}`)}>Đặt lịch {d.ten.toLowerCase().replace(/ \(.*\)$/, '')}</a>}
+            {tt.zalo && <a class="nut nut-vien" href={tt.zalo} target="_blank" rel="noopener">Hỏi qua Zalo</a>}
           </div>
         </article>
       ))}

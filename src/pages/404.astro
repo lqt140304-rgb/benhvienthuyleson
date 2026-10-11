@@ -1,12 +1,17 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
 import tt from '../data/thong_tin.json';
 import { u } from '../lib/site';
 ---
 <Layout title="Không tìm thấy trang" noindex>
-  <section class="pagehead"><div class="wrap" style="max-width:720px">
-    <h1>Không tìm thấy trang này</h1>
-    <p class="lead">Đường dẫn có thể đã thay đổi. Bạn quay về trang chủ hoặc gọi {tt.dien_thoai} nếu cần hỗ trợ.</p>
-    <p class="dv-nut"><a class="btn btn-cta" href={u('/')}>Về trang chủ</a><a class="btn btn-line" href={u('/tu-van/')}>Xem cẩm nang thú cưng</a></p>
-  </div></section>
+  <section class="khoi trang-loi" id="noi-dung">
+    <div class="khung trang-loi-in">
+      <span class="trang-loi-ic" aria-hidden="true"><Icon name="chan" size={40} /></span>
+      <p class="nhan">Lỗi 404</p>
+      <h1 tabindex="-1">Không tìm thấy trang này</h1>
+      <p class="dan-nho">Đường dẫn có thể đã đổi hoặc gõ chưa đúng. Bạn có thể quay về trang chủ, xem bảng giá hoặc gọi {tt.dien_thoai} nếu cần hỗ trợ.</p>
+      <div class="hang-nut"><a class="nut nut-chinh" href={u('/')}><Icon name="trai" size={20} />Về trang chủ</a><a class="nut nut-vien" href={u('/bang-gia/')}>Xem bảng giá</a></div>
+    </div>
+  </section>
 </Layout>

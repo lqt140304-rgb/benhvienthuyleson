@@ -1,12 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
+import TrangDau from '../components/ls/TrangDau.astro';
 import { u } from '../lib/site';
 ---
 <Layout title="Khu nhân viên" noindex>
-  <section class="pagehead"><div class="wrap" style="max-width:720px">
-    <h1><Icon name="lock" size={30} /> Khu nhân viên</h1>
-    <p class="lead">Khu dành cho nhân viên (báo cáo spa, nội trú, bệnh án) đang được xây dựng.</p>
-    <p><a class="btn btn-line" href={u('/')}>Về trang chủ</a></p>
-  </div></section>
+  <TrangDau crumbs={[{ ten: 'Trang chủ', href: u('/') }, { ten: 'Khu nhân viên' }]} tieuDe="Khu nhân viên" moTa="Khu dành cho nhân viên (báo cáo spa, nội trú, bệnh án) đang được xây dựng.">
+    <p style="margin-top:16px"><a class="nut nut-vien" href={u('/')}><Icon name="trai" size={18} />Về trang chủ</a></p>
+  </TrangDau>
 </Layout>
