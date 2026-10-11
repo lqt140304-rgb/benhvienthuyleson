@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">
+<title>Thử nhận lịch (Sheet riêng)</title>
+<style>
+body{font:16px/1.5 system-ui,sans-serif;max-width:640px;margin:24px auto;padding:0 16px;color:#222}
+h1{font-size:1.3rem}label{display:block;margin:12px 0 4px;font-weight:600}input[type=url]{width:100%;padding:10px;font:inherit;box-sizing:border-box}
+button{padding:10px 16px;font:inherit;margin:8px 8px 0 0;cursor:pointer}button:disabled{opacity:.5;cursor:not-allowed}
+pre{background:#f4f4f4;padding:12px;white-space:pre-wrap;word-break:break-word;border-radius:6px}.canh-bao{background:#fff3cd;padding:10px 12px;border-radius:6px}
+</style></head><body>
+<h1>Thử nhận lịch trên Sheet RIÊNG</h1>
+<p class="canh-bao"><b>Chỉ dùng với địa chỉ của Google Sheet THỬ.</b> Mỗi lần bấm "Gửi 1 lịch thử" sẽ ghi 1 dòng (tên "THỬ NGHIỆM (xoá được)") và gửi 1 email. Tệp này không gắn với website; nó chỉ gửi đúng một yêu cầu tới địa chỉ bạn dán.</p>
+<label for="url">Địa chỉ web app (kết thúc bằng /exec) của Sheet THỬ</label>
+<input id="url" type="url" placeholder="https://script.google.com/macros/s/…/exec" autocomplete="off">
+<label><input id="xn" type="checkbox"> Tôi xác nhận đây là Sheet THỬ, không phải Sheet thật</label>
+<button id="gui" disabled>Gửi 1 lịch thử</button><button id="lai" disabled>Gửi lại lần nữa (cùng mã)</button>
+<p>Cách đọc kết quả: lần 1 phải có <code>"ok": true</code>, <code>"trung": false</code> và một mã dạng <code>LS-…</code>. Lần "gửi lại" phải trả <b>cùng mã</b> với <code>"trung": true</code>. Sau đó mở Sheet thử: phải thấy <b>đúng 1 dòng</b>, và hộp thư nhận phải có <b>đúng 1 email</b> "Lịch mới LS-…".</p>
+<pre id="kq">Chưa gửi gì.</pre>
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)}, ma=null, kq=$('kq');
+  function hopLe(){return /^https:\/\/script\.google\.com\/macros\/s\/[^\/\s]+\/exec$/.test($('url').value.trim())&&$('xn').checked}
+  function capNhat(){$('gui').disabled=!hopLe();$('lai').disabled=!hopLe()||!ma}
+  $('url').addEventListener('input',capNhat);$('xn').addEventListener('change',capNhat);
+  function ngayMai(){var d=new Date(Date.now()+7*3600e3+86400e3);return d.toISOString().slice(0,10)}
+  function gui(){
+    var dl={ma_yeu_cau:ma,ten_khach:'THỬ NGHIỆM (xoá được)',dien_thoai:'0912345678',ten_thu_cung:'Bé thử',loai:'Chó',loai_khac:'',dich_vu:'Khám và chẩn đoán',ngay:ngayMai(),gio:'09:00',ngay_don:'',ghi_chu:'Dòng thử từ thu-nhan-lich.html, xoá được',nguon:'/thu-nhan-lich',website:''};
+    kq.textContent='Đang gửi…';
+    return fetch($('url').value.trim(),{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(dl)}).then(function(r){return r.text()}).then(function(t){
+      var j=null;try{j=JSON.parse(t)}catch(e){}
+      kq.textContent=j?('Phản hồi đọc được:\n'+JSON.stringify(j,null,1)+'\n\n'+(j.ok&&j.trung===false?'Lần đầu: đã lưu. Bấm "Gửi lại" để thử chống trùng.':j.ok&&j.trung===true?'Gửi lại: máy chủ nhận ra là CÙNG yêu cầu, không tạo dòng mới.':'Máy chủ từ chối: '+(j.loi||'')))
+        :('Có phản hồi nhưng KHÔNG phải JSON đọc được (có thể địa chỉ sai hoặc chưa triển khai đúng):\n'+t.slice(0,300));
+    }).catch(function(e){kq.textContent='Không đọc được phản hồi ('+e.message+'). Có thể dòng ĐÃ được lưu: mở Sheet thử để xem. Nếu có dòng mà trình duyệt không đọc được phản hồi thì biểu mẫu thật cũng sẽ báo "chưa nhận được xác nhận".'});
+  }
+  $('gui').addEventListener('click',function(){ma='thu-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,8);capNhat();gui()});
+  $('lai').addEventListener('click',function(){gui()});
+})();
+</script></body></html>

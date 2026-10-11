@@ -257,7 +257,7 @@
  {
   "tt": "ĐẠT",
   "ten": "[1440x900] \"Xem dịch vụ\" cuộn tới khu Dịch vụ ở trang chủ, focus ở tiêu đề (không rơi về BODY)",
-  "ct": "{\"foc\":\"H2\",\"tren\":193}"
+  "ct": "{\"foc\":\"H2\",\"tren\":227}"
  },
  {
   "tt": "ĐẠT",
@@ -277,7 +277,7 @@
  {
   "tt": "ĐẠT",
   "ten": "[390x844] \"Xem dịch vụ\" cuộn tới khu Dịch vụ ở trang chủ, focus ở tiêu đề (không rơi về BODY)",
-  "ct": "{\"foc\":\"H2\",\"tren\":313}"
+  "ct": "{\"foc\":\"H2\",\"tren\":269}"
  },
  {
   "tt": "ĐẠT",
@@ -392,7 +392,7 @@
  {
   "tt": "ĐẠT",
   "ten": "[nhận thật] Đúng 1 yêu cầu, POST, Content-Type text/plain (không gây bước kiểm tra trước), JSON có đủ trường và ma_yeu_cau",
-  "ct": "{\"ten_khach\":\"Khách thử nghiệm\",\"dien_thoai\":\"0912345678\",\"ten_thu_cung\":\"Bé Thử\",\"loai\":\"Chó\",\"loai_khac\":\"\",\"dich_vu\":\"Khám và chẩn đoán\",\"dich_vu_ma\":\"kham-va-chan-doan\",\"ngay\":\"2026-10-13\",\"gio\":\"09:00\",\"ngay_don\":\"\",\"ghi_chu\":\"ghi chú thử\",\"website\":\"\",\"ma_yeu_cau\":\"0601a0c8-9106-46b3-b887-9905d5117177\",\"nguon\":\"/benhvienthuyleson/dat-lich/\",\"gui_luc\":\"2026-10-11T11:18:48.920Z\"}"
+  "ct": "{\"ten_khach\":\"Khách thử nghiệm\",\"dien_thoai\":\"0912345678\",\"ten_thu_cung\":\"Bé Thử\",\"loai\":\"Chó\",\"loai_khac\":\"\",\"dich_vu\":\"Khám và chẩn đoán\",\"dich_vu_ma\":\"kham-va-chan-doan\",\"ngay\":\"2026-10-13\",\"gio\":\"09:00\",\"ngay_don\":\"\",\"ghi_chu\":\"ghi chú thử\",\"website\":\"\",\"ma_yeu_cau\":\"40fdd0c5-3e50-4b6f-91ee-153746ef8415\",\"nguon\":\"/benhvienthuyleson/dat-lich/\",\"gui_luc\":\"2026-10-11T11:51:41.762Z\"}"
  },
  {
   "tt": "ĐẠT",
@@ -452,12 +452,12 @@
  {
   "tt": "ĐẠT",
   "ten": "[chống trùng] \"Gửi lại\" nguyên nội dung dùng lại CÙNG mã yêu cầu (máy chủ nhờ đó bỏ qua bản trùng)",
-  "ct": "b0f0bf82-7709-45fc-b057-11127ca168a1 / b0f0bf82-7709-45fc-b057-11127ca168a1"
+  "ct": "1c674c93-2cac-4618-9a81-f1e64dc473a3 / 1c674c93-2cac-4618-9a81-f1e64dc473a3"
  },
  {
   "tt": "ĐẠT",
   "ten": "[chống trùng] Đổi nội dung rồi gửi: mã yêu cầu MỚI; máy chủ trả trùng thì vẫn hiện đã nhận",
-  "ct": "b0f0bf82-7709-45fc-b057-11127ca168a1 / bc8c70fb-ee72-4207-a433-af859182ea48"
+  "ct": "1c674c93-2cac-4618-9a81-f1e64dc473a3 / bdc4d74d-8cbb-4ce8-a5f7-a5e5303eb97e"
  },
  {
   "tt": "ĐẠT",
@@ -481,6 +481,11 @@
  },
  {
   "tt": "ĐẠT",
+  "ten": "kiem-tra-che-do: CHẶN chế độ that khi chưa xác nhận đã thử trên Sheet riêng (thiếu DA_THU_SHEET_RIENG=co → mã thoát 1, chỉ dẫn docs/BAT-CHE-DO-THAT.md), dù bản dựng that hoàn toàn đúng",
+  "ct": "CHƯA ĐƯỢC BẬT CHẾ ĐỘ \"that\": chưa có xác nhận đã thử trên Sheet riêng (lưu đúng 1 dòng, email tới đúng hộp thư, gửi lại không trùng). Làm theo docs/BAT-CHE-DO-THAT.md; chỉ khi chủ dự án xác nhận đạt mới chạy lại với DA_THU_SHEET_RIENG=co.\n"
+ },
+ {
+  "tt": "ĐẠT",
   "ten": "kiem-tra-che-do: dist-that ĐÚNG \"that\" (có địa chỉ nhận script.google.com), dist-cu ĐÚNG \"cu\"; dist-cu mà mong gia-lap thì lệch",
   "ct": "CHẾ ĐỘ BẢN XUẤT: that  (thư mục dist-that)\n{\"bieuMauMoi\":true,\"bieuMauCu\":false,\"dongXemTruoc\":false,\"diaChiNhan\":\"https://script.google.com/macros/s/AKfycbzf5eQ3pWBwXk7l7KaWoayMk1F8J4fmZRmR4MEjyLGLULWADD13x8zETSt75ITHHjEE/exec\",\"trangChuCoBieuMauMoi\":true,\"trangChuCoBieuMauCu\":false}\nĐÚNG chế độ \"t"
  },
@@ -491,7 +496,7 @@
  },
  {
   "tt": "ĐẠT",
-  "ten": "Logic Code.v2.gs bằng đối tượng giả của Google, gồm BODY của biểu mẫu cũ thật vừa bắt được (không gọi Google): ĐẠT 39 · KHÔNG ĐẠT 0 · CHƯA XÁC MINH 1",
+  "ten": "Logic Code.v2.gs bằng đối tượng giả của Google, gồm BODY của biểu mẫu cũ thật vừa bắt được (không gọi Google): ĐẠT 72 · KHÔNG ĐẠT 0 · CHƯA XÁC MINH 1",
   "ct": ""
  },
  {

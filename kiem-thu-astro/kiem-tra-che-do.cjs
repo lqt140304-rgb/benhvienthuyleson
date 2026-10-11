@@ -1,10 +1,15 @@
 // Kiểm tra CHẾ ĐỘ BIỂU MẪU ĐẶT LỊCH của bản dựng trước khi phát hành. Không cần thư viện.
 // Dùng: npm run build && npm run kiem-tra-che-do -- --mong=gia-lap|that|cu [--dist=dist]
+// Chế độ "that" CHỈ được xác nhận khi đã thử xong trên Sheet riêng và chủ dự án đồng ý: phải đặt biến DA_THU_SHEET_RIENG=co (xem docs/BAT-CHE-DO-THAT.md). Thiếu thì thoát mã 1.
 // In "CHẾ ĐỘ BẢN XUẤT: …" và thoát mã 1 nếu bản dựng KHÔNG đúng chế độ mong muốn (để không phát hành nhầm).
 const fs = require('fs'), path = require('path');
 const arg = (k) => (process.argv.find((a) => a.startsWith('--' + k + '=')) || '').split('=').slice(1).join('=');
 const mong = arg('mong'), dist = path.resolve(process.cwd(), arg('dist') || 'dist');
 if (!['gia-lap', 'that', 'cu'].includes(mong)) { console.error('Thiếu --mong=gia-lap|that|cu'); process.exit(2); }
+if (mong === 'that' && process.env.DA_THU_SHEET_RIENG !== 'co') {
+  console.error('CHƯA ĐƯỢC BẬT CHẾ ĐỘ "that": chưa có xác nhận đã thử trên Sheet riêng (lưu đúng 1 dòng, email tới đúng hộp thư, gửi lại không trùng). Làm theo docs/BAT-CHE-DO-THAT.md; chỉ khi chủ dự án xác nhận đạt mới chạy lại với DA_THU_SHEET_RIENG=co.');
+  process.exit(1);
+}
 const doc = (p) => { const f = path.join(dist, p); if (!fs.existsSync(f)) { console.error('Không thấy ' + f + ' (đã chạy npm run build chưa?)'); process.exit(2); } return fs.readFileSync(f, 'utf8'); };
 const dat = doc('dat-lich/index.html'), chu = doc('index.html');
 const moi = /id="form-dat-lich"/.test(dat), cu = /<form[^>]*id="dat-lich"[^>]*data-endpoint/.test(dat);

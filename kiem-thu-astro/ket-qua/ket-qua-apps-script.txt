@@ -1,12 +1,12 @@
-Thử logic Code.v2.gs bằng đối tượng giả (không gọi Google) · 2026-10-11T11:35:21.721Z
-ĐẠT 39 · KHÔNG ĐẠT 0 · CHƯA XÁC MINH 1
+Thử logic Code.v2.gs bằng đối tượng giả (không gọi Google) · 2026-10-11T11:52:22.156Z
+ĐẠT 72 · KHÔNG ĐẠT 0 · CHƯA XÁC MINH 1
 
 
 -- 1. Biểu mẫu mới: lưu, chống trùng, email
 [ĐẠT] Yêu cầu hợp lệ: trả { ok: true, ma } với mã dạng LS-yymmdd-XXXXXX (6 ký tự)
 [ĐẠT] Lưu đúng 1 dòng, đúng cột (mã, mã gửi, tên, số điện thoại, thú cưng, loài, dịch vụ, ngày, giờ, trạng thái "Mới")
 [ĐẠT] Gửi đúng 1 email cho chủ tài khoản, có mã yêu cầu; cột "Email báo" ghi "đã gửi"
-[ĐẠT] Khoá được lấy và trả lại đủ
+[ĐẠT] Khoá lấy và trả lại cân bằng (ghi dòng; cập nhật kết quả email)
 [ĐẠT] Gửi lại CÙNG mã yêu cầu: không tạo dòng mới, không gửi email nữa, trả lại mã cũ với trung: true
 [ĐẠT] Mã yêu cầu khác: tạo dòng mới và mã mới
 
@@ -54,5 +54,44 @@ Thử logic Code.v2.gs bằng đối tượng giả (không gọi Google) · 202
 -- 7. Dữ liệu lạ
 [ĐẠT] JSON hỏng: trả { ok: false } có thông báo, không báo lỗi script
 [ĐẠT] doGet chỉ trả trạng thái chạy, không lộ dữ liệu
+
+-- 8. Trang tính cũ: ghi theo TÊN cột, giữ nguyên dữ liệu cũ (tiêu đề + dòng cũ)
+[ĐẠT] Trang cũ (12 cột của Code.gs): ghi dòng mới được ok, tạo mã
+[ĐẠT] GIỮ NGUYÊN 12 tiêu đề cũ (không ghi đè, không đổi thứ tự, không đổi tên)
+[ĐẠT] GIỮ NGUYÊN hai dòng dữ liệu cũ (giá trị và số cột không đổi)
+[ĐẠT] Cột còn thiếu được THÊM VÀO CUỐI (9 cột: Mã yêu cầu … Nguồn), không chen vào giữa
+[ĐẠT] Dòng mới nằm ĐÚNG CỘT theo tên: "Tên chủ nuôi" = tên khách, "Thú cưng" = loài, "Giờ muốn đến" = giờ, "Ngày muốn đến" = ngày, "Trạng thái" = Mới, "Ghi chú"
+[ĐẠT] Cột mới đúng chỗ: Mã yêu cầu = mã trả về, Tên thú cưng, Mã gửi từ trình duyệt, Email báo "đã gửi"
+[ĐẠT] Không dòng cũ nào bị tô màu hay đổi
+[ĐẠT] Gửi lại cùng mã trên trang cũ: chống trùng hoạt động (trung: true, không thêm dòng, không thêm email, không thêm cột)
+[ĐẠT] Yêu cầu khác trên trang cũ: thêm dòng mới, số cột tiêu đề KHÔNG tăng nữa (thêm cột chỉ làm một lần)
+[ĐẠT] Chạy gửi lại email trên trang cũ: các dòng cũ (không có mã) không bị đụng, không gửi email thừa
+[ĐẠT] Có cả "Tên khách hàng" lẫn "Tên chủ nuôi": ghi vào "Tên khách hàng" (tên chuẩn), để trống "Tên chủ nuôi"; "Loài" thắng "Thú cưng"
+[ĐẠT] Bố cục nháp 14 cột: thêm 7 cột còn thiếu vào cuối; 14 cột đầu và dòng cũ giữ nguyên; dòng mới đúng cột (Trạng thái "Mới", Email báo "đã gửi")
+[ĐẠT] Cột bị sắp xếp lại / có cột riêng / tiêu đề lệch hoa-thường-khoảng trắng: vẫn khớp theo tên; cột riêng của nhân viên để trống; 7 tiêu đề gốc nguyên văn
+[ĐẠT] Dòng cũ của bố cục đó không đổi; "Ghi chú" không bị nhầm với "Ghi chú nội bộ" (cột Ghi chú mới thêm ở cuối)
+[ĐẠT] Mã gửi đã có sẵn ở dòng cũ (đọc theo tên cột): trả lại mã cũ, không tạo dòng
+[ĐẠT] Trang trống: ghi đủ 21 tiêu đề chuẩn theo thứ tự (hành vi cũ giữ nguyên)
+
+-- 9. Gửi lại email: không gửi trùng khi chạy chồng nhau
+[ĐẠT] Hai lần chạy chồng nhau lên cùng dòng LỖI: chỉ gửi ĐÚNG 1 email
+[ĐẠT] Kết quả cuối: "Email báo" = "đã gửi", hết màu lỗi, số lần gửi = 2 (1 lần lỗi + 1 lần gửi lại)
+[ĐẠT] Khoá cân bằng sau khi chạy chồng
+[ĐẠT] Hai dòng LỖI, chạy 3 lần liên tiếp: mỗi dòng đúng 1 email (tổng 2)
+[ĐẠT] Trigger gửi lại chạy đúng lúc đang gửi email lần đầu của yêu cầu mới: vẫn chỉ 1 email
+[ĐẠT] Dòng "ĐANG GỬI" MỚI (lần chạy khác đang gửi) không bị gửi lại
+[ĐẠT] Dòng "ĐANG GỬI" bị treo quá 5 phút (lần chạy trước chết giữa chừng): được gửi lại đúng 1 lần, số lần tăng lên 3
+[ĐẠT] Treo mà đã hết 5 lượt: KHÔNG gửi nữa, chuyển sang LỖI và tô màu để nhân viên xem
+[ĐẠT] Nhân viên chèn dòng ở trên trong lúc gửi email: kết quả "đã gửi" ghi đúng dòng của yêu cầu (tìm theo mã, không theo số dòng cũ), dòng chèn không bị đụng
+[ĐẠT] Khoá đang bận khi chạy gửi lại: bỏ lượt, không ném lỗi, không gửi email
+[ĐẠT] Khoá bận khi ghi yêu cầu mới: trả lỗi tiếng Việt (khách bấm gửi lại được), KHÔNG ghi dòng nào
+[ĐẠT] EMAIL_NHAN điền sẵn: email gửi tới đúng các địa chỉ đó; để trống: gửi tới chủ tài khoản đã triển khai
+
+-- 10. kiemTraTrenSheetRieng(): bộ thử cho Sheet riêng
+[ĐẠT] Có hàm kiemTraTrenSheetRieng()
+[ĐẠT] Môi trường tốt: mọi mục ĐẠT, ghi vào trang "Kết quả thử"
+[ĐẠT] Đúng MỘT dòng trong trang đặt lịch và đúng 2 email thử (1 lần đầu + 1 lần sau khi giả lập lỗi), tới chủ tài khoản
+[ĐẠT] Email hỏng (hết hạn mức): bộ thử BÁO KHÔNG ĐẠT, không báo ĐẠT giả
+[ĐẠT] GUI_EMAIL = false: bộ thử vẫn đạt phần lưu 1 dòng và gửi lại không trùng, không gửi email
 
 [CHƯA XÁC MINH] Chạy thật trên Google (cấp quyền, email tới, hạn mức email, phản hồi JSON đọc được từ trình duyệt github.io)  → cần chủ dự án thử theo HUONG-DAN-NHAN-LICH.md

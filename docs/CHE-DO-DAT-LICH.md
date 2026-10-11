@@ -14,14 +14,14 @@ Website thật **hôm nay đang chạy biểu mẫu cũ**. Nếu đưa bản m�
 - Chỉ đưa lên khi ở `'that'` **và đã thử nhận thành công**.
 
 ## Lộ trình an toàn
-1. Bạn làm theo `HUONG-DAN-NHAN-LICH.md` phần A (tạo Google Sheet thử, dán script, chạy `thuNghiem`).
-2. Bạn báo "đã triển khai, link là …" → tôi bật `'that'` **trên nhánh làm việc** và chạy `npm run kiem-tra-che-do -- --mong=that`.
+1. Bạn làm theo `HUONG-DAN-NHAN-LICH.md` phần A và `docs/BAT-CHE-DO-THAT.md` (Google Sheet **thử riêng**, dán script, chạy `kiemTraTrenSheetRieng`).
+2. Bạn báo "đã triển khai, link là …" → tôi bật `'that'` **trên nhánh làm việc** và chạy `DA_THU_SHEET_RIENG=co npm run kiem-tra-che-do -- --mong=that` (thiếu biến này lệnh từ chối: không bật nhầm khi chưa thử trên Sheet riêng).
 3. Bạn gửi một lịch thử và kiểm tra Sheet + email (phần B của hướng dẫn).
 4. Đạt cả bốn kiểm tra thì tôi mới đề nghị đưa lên website thật, và **chỉ làm khi bạn đồng ý**.
 
 ## Hai điều cần biết khi nâng cấp script
 - **Biểu mẫu cũ không bị hỏng:** script bản 2 vẫn nhận được dữ liệu của biểu mẫu cũ (đã kiểm thử bằng dữ liệu do biểu mẫu cũ thật gửi).
-- **Nhân viên phải xem trang tính mới:** bản 2 ghi vào trang **"Đặt lịch v2"**, không phải trang "Đặt lịch" cũ.
+- **Nhân viên phải xem trang tính mới:** bản 2 ghi vào trang **"Đặt lịch v2"**, không phải trang "Đặt lịch" cũ (hoặc đặt `TEN_TRANG` về "Đặt lịch": dữ liệu cũ giữ nguyên, cột mới thêm bên phải).
 
 ## Tôi đã làm gì để tránh nhầm chế độ
 - Lệnh `npm run kiem-tra-che-do -- --mong=that` (hoặc `gia-lap`, `cu`) đọc bản dựng và **báo LỆCH** nếu chế độ thật khác chế độ mong muốn, để không phát hành nhầm.

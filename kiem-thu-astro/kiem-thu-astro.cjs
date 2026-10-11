@@ -453,10 +453,11 @@ function kiemDuLieu() {
     ok('Chế độ "cu" (quay lại biểu mẫu cũ): trang Đặt lịch có biểu mẫu cũ #dat-lich, không có biểu mẫu mới; trang chủ chỉ còn lối vào /dat-lich/', /id="dat-lich"[^>]*data-endpoint/.test(f) && !/id="form-dat-lich"/.test(f) && !/id="form-dat-lich"/.test(g) && /Mở biểu mẫu đặt lịch/.test(g), ''); }
 
   // --- Kiểm tra chế độ bản xuất (kiem-tra-che-do.cjs): phát hiện phát hành nhầm chế độ ---
-  { const chay = (mong, dist) => cp.spawnSync('node', [path.join(__dirname, 'kiem-tra-che-do.cjs'), `--mong=${mong}`, `--dist=${dist}`], { encoding: 'utf8', cwd: GOC });
-    const a = chay('gia-lap', 'dist'), b2 = chay('that', 'dist'), c = chay('that', 'dist-that'), d = chay('cu', 'dist-cu'), e2 = chay('gia-lap', 'dist-cu');
+  { const chay = (mong, dist, daThu) => cp.spawnSync('node', [path.join(__dirname, 'kiem-tra-che-do.cjs'), `--mong=${mong}`, `--dist=${dist}`], { encoding: 'utf8', cwd: GOC, env: { ...process.env, DA_THU_SHEET_RIENG: daThu ? 'co' : '' } });
+    const a = chay('gia-lap', 'dist'), b2 = chay('that', 'dist', true), c = chay('that', 'dist-that', true), c0 = chay('that', 'dist-that', false), d = chay('cu', 'dist-cu'), e2 = chay('gia-lap', 'dist-cu');
     ok('kiem-tra-che-do: bản mặc định (dist) ĐÚNG "gia-lap" (mã thoát 0)', a.status === 0 && /CHẾ ĐỘ BẢN XUẤT: gia-lap/.test(a.stdout), a.stdout + a.stderr);
     ok('kiem-tra-che-do: bản mặc định mà "mong" chế độ that thì BÁO LỆCH (mã thoát 1, có chữ KHÔNG NÊN PHÁT HÀNH): không phát hành nhầm', b2.status === 1 && /KHÔNG NÊN PHÁT HÀNH/.test(b2.stderr), b2.stderr);
+    ok('kiem-tra-che-do: CHẶN chế độ that khi chưa xác nhận đã thử trên Sheet riêng (thiếu DA_THU_SHEET_RIENG=co → mã thoát 1, chỉ dẫn docs/BAT-CHE-DO-THAT.md), dù bản dựng that hoàn toàn đúng', c0.status === 1 && /CHƯA ĐƯỢC BẬT/.test(c0.stderr) && /BAT-CHE-DO-THAT/.test(c0.stderr), c0.stderr);
     ok('kiem-tra-che-do: dist-that ĐÚNG "that" (có địa chỉ nhận script.google.com), dist-cu ĐÚNG "cu"; dist-cu mà mong gia-lap thì lệch', c.status === 0 && d.status === 0 && e2.status === 1, [c.stdout, d.stdout, e2.stderr].join(' | ').slice(0, 300)); }
   // --- Biểu mẫu CŨ thật: bắt body trình duyệt gửi, rồi đưa cho Code.v2.gs (đối tượng giả) ---
   { const ctx = await ctxMoi({ viewport: { width: 1440, height: 900 } }), p = await ctx.newPage(); let body = '', ct = '', soYc = 0;

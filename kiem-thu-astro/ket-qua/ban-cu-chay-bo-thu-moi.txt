@@ -1,0 +1,30 @@
+Thử logic Code.v2.gs bằng đối tượng giả (không gọi Google) · BẢN THỬ: /tmp/Code.v2.truoc-gd3v2b.gs · 2026-10-11T11:48:50.204Z
+ĐẠT 51 · KHÔNG ĐẠT 17 · CHƯA XÁC MINH 1
+-- 1. Biểu mẫu mới: lưu, chống trùng, email
+-- 2. Kiểm tra dữ liệu phía máy chủ
+-- 3. Bảo vệ (ô bẫy, công thức, độ dài)
+-- 4. Tương thích biểu mẫu cũ (form-urlencoded, đúng định dạng FormDatLichCu gửi, không đọc được phản hồi)
+-- 5. Mã tra cứu đủ dài và duy nhất
+-- 6. Nơi nhận: lỗi email không còn im lặng
+-- 7. Dữ liệu lạ
+-- 8. Trang tính cũ: ghi theo TÊN cột, giữ nguyên dữ liệu cũ (tiêu đề + dòng cũ)
+[KHÔNG ĐẠT] Cột còn thiếu được THÊM VÀO CUỐI (9 cột: Mã yêu cầu … Nguồn), không chen vào giữa  → []
+[KHÔNG ĐẠT] Dòng mới nằm ĐÚNG CỘT theo tên: "Tên chủ nuôi" = tên khách, "Thú cưng" = loài, "Giờ muốn đến" = giờ, "Ngày muốn đến" = ngày, "Trạng thái" = Mới, "Ghi chú"  → {"Thời gian gửi":"LS-261011-NRVJBF","Tên chủ nuôi":"75239dcb-de66-489e-a4b3-a03cb45b27b2","Số điện thoại":"2026-10-11T11:48:50.186Z","Thú cưng":"Khách mới","Dịch vụ":"0912345678","Ngày muốn đến":"Bé Thử","Giờ muốn đến":"Chó","Ghi chú":"Khám và chẩn đoán","Trạng thái":"2026-10-13","Cân nặng":"09:00",
+[KHÔNG ĐẠT] Cột mới đúng chỗ: Mã yêu cầu = mã trả về, Tên thú cưng, Mã gửi từ trình duyệt, Email báo "đã gửi"  → {"Thời gian gửi":"LS-261011-NRVJBF","Tên chủ nuôi":"75239dcb-de66-489e-a4b3-a03cb45b27b2","Số điện thoại":"2026-10-11T11:48:50.186Z","Thú cưng":"Khách mới","Dịch vụ":"0912345678","Ngày muốn đến":"Bé Thử","Giờ muốn đến":"Chó","Ghi chú":"Khám và chẩn đoán","Trạng thái":"2026-10-13","Cân nặng":"09:00",
+[KHÔNG ĐẠT] Gửi lại cùng mã trên trang cũ: chống trùng hoạt động (trung: true, không thêm dòng, không thêm email, không thêm cột)  → {"ok":true,"ma":"LS-261011-NRVJBF","trung":true}
+[KHÔNG ĐẠT] Yêu cầu khác trên trang cũ: thêm dòng mới, số cột tiêu đề KHÔNG tăng nữa (thêm cột chỉ làm một lần)
+[KHÔNG ĐẠT] Có cả "Tên khách hàng" lẫn "Tên chủ nuôi": ghi vào "Tên khách hàng" (tên chuẩn), để trống "Tên chủ nuôi"; "Loài" thắng "Thú cưng"  → {"Thời gian gửi":"LS-261011-JEXZRX","Tên chủ nuôi":"7b990d29-296c-420e-bdcf-b21c261f5640","Tên khách hàng":"2026-10-11T11:48:50.188Z","Số điện thoại":"Khách thử","Loài":"0912345678","Thú cưng":"Bé Thử"}
+[KHÔNG ĐẠT] Bố cục nháp 14 cột: thêm 7 cột còn thiếu vào cuối; 14 cột đầu và dòng cũ giữ nguyên; dòng mới đúng cột (Trạng thái "Mới", Email báo "đã gửi")  → ["Mã yêu cầu","Mã gửi từ trình duyệt","Thời gian nhận","Tên khách hàng","Số điện thoại","Tên thú cưng","Loài","Dịch vụ","Ngày mong muốn / gửi","Giờ","Ngày đón dự kiến","Giờ đón","Cân nặng","Ghi chú"]
+[KHÔNG ĐẠT] Cột bị sắp xếp lại / có cột riêng / tiêu đề lệch hoa-thường-khoảng trắng: vẫn khớp theo tên; cột riêng của nhân viên để trống; 7 tiêu đề gốc nguyên văn  → {"Nhân viên phụ trách":"LS-261011-739KHD","  TÊN   khách hàng ":"3b61b199-8040-4a69-9f16-64d414c8d867","Mã yêu cầu":"2026-10-11T11:48:50.190Z","số điện thoại":"Khách thử","Ghi chú nội bộ":"0912345678","Giờ":"Bé Thử","Dịch vụ":"Chó"}
+[KHÔNG ĐẠT] Dòng cũ của bố cục đó không đổi; "Ghi chú" không bị nhầm với "Ghi chú nội bộ" (cột Ghi chú mới thêm ở cuối)  → ["Nhân viên phụ trách","  TÊN   khách hàng ","Mã yêu cầu","số điện thoại","Ghi chú nội bộ","Giờ","Dịch vụ"]
+-- 9. Gửi lại email: không gửi trùng khi chạy chồng nhau
+[KHÔNG ĐẠT] Hai lần chạy chồng nhau lên cùng dòng LỖI: chỉ gửi ĐÚNG 1 email  → 2
+[KHÔNG ĐẠT] Dòng "ĐANG GỬI" bị treo quá 5 phút (lần chạy trước chết giữa chừng): được gửi lại đúng 1 lần, số lần tăng lên 3  → [0,"ĐANG GỬI 2026-10-11T11:28:50.198Z",2]
+[KHÔNG ĐẠT] Treo mà đã hết 5 lượt: KHÔNG gửi nữa, chuyển sang LỖI và tô màu để nhân viên xem  → ["ĐANG GỬI 2026-10-11T11:28:50.198Z",{"2":"#FDE3C8"}]
+[KHÔNG ĐẠT] Nhân viên chèn dòng ở trên trong lúc gửi email: kết quả "đã gửi" ghi đúng dòng của yêu cầu (tìm theo mã, không theo số dòng cũ), dòng chèn không bị đụng  → [2,"",["nhân viên chèn dòng","","","","","","","","","","","","","","","","","","đã gửi",1]]
+[KHÔNG ĐẠT] Khoá đang bận khi chạy gửi lại: bỏ lượt, không ném lỗi, không gửi email
+[KHÔNG ĐẠT] khối 12: script báo lỗi khi chạy  → Không lấy được khoá
+[KHÔNG ĐẠT] EMAIL_NHAN điền sẵn: email gửi tới đúng các địa chỉ đó; để trống: gửi tới chủ tài khoản đã triển khai  → ["chu@example.com","chu@example.com"]
+-- 10. kiemTraTrenSheetRieng(): bộ thử cho Sheet riêng
+[KHÔNG ĐẠT] Có hàm kiemTraTrenSheetRieng()
+ĐẠT 51 · KHÔNG ĐẠT 17 · CHƯA XÁC MINH 1

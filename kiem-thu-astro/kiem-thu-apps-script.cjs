@@ -11,20 +11,27 @@ const chuaXm = (ten, ly) => kq.push({ tt: 'CHƯA XÁC MINH', ten, ct: ly });
 const muc = (t) => kq.push({ tt: 'MỤC', ten: t, ct: '' });
 
 function taoMoiTruong(tuyChon = {}) {
-  const st = { rows: [], raw: [], bg: {}, khoa: 0, mo: 0, emails: [], sheets: {}, emailLoi: !!tuyChon.emailLoi, triggers: [] };
+  const tenChinh = (tuyChon.cauHinh && tuyChon.cauHinh.TEN_TRANG) || 'Đặt lịch v2';
+  const st = { khoa: 0, mo: 0, giu: false, khoaBan: false, emails: [], sheets: {}, emailLoi: !!tuyChon.emailLoi, triggers: [], truocGui: null, hanMuc: 100 };
+  Object.defineProperties(st, { rows: { get: () => (st.sheets[tenChinh] ? st.sheets[tenChinh].d.rows : []) }, raw: { get: () => (st.sheets[tenChinh] ? st.sheets[tenChinh].d.raw : []) }, bg: { get: () => (st.sheets[tenChinh] ? st.sheets[tenChinh].d.bg : {}) } });
   const boNhay = (r) => r.map((x) => (typeof x === 'string' && x[0] === "'" ? x.slice(1) : x)); // Sheets: dấu nháy đầu ô = ép kiểu chữ, không nằm trong giá trị
-  const sheet = (ten) => ({ ten, getLastRow: () => st.rows.length, getLastColumn: () => (st.rows[0] || []).length, setFrozenRows() {},
-    appendRow: (r) => { st.raw.push(r); st.rows.push(boNhay(r)); },
-    getRange: (r, c, n, m) => ({ getValues: () => st.rows.slice(r - 1, r - 1 + (n || 1)).map((x) => x.slice(c - 1, c - 1 + (m || 1))),
-      setValue: (v) => { st.rows[r - 1][c - 1] = v; }, setValues: (vv) => vv.forEach((row, i) => row.forEach((v, j) => { st.rows[r - 1 + i][c - 1 + j] = v; })),
-      setBackground: (b) => { st.bg[r] = b; } }) });
+  const sheet = (ten, rows0) => { const d = { rows: rows0 || [], raw: [], bg: {} }, soCot = () => d.rows.reduce((m, r) => Math.max(m, r.length), 0);
+    return { ten, d, getLastRow: () => d.rows.length, getLastColumn: soCot, setFrozenRows() {},
+      appendRow: (r) => { d.raw.push(r); d.rows.push(boNhay(r)); },
+      getRange: (r, c, n, m) => ({ getValues: () => Array.from({ length: n || 1 }, (_, i) => Array.from({ length: m || 1 }, (_, j) => { const v = (d.rows[r - 1 + i] || [])[c - 1 + j]; return v === undefined ? '' : v; })),
+        getValue: () => { const v = (d.rows[r - 1] || [])[c - 1]; return v === undefined ? '' : v; },
+        setValue: (v) => { const row = (d.rows[r - 1] = d.rows[r - 1] || []); while (row.length < c - 1) row.push(''); row[c - 1] = v; },
+        setValues: (vv) => vv.forEach((row0, i) => row0.forEach((v, j) => { const row = (d.rows[r - 1 + i] = d.rows[r - 1 + i] || []); while (row.length < c - 1 + j) row.push(''); row[c - 1 + j] = v; })),
+        setBackground: (b) => { d.bg[r] = b; } }) }; };
   const ss = { getSheetByName: (t) => st.sheets[t] || null, insertSheet: (t) => (st.sheets[t] = sheet(t)), getUrl: () => 'https://docs.example/sheet' };
+  // Dựng sẵn trang tính CŨ (có dữ liệu) trước khi script chạy: hang0 = [tiêu đề, dòng 1, dòng 2…]
+  if (tuyChon.hangCu) st.sheets[tenChinh] = sheet(tenChinh, JSON.parse(JSON.stringify(tuyChon.hangCu), (k, v) => (typeof v === 'string' && /^\d{4}-\d\d-\d\dT[\d:.]+Z$/.test(v) && k === 'ngayThuc' ? new Date(v) : v)));
   const vn = (d, f) => { const x = new Date(d.getTime() + 7 * 3600e3), p = (n) => String(n).padStart(2, '0'); return f === 'yyMMdd' ? p(x.getUTCFullYear() % 100) + p(x.getUTCMonth() + 1) + p(x.getUTCDate()) : f === 'HH:mm' ? `${p(x.getUTCHours())}:${p(x.getUTCMinutes())}` : `${x.getUTCFullYear()}-${p(x.getUTCMonth() + 1)}-${p(x.getUTCDate())}`; };
   const digest = tuyChon.digestHang ? () => Array(16).fill(7) : (a, s) => Array.from(crypto.createHash('md5').update(s).digest()).map((b) => (b > 127 ? b - 256 : b));
   const ctx = vm.createContext({
     SpreadsheetApp: { getActiveSpreadsheet: () => ss },
-    LockService: { getScriptLock: () => ({ waitLock() { st.khoa++; }, releaseLock() { st.mo++; } }) },
-    MailApp: { sendEmail: (o) => { if (st.emailLoi) throw new Error('hết hạn mức email'); st.emails.push(o); } },
+    LockService: { getScriptLock: () => ({ waitLock() { if (st.khoaBan || st.giu) throw new Error('Không lấy được khoá'); st.giu = true; st.khoa++; }, releaseLock() { st.giu = false; st.mo++; } }) }, // khoá thật: đang có người giữ thì lấy không được
+    MailApp: { sendEmail: (o) => { if (st.truocGui) st.truocGui(o); if (st.emailLoi) throw new Error('hết hạn mức email'); st.emails.push(o); }, getRemainingDailyQuota: () => st.hanMuc - st.emails.length },
     Session: { getEffectiveUser: () => ({ getEmail: () => 'chu@example.com' }) },
     ScriptApp: { getProjectTriggers: () => st.triggers.map((t) => ({ getHandlerFunction: () => t })), newTrigger: (fn) => ({ timeBased() { return this; }, everyMinutes() { return this; }, create() { st.triggers.push(fn); } }) },
     Utilities: { computeDigest: digest, DigestAlgorithm: { MD5: 'MD5' }, formatDate: (d, tz, f) => vn(d, f), getUuid: () => crypto.randomUUID() },
@@ -50,7 +57,7 @@ muc('1. Biểu mẫu mới: lưu, chống trùng, email');
   const x = o(1);
   ok('Lưu đúng 1 dòng, đúng cột (mã, mã gửi, tên, số điện thoại, thú cưng, loài, dịch vụ, ngày, giờ, trạng thái "Mới")', st.rows.length === 2 && x['Mã yêu cầu'] === r.ma && x['Mã gửi từ trình duyệt'] === d.ma_yeu_cau && x['Tên khách hàng'] === 'Khách thử' && x['Tên thú cưng'] === 'Bé Thử' && x['Loài'] === 'Chó' && x['Ngày mong muốn / gửi'] === d.ngay && x['Giờ'] === '09:00' && x['Trạng thái'] === 'Mới', JSON.stringify(x));
   ok('Gửi đúng 1 email cho chủ tài khoản, có mã yêu cầu; cột "Email báo" ghi "đã gửi"', st.emails.length === 1 && st.emails[0].to === 'chu@example.com' && st.emails[0].subject.includes(r.ma) && x['Email báo'] === 'đã gửi', JSON.stringify(x['Email báo']));
-  ok('Khoá được lấy và trả lại đủ', st.khoa === 1 && st.mo === 1, `${st.khoa}/${st.mo}`);
+  ok('Khoá lấy và trả lại cân bằng (ghi dòng; cập nhật kết quả email)', st.khoa >= 1 && st.khoa === st.mo && !st.giu, `${st.khoa}/${st.mo}`);
   const r2 = gui(d);
   ok('Gửi lại CÙNG mã yêu cầu: không tạo dòng mới, không gửi email nữa, trả lại mã cũ với trung: true', r2.ok && r2.trung === true && r2.ma === r.ma && st.rows.length === 2 && st.emails.length === 1, JSON.stringify(r2));
   const r3 = gui(tot());
@@ -148,6 +155,97 @@ muc('7. Dữ liệu lạ');
 { const { st, gui, ctx } = taoMoiTruong(); const r = gui(null, '{bad json');
   ok('JSON hỏng: trả { ok: false } có thông báo, không báo lỗi script', r.ok === false && !!r.loi && !st.rows.length, JSON.stringify(r));
   const g = JSON.parse(ctx.doGet().getContent()); ok('doGet chỉ trả trạng thái chạy, không lộ dữ liệu', g.ok === true && g.dich_vu === 'dat-lich-v2' && Object.keys(g).length === 2, JSON.stringify(g)); }
+
+// ===== 8. Trang tính CŨ: không lệch cột, không đụng dữ liệu cũ =====
+muc('8. Trang tính cũ: ghi theo TÊN cột, giữ nguyên dữ liệu cũ (tiêu đề + dòng cũ)');
+const TIEU_DE_CU = ['Thời gian gửi', 'Tên chủ nuôi', 'Số điện thoại', 'Thú cưng', 'Dịch vụ', 'Ngày muốn đến', 'Giờ muốn đến', 'Ghi chú', 'Trạng thái', 'Cân nặng', 'Hoá đơn tham khảo', 'Tổng tạm tính'];
+const DONG_CU = [['2026-09-01 10:00', 'Chị Lan', '0901111111', 'Chó', 'Tắm – Chó lông ngắn', '2026-09-05', '10:00', 'bé hiền', 'Đã xác nhận', '3 – 5 kg', 'Tắm: 120.000đ', '120.000đ'],
+  ['2026-09-02 09:30', 'Anh Nam', '0902222222', 'Khác (thỏ)', 'Khám và chẩn đoán', '2026-09-06', '14:00', '', 'Mới', '', '', '']];
+const chup = (v) => JSON.stringify(v);
+const thu = (ten, fn) => { try { fn(); } catch (e) { ok(ten + ': script báo lỗi khi chạy', false, e && e.message); } }; // một khối lỗi không làm dừng cả bộ thử
+const CH_CU = { cauHinh: { TEN_TRANG: 'Đặt lịch' }, hangCu: [TIEU_DE_CU, ...DONG_CU] };
+thu('khối 1', () => { const T = taoMoiTruong(CH_CU), d = tot({ ten_khach: 'Khách mới', ghi_chu: 'từ web mới' }), r = T.gui(d);
+  ok('Trang cũ (12 cột của Code.gs): ghi dòng mới được ok, tạo mã', r.ok === true && !!r.ma, JSON.stringify(r));
+  const hd = T.st.rows[0] || [], sau = T.st.rows;
+  ok('GIỮ NGUYÊN 12 tiêu đề cũ (không ghi đè, không đổi thứ tự, không đổi tên)', chup(hd.slice(0, 12)) === chup(TIEU_DE_CU), chup(hd.slice(0, 12)));
+  ok('GIỮ NGUYÊN hai dòng dữ liệu cũ (giá trị và số cột không đổi)', chup(sau.slice(1, 3)) === chup(DONG_CU), chup(sau.slice(1, 3)));
+  ok('Cột còn thiếu được THÊM VÀO CUỐI (9 cột: Mã yêu cầu … Nguồn), không chen vào giữa', hd.length === 21 && hd.slice(12).includes('Mã yêu cầu') && hd.slice(12).includes('Email báo') && hd.slice(12).includes('Nguồn'), chup(hd.slice(12)));
+  const m = sau.length > 3 ? T.o(3) : {};
+  ok('Dòng mới nằm ĐÚNG CỘT theo tên: "Tên chủ nuôi" = tên khách, "Thú cưng" = loài, "Giờ muốn đến" = giờ, "Ngày muốn đến" = ngày, "Trạng thái" = Mới, "Ghi chú"', m['Tên chủ nuôi'] === 'Khách mới' && m['Thú cưng'] === 'Chó' && m['Giờ muốn đến'] === '09:00' && m['Ngày muốn đến'] === d.ngay && m['Trạng thái'] === 'Mới' && m['Ghi chú'] === 'từ web mới' && m['Số điện thoại'] === '0912345678' && m['Dịch vụ'] === 'Khám và chẩn đoán', chup(m));
+  ok('Cột mới đúng chỗ: Mã yêu cầu = mã trả về, Tên thú cưng, Mã gửi từ trình duyệt, Email báo "đã gửi"', m['Mã yêu cầu'] === r.ma && m['Tên thú cưng'] === 'Bé Thử' && m['Mã gửi từ trình duyệt'] === d.ma_yeu_cau && m['Email báo'] === 'đã gửi', chup(m));
+  ok('Không dòng cũ nào bị tô màu hay đổi', !T.st.bg[2] && !T.st.bg[3], chup(T.st.bg));
+  const r2 = T.gui(d);
+  ok('Gửi lại cùng mã trên trang cũ: chống trùng hoạt động (trung: true, không thêm dòng, không thêm email, không thêm cột)', r2.trung === true && r2.ma === r.ma && T.st.rows.length === 4 && T.st.emails.length === 1 && T.st.rows[0].length === 21, chup(r2));
+  const r3 = T.gui(tot()); ok('Yêu cầu khác trên trang cũ: thêm dòng mới, số cột tiêu đề KHÔNG tăng nữa (thêm cột chỉ làm một lần)', r3.ok && T.st.rows.length === 5 && T.st.rows[0].length === 21 && chup(T.st.rows.slice(1, 3)) === chup(DONG_CU), '');
+  T.ctx.guiLaiEmailLoi(); T.ctx.guiLaiEmailLoi();
+  ok('Chạy gửi lại email trên trang cũ: các dòng cũ (không có mã) không bị đụng, không gửi email thừa', chup(T.st.rows.slice(1, 3)) === chup(DONG_CU) && T.st.emails.length === 2, T.st.emails.length); });
+thu('khối 2', () => { const tieu = ['Thời gian gửi', 'Tên chủ nuôi', 'Tên khách hàng', 'Số điện thoại', 'Loài', 'Thú cưng'], T = taoMoiTruong({ hangCu: [tieu, ['t', 'a', 'b', '0900000000', 'Mèo', 'Mèo']] });
+  T.gui(tot()); const m = T.st.rows.length > 2 ? T.o(2) : {};
+  ok('Có cả "Tên khách hàng" lẫn "Tên chủ nuôi": ghi vào "Tên khách hàng" (tên chuẩn), để trống "Tên chủ nuôi"; "Loài" thắng "Thú cưng"', m['Tên khách hàng'] === 'Khách thử' && m['Tên chủ nuôi'] === '' && m['Loài'] === 'Chó' && m['Thú cưng'] === '', chup(m)); });
+thu('khối 3', () => { const tieu = ['Mã yêu cầu', 'Mã gửi từ trình duyệt', 'Thời gian nhận', 'Tên khách hàng', 'Số điện thoại', 'Tên thú cưng', 'Loài', 'Dịch vụ', 'Ngày mong muốn / gửi', 'Giờ', 'Ngày đón dự kiến', 'Giờ đón', 'Cân nặng', 'Ghi chú'];
+  const cu = [['LS-260901-AAAAAA', 'g1', '2026-09-01', 'A', '0900000001', 'Mi', 'Mèo', 'Khám', '2026-09-03', '09:00', '', '', '', '']];
+  const T = taoMoiTruong({ hangCu: [tieu, ...cu] }), r = T.gui(tot()), m = T.st.rows.length > 2 ? T.o(2) : {};
+  ok('Bố cục nháp 14 cột: thêm 7 cột còn thiếu vào cuối; 14 cột đầu và dòng cũ giữ nguyên; dòng mới đúng cột (Trạng thái "Mới", Email báo "đã gửi")', r.ok && chup(T.st.rows[0].slice(0, 14)) === chup(tieu) && chup(T.st.rows[1]) === chup(cu[0]) && T.st.rows[0].length === 21 && m['Trạng thái'] === 'Mới' && m['Email báo'] === 'đã gửi' && m['Mã yêu cầu'] === r.ma, chup(T.st.rows[0])); });
+thu('khối 4', () => { const tieu = ['Nhân viên phụ trách', '  TÊN   khách hàng ', 'Mã yêu cầu', 'số điện thoại', 'Ghi chú nội bộ', 'Giờ', 'Dịch vụ'];
+  const cu = [['Hà', 'Chị X', 'LS-260901-ZZZZZZ', '0900000009', 'VIP', '09:00', 'Tắm']];
+  const T = taoMoiTruong({ hangCu: [tieu, ...cu] }), r = T.gui(tot()), h = T.st.rows[0], m = T.st.rows.length > 2 ? T.o(2) : {};
+  ok('Cột bị sắp xếp lại / có cột riêng / tiêu đề lệch hoa-thường-khoảng trắng: vẫn khớp theo tên; cột riêng của nhân viên để trống; 7 tiêu đề gốc nguyên văn', r.ok && chup(h.slice(0, 7)) === chup(tieu) && m['  TÊN   khách hàng '] === 'Khách thử' && m['Mã yêu cầu'] === r.ma && m['số điện thoại'] === '0912345678' && m['Giờ'] === '09:00' && m['Nhân viên phụ trách'] === '' && m['Ghi chú nội bộ'] === '', chup(m));
+  ok('Dòng cũ của bố cục đó không đổi; "Ghi chú" không bị nhầm với "Ghi chú nội bộ" (cột Ghi chú mới thêm ở cuối)', chup(T.st.rows[1]) === chup(cu[0]) && h.slice(7).includes('Ghi chú') && m['Ghi chú'] === 'ghi chú', chup(h)); });
+thu('khối 5', () => { const tieu = ['Mã yêu cầu', 'Mã gửi từ trình duyệt', 'Tên khách hàng'], cu = [['LS-260901-QQQQQQ', 'da-co-ma-gui', 'A']];
+  const T = taoMoiTruong({ hangCu: [tieu, ...cu] }), r = T.gui(tot({ ma_yeu_cau: 'da-co-ma-gui' }));
+  ok('Mã gửi đã có sẵn ở dòng cũ (đọc theo tên cột): trả lại mã cũ, không tạo dòng', r.ok && r.trung === true && r.ma === 'LS-260901-QQQQQQ' && T.st.rows.length === 2, chup(r)); });
+thu('khối 6', () => { const T = taoMoiTruong(); T.gui(tot());
+  ok('Trang trống: ghi đủ 21 tiêu đề chuẩn theo thứ tự (hành vi cũ giữ nguyên)', T.st.rows[0].length === 21 && T.st.rows[0][0] === 'Mã yêu cầu' && T.st.rows[0][20] === 'Nguồn', chup(T.st.rows[0])); });
+
+// ===== 9. Gửi lại email đồng thời không trùng =====
+muc('9. Gửi lại email: không gửi trùng khi chạy chồng nhau');
+thu('khối 7', () => { const T = taoMoiTruong({ emailLoi: true }); T.gui(tot()); // dòng ở trạng thái LỖI
+  T.st.emailLoi = false; let da = false;
+  T.st.truocGui = () => { if (!da) { da = true; T.ctx.guiLaiEmailLoi(); } }; // trong lúc lần chạy A đang gửi, lần chạy B (trigger / bấm tay) chạy chồng
+  T.ctx.guiLaiEmailLoi();
+  ok('Hai lần chạy chồng nhau lên cùng dòng LỖI: chỉ gửi ĐÚNG 1 email', T.st.emails.length === 1, T.st.emails.length);
+  ok('Kết quả cuối: "Email báo" = "đã gửi", hết màu lỗi, số lần gửi = 2 (1 lần lỗi + 1 lần gửi lại)', T.o(1)['Email báo'] === 'đã gửi' && !T.st.bg[2] && Number(T.o(1)['Số lần gửi email']) === 2, chup([T.o(1)['Email báo'], T.st.bg, T.o(1)['Số lần gửi email']]));
+  ok('Khoá cân bằng sau khi chạy chồng', T.st.khoa === T.st.mo && !T.st.giu, `${T.st.khoa}/${T.st.mo}`); });
+thu('khối 8', () => { const T = taoMoiTruong({ emailLoi: true }); T.gui(tot()); T.gui(tot()); T.st.emailLoi = false; T.ctx.guiLaiEmailLoi(); T.ctx.guiLaiEmailLoi(); T.ctx.guiLaiEmailLoi();
+  ok('Hai dòng LỖI, chạy 3 lần liên tiếp: mỗi dòng đúng 1 email (tổng 2)', T.st.emails.length === 2, T.st.emails.length); });
+thu('khối 9', () => { const T = taoMoiTruong(); let da = false;
+  T.st.truocGui = () => { if (!da) { da = true; T.ctx.guiLaiEmailLoi(); } }; // trong lúc gửi email lần đầu của doPost, trigger gửi lại chạy
+  const r = T.gui(tot());
+  ok('Trigger gửi lại chạy đúng lúc đang gửi email lần đầu của yêu cầu mới: vẫn chỉ 1 email', r.ok && T.st.emails.length === 1 && T.o(1)['Email báo'] === 'đã gửi', T.st.emails.length); });
+thu('khối 10', () => { const T = taoMoiTruong({ emailLoi: true }); T.gui(tot()); T.st.emailLoi = false;
+  const i = T.cot('Email báo'), j = T.cot('Số lần gửi email'); T.st.rows[1][i] = 'ĐANG GỬI ' + new Date().toISOString(); T.st.rows[1][j] = 2;
+  T.ctx.guiLaiEmailLoi();
+  ok('Dòng "ĐANG GỬI" MỚI (lần chạy khác đang gửi) không bị gửi lại', T.st.emails.length === 0 && /^ĐANG GỬI/.test(T.o(1)['Email báo']), T.o(1)['Email báo']);
+  T.st.rows[1][i] = 'ĐANG GỬI ' + new Date(Date.now() - 20 * 60000).toISOString();
+  T.ctx.guiLaiEmailLoi();
+  ok('Dòng "ĐANG GỬI" bị treo quá 5 phút (lần chạy trước chết giữa chừng): được gửi lại đúng 1 lần, số lần tăng lên 3', T.st.emails.length === 1 && T.o(1)['Email báo'] === 'đã gửi' && Number(T.o(1)['Số lần gửi email']) === 3, chup([T.st.emails.length, T.o(1)['Email báo'], T.o(1)['Số lần gửi email']]));
+  T.st.rows[1][i] = 'ĐANG GỬI ' + new Date(Date.now() - 20 * 60000).toISOString(); T.st.rows[1][j] = 5; const truoc = T.st.emails.length;
+  T.ctx.guiLaiEmailLoi();
+  ok('Treo mà đã hết 5 lượt: KHÔNG gửi nữa, chuyển sang LỖI và tô màu để nhân viên xem', T.st.emails.length === truoc && /^LỖI/.test(T.o(1)['Email báo']) && !!T.st.bg[2], chup([T.o(1)['Email báo'], T.st.bg])); });
+thu('khối 11', () => { const T = taoMoiTruong();
+  T.st.truocGui = () => { T.st.rows.splice(1, 0, ['nhân viên chèn dòng', '', '']); T.st.truocGui = null; }; // nhân viên chèn một dòng NGAY TRÊN dòng vừa ghi trong lúc email đang gửi
+  const r = T.gui(tot()), hang = T.st.rows.findIndex((x) => x[0] === r.ma), iE = T.cot('Email báo');
+  ok('Nhân viên chèn dòng ở trên trong lúc gửi email: kết quả "đã gửi" ghi đúng dòng của yêu cầu (tìm theo mã, không theo số dòng cũ), dòng chèn không bị đụng', hang === 2 && T.st.rows[hang][iE] === 'đã gửi' && chup(T.st.rows[1]) === chup(['nhân viên chèn dòng', '', '']), chup([hang, T.st.rows[hang] && T.st.rows[hang][iE], T.st.rows[1]])); });
+thu('khối 12', () => { const T = taoMoiTruong({ emailLoi: true }); T.gui(tot()); T.st.emailLoi = false; T.st.khoaBan = true;
+  let loi = ''; try { T.ctx.guiLaiEmailLoi(); } catch (e) { loi = e.message; }
+  ok('Khoá đang bận khi chạy gửi lại: bỏ lượt, không ném lỗi, không gửi email', loi === '' && T.st.emails.length === 0, loi);
+  const r = T.gui(tot());
+  ok('Khoá bận khi ghi yêu cầu mới: trả lỗi tiếng Việt (khách bấm gửi lại được), KHÔNG ghi dòng nào', r.ok === false && /thử lại/.test(r.loi || '') && T.st.rows.length === 2, chup(r)); });
+thu('khối 13', () => { const A = taoMoiTruong({ cauHinh: { EMAIL_NHAN: 'a@x.vn, b@x.vn' } }); A.gui(tot());
+  const B = taoMoiTruong(); B.gui(tot());
+  ok('EMAIL_NHAN điền sẵn: email gửi tới đúng các địa chỉ đó; để trống: gửi tới chủ tài khoản đã triển khai', A.st.emails[0].to === 'a@x.vn, b@x.vn' && B.st.emails[0].to === 'chu@example.com', chup([A.st.emails[0].to, B.st.emails[0].to])); });
+
+// ===== 10. Thử trên Sheet riêng (hàm kiemTraTrenSheetRieng) =====
+muc('10. kiemTraTrenSheetRieng(): bộ thử cho Sheet riêng');
+thu('khối 14', () => { const T = taoMoiTruong(); const hamCo = typeof T.ctx.kiemTraTrenSheetRieng === 'function';
+  ok('Có hàm kiemTraTrenSheetRieng()', hamCo, '');
+  if (hamCo) { const kqHam = T.ctx.kiemTraTrenSheetRieng(), kt = T.st.sheets['Kết quả thử'], dong = kt ? kt.d.rows.slice(1) : [];
+    ok('Môi trường tốt: mọi mục ĐẠT, ghi vào trang "Kết quả thử"', kqHam.khongDat === 0 && dong.length >= 7 && dong.every((r) => r[1] === 'ĐẠT'), chup(dong.map((r) => r[1] + ' ' + r[2])));
+    ok('Đúng MỘT dòng trong trang đặt lịch và đúng 2 email thử (1 lần đầu + 1 lần sau khi giả lập lỗi), tới chủ tài khoản', T.st.rows.length === 2 && T.st.emails.length === 2 && T.st.emails.every((e) => e.to === 'chu@example.com'), `${T.st.rows.length - 1} dòng, ${T.st.emails.length} email`);
+    const H = taoMoiTruong({ emailLoi: true }), kh = H.ctx.kiemTraTrenSheetRieng();
+    ok('Email hỏng (hết hạn mức): bộ thử BÁO KHÔNG ĐẠT, không báo ĐẠT giả', kh.khongDat > 0, JSON.stringify(kh));
+    const C = taoMoiTruong({ cauHinh: { GUI_EMAIL: false } }), kc = C.ctx.kiemTraTrenSheetRieng();
+    ok('GUI_EMAIL = false: bộ thử vẫn đạt phần lưu 1 dòng và gửi lại không trùng, không gửi email', kc.khongDat === 0 && C.st.emails.length === 0 && C.st.rows.length === 2, JSON.stringify(kc)); } });
 
 const dem = (t) => kq.filter((x) => x.tt === t).length;
 const tom = `ĐẠT ${dem('ĐẠT')} · KHÔNG ĐẠT ${dem('KHÔNG ĐẠT')} · CHƯA XÁC MINH ${dem('CHƯA XÁC MINH') + 1}`;

@@ -4,6 +4,8 @@
 > Hiện biểu mẫu mới đang ở chế độ **xem trước (giả lập)**, chưa nhận lịch thật. Công tắc chế độ giải thích ở `docs/CHE-DO-DAT-LICH.md`.
 > Chưa có gì trong tài liệu này được cài lên Google. Làm theo thứ tự, và **thử bằng một Google Sheet riêng trước**.
 
+> **Làm thêm theo `docs/BAT-CHE-DO-THAT.md`:** chạy hàm `kiemTraTrenSheetRieng` và `apps-script/thu-nhan-lich.html` trên Sheet THỬ. Chế độ `'that'` chỉ được bật sau khi đạt 3 điều: lưu đúng 1 dòng, email tới đúng hộp thư, gửi lại không trùng.
+
 ## A. Việc bạn làm (khoảng 15 phút)
 1. Đăng nhập Google bằng tài khoản của bệnh viện, tạo một **Google Sheet thử**, đặt tên "Thử đặt lịch".
 2. Trong Sheet: **Tiện ích mở rộng → Apps Script**.
@@ -27,7 +29,9 @@
 - Mỗi yêu cầu là một dòng ở trang **"Đặt lịch v2"** (cột "Trạng thái": Mới → Đã gọi…). Đây là trang quản lý.
 - **Cột "Email báo":** "đã gửi", "không dùng", hoặc **LỖI** (dòng được tô màu cam). Dòng LỖI nghĩa là yêu cầu **vẫn được lưu** nhưng email chưa tới: xem Sheet, và nếu đã đặt bước A7 thì hệ thống tự gửi lại.
 - **Cột "Cần kiểm tra"** có chữ: lịch đến từ biểu mẫu cũ và có chỗ hệ thống không đọc được (ví dụ ngày đón): nhân viên xem lại khi gọi khách.
-- Script bản 2 ghi vào trang **"Đặt lịch v2"**, **khác trang "Đặt lịch" cũ**: đổi thói quen xem sang trang mới.
+- Script bản 2 mặc định ghi vào trang **"Đặt lịch v2"**, **khác trang "Đặt lịch" cũ**: đổi thói quen xem sang trang mới. Nếu muốn dùng lại trang "Đặt lịch" cũ, đặt `TEN_TRANG: 'Đặt lịch'`: bản 2 **không đụng dòng và tiêu đề cũ**, chỉ thêm cột mới vào bên phải và ghi dòng mới đúng cột theo tên.
+- Cột **"Email báo"** có thể ghi **ĐANG GỬI …** trong vài giây (hệ thống đang gửi). Nếu ghi mãi quá 5 phút thì lần gửi lại tự động sẽ xử lý.
+- Muốn email tới hộp thư khác chủ tài khoản: điền `EMAIL_NHAN` ở đầu script.
 - Biểu mẫu cũ đang chạy trên web vẫn hoạt động nếu bạn nâng cấp script cũ lên bản 2 (bản 2 vẫn nhận được dữ liệu của biểu mẫu cũ), nhưng lịch từ biểu mẫu cũ cũng nằm ở trang "Đặt lịch v2".
 
 ## D. Quay lại khi cần
