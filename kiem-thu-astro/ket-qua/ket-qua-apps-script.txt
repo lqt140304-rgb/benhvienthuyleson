@@ -1,22 +1,58 @@
-Thử logic Code.v2.gs bằng đối tượng giả (không gọi Google) · 2026-10-11T10:55:18.438Z
-ĐẠT 17 · KHÔNG ĐẠT 0
+Thử logic Code.v2.gs bằng đối tượng giả (không gọi Google) · 2026-10-11T11:13:47.086Z
+ĐẠT 38 · KHÔNG ĐẠT 0 · CHƯA XÁC MINH 2
 
-[ĐẠT] Yêu cầu hợp lệ: trả { ok: true, ma } với mã dạng LS-yymmdd-XXXX
+
+-- 1. Biểu mẫu mới: lưu, chống trùng, email
+[ĐẠT] Yêu cầu hợp lệ: trả { ok: true, ma } với mã dạng LS-yymmdd-XXXXXX (6 ký tự)
 [ĐẠT] Lưu đúng 1 dòng, đúng cột (mã, mã gửi, tên, số điện thoại, thú cưng, loài, dịch vụ, ngày, giờ, trạng thái "Mới")
-[ĐẠT] Gửi đúng 1 email cho chủ tài khoản, có mã yêu cầu
+[ĐẠT] Gửi đúng 1 email cho chủ tài khoản, có mã yêu cầu; cột "Email báo" ghi "đã gửi"
 [ĐẠT] Khoá được lấy và trả lại đủ
 [ĐẠT] Gửi lại CÙNG mã yêu cầu: không tạo dòng mới, không gửi email nữa, trả lại mã cũ với trung: true
 [ĐẠT] Mã yêu cầu khác: tạo dòng mới và mã mới
+
+-- 2. Kiểm tra dữ liệu phía máy chủ
 [ĐẠT] 16 trường hợp dữ liệu sai: đều trả { ok: false, loi } bằng tiếng Việt, không lưu dòng nào, không gửi email
 [ĐẠT] Ngày đón CÙNG ngày gửi là hợp lệ; ngày đón sau ngày gửi hợp lệ
 [ĐẠT] Loài Khác lưu kèm tên loài; số điện thoại +84 được đổi về dạng 0…
+[ĐẠT] Giờ không hợp lệ (16 dạng, gồm 08:99, 09:60, 24:00, 25:00): đều bị từ chối, không lưu
+[ĐẠT] Giờ hợp lệ 08:00, 08:30, 20:30, 21:00 được nhận (khung 8:00–21:00 như Code.gs cũ)
+
+-- 3. Bảo vệ (ô bẫy, công thức, độ dài)
 [ĐẠT] Ô bẫy spam có chữ: từ chối, không lưu, không gửi email
-[ĐẠT] Chặn công thức: nội dung bắt đầu bằng = + - @ được lưu kèm dấu nháy ở đầu
+[ĐẠT] Chặn công thức: nội dung bắt đầu bằng = + - @ được ghi kèm dấu nháy ở đầu (Google Sheets coi là chữ)
 [ĐẠT] Nội dung quá dài bị cắt (ghi chú ≤ 1000, tên ≤ 80)
-[ĐẠT] GUI_EMAIL = false (chỉ trang tính): vẫn lưu dòng, không gửi email
-[ĐẠT] Gửi email lỗi (hết hạn mức): yêu cầu VẪN được lưu và vẫn trả ok: true (nhân viên thấy dòng mới trong trang tính)
+
+-- 4. Tương thích biểu mẫu cũ (form-urlencoded, đúng định dạng FormDatLichCu gửi, không đọc được phản hồi)
+[ĐẠT] Gửi nội trú từ biểu mẫu cũ (có "· đón dd/mm/yyyy lúc HH:MM" dính trong tên dịch vụ): ĐƯỢC NHẬN và lưu
+[ĐẠT] Tách đúng: Dịch vụ sạch (không còn "· đón…"), Ngày đón dự kiến, Giờ đón; Loài "Khác (thỏ)"
+[ĐẠT] Giữ đủ thông tin cũ: cân nặng, hoá đơn tham khảo (nhiều dòng), tổng tạm tính; không cần kiểm tra thêm
+[ĐẠT] Email có ngày đón, hoá đơn và tổng tạm tính (như Code.gs cũ)
+[ĐẠT] Biểu mẫu cũ không có "tên thú cưng": vẫn nhận, ghi chú rõ không có
+[ĐẠT] Nội trú cũ nhưng KHÔNG đọc được ngày đón: vẫn LƯU (không mất lịch trong im lặng) và gắn "Cần kiểm tra"
+[ĐẠT] Dữ liệu mẫu của hàm thuNghiem() trong Code.gs cũ (Tắm) được nhận
+[ĐẠT] Biểu mẫu cũ vẫn bị từ chối khi lỗi LÕI (số điện thoại, tên, giờ, ngày, ngày đón trước ngày gửi) như Code.gs cũ
+[ĐẠT] Giờ đón của biểu mẫu cũ sai định dạng: vẫn lưu lịch, gắn "Cần kiểm tra" (giờ đón)
+[CHƯA XÁC MINH] Từ đầu đến cuối với body biểu mẫu cũ thật  → Chưa có ket-qua/body-bieu-mau-cu.txt: chạy kiem-thu-astro.cjs trước (nó ghi body từ trình duyệt thật), rồi chạy lại tệp này
+
+-- 5. Mã tra cứu đủ dài và duy nhất
+[ĐẠT] Cặp mã gửi request-240 / request-382 đã từng trùng mã bản cũ (cùng 4 ký tự đầu của MD5)
+[ĐẠT] Hai mã gửi đó giờ ra HAI mã tra cứu khác nhau, đủ 2 dòng
+[ĐẠT] 1.500 yêu cầu khác nhau cùng một ngày: 1.500 mã khác nhau, 1.500 dòng, không lỗi
+[ĐẠT] Ép băm trả cùng một giá trị (va chạm giả): vẫn ra các mã KHÁC nhau và đủ dòng (kiểm tra tính duy nhất, không dựa vào may rủi)
+[ĐẠT] Dù va chạm giả, gửi lại cùng mã gửi vẫn trả đúng mã cũ (không tạo dòng mới)
+
+-- 6. Nơi nhận: lỗi email không còn im lặng
+[ĐẠT] GUI_EMAIL = false (chỉ trang tính): vẫn lưu dòng, không gửi email, cột "Email báo" ghi "không dùng"
+[ĐẠT] Gửi email lỗi (hết hạn mức): yêu cầu VẪN được lưu, vẫn trả ok: true, nhưng cột "Email báo" ghi LỖI và dòng được tô màu để nhân viên thấy
+[ĐẠT] Có hàm guiLaiEmailLoi() và taoLichGuiLaiEmail()
+[ĐẠT] Sau khi email hoạt động lại: guiLaiEmailLoi() gửi lại đúng 1 email, đánh dấu "đã gửi", bỏ màu
+[ĐẠT] Chạy lại lần nữa: không gửi trùng email đã gửi
+[ĐẠT] Email vẫn lỗi: thử lại tối đa 5 lần rồi dừng (không lặp vô hạn); dòng vẫn nằm ở trạng thái LỖI để nhân viên theo dõi
+[ĐẠT] GUI_EMAIL = false: guiLaiEmailLoi() không gửi gì
+[ĐẠT] taoLichGuiLaiEmail() đặt đúng 1 trigger dù chạy hai lần
+
+-- 7. Dữ liệu lạ
 [ĐẠT] JSON hỏng: trả { ok: false } có thông báo, không báo lỗi script
-[ĐẠT] Biểu mẫu cũ (form-urlencoded) vẫn được nhận và lưu (có thể quay lại biểu mẫu cũ mà không đổi script)
 [ĐẠT] doGet chỉ trả trạng thái chạy, không lộ dữ liệu
 
-[CHƯA XÁC MINH] Chạy thật trên Google (cấp quyền, email tới, phản hồi JSON đọc được từ trình duyệt github.io)  → cần chủ dự án thử theo HUONG-DAN-NHAN-LICH.md
+[CHƯA XÁC MINH] Chạy thật trên Google (cấp quyền, email tới, hạn mức email, phản hồi JSON đọc được từ trình duyệt github.io)  → cần chủ dự án thử theo HUONG-DAN-NHAN-LICH.md

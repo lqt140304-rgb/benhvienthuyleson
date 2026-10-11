@@ -1,4 +1,4 @@
-// Quay video biểu mẫu đặt lịch mới. Cần: máy chủ bản thường (cổng 4321) và bản dựng PUBLIC_MODE_DAT_LICH=that (cổng 4398, dùng máy chủ GIẢ của Google qua page.route; không gửi gì ra ngoài).
+// Quay video biểu mẫu đặt lịch mới. Cần: máy chủ bản thường (cổng 4321) và bản dựng chế độ 'that' (dựng bằng `node kiem-thu-astro/dung-che-do.cjs that dist-that`, chạy `DIST=dist-that node kiem-thu-astro/may-chu.cjs 4398`). Dùng máy chủ GIẢ của Google qua page.route; không gửi gì ra ngoài.
 // Chạy: NODE_PATH=$(npm root -g) node kiem-thu-astro/quay-video-form.cjs [thư mục ra]
 const { chromium } = require('playwright'); const fs = require('fs'), path = require('path'), { execSync } = require('child_process');
 const RA = path.resolve(process.argv[2] || path.join(__dirname, 'video')); fs.mkdirSync(RA, { recursive: true });
@@ -25,12 +25,12 @@ const dien = async (p, t = 350) => {
     await p.waitForTimeout(800); await p.locator('#m-ten').focus(); await p.locator('#m-sdt').focus(); await p.waitForTimeout(700); // báo lỗi khi bỏ trống
     await dien(p); await p.click('#m-gui'); await p.waitForTimeout(2500);
   });
-  await quay('form-nhan-that-desktop-1440', 4398, 1440, 900, {}, async (p) => {
+  await quay('form-nhan-voi-may-chu-gia-desktop-1440', 4398, 1440, 900, {}, async (p) => {
     let lan = 0; await p.route(/script\.google\.com/, async (r) => { lan++; await new Promise((k) => setTimeout(k, 1200)); if (lan === 1) return r.abort('failed'); return r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true, ma: 'LS-261011-7F3A' }) }); });
     await p.waitForTimeout(800); await dien(p, 250); await p.click('#m-gui'); await p.waitForTimeout(2800); // đang gửi → chưa nhận được xác nhận (giữ dữ liệu)
     await p.click('#m-gui'); await p.waitForTimeout(3500); // gửi lại → đã nhận + mã
   });
-  await quay('form-nhan-that-mobile-390', 4398, 390, 844, { isMobile: true, hasTouch: true }, async (p) => {
+  await quay('form-nhan-voi-may-chu-gia-mobile-390', 4398, 390, 844, { isMobile: true, hasTouch: true }, async (p) => {
     await p.route(/script\.google\.com/, async (r) => { await new Promise((k) => setTimeout(k, 1200)); r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true, ma: 'LS-261011-7F3A' }) }); });
     await p.waitForTimeout(800); await dien(p, 250); await p.click('#m-gui'); await p.waitForTimeout(3500);
   });

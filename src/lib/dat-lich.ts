@@ -1,7 +1,7 @@
 // Cấu hình và dữ liệu cho biểu mẫu đặt lịch mới. KHÔNG sửa dữ liệu nguồn: danh sách dịch vụ lấy từ src/data/dich_vu.json qua site.ts.
 
 /**
- * Chế độ của biểu mẫu đặt lịch (đổi giá trị này rồi dựng lại web):
+ * Chế độ của biểu mẫu đặt lịch (đổi hằng số `modeDatLich` bên dưới, dựng lại web):
  *  - 'gia-lap' (MẶC ĐỊNH): biểu mẫu mới chạy thử, KHÔNG gửi dữ liệu đi đâu. Có dòng "chưa gửi dữ liệu thật" và lối gọi điện / Zalo.
  *  - 'that'   : gửi tới địa chỉ nhận (`dia_chi_nhan_dat_lich` trong thong_tin.json). Chỉ dùng sau khi đã triển khai apps-script/Code.v2.gs
  *               và thử nhận thật (xem HUONG-DAN-NHAN-LICH.md). Chỉ báo "Đã nhận yêu cầu" khi máy chủ trả { ok: true, ma } đọc được.
@@ -11,9 +11,10 @@
  * (khách chỉ còn gọi điện / Zalo). Chủ dự án cần chốt nơi nhận lịch (email, trang quản lý hay cả hai) trước khi gộp.
  */
 export type ModeDatLich = 'gia-lap' | 'that' | 'cu';
-// PUBLIC_MODE_DAT_LICH chỉ để kiểm thử (dựng thử ở chế độ khác mà không sửa mã). Không đặt biến này khi dựng bản thật: mặc định luôn là 'gia-lap'.
-const tuMoiTruong = import.meta.env.PUBLIC_MODE_DAT_LICH;
-export const modeDatLich: ModeDatLich = tuMoiTruong === 'that' || tuMoiTruong === 'cu' ? tuMoiTruong : 'gia-lap';
+// MỘT cách duy nhất để đổi chế độ: sửa dòng dưới đây, dựng lại web, kiểm tra bằng `npm run kiem-tra-che-do -- --mong=<chế độ>`, rồi commit.
+// (Không có biến môi trường nào đổi được chế độ; workflow triển khai không đặt biến nào.)
+export const modeDatLich: ModeDatLich = 'gia-lap';
+console.info(`[dat-lich] modeDatLich = ${modeDatLich}`); // hiện trong nhật ký dựng web (npm run build)
 
 /** Khung giờ nhận lịch (giờ mở cửa 8:00 – 21:00), cách 30 phút */
 export const khungGio = Array.from({ length: 26 }, (_, i) => `${String(8 + Math.floor(i / 2)).padStart(2, '0')}:${i % 2 ? '30' : '00'}`);

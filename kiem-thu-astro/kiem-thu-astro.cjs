@@ -5,7 +5,7 @@
 const { chromium } = require('playwright');
 const fs = require('fs'), path = require('path'), cp = require('child_process'), crypto = require('crypto');
 const GOC = path.resolve(__dirname, '..'), DIST = path.join(GOC, 'dist'), BASE = '/benhvienthuyleson';
-const CONG = 4399, CONG2 = 4398, URLG = `http://localhost:${CONG}${BASE}`;
+const CONG = 4399, CONG2 = 4398, CONG3 = 4397, URLG = `http://localhost:${CONG}${BASE}`;
 const COMMIT_GOC = process.env.COMMIT_GOC || '24d5057'; // commit trước khi tích hợp giao diện mới
 const KQ = path.join(__dirname, 'ket-qua'); fs.mkdirSync(KQ, { recursive: true });
 
@@ -64,22 +64,33 @@ function kiemLienKet() {
 
 // ---------- 2. Dữ liệu giá và logo không đổi so với trước khi tích hợp ----------
 function kiemDuLieu() {
-  muc(`2. Dữ liệu giá, logo, dữ liệu nguồn so với commit ${COMMIT_GOC}`);
-  const tep = [...fs.readdirSync(path.join(GOC, 'src/data')).map((f) => 'src/data/' + f), 'public/img/logo.jpg', 'public/img/og.jpg', 'public/img/favicon.png'];
-  const khac = [];
-  for (const t of tep) {
-    let goc; try { goc = cp.execSync(`git show ${COMMIT_GOC}:${t}`, { cwd: GOC, maxBuffer: 1 << 26, stdio: ['ignore', 'pipe', 'ignore'] }); } catch { continue; }
-    const nay = fs.readFileSync(path.join(GOC, t));
-    if (crypto.createHash('sha256').update(goc).digest('hex') !== crypto.createHash('sha256').update(nay).digest('hex')) khac.push(t);
-  }
-  ok(`${tep.length} tệp dữ liệu / logo giống hệt bản gốc (SHA-256)`, khac.length === 0, khac.join(', '));
+  muc(`2. Dữ liệu giá, logo, dữ liệu nguồn so với bản gốc (commit ${COMMIT_GOC})`);
+  const tepBang = path.join(__dirname, 'du-lieu-goc.sha256');
+  if (!fs.existsSync(tepBang)) { chuaXm('Đối chiếu dữ liệu / logo với bản gốc', 'Thiếu kiem-thu-astro/du-lieu-goc.sha256 (bảng SHA-256 của bản gốc): chưa đối chiếu được'); return; }
+  const bang = fs.readFileSync(tepBang, 'utf8').split('\n').filter(Boolean).map((l) => { const m = /^([0-9a-f]{64})\s+(.+)$/.exec(l); return m && [m[2], m[1]]; }).filter(Boolean);
+  const sha = (b) => crypto.createHash('sha256').update(b).digest('hex');
+  const khac = [], thieu = [];
+  for (const [t, h] of bang) { const f = path.join(GOC, t); if (!fs.existsSync(f)) { thieu.push(t); continue; } if (sha(fs.readFileSync(f)) !== h) khac.push(t); }
+  const moi = fs.readdirSync(path.join(GOC, 'src/data')).map((f) => 'src/data/' + f).filter((t) => !bang.some(([x]) => x === t));
+  const soSanh = bang.length - thieu.length;
+  ok(`${soSanh}/${bang.length} tệp dữ liệu và logo (src/data/*.json, logo, og, favicon) giống hệt bản gốc (SHA-256 theo bảng du-lieu-goc.sha256)`, khac.length === 0 && thieu.length === 0 && moi.length === 0, `khác: ${khac.join(',') || '-'}; thiếu: ${thieu.join(',') || '-'}; tệp dữ liệu mới không có trong bản gốc: ${moi.join(',') || '-'}`);
+  // Đối chiếu chéo: bảng băm có đúng là của commit gốc không (chỉ làm được khi có lịch sử git)
+  let coGit = true; try { cp.execSync(`git cat-file -e ${COMMIT_GOC}^{commit}`, { cwd: GOC, stdio: 'ignore' }); } catch { coGit = false; }
+  if (!coGit) { chuaXm('Đối chiếu chéo bảng SHA-256 với lịch sử git', `Không có .git hoặc không có commit ${COMMIT_GOC}: chỉ đối chiếu được theo bảng băm đi kèm, chưa kiểm tra bảng băm có đúng là của bản gốc`); return; }
+  let soDoiChieu = 0; const lech = [];
+  for (const [t, h] of bang) { try { const g = cp.execSync(`git show ${COMMIT_GOC}:${t}`, { cwd: GOC, maxBuffer: 1 << 26, stdio: ['ignore', 'pipe', 'ignore'] }); soDoiChieu++; if (sha(g) !== h) lech.push(t); } catch { lech.push(t + ' (không đọc được từ git)'); } }
+  ok(`Bảng SHA-256 khớp với lịch sử git: ${soDoiChieu}/${bang.length} tệp đã đọc từ commit ${COMMIT_GOC} và so được`, lech.length === 0 && soDoiChieu === bang.length, lech.join(', '));
 }
 
 (async () => {
-  // Dựng thêm hai bản để thử các chế độ biểu mẫu: PUBLIC_MODE_DAT_LICH=that (nhận thật, dùng máy chủ giả) và =cu (biểu mẫu cũ)
-  for (const [mode, thuMuc] of [['that', 'dist-that'], ['cu', 'dist-cu']]) cp.execSync(`npx astro build --outDir ${thuMuc}`, { cwd: GOC, env: { ...process.env, PUBLIC_MODE_DAT_LICH: mode }, stdio: 'ignore' });
+  // Dựng thêm ba bản để thử các chế độ biểu mẫu bằng trình trợ giúp dung-che-do.cjs (ghi tạm hằng số rồi khôi phục): that (nhận thật, dùng máy chủ GIẢ), cu (biểu mẫu cũ)
+  const { dung, sachSua } = require('./dung-che-do.cjs');
+  if (!sachSua()) { console.error('src/lib/dat-lich.ts đang có sửa đổi chưa commit (lần chạy trước bị ngắt?): hãy `git checkout src/lib/dat-lich.ts` rồi chạy lại.'); process.exit(2); }
+  dung('that', 'dist-that'); dung('cu', 'dist-cu');
+  if (!sachSua()) { console.error('Trình trợ giúp không khôi phục được src/lib/dat-lich.ts'); process.exit(2); }
   const may = cp.spawn('node', [path.join(__dirname, 'may-chu.cjs'), String(CONG)], { stdio: 'ignore' });
   const may2 = cp.spawn('node', [path.join(__dirname, 'may-chu.cjs'), String(CONG2)], { stdio: 'ignore', env: { ...process.env, DIST: path.join(GOC, 'dist-that') } });
+  const may3 = cp.spawn('node', [path.join(__dirname, 'may-chu.cjs'), String(CONG3)], { stdio: 'ignore', env: { ...process.env, DIST: path.join(GOC, 'dist-cu') } });
   await new Promise((r) => setTimeout(r, 800));
   const ngoaiBuild = kiemLienKet(); kiemDuLieu();
   const b = await chromium.launch();
@@ -89,7 +100,7 @@ function kiemDuLieu() {
     const ctx = await b.newContext({ locale: 'vi-VN', ...tuy });
     await ctx.route('**/*', (r) => {
       const u = r.request().url();
-      if (u.startsWith(`http://localhost:${CONG}`) || u.startsWith(`http://localhost:${CONG2}`)) return r.continue();
+      if ([CONG, CONG2, CONG3].some((c) => u.startsWith(`http://localhost:${c}`))) return r.continue();
       ngoaiYeuCau.add(new URL(u).host);
       if (/script\.google\.com/.test(u)) { guiGoogle++; return r.fulfill({ status: 200, contentType: 'text/plain', body: 'ok' }); }
       return r.abort(); // phông chữ Google và mọi thứ khác: chặn, không gọi ra ngoài
@@ -375,7 +386,7 @@ function kiemDuLieu() {
     }
     await ctx.close();
   }
-  // --- Nhận thật với máy chủ giả (bản dựng PUBLIC_MODE_DAT_LICH=that) ---
+  // --- Nhận thật với máy chủ giả (bản dựng chế độ 'that' bằng dung-che-do.cjs) ---
   {
     const URLT = `http://localhost:${CONG2}${BASE}`;
     const ctx = await ctxMoi({ viewport: { width: 1440, height: 900 } });
@@ -441,6 +452,29 @@ function kiemDuLieu() {
   { const f = fs.readFileSync(path.join(GOC, 'dist-cu/dat-lich/index.html'), 'utf8'), g = fs.readFileSync(path.join(GOC, 'dist-cu/index.html'), 'utf8');
     ok('Chế độ "cu" (quay lại biểu mẫu cũ): trang Đặt lịch có biểu mẫu cũ #dat-lich, không có biểu mẫu mới; trang chủ chỉ còn lối vào /dat-lich/', /id="dat-lich"[^>]*data-endpoint/.test(f) && !/id="form-dat-lich"/.test(f) && !/id="form-dat-lich"/.test(g) && /Mở biểu mẫu đặt lịch/.test(g), ''); }
 
+  // --- Kiểm tra chế độ bản xuất (kiem-tra-che-do.cjs): phát hiện phát hành nhầm chế độ ---
+  { const chay = (mong, dist) => cp.spawnSync('node', [path.join(__dirname, 'kiem-tra-che-do.cjs'), `--mong=${mong}`, `--dist=${dist}`], { encoding: 'utf8', cwd: GOC });
+    const a = chay('gia-lap', 'dist'), b2 = chay('that', 'dist'), c = chay('that', 'dist-that'), d = chay('cu', 'dist-cu'), e2 = chay('gia-lap', 'dist-cu');
+    ok('kiem-tra-che-do: bản mặc định (dist) ĐÚNG "gia-lap" (mã thoát 0)', a.status === 0 && /CHẾ ĐỘ BẢN XUẤT: gia-lap/.test(a.stdout), a.stdout + a.stderr);
+    ok('kiem-tra-che-do: bản mặc định mà "mong" chế độ that thì BÁO LỆCH (mã thoát 1, có chữ KHÔNG NÊN PHÁT HÀNH): không phát hành nhầm', b2.status === 1 && /KHÔNG NÊN PHÁT HÀNH/.test(b2.stderr), b2.stderr);
+    ok('kiem-tra-che-do: dist-that ĐÚNG "that" (có địa chỉ nhận script.google.com), dist-cu ĐÚNG "cu"; dist-cu mà mong gia-lap thì lệch', c.status === 0 && d.status === 0 && e2.status === 1, [c.stdout, d.stdout, e2.stderr].join(' | ').slice(0, 300)); }
+  // --- Biểu mẫu CŨ thật: bắt body trình duyệt gửi, rồi đưa cho Code.v2.gs (đối tượng giả) ---
+  { const ctx = await ctxMoi({ viewport: { width: 1440, height: 900 } }), p = await ctx.newPage(); let body = '', ct = '', soYc = 0;
+    await p.route(/script\.google\.com/, (r) => { soYc++; body = r.request().postData() || ''; ct = r.request().headers()['content-type'] || ''; r.fulfill({ status: 200, contentType: 'text/plain', body: 'ok' }); });
+    await p.goto(`http://localhost:${CONG3}${BASE}/dat-lich/`, { waitUntil: 'load' }); await p.evaluate(() => document.fonts.ready);
+    const iso = (n) => new Date(Date.now() + 7 * 3600e3 + n * 86400e3).toISOString().slice(0, 10);
+    await p.fill('#f-ten', 'Khách cũ thử nghiệm'); await p.fill('#f-sdt', '0912345678'); await p.check('input[name="thu_cung"][value="Khác"]', { force: true }); await p.fill('#f-loai', 'thỏ');
+    const nhom = await p.evaluate(() => [...document.getElementById('f-nhom').options].find((o) => /noi-tru/.test(o.dataset.id || ''))?.value); await p.selectOption('#f-nhom', nhom);
+    const dvv = await p.evaluate(() => [...document.getElementById('f-dv').options].find((o) => o.value)?.value); await p.selectOption('#f-dv', dvv);
+    if (await p.isVisible('#f-kg')) await p.selectOption('#f-kg', { index: 1 });
+    await p.fill('#f-ngay', iso(2)); await p.fill('#f-gio', '09:00'); await p.fill('#f-ngay-don', iso(5)); await p.fill('#f-gio-don', '17:00'); await p.fill('#f-ghichu', 'ghi chú cũ');
+    await p.click('#gui'); await p.waitForTimeout(1200);
+    const hienOk = await p.evaluate(() => !document.getElementById('ok').hidden);
+    ok('Biểu mẫu cũ thật (chế độ "cu") gửi đúng 1 yêu cầu tới địa chỉ nhận (đã chặn, trả lời giả), dạng form-urlencoded, có "· đón … lúc …" trong dịch vụ', soYc === 1 && /x-www-form-urlencoded/.test(ct) && /%C2%B7|·|\+%C2%B7\+/.test(body) && /don|%C4%91%C3%B3n|đón/.test(body) && hienOk, `${soYc} yêu cầu, ${ct}, ${decodeURIComponent(body.replace(/\+/g, ' ')).slice(0, 220)}`);
+    if (body) fs.writeFileSync(path.join(KQ, 'body-bieu-mau-cu.txt'), body); await ctx.close(); }
+  { const r = cp.spawnSync('node', [path.join(__dirname, 'kiem-thu-apps-script.cjs')], { encoding: 'utf8', cwd: GOC }), dong = (r.stdout.trim().split('\n').pop() || '');
+    ok(`Logic Code.v2.gs bằng đối tượng giả của Google, gồm BODY của biểu mẫu cũ thật vừa bắt được (không gọi Google): ${dong}`, r.status === 0 && /KHÔNG ĐẠT 0/.test(dong), r.stdout.split('\n').filter((l) => l.startsWith('[KHÔNG')).join(' | ')); }
+
   // ---------- 12. Không gọi ra ngoài ----------
   muc('12. Yêu cầu mạng ra ngoài');
   const cho = [...ngoaiYeuCau].filter((h) => !/fonts\.(googleapis|gstatic)\.com|script\.google\.com|^www\.google\.com$/.test(h));
@@ -458,7 +492,7 @@ function kiemDuLieu() {
   chuaXm('Cảm nhận chuyển động và độ mượt trên máy yếu', 'Cần người xem video / thử trên máy thật');
   chuaXm('Nội dung cẩm nang / ca bệnh khi đã có bài thật', 'Thư mục src/content hiện rỗng: giao diện bài viết và ca bệnh chưa được duyệt bằng nội dung thật (kiểm bằng dữ liệu thử ở bước riêng nếu có)');
 
-  await b.close(); may.kill(); may2.kill(); for (const t of ['dist-that', 'dist-cu']) fs.rmSync(path.join(GOC, t), { recursive: true, force: true });
+  await b.close(); may.kill(); may2.kill(); may3.kill(); for (const t of ['dist-that', 'dist-cu']) fs.rmSync(path.join(GOC, t), { recursive: true, force: true });
   const dem = (t) => kq.filter((x) => x.tt === t).length;
   const tom = `ĐẠT ${dem('ĐẠT')} · KHÔNG ĐẠT ${dem('KHÔNG ĐẠT')} · CHƯA CHẠY ${dem('CHƯA CHẠY')} · CHƯA XÁC MINH ${dem('CHƯA XÁC MINH')}`;
   const dong = [`Kiểm thử bản dựng Astro Lê Sơn · Chromium ${phienBan} (Playwright) · ${new Date().toISOString()}`, tom, '', ...kq.map((x) => x.tt === 'MỤC' ? `\n-- ${x.ten}` : `[${x.tt}] ${x.ten}${x.ct ? '  → ' + x.ct : ''}`)];

@@ -78,5 +78,5 @@ Script `kiem-thu-astro/kiem-thu-astro.cjs` quét mọi `href`, `src`, `url()` tr
 ## 7. Cảnh báo cho chủ dự án
 
 1. **Gộp nhánh vào `main` sẽ tự triển khai** toàn bộ giao diện mới lên website thật. Cần xem bản xem thử và duyệt trước.
-2. **Biểu mẫu đặt lịch mới mặc định ở chế độ giả lập (không gửi dữ liệu).** Website đang chạy thật dùng biểu mẫu cũ: gộp vào `main` khi để mặc định thì web ngừng nhận lịch qua biểu mẫu. Chủ dự án chọn `modeDatLich` (`'cu'` / `'gia-lap'` / `'that'`) trong `src/lib/dat-lich.ts` trước khi gộp. Chi tiết và cách chuyển: `docs/DAT-LICH-DANH-GIA.md`, `HUONG-DAN-NHAN-LICH.md`.
+2. **Biểu mẫu đặt lịch mới mặc định ở chế độ giả lập (không gửi dữ liệu).** Website đang chạy thật dùng biểu mẫu cũ: gộp vào `main` khi để mặc định thì web ngừng nhận lịch qua biểu mẫu. Chủ dự án chọn `modeDatLich` (`'cu'` / `'gia-lap'` / `'that'`) bằng cách sửa hằng số trong `src/lib/dat-lich.ts` (cách duy nhất) và kiểm tra bằng `npm run kiem-tra-che-do -- --mong=<chế độ>` trước khi gộp. Chi tiết và cách chuyển: `docs/DAT-LICH-DANH-GIA.md`, `HUONG-DAN-NHAN-LICH.md`.
 3. `src/content/tu-van` và `ca-benh` đang rỗng: giao diện bài viết / ca bệnh chưa duyệt bằng nội dung thật.

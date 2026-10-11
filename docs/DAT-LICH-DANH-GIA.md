@@ -37,15 +37,15 @@ Các điều trên chỉ chủ dự án kiểm được bằng cách tự thử 
 | Giữ dữ liệu khi lỗi | Không xoá gì; nút đổi thành "Gửi lại" |
 | Chống gửi trùng | Khoá nút và chặn gửi khi đang gửi; **mã yêu cầu** `ma_yeu_cau` sinh một lần cho một nội dung và tái dùng khi gửi lại; máy chủ (v2) bỏ qua mã đã có |
 | Câu "Đã nhận yêu cầu đặt lịch, bệnh viện sẽ liên hệ xác nhận" | Chỉ hiện sau khi máy chủ thật sự đã nhận. **Không bao giờ nói "lịch đã được xác nhận"** |
-| Mặc định | **Giả lập: không gửi gì** (`modeDatLich = 'gia-lap'` trong `src/lib/dat-lich.ts`), có dòng "Bản xem trước · chưa gửi dữ liệu thật" |
+| Mặc định | **Giả lập: không gửi gì** (hằng số `modeDatLich = 'gia-lap'` trong `src/lib/dat-lich.ts`, cách duy nhất để đổi chế độ), có dòng "Bản xem trước · chưa gửi dữ liệu thật" |
 | Nhận thật | Đề xuất `apps-script/Code.v2.gs` + `HUONG-DAN-NHAN-LICH.md`; **chưa triển khai**, không đổi địa chỉ nhận hiện có |
 
-### Không đưa sang biểu mẫu mới (cần chủ dự án quyết định)
-Hoá đơn tham khảo và phụ phí tự động, chọn cân nặng theo dịch vụ, giảm giá gửi dài ngày: biểu mẫu mới theo bản thiết kế đã duyệt (một ô chọn dịch vụ, không hoá đơn). Giá vẫn xem ở trang Bảng giá. Muốn giữ tính năng hoá đơn: đặt `modeDatLich = 'cu'` (quay lại biểu mẫu cũ) hoặc yêu cầu bổ sung vào biểu mẫu mới.
+### Không đưa sang biểu mẫu mới (CHỦ DỰ ÁN CHƯA QUYẾT ĐỊNH)
+Hoá đơn tham khảo và phụ phí tự động, chọn cân nặng theo dịch vụ, giảm giá gửi dài ngày: bản thiết kế prototype R3.x không có các tính năng này, nên biểu mẫu mới (một ô chọn dịch vụ) cũng không có. **Chủ dự án chưa quyết định giữ hay bỏ**; việc bỏ chưa được duyệt. Giá vẫn xem ở trang Bảng giá. Muốn giữ tính năng hoá đơn: đặt `modeDatLich = 'cu'` (quay lại biểu mẫu cũ) hoặc yêu cầu bổ sung vào biểu mẫu mới.
 
 ## 5. CẢNH BÁO khi gộp vào `main`
 
-Website đang chạy thật dùng biểu mẫu cũ. Nếu gộp nhánh này vào `main` khi `modeDatLich = 'gia-lap'` (mặc định hiện tại), **trang web ngừng nhận lịch qua biểu mẫu** (khách chỉ còn gọi điện / Zalo, và biểu mẫu nói rõ "chưa gửi dữ liệu thật"). Trước khi gộp, chủ dự án chọn một trong ba:
+Website đang chạy thật dùng biểu mẫu cũ. Nếu gộp nhánh này vào `main` khi `modeDatLich = 'gia-lap'` (mặc định hiện tại), **trang web ngừng nhận lịch qua biểu mẫu** (khách chỉ còn gọi điện / Zalo, và biểu mẫu nói rõ "chưa gửi dữ liệu thật"). Trước khi gộp, chủ dự án chọn một trong ba (sửa hằng số `modeDatLich`, dựng lại, rồi chạy `npm run kiem-tra-che-do -- --mong=<chế độ>` để chắc bản dựng đúng chế độ):
 1. `'cu'`: giữ nguyên biểu mẫu cũ đang chạy (không có biểu mẫu mới);
 2. `'gia-lap'`: chỉ xem trước (không nhận lịch qua web);
 3. `'that'`: biểu mẫu mới nhận thật, **sau khi** triển khai `Code.v2.gs` và thử nhận thật thành công.
