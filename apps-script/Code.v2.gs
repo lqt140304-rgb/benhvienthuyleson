@@ -22,6 +22,7 @@
  *    Kết quả được ghi theo Mã yêu cầu (không theo số dòng, nên nhân viên chèn/xoá dòng cũng không ghi nhầm). Giữ chỗ quá CHO_GUI_PHUT phút mà không có kết quả thì coi là treo và mới được thử lại.
  *  - Chống trùng theo NỘI DUNG: cùng số điện thoại + tên thú cưng + dịch vụ + ngày + giờ trong CHONG_TRUNG_PHUT (60) phút = cùng một yêu cầu, dù mã gửi khác nhau
  *    (ví dụ khách bấm "Gửi yêu cầu khác" rồi điền lại y hệt): không thêm dòng, không gửi thêm email, vẫn trả mã cũ. Đổi bất kỳ trường nào trong 5 trường đó hoặc quá 60 phút = yêu cầu mới.
+ *  - Hôm nay thì không nhận giờ đã qua (theo giờ Việt Nam), ví dụ đang 8:00 không nhận lịch 6:00. Biểu mẫu cũ: vẫn lưu, gắn "Cần kiểm tra".
  *  - Muốn thử trên Sheet RIÊNG trước khi dùng thật: chạy kiemTraTrenSheetRieng() (xem docs/BAT-CHE-DO-THAT.md).
  * Cách cài: xem HUONG-DAN-NHAN-LICH.md. KHÔNG dán đè lên bản đang chạy khi chưa thử nghiệm.
  */
@@ -146,6 +147,11 @@ function kiemTra_(du, now) {
   var phut = phutCua_(du.gio);
   if (phut < 0) return 'Giờ chưa đúng (định dạng HH:MM, ví dụ 09:30).';
   if (phut < CAU_HINH.GIO_MO || phut > CAU_HINH.GIO_DONG) return 'Giờ nhận lịch từ 8:00 đến 21:00.';
+  // Hôm nay (giờ Việt Nam) thì giờ đã qua không được nhận. Biểu mẫu cũ không đọc được phản hồi nên KHÔNG từ chối (mất lịch im lặng): lưu và gắn "Cần kiểm tra".
+  if (ngay.getTime() === homNay.getTime() && phut < vn.getUTCHours() * 60 + vn.getUTCMinutes()) {
+    if (!du.cu) return 'Giờ này hôm nay đã qua, vui lòng chọn giờ khác hoặc ngày khác.';
+    du.can_kiem_tra.push('giờ hẹn đã qua lúc nhận (' + du.gio + ')');
+  }
   if (/nội trú/i.test(du.dich_vu) && !du.ngay_don) {
     if (!du.cu) return 'Thiếu ngày đón dự kiến.';
     if (du.can_kiem_tra.length === 0) du.can_kiem_tra.push('nội trú nhưng không đọc được ngày đón');

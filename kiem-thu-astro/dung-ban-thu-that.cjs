@@ -22,6 +22,6 @@ Bản này gửi lịch tới **Sheet thử** của bạn (không phải Sheet t
 2. **Gửi lại không trùng:** ngay sau đó bấm "Gửi yêu cầu khác" rồi điền **y hệt** (cùng SĐT, tên thú cưng, dịch vụ, ngày, giờ) và gửi. Khách vẫn thấy "Đã nhận" với **cùng mã**, Sheet vẫn **1 dòng**, hộp thư vẫn **1 thư**. (Đổi một trong 5 thông tin đó thì là lịch mới, ra dòng mới.)
    *Cần dán lại script mới và Triển khai "Phiên bản: Mới" trước khi thử (xem docs/BAT-CHE-DO-THAT.md).*
 3. **Lỗi mạng:** tắt wifi/mạng rồi bấm gửi. Phải hiện "Chưa nhận được xác nhận…", **không** báo thành công. Bật mạng, bấm "Gửi lại": Sheet có **đúng 1 dòng** cho lịch đó (không 2).
-4. Báo tôi: số dòng trong Sheet, số thư nhận, và màn hình hiện gì ở mỗi bước (nếu được, chụp ảnh).
+4. **Giờ đã qua:** chọn ngày hôm nay: các giờ đã qua phải bị tắt (xám) và không chọn được. Chọn ngày mai thì mở lại hết.\n5. Báo tôi: số dòng trong Sheet, số thư nhận, và màn hình hiện gì ở mỗi bước (nếu được, chụp ảnh).
 `);
 console.log(`Đã dựng bản thử "that" vào ${ra}/ (chạy: node ${ra}/chay/may-chu.cjs 4321). Bản này KHÔNG nằm trong git.`);

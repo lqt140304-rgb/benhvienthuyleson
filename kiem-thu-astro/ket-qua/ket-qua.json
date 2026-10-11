@@ -392,7 +392,7 @@
  {
   "tt": "ĐẠT",
   "ten": "[nhận thật] Đúng 1 yêu cầu, POST, Content-Type text/plain (không gây bước kiểm tra trước), JSON có đủ trường và ma_yeu_cau",
-  "ct": "{\"ten_khach\":\"Khách thử nghiệm\",\"dien_thoai\":\"0912345678\",\"ten_thu_cung\":\"Bé Thử\",\"loai\":\"Chó\",\"loai_khac\":\"\",\"dich_vu\":\"Khám và chẩn đoán\",\"dich_vu_ma\":\"kham-va-chan-doan\",\"ngay\":\"2026-10-13\",\"gio\":\"09:00\",\"ngay_don\":\"\",\"ghi_chu\":\"ghi chú thử\",\"website\":\"\",\"ma_yeu_cau\":\"d9cd9116-cf49-4b42-bd59-575317e181a1\",\"nguon\":\"/benhvienthuyleson/dat-lich/\",\"gui_luc\":\"2026-10-11T12:33:39.312Z\"}"
+  "ct": "{\"ten_khach\":\"Khách thử nghiệm\",\"dien_thoai\":\"0912345678\",\"ten_thu_cung\":\"Bé Thử\",\"loai\":\"Chó\",\"loai_khac\":\"\",\"dich_vu\":\"Khám và chẩn đoán\",\"dich_vu_ma\":\"kham-va-chan-doan\",\"ngay\":\"2026-10-13\",\"gio\":\"09:00\",\"ngay_don\":\"\",\"ghi_chu\":\"ghi chú thử\",\"website\":\"\",\"ma_yeu_cau\":\"a319ad56-400d-4804-ac85-8b92ef31b9fa\",\"nguon\":\"/benhvienthuyleson/dat-lich/\",\"gui_luc\":\"2026-10-11T12:50:47.990Z\"}"
  },
  {
   "tt": "ĐẠT",
@@ -452,12 +452,12 @@
  {
   "tt": "ĐẠT",
   "ten": "[chống trùng] \"Gửi lại\" nguyên nội dung dùng lại CÙNG mã yêu cầu (máy chủ nhờ đó bỏ qua bản trùng)",
-  "ct": "3d2d5ad4-044a-49ab-a7c6-4197f775bfab / 3d2d5ad4-044a-49ab-a7c6-4197f775bfab"
+  "ct": "c84a5050-fd03-45ef-886e-161dec744bda / c84a5050-fd03-45ef-886e-161dec744bda"
  },
  {
   "tt": "ĐẠT",
   "ten": "[chống trùng] Đổi nội dung rồi gửi: mã yêu cầu MỚI; máy chủ trả trùng thì vẫn hiện đã nhận",
-  "ct": "3d2d5ad4-044a-49ab-a7c6-4197f775bfab / d0ebe759-27ed-453c-938c-e2040abc2ced"
+  "ct": "c84a5050-fd03-45ef-886e-161dec744bda / 11a5c558-678f-453b-a4db-12ad91573602"
  },
  {
   "tt": "ĐẠT",
@@ -496,7 +496,7 @@
  },
  {
   "tt": "ĐẠT",
-  "ten": "Logic Code.v2.gs bằng đối tượng giả của Google, gồm BODY của biểu mẫu cũ thật vừa bắt được (không gọi Google): ĐẠT 80 · KHÔNG ĐẠT 0 · CHƯA XÁC MINH 1",
+  "ten": "Logic Code.v2.gs bằng đối tượng giả của Google, gồm BODY của biểu mẫu cũ thật vừa bắt được (không gọi Google): ĐẠT 88 · KHÔNG ĐẠT 0 · CHƯA XÁC MINH 1",
   "ct": ""
  },
  {

@@ -1,5 +1,5 @@
-Thử logic Code.v2.gs bằng đối tượng giả (không gọi Google) · 2026-10-11T12:34:50.743Z
-ĐẠT 80 · KHÔNG ĐẠT 0 · CHƯA XÁC MINH 1
+Thử logic Code.v2.gs bằng đối tượng giả (không gọi Google) · 2026-10-11T12:51:59.335Z
+ĐẠT 88 · KHÔNG ĐẠT 0 · CHƯA XÁC MINH 1
 
 
 -- 1. Biểu mẫu mới: lưu, chống trùng, email
@@ -103,5 +103,15 @@ Thử logic Code.v2.gs bằng đối tượng giả (không gọi Google) · 202
 [ĐẠT] Trang cũ có dòng cùng SĐT/dịch vụ/ngày/giờ (dòng cũ không có "tên thú cưng", thời gian dạng chữ): dòng cũ KHÔNG bị coi là trùng, yêu cầu được nhận và dòng cũ giữ nguyên
 [ĐẠT] Biểu mẫu cũ bấm gửi 2 lần (mỗi lần sinh mã riêng): chỉ 1 dòng, 1 email
 [ĐẠT] Điền y hệt 3 lần liên tiếp: vẫn 1 dòng, 1 email; khoá cân bằng
+
+-- 12. Hôm nay không nhận giờ đã qua (theo giờ Việt Nam)
+[ĐẠT] Đang 8:00 sáng, đặt hôm nay lúc 6:00 → bị từ chối (ví dụ của chủ dự án)
+[ĐẠT] Đang 14:00, đặt hôm nay lúc 09:00 → từ chối "đã qua"
+[ĐẠT] Đang 14:00, đặt hôm nay lúc 13:59 → từ chối; 14:00 (giờ hiện tại) → nhận; 14:30 → nhận
+[ĐẠT] Đang 14:00, đặt NGÀY MAI lúc 09:00 → nhận (chỉ chặn giờ đã qua của hôm nay)
+[ĐẠT] Đang 20:45 (VN), đặt hôm nay lúc 20:30 → từ chối; 21:00 → nhận
+[ĐẠT] Múi giờ Việt Nam: lúc 00:30 giờ VN, "hôm nay" là ngày VN mới (không bị lệch theo UTC)
+[ĐẠT] Biểu mẫu cũ (không đọc được phản hồi): giờ đã qua KHÔNG bị từ chối (tránh mất lịch im lặng), được lưu và gắn "Cần kiểm tra"
+[ĐẠT] Qua doPost (giờ thật): hôm nay 08:00 đã qua → ok:false, không lưu dòng, không email; hôm nay 21:00 → nhận
 
 [CHƯA XÁC MINH] Chạy thật trên Google (cấp quyền, email tới, hạn mức email, phản hồi JSON đọc được từ trình duyệt github.io)  → cần chủ dự án thử theo HUONG-DAN-NHAN-LICH.md

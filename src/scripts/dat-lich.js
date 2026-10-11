@@ -27,6 +27,9 @@
     return d.getDate() === +m[1] && d.getMonth() === +m[2] - 1 ? d : 'sai';
   }
   var isoCua = function (d) { return d.getFullYear() + '-' + hai(d.getMonth() + 1) + '-' + hai(d.getDate()); };
+  // Giờ Việt Nam hiện tại (phút trong ngày), tính lại mỗi lần gọi: ngày chọn là HÔM NAY thì không chọn được giờ đã qua
+  var phutVnNay = function () { var t = new Date(Date.now() + 7 * 3600000); return t.getUTCHours() * 60 + t.getUTCMinutes(); };
+  var phutCuaGio = function (g) { var m = /^(\d{2}):(\d{2})$/.exec(g); return m ? +m[1] * 60 + +m[2] : -1; };
   var ngayHopLe = function (id) { var d = docNgay($(id).value); return d && d !== 'sai' ? d : null; };
 
   // Ô ngày dd/mm/yyyy + nút lịch + ô lịch ẩn (dùng cho "Ngày mong muốn" và "Ngày đón dự kiến")
@@ -78,6 +81,15 @@
     $('m-ngay-goi-ten').textContent = nt ? 'Ngày gửi: ngày/tháng/năm' : 'Ngày/tháng/năm';
   }
 
+  var laHomNay = function () { var g = ngayHopLe('m-ngay'); return !!g && g.getTime() === homNay.getTime(); };
+  var conGioHomNay = function () { return Array.prototype.some.call($('m-gio').options, function (o) { return o.value && phutCuaGio(o.value) >= phutVnNay(); }); };
+  var goiGioGoc = $('m-gio-goi').textContent;
+  // Ngày là hôm nay: tắt các giờ đã qua trong danh sách và nói rõ bằng dòng gợi ý
+  function capNhatGio() {
+    var nay = laHomNay(), ph = phutVnNay();
+    Array.prototype.forEach.call($('m-gio').options, function (o) { if (o.value) o.disabled = nay && phutCuaGio(o.value) < ph; });
+    $('m-gio-goi').textContent = nay ? (conGioHomNay() ? 'Hôm nay chỉ chọn được giờ chưa qua. ' : 'Hôm nay đã hết giờ nhận lịch. ') + goiGioGoc : goiGioGoc;
+  }
   var luat = {
     'm-ten': function (v) { return v.trim() ? '' : 'Vui lòng nhập tên khách hàng.'; },
     'm-sdt': function (v) { var s = v.replace(/[\s.\-]/g, ''); return !s ? 'Vui lòng nhập số điện thoại.' : /^(0|\+84)\d{9}$/.test(s) ? '' : 'Số điện thoại gồm 10 số, ví dụ 0912 345 678.'; },
@@ -89,7 +101,8 @@
       var d = docNgay(v);
       if (!d) return 'Nhập theo dạng ngày/tháng/năm, ví dụ ' + ddmmyyyy(ngayMai) + '.';
       if (d === 'sai') return 'Ngày này không tồn tại.';
-      return d < homNay ? 'Vui lòng chọn từ hôm nay trở đi.' : '';
+      if (d < homNay) return 'Vui lòng chọn từ hôm nay trở đi.';
+      return d.getTime() === homNay.getTime() && !conGioHomNay() ? 'Hôm nay đã hết giờ nhận lịch, vui lòng chọn ngày khác.' : '';
     },
     'm-ngay-don': function (v) {
       if (!laNoiTru()) return '';
@@ -103,7 +116,8 @@
     },
     'm-gio': function (v) {
       if (!v) return 'Vui lòng chọn giờ mong muốn.';
-      return /^\d{2}:\d{2}$/.test(v) && v >= '08:00' && v <= '21:00' ? '' : 'Giờ trong khoảng 8:00 – 21:00.';
+      if (!(/^\d{2}:\d{2}$/.test(v) && v >= '08:00' && v <= '21:00')) return 'Giờ trong khoảng 8:00 – 21:00.';
+      return laHomNay() && phutCuaGio(v) < phutVnNay() ? 'Giờ này hôm nay đã qua, vui lòng chọn giờ khác (hoặc chọn ngày khác).' : '';
     },
   };
   var icLoi = '<svg class="ic" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>';
@@ -259,9 +273,11 @@
     if (e.target.id === 'm-dv' && ($('m-ngay').value.trim() || $('m-ngay').closest('.o').classList.contains('co-loi'))) kiemTra('m-ngay', true);
     capNhatNut();
   });
+  function lamMoiGio() { capNhatGio(); var g = $('m-gio'); if (g.value || g.closest('.o').classList.contains('co-loi')) kiemTra('m-gio', true); capNhatNut(); }
+  ['input', 'blur', 'ngay-doi'].forEach(function (k) { $('m-ngay').addEventListener(k, lamMoiGio); });
   function kiemLaiDon() { var o = $('m-ngay-don'); if (laNoiTru() && (o.value.trim() || o.closest('.o').classList.contains('co-loi'))) kiemTra('m-ngay-don', true); ngayDon.dongBo(); capNhatNut(); }
   ['input', 'blur', 'ngay-doi'].forEach(function (k) { $('m-ngay').addEventListener(k, kiemLaiDon); });
   // Đường dẫn /dat-lich/?nhom=<mã dịch vụ> (từ Bảng giá): chọn sẵn dịch vụ
   try { var nhom = new URLSearchParams(location.search).get('nhom'), opt = nhom && Array.prototype.filter.call($('m-dv').options, function (x) { return x.value === nhom; })[0]; if (opt) $('m-dv').value = opt.value; } catch (e) { /* bỏ qua */ }
-  capNhatPhuThuoc(); capNhatNut();
+  capNhatGio(); capNhatPhuThuoc(); capNhatNut();
 })();

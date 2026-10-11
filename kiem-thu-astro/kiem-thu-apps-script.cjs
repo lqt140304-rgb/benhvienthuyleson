@@ -217,14 +217,14 @@ thu('khối 14', () => { const T = taoMoiTruong(); const hamCo = typeof T.ctx.ki
 // ===== 11. Chống trùng theo NỘI DUNG (bấm "Gửi yêu cầu khác" rồi điền lại y hệt) =====
 muc('11. Cùng SĐT + tên thú cưng + dịch vụ + ngày + giờ trong 60 phút = một yêu cầu');
 thu('mục 11', () => {
-  { const T = taoMoiTruong(), a = T.gui(tot({ ma_yeu_cau: 'adc8dfbc-a794-4e35-a7a4-111111111111', ten_khach: 'Trung Lê Quốc', dien_thoai: '0369661409', ten_thu_cung: 'pinky', dich_vu: 'Grooming - Spa', ngay: ngay(0), gio: '17:00' }));
-    const b = T.gui(tot({ ma_yeu_cau: '4a689dd0-5ab9-45c1-bafa-222222222222', ten_khach: 'Trung Lê Quốc', dien_thoai: '0369661409', ten_thu_cung: 'pinky', dich_vu: 'Grooming - Spa', ngay: ngay(0), gio: '17:00' }));
+  { const T = taoMoiTruong(), a = T.gui(tot({ ma_yeu_cau: 'adc8dfbc-a794-4e35-a7a4-111111111111', ten_khach: 'Trung Lê Quốc', dien_thoai: '0369661409', ten_thu_cung: 'pinky', dich_vu: 'Grooming - Spa', ngay: ngay(1), gio: '17:00' }));
+    const b = T.gui(tot({ ma_yeu_cau: '4a689dd0-5ab9-45c1-bafa-222222222222', ten_khach: 'Trung Lê Quốc', dien_thoai: '0369661409', ten_thu_cung: 'pinky', dich_vu: 'Grooming - Spa', ngay: ngay(1), gio: '17:00' }));
     ok('Đúng cảnh khách đã gặp (2 mã gửi khác nhau, nội dung y hệt): chỉ 1 dòng, 1 email; lần 2 trả LẠI mã của lần 1 với trung: true', a.ok && b.ok && b.ma === a.ma && b.trung === true && T.st.rows.length === 2 && T.st.emails.length === 1, chup([a, b, T.st.rows.length - 1, T.st.emails.length]));
-    const c = T.gui(tot({ ma_yeu_cau: 'ccccdddd-5ab9-45c1-bafa-333333333333', ten_khach: 'Trung Lê Quốc', dien_thoai: '+84 369 661 409', ten_thu_cung: '  PINKY ', dich_vu: 'grooming - spa', ngay: ngay(0), gio: '17:00' }));
+    const c = T.gui(tot({ ma_yeu_cau: 'ccccdddd-5ab9-45c1-bafa-333333333333', ten_khach: 'Trung Lê Quốc', dien_thoai: '+84 369 661 409', ten_thu_cung: '  PINKY ', dich_vu: 'grooming - spa', ngay: ngay(1), gio: '17:00' }));
     ok('Khác hoa-thường, khoảng trắng, +84 so với 0…: vẫn nhận ra là trùng', c.ok && c.ma === a.ma && T.st.rows.length === 2 && T.st.emails.length === 1, chup(c)); }
-  const bien = [['số điện thoại', { dien_thoai: '0369661410' }], ['tên thú cưng', { ten_thu_cung: 'mimi' }], ['dịch vụ', { dich_vu: 'Khám và chẩn đoán' }], ['ngày', { ngay: ngay(1) }], ['giờ', { gio: '17:30' }]];
+  const bien = [['số điện thoại', { dien_thoai: '0369661410' }], ['tên thú cưng', { ten_thu_cung: 'mimi' }], ['dịch vụ', { dich_vu: 'Khám và chẩn đoán' }], ['ngày', { ngay: ngay(2) }], ['giờ', { gio: '17:30' }]];
   const hong = [];
-  for (const [ten, x] of bien) { const T = taoMoiTruong(), goc = { ten_thu_cung: 'pinky', dich_vu: 'Grooming - Spa', ngay: ngay(0), gio: '17:00' }; T.gui(tot(goc)); const r = T.gui(tot({ ...goc, ...x })); if (!(r.ok && r.trung === false && T.st.rows.length === 3 && T.st.emails.length === 2)) hong.push(ten + ' → ' + chup(r)); }
+  for (const [ten, x] of bien) { const T = taoMoiTruong(), goc = { ten_thu_cung: 'pinky', dich_vu: 'Grooming - Spa', ngay: ngay(1), gio: '17:00' }; T.gui(tot(goc)); const r = T.gui(tot({ ...goc, ...x })); if (!(r.ok && r.trung === false && T.st.rows.length === 3 && T.st.emails.length === 2)) hong.push(ten + ' → ' + chup(r)); }
   ok('Đổi MỘT trong 5 trường (SĐT / tên thú cưng / dịch vụ / ngày / giờ): là yêu cầu MỚI, có dòng mới và email mới', hong.length === 0, hong.join(' | '));
   { const T = taoMoiTruong(); T.gui(tot({ ten_thu_cung: 'pinky' })); T.st.rows[1][T.cot('Thời gian nhận')] = new Date(Date.now() - 59 * 60000); const r1 = T.gui(tot({ ten_thu_cung: 'pinky' }));
     T.st.rows[1][T.cot('Thời gian nhận')] = new Date(Date.now() - 61 * 60000); const r2 = T.gui(tot({ ten_thu_cung: 'pinky' }));
@@ -238,6 +238,28 @@ thu('mục 11', () => {
     ok('Biểu mẫu cũ bấm gửi 2 lần (mỗi lần sinh mã riêng): chỉ 1 dòng, 1 email', a.ok && b.ok && b.ma === a.ma && T.st.rows.length === 2 && T.st.emails.length === 1, chup([a, b, T.st.rows.length - 1])); }
   { const T = taoMoiTruong(); const a = T.gui(tot({ ten_thu_cung: 'pinky' })); T.gui(tot({ ten_thu_cung: 'pinky' })); T.gui(tot({ ten_thu_cung: 'pinky' }));
     ok('Điền y hệt 3 lần liên tiếp: vẫn 1 dòng, 1 email; khoá cân bằng', T.st.rows.length === 2 && T.st.emails.length === 1 && T.st.khoa === T.st.mo && !T.st.giu, `${T.st.rows.length - 1} dòng, ${T.st.emails.length} email`); }
+});
+
+// ===== 12. Giờ đã qua trong ngày hôm nay =====
+muc('12. Hôm nay không nhận giờ đã qua (theo giờ Việt Nam)');
+thu('mục 12', () => {
+  const T = taoMoiTruong(), homNayVn = ngay(0), vnGio = (h, m) => new Date(Date.UTC(+homNayVn.slice(0, 4), +homNayVn.slice(5, 7) - 1, +homNayVn.slice(8, 10), h - 7, m)); // đổi giờ VN → thời điểm thật
+  const du = (o) => ({ cu: false, can_kiem_tra: [], ma_yeu_cau: 'abcdefgh1', ten_khach: 'A', dien_thoai: '0912345678', ten_thu_cung: 'B', loai: 'Chó', loai_khac: '', dich_vu: 'Khám', ngay: homNayVn, gio: '09:00', ngay_don: '', gio_don: '', ...o });
+  const kt = (o, now) => T.ctx.kiemTra_(du(o), now);
+  ok('Đang 8:00 sáng, đặt hôm nay lúc 6:00 → bị từ chối (ví dụ của chủ dự án)', /đã qua|8:00 đến 21:00/.test(kt({ gio: '06:00' }, vnGio(8, 0))), kt({ gio: '06:00' }, vnGio(8, 0)));
+  ok('Đang 14:00, đặt hôm nay lúc 09:00 → từ chối "đã qua"', /đã qua/.test(kt({ gio: '09:00' }, vnGio(14, 0))), kt({ gio: '09:00' }, vnGio(14, 0)));
+  ok('Đang 14:00, đặt hôm nay lúc 13:59 → từ chối; 14:00 (giờ hiện tại) → nhận; 14:30 → nhận', /đã qua/.test(kt({ gio: '13:59' }, vnGio(14, 0))) && kt({ gio: '14:00' }, vnGio(14, 0)) === '' && kt({ gio: '14:30' }, vnGio(14, 0)) === '', [kt({ gio: '13:59' }, vnGio(14, 0)), kt({ gio: '14:00' }, vnGio(14, 0))].join('|'));
+  ok('Đang 14:00, đặt NGÀY MAI lúc 09:00 → nhận (chỉ chặn giờ đã qua của hôm nay)', kt({ gio: '09:00', ngay: ngay(1) }, vnGio(14, 0)) === '', kt({ gio: '09:00', ngay: ngay(1) }, vnGio(14, 0)));
+  ok('Đang 20:45 (VN), đặt hôm nay lúc 20:30 → từ chối; 21:00 → nhận', /đã qua/.test(kt({ gio: '20:30' }, vnGio(20, 45))) && kt({ gio: '21:00' }, vnGio(20, 45)) === '', '');
+  // Múi giờ: 17:30 UTC hôm trước = 00:30 VN hôm nay → sang ngày mới theo giờ Việt Nam
+  ok('Múi giờ Việt Nam: lúc 00:30 giờ VN, "hôm nay" là ngày VN mới (không bị lệch theo UTC)', kt({ gio: '08:00' }, vnGio(0, 30)) === '', kt({ gio: '08:00' }, vnGio(0, 30)));
+  const cu = du({ cu: true, gio: '09:00' }), l = T.ctx.kiemTra_(cu, vnGio(14, 0));
+  ok('Biểu mẫu cũ (không đọc được phản hồi): giờ đã qua KHÔNG bị từ chối (tránh mất lịch im lặng), được lưu và gắn "Cần kiểm tra"', l === '' && cu.can_kiem_tra.some((s) => /giờ hẹn đã qua/.test(s)), chup([l, cu.can_kiem_tra]));
+  // Qua doPost với giờ thật: dùng 21:00 (luôn còn nếu chưa 21:00 VN) và khung đầu 08:00 (đã qua nếu đã quá 8:00 VN)
+  const vnNow = new Date(Date.now() + 7 * 3600e3), phutNay = vnNow.getUTCHours() * 60 + vnNow.getUTCMinutes();
+  if (phutNay > 8 * 60 && phutNay <= 21 * 60) { const U = taoMoiTruong(), r = U.gui(tot({ ngay: ngay(0), gio: '08:00' })), r2 = U.gui(tot({ ngay: ngay(0), gio: '21:00', ten_thu_cung: 'Bé giờ cuối' }));
+    ok('Qua doPost (giờ thật): hôm nay 08:00 đã qua → ok:false, không lưu dòng, không email; hôm nay 21:00 → nhận', r.ok === false && /đã qua/.test(r.loi) && r2.ok === true && U.st.rows.length === 2 && U.st.emails.length === 1, chup([r, r2])); }
+  else chuaXm('Qua doPost bằng giờ thật', 'Giờ Việt Nam hiện tại nằm ngoài 08:00–21:00 nên không thử được bằng đồng hồ thật (các mục trên dùng đồng hồ giả nên vẫn đủ)');
 });
 
 const dem = (t) => kq.filter((x) => x.tt === t).length;

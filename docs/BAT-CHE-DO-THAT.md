@@ -43,3 +43,10 @@ Lần thử đầu cho 2 dòng và 2 email: khách bấm **"Gửi yêu cầu kh�
 - **Sau khi sửa script phải dán lại VÀ triển khai PHIÊN BẢN MỚI** (Triển khai → Quản lý bản triển khai → biểu tượng bút → Phiên bản: Mới → Triển khai), nếu không `/exec` vẫn chạy mã cũ.
 - Dòng thừa đã có trong Sheet thử: xoá tay.
 - Kiểm thử: `kiem-thu-apps-script.cjs` mục 11 và `kiem-thu-that-dau-cuoi.cjs` mục E (mô phỏng đúng thao tác trên); bản trước khi sửa: `ket-qua/ban-cu-chay-bo-thu-chong-trung.txt` (6 KHÔNG ĐẠT).
+
+## Không nhận giờ đã qua trong ngày hôm nay
+Yêu cầu của chủ dự án: đang 8:00 thì không đặt được lịch 6:00. Làm ở **hai nơi**:
+- **Biểu mẫu** (`src/scripts/dat-lich.js`): chọn ngày hôm nay thì các giờ đã qua (so với giờ Việt Nam lúc đó) bị **tắt** trong danh sách, có dòng gợi ý; ép chọn giờ đã qua vẫn báo lỗi và không gửi được; sau 20:30 chọn hôm nay báo "đã hết giờ nhận lịch". Chọn ngày mai trở đi thì mọi giờ mở lại. Giờ hiện tại đúng bằng khung (ví dụ đang 14:10, khung 14:00) coi là đã qua; khung kế tiếp 14:30 còn chọn được.
+- **Máy chủ** (`Code.v2.gs`, `kiemTra_`): hôm nay mà giờ đã qua thì trả `{ ok:false, loi:"Giờ này hôm nay đã qua…" }`, không lưu, không email. (Biểu mẫu cũ không đọc được phản hồi nên **không** từ chối: vẫn lưu và ghi "Cần kiểm tra".)
+- Cần **dán lại script và triển khai Phiên bản: Mới**, và dựng lại bản thử để có phần biểu mẫu mới. Kiểm thử: `kiem-thu-apps-script.cjs` mục 12 (đồng hồ giả) và `kiem-thu-that-dau-cuoi.cjs` mục F (đồng hồ trình duyệt đặt 14:00 và 21:30).
+- Giới hạn: giờ so với đồng hồ của máy khách ở biểu mẫu, nên máy khách sai giờ vẫn được máy chủ chặn lại bằng giờ thật của Google.

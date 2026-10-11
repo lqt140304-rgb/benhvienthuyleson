@@ -11,8 +11,10 @@ const cong = (n) => { const v = new Date(Date.now() + 7 * 3600e3), d = new Date(
   const may = cp.spawn('node', [path.join(__dirname, 'may-chu.cjs'), String(CONG)], { stdio: 'ignore', env: { ...process.env, DIST } });
   await new Promise((r) => setTimeout(r, 800));
   const b = await chromium.launch();
-  const mo = async (env, kieu) => { // kieu: hàm (lan, bodyDaLuu) → 'qua' | 'mat-phan-hoi' | 'loi-mang'
-    const ctx = await b.newContext({ viewport: { width: 1280, height: 900 } }), p = await ctx.newPage(), ds = []; p.__loi = []; p.on('pageerror', (e) => p.__loi.push(e.message));
+  const mo = async (env, kieu, gioVn) => { // kieu: hàm (lan, bodyDaLuu) → 'qua' | 'mat-phan-hoi' | 'loi-mang'
+    const ctx = await b.newContext({ viewport: { width: 1280, height: 900 } }), p = await ctx.newPage(), ds = [];
+    if (gioVn) { const v = new Date(Date.now() + 7 * 3600e3); await ctx.clock.setFixedTime(new Date(Date.UTC(v.getUTCFullYear(), v.getUTCMonth(), v.getUTCDate(), gioVn[0] - 7, gioVn[1]))); } /* đồng hồ trình duyệt = giờ Việt Nam hôm nay lúc gioVn */
+    p.__loi = []; p.on('pageerror', (e) => p.__loi.push(e.message));
     await ctx.route(/^(?!http:\/\/localhost)/, async (r) => {
       const u = r.request().url(); if (!/script\.google\.com/.test(u)) return r.abort();
       const body = r.request().postData() || '', lan = ds.push({ u, body }), cach = kieu(lan);
@@ -70,6 +72,23 @@ const cong = (n) => { const v = new Date(Date.now() + 7 * 3600e3), d = new Date(
     const g1 = JSON.parse(p.__ds[0].body).ma_yeu_cau, g2 = JSON.parse(p.__ds[1].body).ma_yeu_cau;
     ok('[E gửi yêu cầu khác rồi điền y hệt] Trình duyệt gửi 2 mã gửi KHÁC nhau, nhưng Sheet vẫn đúng 1 dòng, đúng 1 email; khách thấy "Đã nhận" với cùng mã', g1 !== g2 && p.__ds.length === 2 && ma1 === ma2 && env.st.rows.length === 2 && env.st.emails.length === 1, `${env.st.rows.length - 1} dòng · ${env.st.emails.length} email · ${ma1}/${ma2}`);
     ok('[E] Không lỗi JavaScript', p.__loi.length === 0, p.__loi.join('|')); await p.context().close(); }
+
+  // F. Giờ đã qua trong ngày hôm nay (đồng hồ trình duyệt đặt 14:00 giờ Việt Nam)
+  { const env = taoMoiTruong(), p = await mo(env, () => 'qua', [14, 0]); await dien(p);
+    await p.fill('#m-ngay', cong(0)); await p.press('#m-ngay', 'Tab');
+    const ds = await p.evaluate(() => [...document.getElementById('m-gio').options].filter((o) => o.value).map((o) => [o.value, o.disabled])), goi = await chu(p, '#m-gio-goi');
+    ok('[F giờ đã qua] Chọn ngày HÔM NAY lúc 14:00: mọi giờ trước 14:00 bị tắt (không chọn được); 14:00, 14:30… 20:30 còn chọn được; có dòng gợi ý', ds.filter(([g]) => g < '14:00').every(([, d]) => d) && ds.filter(([g]) => g >= '14:00').every(([, d]) => !d) && ds.length === 26 && /Hôm nay chỉ chọn được giờ chưa qua/.test(goi), `${ds.filter(([, d]) => d).length} giờ bị tắt · ${goi}`);
+    await p.evaluate(() => { const s = document.getElementById('m-gio'); s.value = '09:00'; s.dispatchEvent(new Event('change', { bubbles: true })); });
+    await p.waitForTimeout(150); const loi = await chu(p, '#m-gio-loi'), tat = await p.isDisabled('#m-gui');
+    await p.evaluate(() => document.getElementById('form-dat-lich').requestSubmit()); await p.waitForTimeout(300);
+    ok('[F giờ đã qua] Ép giờ 09:00 (đã qua) cho hôm nay: hiện lỗi "đã qua", nút gửi tắt, bấm gửi bằng mã lệnh cũng KHÔNG gửi gì (0 yêu cầu), Sheet 0 dòng', /đã qua/.test(loi) && tat && p.__ds.length === 0 && env.st.rows.length === 0, `${loi} · gửi tắt=${tat} · ${p.__ds.length} yêu cầu`);
+    await p.fill('#m-ngay', cong(1)); await p.press('#m-ngay', 'Tab'); await p.waitForTimeout(150);
+    const ds2 = await p.evaluate(() => [...document.getElementById('m-gio').options].filter((o) => o.value).every((o) => !o.disabled)), loi2 = await chu(p, '#m-gio-loi');
+    ok('[F giờ đã qua] Đổi sang NGÀY MAI: mọi giờ mở lại, lỗi "đã qua" biến mất, 09:00 gửi được', ds2 && !/đã qua/.test(loi2) && !(await p.isDisabled('#m-gui')), loi2);
+    await p.close().catch(() => {}); await p.context().close(); }
+  { const env = taoMoiTruong(), p = await mo(env, () => 'qua', [21, 30]); await dien(p); await p.fill('#m-ngay', cong(0)); await p.press('#m-ngay', 'Tab'); await p.waitForTimeout(150);
+    const ds = await p.evaluate(() => [...document.getElementById('m-gio').options].filter((o) => o.value).every((o) => o.disabled)), l = await chu(p, '#m-ngay-loi');
+    ok('[F hết giờ] Sau 20:30 (đang 21:30): chọn hôm nay → mọi giờ bị tắt và hiện "Hôm nay đã hết giờ nhận lịch, vui lòng chọn ngày khác"', ds && /đã hết giờ nhận lịch/.test(l), l); await p.context().close(); }
 
   await b.close(); may.kill();
   const dem = (t) => kq.filter((x) => x.tt === t).length, dong = kq.map((x) => `[${x.tt}] ${x.ten}${x.tt !== 'ĐẠT' && x.ct ? '  → ' + x.ct : ''}`);
