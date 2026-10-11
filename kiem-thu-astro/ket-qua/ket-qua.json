@@ -252,7 +252,7 @@
  {
   "tt": "ĐẠT",
   "ten": "[1440x900] \"Xem dịch vụ\" cuộn tới khu Dịch vụ ở trang chủ, focus ở tiêu đề (không rơi về BODY)",
-  "ct": "{\"foc\":\"H2\",\"tren\":227}"
+  "ct": "{\"foc\":\"H2\",\"tren\":193}"
  },
  {
   "tt": "ĐẠT",
@@ -272,7 +272,7 @@
  {
   "tt": "ĐẠT",
   "ten": "[390x844] \"Xem dịch vụ\" cuộn tới khu Dịch vụ ở trang chủ, focus ở tiêu đề (không rơi về BODY)",
-  "ct": "{\"foc\":\"H2\",\"tren\":313}"
+  "ct": "{\"foc\":\"H2\",\"tren\":362}"
  },
  {
   "tt": "ĐẠT",
@@ -301,18 +301,168 @@
  },
  {
   "tt": "MỤC",
-  "ten": "11. Form đặt lịch hiện tại (giữ nguyên hành vi ở giai đoạn này; không gửi dữ liệu thật)",
+  "ten": "11. Biểu mẫu đặt lịch mới: trường, kiểm tra, giả lập (0 yêu cầu), nhận thật với máy chủ giả (đã nhận / lỗi / quá thời gian / không đọc được / trùng)",
+  "ct": ""
+ },
+ {
+  "tt": "KHÔNG ĐẠT",
+  "ten": "[1440x900] Đủ trường: tên khách hàng, số điện thoại (inputmode tel), tên thú cưng, loài (Chó / Mèo / Khác), dịch vụ, ngày, giờ 8:00–21:00 cách 30 phút, ghi chú không bắt buộc; ô bẫy ẩn khỏi mắt người",
+  "ct": "{\"ten\":true,\"sdt\":\"tel\",\"thu\":true,\"loai\":[\"cho\",\"meo\",\"khac\"],\"dv\":8,\"gio\":[\"08:00\",\"08:30\",\"09:00\",\"09:30\",\"10:00\",\"10:30\",\"11:00\",\"11:30\",\"12:00\",\"12:30\",\"13:00\",\"13:30\",\"14:00\",\"14:30\",\"15:00\",\"15:30\",\"16:00\",\"16:30\",\"17:00\",\"17:30\",\"18:00\",\"18:30\",\"19:00\",\"19:30\",\"20:00\",\"20:30\"],\"ghi\":false,\"ngay\":\"numeric\",\"bay\":\"-9999px\"}"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[1440x900] Chưa nhập gì: nút gửi tắt; lời nhắc nói rõ",
   "ct": ""
  },
  {
   "tt": "ĐẠT",
-  "ten": "Gửi form trống: hiện lỗi từng ô và KHÔNG gửi yêu cầu nào",
-  "ct": "3 lỗi, 0 yêu cầu"
+  "ten": "[1440x900] Chọn \"Khác\" hiện ô nhập loài (bắt buộc, thiếu thì chưa gửi được); chọn lại Chó thì ẩn",
+  "ct": "{\"an0\":{\"khac\":true,\"don\":true},\"a1\":true,\"chuaKhac\":true,\"duKhac\":true,\"a2\":true}"
  },
  {
   "tt": "ĐẠT",
-  "ten": "Điền đúng rồi gửi (máy chủ nhận được giả lập): có đúng 1 yêu cầu tới địa chỉ nhận, hiện thông báo đã gửi",
-  "ct": "{\"yeuCau\":1,\"ok\":true,\"loiGui\":\"\",\"loiHien\":[]}"
+  "ten": "[1440x900] Dịch vụ nội trú: hiện \"Ngày đón dự kiến\" (bắt buộc); ngày đón TRƯỚC ngày gửi bị báo lỗi; cùng ngày hoặc sau thì hợp lệ; đổi dịch vụ thường thì ẩn",
+  "ct": "{\"nt\":{\"don\":true,\"nhan\":\"Ngày gửi thú cưng\"},\"chuaDon\":true,\"truoc\":{\"loi\":\"Ngày đón không được trước ngày gửi (14/10/2026).\",\"ban\":true},\"cung\":true,\"sau\":true,\"anDon\":true}"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[1440x900] Báo lỗi cạnh từng ô (số điện thoại sai, ngày quá khứ, thiếu tên), aria-invalid, nội dung tiếng Việt",
+  "ct": "{\"sdt\":\"Số điện thoại gồm 10 số, ví dụ 0912 345 678.\",\"ngay\":\"Vui lòng chọn từ hôm nay trở đi.\",\"ten\":\"Vui lòng nhập tên khách hàng.\",\"inv\":\"true\"}"
+ },
+ {
+  "tt": "KHÔNG ĐẠT",
+  "ten": "[390x844] Đủ trường: tên khách hàng, số điện thoại (inputmode tel), tên thú cưng, loài (Chó / Mèo / Khác), dịch vụ, ngày, giờ 8:00–21:00 cách 30 phút, ghi chú không bắt buộc; ô bẫy ẩn khỏi mắt người",
+  "ct": "{\"ten\":true,\"sdt\":\"tel\",\"thu\":true,\"loai\":[\"cho\",\"meo\",\"khac\"],\"dv\":8,\"gio\":[\"08:00\",\"08:30\",\"09:00\",\"09:30\",\"10:00\",\"10:30\",\"11:00\",\"11:30\",\"12:00\",\"12:30\",\"13:00\",\"13:30\",\"14:00\",\"14:30\",\"15:00\",\"15:30\",\"16:00\",\"16:30\",\"17:00\",\"17:30\",\"18:00\",\"18:30\",\"19:00\",\"19:30\",\"20:00\",\"20:30\"],\"ghi\":false,\"ngay\":\"numeric\",\"bay\":\"-9999px\"}"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[390x844] Chưa nhập gì: nút gửi tắt; lời nhắc nói rõ",
+  "ct": ""
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[390x844] Chọn \"Khác\" hiện ô nhập loài (bắt buộc, thiếu thì chưa gửi được); chọn lại Chó thì ẩn",
+  "ct": "{\"an0\":{\"khac\":true,\"don\":true},\"a1\":true,\"chuaKhac\":true,\"duKhac\":true,\"a2\":true}"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[390x844] Dịch vụ nội trú: hiện \"Ngày đón dự kiến\" (bắt buộc); ngày đón TRƯỚC ngày gửi bị báo lỗi; cùng ngày hoặc sau thì hợp lệ; đổi dịch vụ thường thì ẩn",
+  "ct": "{\"nt\":{\"don\":true,\"nhan\":\"Ngày gửi thú cưng\"},\"chuaDon\":true,\"truoc\":{\"loi\":\"Ngày đón không được trước ngày gửi (14/10/2026).\",\"ban\":true},\"cung\":true,\"sau\":true,\"anDon\":true}"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[390x844] Báo lỗi cạnh từng ô (số điện thoại sai, ngày quá khứ, thiếu tên), aria-invalid, nội dung tiếng Việt",
+  "ct": "{\"sdt\":\"Số điện thoại gồm 10 số, ví dụ 0912 345 678.\",\"ngay\":\"Vui lòng chọn từ hôm nay trở đi.\",\"ten\":\"Vui lòng nhập tên khách hàng.\",\"inv\":\"true\"}"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[/dat-lich/] Chế độ giả lập có dòng \"Bản xem trước · chưa gửi dữ liệu thật\"",
+  "ct": ""
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[/dat-lich/] Bấm gửi ở chế độ giả lập: 0 yêu cầu mạng; hiện \"Hoàn tất giả lập, chưa gửi đi đâu\"; KHÔNG có câu \"Đã nhận yêu cầu\"",
+  "ct": "{\"ngoai\":[],\"t\":\"Hoàn tất giả lậpĐây là bản xem trước: yêu cầu CHƯA được gửi đi đâu và chưa có lịch hẹn nào được xác nhận. Cần đặt lịch n\"}"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[/] Chế độ giả lập có dòng \"Bản xem trước · chưa gửi dữ liệu thật\"",
+  "ct": ""
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[/] Bấm gửi ở chế độ giả lập: 0 yêu cầu mạng; hiện \"Hoàn tất giả lập, chưa gửi đi đâu\"; KHÔNG có câu \"Đã nhận yêu cầu\"",
+  "ct": "{\"ngoai\":[],\"t\":\"Hoàn tất giả lậpĐây là bản xem trước: yêu cầu CHƯA được gửi đi đâu và chưa có lịch hẹn nào được xác nhận. Cần đặt lịch n\"}"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[nhận thật] Bản dựng chế độ \"that\" không có dòng \"chưa gửi dữ liệu thật\"; địa chỉ nhận lấy từ thong_tin.json",
+  "ct": ""
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[nhận thật] Máy chủ trả { ok: true, ma }: hiện đúng câu \"Đã nhận yêu cầu đặt lịch, bệnh viện sẽ liên hệ xác nhận.\" + mã yêu cầu + tóm tắt; không nói \"đã xác nhận lịch\"",
+  "ct": "Đã nhận yêu cầu đặt lịch, bệnh viện sẽ liên hệ xác nhận.Lịch hẹn chỉ được xác nhận sau khi nhân viên liên hệ với bạn. Cần gấp? Gọi 0973 555 105.Mã yêu cầu: LS-2"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[nhận thật] Đúng 1 yêu cầu, POST, Content-Type text/plain (không gây bước kiểm tra trước), JSON có đủ trường và ma_yeu_cau",
+  "ct": "{\"ten_khach\":\"Khách thử nghiệm\",\"dien_thoai\":\"0912345678\",\"ten_thu_cung\":\"Bé Thử\",\"loai\":\"Chó\",\"loai_khac\":\"\",\"dich_vu\":\"Khám và chẩn đoán\",\"dich_vu_ma\":\"kham-va-chan-doan\",\"ngay\":\"2026-10-13\",\"gio\":\"09:00\",\"ngay_don\":\"\",\"ghi_chu\":\"ghi chú thử\",\"website\":\"\",\"ma_yeu_cau\":\"14fdd159-1148-4ebd-b8ed-409e95226620\",\"nguon\":\"/benhvienthuyleson/dat-lich/\",\"gui_luc\":\"2026-10-11T10:50:56.181Z\"}"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[nhận thật] \"Gửi yêu cầu khác\": form trống trở lại, thẻ kết quả ẩn",
+  "ct": "{\"ten\":\"\",\"form\":true,\"the\":true}"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[nhận thật] Yêu cầu thứ hai dùng mã yêu cầu MỚI",
+  "ct": ""
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[nhận thật] Không có lỗi JavaScript",
+  "ct": ""
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[thất bại] Máy chủ báo lỗi đọc được: hiện thông báo thất bại (role=alert, focus vào đó, có số gọi), GIỮ nguyên dữ liệu, nút thành \"Gửi lại\" và bấm được, KHÔNG báo đã nhận",
+  "ct": "{\"tb\":\"Chưa gửi được yêu cầu: Số điện thoại chưa đúng.. Thông tin bạn nhập vẫn còn nguyên. Bấm “Gửi lại”, hoặc gọi 0973 555 105.\",\"ten\":\"Khách thử nghiệm\",\"ghi\":\"giữ nguyên\",\"nut\":\"Gửi lại\",\"bat\":true,\"the\":true,\"role\":\"alert\",\"tel\":true,\"foc\":\"dl-thong-bao\"}"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[đang gửi] Trong lúc chờ: nút \"Đang gửi…\" (aria-busy), các ô nhập bị khoá, dòng trạng thái nói đang gửi",
+  "ct": "{\"nut\":\"Đang gửi…\",\"busy\":\"true\",\"khoa\":true,\"chu\":\"Đang gửi yêu cầu… Vui lòng không đóng trang.\"}"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[quá thời gian] Không có phản hồi: báo \"Chưa nhận được xác nhận…\" (KHÔNG báo thành công), giữ dữ liệu, mở khoá ô nhập, nút \"Gửi lại\"",
+  "ct": "{\"tb\":\"Chưa nhận được xác nhận từ bệnh viện, nên yêu cầu có thể chưa được gửi. Thông tin bạn nhập vẫn còn nguyên: bấm “Gửi lại” (hệ thống tránh tạo lịch trùng) hoặc gọi 0973 555 105.\",\"ten\":\"Khách thử nghiệm\",\"nut\":\"Gửi lại\",\"the\":true,\"khoa\":false}"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[không báo nhầm] phản hồi không đọc được (văn bản \"ok\" như script cũ): báo \"Chưa nhận được xác nhận…\", không hiện \"Đã nhận\", giữ dữ liệu",
+  "ct": "{\"tb\":\"Chưa nhận được xác nhận từ bệnh viện, nên yêu cầu có thể chưa được gửi. Thông tin bạn nhập vẫn còn nguyên: bấm “Gửi lại” (hệ thống tránh tạo lịch trùng) hoặc gọi 0973 555 105.\",\"the\":true,\"ten\":\"Khách thử nghiệm\"}"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[không báo nhầm] JSON thiếu mã: báo \"Chưa nhận được xác nhận…\", không hiện \"Đã nhận\", giữ dữ liệu",
+  "ct": "{\"tb\":\"Chưa nhận được xác nhận từ bệnh viện, nên yêu cầu có thể chưa được gửi. Thông tin bạn nhập vẫn còn nguyên: bấm “Gửi lại” (hệ thống tránh tạo lịch trùng) hoặc gọi 0973 555 105.\",\"the\":true,\"ten\":\"Khách thử nghiệm\"}"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[không báo nhầm] lỗi 500: báo \"Chưa nhận được xác nhận…\", không hiện \"Đã nhận\", giữ dữ liệu",
+  "ct": "{\"tb\":\"Chưa nhận được xác nhận từ bệnh viện, nên yêu cầu có thể chưa được gửi. Thông tin bạn nhập vẫn còn nguyên: bấm “Gửi lại” (hệ thống tránh tạo lịch trùng) hoặc gọi 0973 555 105.\",\"the\":true,\"ten\":\"Khách thử nghiệm\"}"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[không báo nhầm] lỗi mạng: báo \"Chưa nhận được xác nhận…\", không hiện \"Đã nhận\", giữ dữ liệu",
+  "ct": "{\"tb\":\"Chưa nhận được xác nhận từ bệnh viện, nên yêu cầu có thể chưa được gửi. Thông tin bạn nhập vẫn còn nguyên: bấm “Gửi lại” (hệ thống tránh tạo lịch trùng) hoặc gọi 0973 555 105.\",\"the\":true,\"ten\":\"Khách thử nghiệm\"}"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[chống trùng] Bấm nút 3 lần, gửi bằng mã lệnh 2 lần, Enter lặp trong lúc chờ: chỉ ĐÚNG 1 yêu cầu",
+  "ct": "1 yêu cầu"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[chống trùng] \"Gửi lại\" nguyên nội dung dùng lại CÙNG mã yêu cầu (máy chủ nhờ đó bỏ qua bản trùng)",
+  "ct": "8da28c6b-8226-4279-9c47-92ec5cc539c2 / 8da28c6b-8226-4279-9c47-92ec5cc539c2"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[chống trùng] Đổi nội dung rồi gửi: mã yêu cầu MỚI; máy chủ trả trùng thì vẫn hiện đã nhận",
+  "ct": "8da28c6b-8226-4279-9c47-92ec5cc539c2 / 111bf753-5843-4a72-b6e8-9943e7c50a33"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[bẫy spam] Ô bẫy có chữ: không gửi yêu cầu nào và không báo đã nhận",
+  "ct": "0 yêu cầu"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "Chế độ \"cu\" (quay lại biểu mẫu cũ): trang Đặt lịch có biểu mẫu cũ #dat-lich, không có biểu mẫu mới; trang chủ chỉ còn lối vào /dat-lich/",
+  "ct": ""
  },
  {
   "tt": "MỤC",
@@ -322,7 +472,7 @@
  {
   "tt": "ĐẠT",
   "ten": "Trong toàn bộ lần chạy, ngoài phông chữ Google, bản đồ nhúng ở trang Liên hệ (www.google.com) và địa chỉ nhận form (đã chặn / trả lời giả) không có máy chủ nào khác bị gọi",
-  "ct": "fonts.googleapis.com, www.google.com, script.google.com"
+  "ct": "fonts.googleapis.com, www.google.com"
  },
  {
   "tt": "MỤC",
