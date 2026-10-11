@@ -32,7 +32,7 @@
 | Dịch vụ nổi bật | `components/ls/DichVuNoiBat.astro` |
 | **Sản phẩm nổi bật** (ngay dưới Dịch vụ nổi bật) | `components/ls/SanPham.astro` |
 | Tóm tắt giá | `components/ls/GiaGon.astro` |
-| Đặt lịch (trang chủ) | `components/ls/DatLichKhu.astro` (giai đoạn 3 sẽ đặt form mới vào đây) |
+| Đặt lịch (trang chủ + `/dat-lich/`) | `components/ls/DatLichKhu.astro` + `FormDatLich.astro` + `scripts/dat-lich.js` (giai đoạn 3); biểu mẫu cũ còn lại ở `FormDatLichCu.astro` |
 | Đội ngũ | `components/ls/DoiNgu.astro` + `DaiNut.astro` |
 | Cẩm nang | `components/ls/CamNang.astro` |
 | Câu chuyện điều trị | `components/ls/CauChuyen.astro` |
@@ -61,8 +61,8 @@ Giữ nhãn "Chờ xác nhận" của prototype (`src/lib/xac-minh.json`): nhóm
 
 | Prototype | Bản Astro | Lý do |
 |---|---|---|
-| Form giả lập ngay trong khu Đặt lịch của trang chủ | Khu Đặt lịch có quy trình 3 bước + nút **mở form thật `/dat-lich/`** | Form thật đang chạy và chưa đổi (giai đoạn 3 mới thiết kế lại); không đặt hai form một lúc |
-| Menu "Đặt lịch" / "Liên hệ" cuộn trong trang | Dẫn tới `/dat-lich/` và `/lien-he/` | Trang riêng đã có; tránh phải bấm hai lần |
+| Form giả lập ngay trong khu Đặt lịch của trang chủ | Giai đoạn 2: nút mở form thật `/dat-lich/`. **Giai đoạn 3: biểu mẫu mới nằm ngay trong khu Đặt lịch** (và ở `/dat-lich/`), mặc định vẫn giả lập | Xem `docs/DAT-LICH-DANH-GIA.md` |
+| Menu "Đặt lịch" / "Liên hệ" cuộn trong trang | "Đặt lịch": ở trang chủ cuộn tới khu Đặt lịch, ở trang khác dẫn tới `/dat-lich/`. "Liên hệ": dẫn tới `/lien-he/` | Trang riêng đã có |
 | Link Cẩm nang, Ca bệnh, Giới thiệu, Liên hệ, "Xem tất cả dịch vụ" trỏ về website cũ `https://lqt140304-rgb.github.io/benhvienthuyleson/...` | Đều qua `u()` thành `/benhvienthuyleson/...` | Cùng một website, không nhảy qua site khác |
 | Bảng giá: `bang-gia.html#nhom-…` | `/bang-gia/#nhom-…` | Route Astro, giữ `trailingSlash` |
 | Hero luôn là chữ tĩnh | Hero tĩnh; bài nổi bật (nếu có) đứng đầu dải Cẩm nang | Giao diện đã duyệt không có chỗ cho bài nổi bật ở hero |
@@ -78,5 +78,5 @@ Script `kiem-thu-astro/kiem-thu-astro.cjs` quét mọi `href`, `src`, `url()` tr
 ## 7. Cảnh báo cho chủ dự án
 
 1. **Gộp nhánh vào `main` sẽ tự triển khai** toàn bộ giao diện mới lên website thật. Cần xem bản xem thử và duyệt trước.
-2. Form đặt lịch thật **chưa đổi** (cùng cách gửi, cùng địa chỉ nhận). Giai đoạn 3 thiết kế lại; mặc định form mới ở chế độ giả lập cho tới khi chủ dự án chốt nơi nhận.
+2. **Biểu mẫu đặt lịch mới mặc định ở chế độ giả lập (không gửi dữ liệu).** Website đang chạy thật dùng biểu mẫu cũ: gộp vào `main` khi để mặc định thì web ngừng nhận lịch qua biểu mẫu. Chủ dự án chọn `modeDatLich` (`'cu'` / `'gia-lap'` / `'that'`) trong `src/lib/dat-lich.ts` trước khi gộp. Chi tiết và cách chuyển: `docs/DAT-LICH-DANH-GIA.md`, `HUONG-DAN-NHAN-LICH.md`.
 3. `src/content/tu-van` và `ca-benh` đang rỗng: giao diện bài viết / ca bệnh chưa duyệt bằng nội dung thật.
