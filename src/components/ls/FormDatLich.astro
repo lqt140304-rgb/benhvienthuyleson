@@ -1,0 +1,55 @@
+---
+// Biểu mẫu đặt lịch mới (giai đoạn 3). Dùng ở khu Đặt lịch của trang chủ và ở /dat-lich/.
+// Chế độ gửi do src/lib/dat-lich.ts quyết định (mặc định giả lập: không gửi dữ liệu). Logic ở src/scripts/dat-lich.js.
+import Icon from '../Icon.astro';
+import tt from '../../data/thong_tin.json';
+import { dichVuLS } from '../../lib/ls';
+import { modeDatLich, khungGio, thoiGianCho } from '../../lib/dat-lich';
+const dv = dichVuLS().filter((d) => d.dat_lich);
+---
+<form class="dl-form" id="form-dat-lich" novalidate data-mode={modeDatLich} data-endpoint={modeDatLich === 'that' ? tt.dia_chi_nhan_dat_lich : undefined} data-cho={thoiGianCho} data-sdt={tt.dien_thoai} data-tel={tt.dien_thoai_goi}>
+  {modeDatLich === 'gia-lap' && <p class="the-xem"><Icon name="info" size={16} />Bản xem trước · chưa gửi dữ liệu thật</p>}
+  <div class="dl-thong-bao" id="dl-thong-bao" tabindex="-1" role="alert" hidden></div>
+  <fieldset class="nhom">
+    <legend>Thông tin liên hệ</legend>
+    <div class="o2">
+      <div class="o"><label for="m-ten">Tên khách hàng <i aria-hidden="true">*</i></label><input id="m-ten" name="ten_khach" autocomplete="name" maxlength="80" required aria-describedby="m-ten-loi"><p class="o-loi" id="m-ten-loi"></p></div>
+      <div class="o"><label for="m-sdt">Số điện thoại <i aria-hidden="true">*</i></label><input id="m-sdt" name="dien_thoai" type="tel" inputmode="tel" autocomplete="tel" placeholder="VD: 0912 345 678" required aria-describedby="m-sdt-loi"><p class="o-loi" id="m-sdt-loi"></p></div>
+    </div>
+  </fieldset>
+  <fieldset class="nhom">
+    <legend>Thú cưng &amp; dịch vụ</legend>
+    <div class="o"><label for="m-thu">Tên thú cưng <i aria-hidden="true">*</i></label><input id="m-thu" name="ten_thu_cung" autocomplete="off" maxlength="60" required aria-describedby="m-thu-loi"><p class="o-loi" id="m-thu-loi"></p></div>
+    <div class="o"><span class="o-nhan" id="m-loai-nhan">Loài</span>
+      <div class="chon" role="radiogroup" aria-labelledby="m-loai-nhan">
+        {[['cho', 'Chó', true], ['meo', 'Mèo', false], ['khac', 'Khác', false]].map(([v, t, c]) => (
+          <label><input type="radio" name="m-loai" value={v as string} checked={c as boolean} aria-controls={v === 'khac' ? 'o-loai-khac' : undefined}><span><i class="chon-dau" aria-hidden="true"><Icon name="check" size={16} /></i>{t}</span></label>
+        ))}
+      </div>
+    </div>
+    <div class="o o-phu" id="o-loai-khac" hidden><label for="m-loai-khac">Loài thú cưng <i aria-hidden="true">*</i></label><input id="m-loai-khac" maxlength="40" autocomplete="off" placeholder="Ví dụ: thỏ, hamster, chim…" aria-describedby="m-loai-khac-goi m-loai-khac-loi"><p class="o-goi" id="m-loai-khac-goi">Nhân viên sẽ liên hệ để xác nhận bệnh viện có tiếp nhận loài này hay không.</p><p class="o-loi" id="m-loai-khac-loi"></p></div>
+    <div class="o"><label for="m-dv">Dịch vụ <i aria-hidden="true">*</i></label>
+      <select id="m-dv" required aria-describedby="m-dv-loi"><option value="">Chọn dịch vụ</option>{dv.map((d) => <option value={d.id} data-noi-tru={d.icon === 'bed' ? '' : undefined}>{d.ten}</option>)}</select>
+      <p class="o-loi" id="m-dv-loi"></p></div>
+  </fieldset>
+  <fieldset class="nhom">
+    <legend>Thời gian</legend>
+    <div class="o2 o2-luon">
+      <div class="o"><label for="m-ngay"><span id="m-ngay-nhan">Ngày mong muốn</span> <i aria-hidden="true">*</i></label>
+        <div class="o-ngay-hop"><input id="m-ngay" type="text" inputmode="numeric" autocomplete="off" maxlength="10" placeholder="dd/mm/yyyy" required aria-describedby="m-ngay-goi m-ngay-loi m-ngay-vn"><button type="button" class="nut-lich" id="m-ngay-lich" aria-label="Mở lịch chọn ngày"><Icon name="calendar" size={18} /></button><input type="date" id="m-ngay-an" class="ngay-an" tabindex="-1" aria-hidden="true"></div>
+        <p class="o-goi" id="m-ngay-goi"><span id="m-ngay-goi-ten">Ngày/tháng/năm</span><span id="m-ngay-vi-du"></span></p><p class="o-loi" id="m-ngay-loi"></p><p class="o-ngay-vn" id="m-ngay-vn" aria-live="polite"></p></div>
+      <div class="o"><label for="m-gio">Giờ mong muốn <i aria-hidden="true">*</i></label>
+        <select id="m-gio" required aria-describedby="m-gio-goi m-gio-loi"><option value="">Chọn giờ</option>{khungGio.map((g) => <option>{g}</option>)}</select>
+        <p class="o-goi" id="m-gio-goi">Theo giờ mở cửa {tt.gio_mo_cua}</p><p class="o-loi" id="m-gio-loi"></p></div>
+    </div>
+    <div class="o o-phu" id="o-ngay-don" hidden><label for="m-ngay-don">Ngày đón dự kiến <i aria-hidden="true">*</i></label>
+      <div class="o-ngay-hop"><input id="m-ngay-don" type="text" inputmode="numeric" autocomplete="off" maxlength="10" placeholder="dd/mm/yyyy" aria-describedby="m-ngay-don-goi m-ngay-don-loi m-ngay-don-vn"><button type="button" class="nut-lich" id="m-ngay-don-lich" aria-label="Mở lịch chọn ngày đón"><Icon name="calendar" size={18} /></button><input type="date" id="m-ngay-don-an" class="ngay-an" tabindex="-1" aria-hidden="true"></div>
+      <p class="o-goi" id="m-ngay-don-goi">Không trước ngày gửi. Chi phí nội trú do nhân viên báo khi xác nhận lịch.</p><p class="o-loi" id="m-ngay-don-loi"></p><p class="o-ngay-vn" id="m-ngay-don-vn" aria-live="polite"></p></div>
+    <div class="o"><label for="m-ghi">Ghi chú <span class="nhe">(không bắt buộc)</span></label><textarea id="m-ghi" name="ghi_chu" rows="2" maxlength="1000" placeholder="Tuổi, cân nặng, tình trạng của bé…"></textarea></div>
+  </fieldset>
+  <div class="bay" aria-hidden="true"><label for="m-web">Để trống ô này</label><input id="m-web" name="website" tabindex="-1" autocomplete="off"></div>
+  <button class="nut nut-chinh nut-rong nut-gui" type="submit" id="m-gui" disabled><span class="quay" aria-hidden="true"></span><span class="nut-xong" aria-hidden="true"><Icon name="check" size={18} /></span><span class="nut-chu">Gửi yêu cầu đặt lịch</span></button>
+  <p class="form-chu" id="form-chu" role="status" aria-live="polite">Điền các ô có dấu * để gửi yêu cầu.</p>
+</form>
+<div class="dl-nhan" id="dl-nhan" tabindex="-1" hidden></div>
+<script>import '../../scripts/dat-lich.js';</script>

@@ -1,0 +1,22 @@
+Thử logic Code.v2.gs bằng đối tượng giả (không gọi Google) · 2026-10-11T10:45:24.180Z
+ĐẠT 17 · KHÔNG ĐẠT 0
+
+[ĐẠT] Yêu cầu hợp lệ: trả { ok: true, ma } với mã dạng LS-yymmdd-XXXX
+[ĐẠT] Lưu đúng 1 dòng, đúng cột (mã, mã gửi, tên, số điện thoại, thú cưng, loài, dịch vụ, ngày, giờ, trạng thái "Mới")
+[ĐẠT] Gửi đúng 1 email cho chủ tài khoản, có mã yêu cầu
+[ĐẠT] Khoá được lấy và trả lại đủ
+[ĐẠT] Gửi lại CÙNG mã yêu cầu: không tạo dòng mới, không gửi email nữa, trả lại mã cũ với trung: true
+[ĐẠT] Mã yêu cầu khác: tạo dòng mới và mã mới
+[ĐẠT] 16 trường hợp dữ liệu sai: đều trả { ok: false, loi } bằng tiếng Việt, không lưu dòng nào, không gửi email
+[ĐẠT] Ngày đón CÙNG ngày gửi là hợp lệ; ngày đón sau ngày gửi hợp lệ
+[ĐẠT] Loài Khác lưu kèm tên loài; số điện thoại +84 được đổi về dạng 0…
+[ĐẠT] Ô bẫy spam có chữ: từ chối, không lưu, không gửi email
+[ĐẠT] Chặn công thức: nội dung bắt đầu bằng = + - @ được lưu kèm dấu nháy ở đầu
+[ĐẠT] Nội dung quá dài bị cắt (ghi chú ≤ 1000, tên ≤ 80)
+[ĐẠT] GUI_EMAIL = false (chỉ trang tính): vẫn lưu dòng, không gửi email
+[ĐẠT] Gửi email lỗi (hết hạn mức): yêu cầu VẪN được lưu và vẫn trả ok: true (nhân viên thấy dòng mới trong trang tính)
+[ĐẠT] JSON hỏng: trả { ok: false } có thông báo, không báo lỗi script
+[ĐẠT] Biểu mẫu cũ (form-urlencoded) vẫn được nhận và lưu (có thể quay lại biểu mẫu cũ mà không đổi script)
+[ĐẠT] doGet chỉ trả trạng thái chạy, không lộ dữ liệu
+
+[CHƯA XÁC MINH] Chạy thật trên Google (cấp quyền, email tới, phản hồi JSON đọc được từ trình duyệt github.io)  → cần chủ dự án thử theo HUONG-DAN-NHAN-LICH.md

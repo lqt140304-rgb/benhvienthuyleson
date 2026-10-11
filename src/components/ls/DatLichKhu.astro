@@ -1,8 +1,10 @@
 ---
-// Khu "Đặt lịch" ở trang chủ: quy trình 3 bước + lối vào form đặt lịch thật (/dat-lich/)
+// Khu "Đặt lịch" ở trang chủ: quy trình 3 bước + biểu mẫu đặt lịch (chế độ do src/lib/dat-lich.ts; nếu 'cu' thì chỉ có lối vào form cũ ở /dat-lich/)
 import Icon from '../Icon.astro';
 import tt from '../../data/thong_tin.json';
+import FormDatLich from './FormDatLich.astro';
 import { u } from '../../lib/site';
+import { modeDatLich } from '../../lib/dat-lich';
 ---
 <section class="khoi khoi-tim" id="dat-lich">
   <div class="khung dl">
@@ -18,13 +20,17 @@ import { u } from '../../lib/site';
       <p class="dl-luu"><Icon name="info" size={20} /><span>Yêu cầu đặt lịch sẽ được xác nhận sau khi nhân viên liên hệ.<span class="an-dt"> Lịch hẹn chưa được xác nhận chỉ bằng thao tác gửi biểu mẫu.</span></span></p>
       <p class="dl-goi">Cần gấp? Gọi <a href={`tel:${tt.dien_thoai_goi}`}>{tt.dien_thoai}</a></p>
     </div>
+    {modeDatLich === 'cu'
+      ? (
     <div class="dl-form dl-loi-vao">
-      <h3>Gửi yêu cầu đặt lịch</h3>
-      <p>Điền biểu mẫu ngắn: tên, số điện thoại, thú cưng, dịch vụ và giờ mong muốn. Nhân viên sẽ liên hệ xác nhận.</p>
-      <div class="hang-nut">
-        <a class="nut nut-chinh" href={u('/dat-lich/')}><Icon name="calendar" size={18} />Mở biểu mẫu đặt lịch</a>
-        {tt.zalo && <a class="nut nut-vien" href={tt.zalo} target="_blank" rel="noopener"><Icon name="chat" size={18} />Nhắn Zalo</a>}
-      </div>
-    </div>
+          <h3>Gửi yêu cầu đặt lịch</h3>
+          <p>Điền biểu mẫu ngắn: tên, số điện thoại, thú cưng, dịch vụ và giờ mong muốn. Nhân viên sẽ liên hệ xác nhận.</p>
+          <div class="hang-nut">
+            <a class="nut nut-chinh" href={u('/dat-lich/')}><Icon name="calendar" size={18} />Mở biểu mẫu đặt lịch</a>
+            {tt.zalo && <a class="nut nut-vien" href={tt.zalo} target="_blank" rel="noopener"><Icon name="chat" size={18} />Nhắn Zalo</a>}
+          </div>
+        </div>
+      )
+      : <FormDatLich />}
   </div>
 </section>

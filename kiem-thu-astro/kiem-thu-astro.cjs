@@ -5,7 +5,7 @@
 const { chromium } = require('playwright');
 const fs = require('fs'), path = require('path'), cp = require('child_process'), crypto = require('crypto');
 const GOC = path.resolve(__dirname, '..'), DIST = path.join(GOC, 'dist'), BASE = '/benhvienthuyleson';
-const CONG = 4399, URLG = `http://localhost:${CONG}${BASE}`;
+const CONG = 4399, CONG2 = 4398, URLG = `http://localhost:${CONG}${BASE}`;
 const COMMIT_GOC = process.env.COMMIT_GOC || '24d5057'; // commit trước khi tích hợp giao diện mới
 const KQ = path.join(__dirname, 'ket-qua'); fs.mkdirSync(KQ, { recursive: true });
 
@@ -76,7 +76,10 @@ function kiemDuLieu() {
 }
 
 (async () => {
+  // Dựng thêm hai bản để thử các chế độ biểu mẫu: PUBLIC_MODE_DAT_LICH=that (nhận thật, dùng máy chủ giả) và =cu (biểu mẫu cũ)
+  for (const [mode, thuMuc] of [['that', 'dist-that'], ['cu', 'dist-cu']]) cp.execSync(`npx astro build --outDir ${thuMuc}`, { cwd: GOC, env: { ...process.env, PUBLIC_MODE_DAT_LICH: mode }, stdio: 'ignore' });
   const may = cp.spawn('node', [path.join(__dirname, 'may-chu.cjs'), String(CONG)], { stdio: 'ignore' });
+  const may2 = cp.spawn('node', [path.join(__dirname, 'may-chu.cjs'), String(CONG2)], { stdio: 'ignore', env: { ...process.env, DIST: path.join(GOC, 'dist-that') } });
   await new Promise((r) => setTimeout(r, 800));
   const ngoaiBuild = kiemLienKet(); kiemDuLieu();
   const b = await chromium.launch();
@@ -86,7 +89,7 @@ function kiemDuLieu() {
     const ctx = await b.newContext({ locale: 'vi-VN', ...tuy });
     await ctx.route('**/*', (r) => {
       const u = r.request().url();
-      if (u.startsWith(`http://localhost:${CONG}`)) return r.continue();
+      if (u.startsWith(`http://localhost:${CONG}`) || u.startsWith(`http://localhost:${CONG2}`)) return r.continue();
       ngoaiYeuCau.add(new URL(u).host);
       if (/script\.google\.com/.test(u)) { guiGoogle++; return r.fulfill({ status: 200, contentType: 'text/plain', body: 'ok' }); }
       return r.abort(); // phông chữ Google và mọi thứ khác: chặn, không gọi ra ngoài
@@ -316,27 +319,127 @@ function kiemDuLieu() {
     await ctx.close();
   }
 
-  // ---------- 11. Form đặt lịch hiện tại: chưa đổi hành vi ----------
-  muc('11. Form đặt lịch hiện tại (giữ nguyên hành vi ở giai đoạn này; không gửi dữ liệu thật)');
-  {
-    const ctx = await ctxMoi({ viewport: { width: 1440, height: 900 } }), { p } = await moTrang(ctx, '/dat-lich/');
-    const g0 = guiGoogle;
-    await p.click('#gui'); await p.waitForTimeout(250);
-    const loi = await p.evaluate(() => [...document.querySelectorAll('.loi:not([hidden])')].length);
-    ok('Gửi form trống: hiện lỗi từng ô và KHÔNG gửi yêu cầu nào', loi >= 2 && guiGoogle === g0, `${loi} lỗi, ${guiGoogle - g0} yêu cầu`);
-    await p.fill('#f-ten', 'Người thử nghiệm'); await p.fill('#f-sdt', '0912345678');
-    const nhom = await p.evaluate(() => { const s = document.getElementById('f-nhom'); const o = [...s.options].find((x) => /kham/.test(x.dataset.id || '')) || s.options[1]; return o.value; });
-    await p.selectOption('#f-nhom', nhom); await p.waitForTimeout(100);
-    const dv = await p.evaluate(() => { const s = document.getElementById('f-dv'); return [...s.options].find((x) => x.value)?.value; });
-    await p.selectOption('#f-dv', dv); await p.waitForTimeout(100);
-    if (await p.isVisible('#f-kg')) await p.selectOption('#f-kg', { index: 1 });
-    const ngay = new Date(Date.now() + 7 * 3600e3 + 2 * 86400e3).toISOString().slice(0, 10);
-    await p.fill('#f-ngay', ngay); await p.fill('#f-gio', '10:00');
-    await p.click('#gui'); await p.waitForTimeout(900);
-    const sau = await p.evaluate(() => ({ ok: !document.getElementById('ok').hidden, loiGui: document.getElementById('loi-gui').textContent, loiHien: [...document.querySelectorAll('.loi:not([hidden])')].map((e) => e.id) }));
-    ok('Điền đúng rồi gửi (máy chủ nhận được giả lập): có đúng 1 yêu cầu tới địa chỉ nhận, hiện thông báo đã gửi', guiGoogle - g0 === 1 && sau.ok, JSON.stringify({ yeuCau: guiGoogle - g0, ...sau }));
+  // ---------- 11. Biểu mẫu đặt lịch mới ----------
+  muc('11. Biểu mẫu đặt lịch mới: trường, kiểm tra, giả lập (0 yêu cầu), nhận thật với máy chủ giả (đã nhận / lỗi / quá thời gian / không đọc được / trùng)');
+  const nhomDat = dichVu.filter((d) => d.dat_lich !== false && !d.cap_cuu), dvThuong = neo(nhomDat.find((d) => d.icon !== 'bed').ten), dvNoiTru = neo(nhomDat.find((d) => d.icon === 'bed').ten);
+  const vn = new Date(Date.now() + 7 * 3600e3), cong = (n) => { const d = new Date(Date.UTC(vn.getUTCFullYear(), vn.getUTCMonth(), vn.getUTCDate() + n)); return `${String(d.getUTCDate()).padStart(2, '0')}/${String(d.getUTCMonth() + 1).padStart(2, '0')}/${d.getUTCFullYear()}`; };
+  const dien = async (p, o = {}) => {
+    await p.fill('#m-ten', o.ten ?? 'Khách thử nghiệm'); await p.fill('#m-sdt', o.sdt ?? '0912 345 678'); await p.fill('#m-thu', o.thu ?? 'Bé Thử');
+    if (o.khac) { await p.check('input[name="m-loai"][value="khac"]', { force: true }); await p.fill('#m-loai-khac', o.khac); }
+    await p.selectOption('#m-dv', o.dv ?? dvThuong); await p.fill('#m-ngay', o.ngay ?? cong(2)); await p.selectOption('#m-gio', o.gio ?? '09:00');
+    if (o.don) await p.fill('#m-ngay-don', o.don);
+    if (o.ghi) await p.fill('#m-ghi', o.ghi);
+  };
+  const choHien = (p, sel) => p.waitForSelector(sel, { state: 'visible', timeout: 8000 });
+  const SAU = `Đã nhận yêu cầu đặt lịch, bệnh viện sẽ liên hệ xác nhận`;
+  // --- Trường và kiểm tra (chế độ mặc định: giả lập) ---
+  for (const [w, h, mobile] of [[1440, 900, false], [390, 844, true]]) {
+    const tag = `${w}x${h}`, ctx = await ctxMoi({ viewport: { width: w, height: h }, isMobile: mobile, hasTouch: mobile }), { p } = await moTrang(ctx, '/dat-lich/');
+    const dsTruong = await p.evaluate(() => ({ ten: !!document.getElementById('m-ten'), sdt: document.getElementById('m-sdt').inputMode, thu: !!document.getElementById('m-thu'), loai: [...document.querySelectorAll('input[name="m-loai"]')].map((r) => r.value), dv: document.getElementById('m-dv').options.length, gio: [...document.getElementById('m-gio').options].map((o) => o.value).filter(Boolean), ghi: document.getElementById('m-ghi').required, ngay: document.getElementById('m-ngay').inputMode, bay: getComputedStyle(document.getElementById('m-web').closest('.bay')).left }));
+    ok(`[${tag}] Đủ trường: tên khách hàng, số điện thoại (inputmode tel), tên thú cưng, loài (Chó / Mèo / Khác), dịch vụ, ngày, giờ 8:00–21:00 cách 30 phút, ghi chú không bắt buộc; ô bẫy ẩn khỏi mắt người`, dsTruong.ten && dsTruong.sdt === 'tel' && dsTruong.thu && dsTruong.loai.join() === 'cho,meo,khac' && dsTruong.dv === nhomDat.length + 1 && dsTruong.gio[0] === '08:00' && dsTruong.gio.at(-1) === '21:00' && dsTruong.gio.length === 26 && !dsTruong.ghi && dsTruong.ngay === 'numeric' && /-\d+px/.test(dsTruong.bay), JSON.stringify(dsTruong));
+    ok(`[${tag}] Chưa nhập gì: nút gửi tắt; lời nhắc nói rõ`, await p.isDisabled('#m-gui') && /Điền các ô có dấu/.test(await p.textContent('#form-chu')), '');
+    const an0 = await p.evaluate(() => ({ khac: document.getElementById('o-loai-khac').hidden, don: document.getElementById('o-ngay-don').hidden }));
+    await p.check('input[name="m-loai"][value="khac"]', { force: true }); const a1 = await p.evaluate(() => !document.getElementById('o-loai-khac').hidden && document.getElementById('m-loai-khac').required);
+    await p.fill('#m-ten', 'A'); await p.fill('#m-sdt', '0912345678'); await p.fill('#m-thu', 'B'); await p.selectOption('#m-dv', dvThuong); await p.fill('#m-ngay', cong(1)); await p.selectOption('#m-gio', '10:00');
+    const chuaKhac = await p.isDisabled('#m-gui');
+    await p.fill('#m-loai-khac', 'thỏ'); const duKhac = !(await p.isDisabled('#m-gui'));
+    await p.check('input[name="m-loai"][value="cho"]', { force: true }); const a2 = await p.evaluate(() => document.getElementById('o-loai-khac').hidden);
+    ok(`[${tag}] Chọn "Khác" hiện ô nhập loài (bắt buộc, thiếu thì chưa gửi được); chọn lại Chó thì ẩn`, an0.khac && a1 && chuaKhac && duKhac && a2, JSON.stringify({ an0, a1, chuaKhac, duKhac, a2 }));
+    await p.selectOption('#m-dv', dvNoiTru); const nt = await p.evaluate(() => ({ don: !document.getElementById('o-ngay-don').hidden, nhan: document.getElementById('m-ngay-nhan').textContent }));
+    const chuaDon = await p.isDisabled('#m-gui');
+    await p.fill('#m-ngay', cong(3)); await p.fill('#m-ngay-don', cong(2)); await p.locator('#m-ngay-don').blur(); await p.waitForTimeout(100);
+    const truoc = await p.evaluate(() => ({ loi: document.getElementById('m-ngay-don-loi').textContent, ban: document.getElementById('m-gui').disabled }));
+    await p.fill('#m-ngay-don', cong(3)); await p.locator('#m-ngay-don').blur(); const cung = !(await p.isDisabled('#m-gui'));
+    await p.fill('#m-ngay-don', cong(5)); const sau = !(await p.isDisabled('#m-gui'));
+    await p.selectOption('#m-dv', dvThuong); const anDon = await p.evaluate(() => document.getElementById('o-ngay-don').hidden);
+    ok(`[${tag}] Dịch vụ nội trú: hiện "Ngày đón dự kiến" (bắt buộc); ngày đón TRƯỚC ngày gửi bị báo lỗi; cùng ngày hoặc sau thì hợp lệ; đổi dịch vụ thường thì ẩn`, nt.don && /Ngày gửi/.test(nt.nhan) && chuaDon && /không được trước ngày gửi/.test(truoc.loi) && truoc.ban && cung && sau && anDon, JSON.stringify({ nt, chuaDon, truoc, cung, sau, anDon }));
+    await p.reload(); await p.fill('#m-sdt', '12345'); await p.locator('#m-sdt').blur(); await p.fill('#m-ngay', cong(-1)); await p.locator('#m-ngay').blur(); await p.locator('#m-ten').focus(); await p.locator('#m-ten').blur();
+    const sai = await p.evaluate(() => ({ sdt: document.getElementById('m-sdt-loi').textContent, ngay: document.getElementById('m-ngay-loi').textContent, ten: document.getElementById('m-ten-loi').textContent, inv: document.getElementById('m-sdt').getAttribute('aria-invalid') }));
+    ok(`[${tag}] Báo lỗi cạnh từng ô (số điện thoại sai, ngày quá khứ, thiếu tên), aria-invalid, nội dung tiếng Việt`, /10 số/.test(sai.sdt) && /từ hôm nay/.test(sai.ngay) && /tên khách hàng/.test(sai.ten) && sai.inv === 'true', JSON.stringify(sai));
     await ctx.close();
   }
+  // --- Giả lập (mặc định): 0 yêu cầu ---
+  {
+    const ctx = await ctxMoi({ viewport: { width: 1440, height: 900 } }), nguoi = [];
+    ctx.on('request', (r) => { if (!r.url().startsWith(`http://localhost:${CONG}`)) nguoi.push(r.url()); });
+    for (const trang of ['/dat-lich/', '/']) {
+      const { p } = await moTrang(ctx, trang);
+      if (trang === '/') await p.evaluate(() => document.getElementById('dat-lich').scrollIntoView());
+      const truoc = nguoi.length;
+      ok(`[${trang}] Chế độ giả lập có dòng "Bản xem trước · chưa gửi dữ liệu thật"`, /chưa gửi dữ liệu thật/.test(await p.textContent('.the-xem')), '');
+      await dien(p, { khac: 'thỏ', ghi: 'thử' }); await choHien(p, '#m-gui:not([disabled])'); await p.click('#m-gui'); await choHien(p, '#dl-nhan');
+      const t = (await p.textContent('#dl-nhan')).replace(/\s+/g, ' ');
+      const ngoai = nguoi.slice(truoc).filter((u) => !/fonts\.(googleapis|gstatic)/.test(u));
+      ok(`[${trang}] Bấm gửi ở chế độ giả lập: 0 yêu cầu mạng; hiện "Hoàn tất giả lập, chưa gửi đi đâu"; KHÔNG có câu "Đã nhận yêu cầu"`, ngoai.length === 0 && /Hoàn tất giả lập/.test(t) && /CHƯA được gửi/.test(t) && !t.includes(SAU) && !/đã được xác nhận|đã xác nhận lịch/i.test(t), JSON.stringify({ ngoai, t: t.slice(0, 120) }));
+      await p.close();
+    }
+    await ctx.close();
+  }
+  // --- Nhận thật với máy chủ giả (bản dựng PUBLIC_MODE_DAT_LICH=that) ---
+  {
+    const URLT = `http://localhost:${CONG2}${BASE}`;
+    const ctx = await ctxMoi({ viewport: { width: 1440, height: 900 } });
+    await ctx.route(`http://localhost:${CONG2}/**`, (r) => r.continue()); // máy chủ bản "that" cũng là cục bộ
+    const moThat = async () => { const p = await ctx.newPage(); const loi = []; p.on('pageerror', (e) => loi.push(e.message)); await p.goto(URLT + '/dat-lich/', { waitUntil: 'load' }); await p.evaluate(() => document.fonts.ready); p.__loi = loi; return p; };
+    const chanGoogle = async (p, xuLy) => { const ds = []; await p.route(/script\.google\.com/, async (r) => { const rq = r.request(); ds.push({ body: rq.postData(), ct: rq.headers()['content-type'], method: rq.method() }); await xuLy(r, ds.length); }); return ds; };
+    const gui = async (p) => { await choHien(p, '#m-gui:not([disabled])'); await p.click('#m-gui'); };
+    const hang = { dien: 'x' };
+    // a. Thành công
+    { const p = await moThat(), ds = await chanGoogle(p, (r) => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true, ma: 'LS-261011-AB12' }) }));
+      ok('[nhận thật] Bản dựng chế độ "that" không có dòng "chưa gửi dữ liệu thật"; địa chỉ nhận lấy từ thong_tin.json', (await p.locator('.the-xem').count()) === 0 && /script\.google\.com/.test(await p.getAttribute('#form-dat-lich', 'data-endpoint')), '');
+      await dien(p, { ghi: 'ghi chú thử' }); await gui(p); await choHien(p, '#dl-nhan'); const t = (await p.textContent('#dl-nhan')).replace(/\s+/g, ' ');
+      const j = ds[0] && JSON.parse(ds[0].body);
+      ok('[nhận thật] Máy chủ trả { ok: true, ma }: hiện đúng câu "Đã nhận yêu cầu đặt lịch, bệnh viện sẽ liên hệ xác nhận." + mã yêu cầu + tóm tắt; không nói "đã xác nhận lịch"', t.includes(SAU) && t.includes('LS-261011-AB12') && /Lịch hẹn chỉ được xác nhận sau khi nhân viên liên hệ/.test(t) && !/lịch (đã|hẹn đã) được xác nhận/i.test(t), t.slice(0, 160));
+      ok('[nhận thật] Đúng 1 yêu cầu, POST, Content-Type text/plain (không gây bước kiểm tra trước), JSON có đủ trường và ma_yeu_cau', ds.length === 1 && ds[0].method === 'POST' && /text\/plain/.test(ds[0].ct) && j && j.ten_khach === 'Khách thử nghiệm' && j.dien_thoai === '0912345678' && j.ten_thu_cung === 'Bé Thử' && j.loai === 'Chó' && j.dich_vu_ma === dvThuong && /^\d{4}-\d{2}-\d{2}$/.test(j.ngay) && j.gio === '09:00' && j.ghi_chu === 'ghi chú thử' && j.website === '' && String(j.ma_yeu_cau).length >= 8, JSON.stringify(j));
+      await p.click('#dl-lam-lai'); await p.waitForTimeout(150);
+      const lai = await p.evaluate(() => ({ ten: document.getElementById('m-ten').value, form: !document.getElementById('form-dat-lich').hidden, the: document.getElementById('dl-nhan').hidden }));
+      ok('[nhận thật] "Gửi yêu cầu khác": form trống trở lại, thẻ kết quả ẩn', lai.ten === '' && lai.form && lai.the, JSON.stringify(lai));
+      await dien(p); await gui(p); await choHien(p, '#dl-nhan'); const j2 = JSON.parse(ds[1].body);
+      ok('[nhận thật] Yêu cầu thứ hai dùng mã yêu cầu MỚI', j2.ma_yeu_cau !== j.ma_yeu_cau, '');
+      ok('[nhận thật] Không có lỗi JavaScript', p.__loi.length === 0, p.__loi.join('|')); await p.close(); }
+    // b. Máy chủ báo lỗi (đọc được)
+    { const p = await moThat(), ds = await chanGoogle(p, (r) => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: false, loi: 'Số điện thoại chưa đúng.' }) }));
+      await dien(p, { ghi: 'giữ nguyên' }); await gui(p); await choHien(p, '#dl-thong-bao');
+      const x = await p.evaluate(() => ({ tb: document.getElementById('dl-thong-bao').textContent, ten: document.getElementById('m-ten').value, ghi: document.getElementById('m-ghi').value, nut: document.getElementById('m-gui').textContent.trim(), bat: !document.getElementById('m-gui').disabled, the: document.getElementById('dl-nhan').hidden, role: document.getElementById('dl-thong-bao').getAttribute('role'), tel: !!document.querySelector('#dl-thong-bao a[href^="tel:"]'), foc: document.activeElement.id }));
+      ok('[thất bại] Máy chủ báo lỗi đọc được: hiện thông báo thất bại (role=alert, focus vào đó, có số gọi), GIỮ nguyên dữ liệu, nút thành "Gửi lại" và bấm được, KHÔNG báo đã nhận', /Chưa gửi được yêu cầu/.test(x.tb) && x.ten === 'Khách thử nghiệm' && x.ghi === 'giữ nguyên' && x.nut === 'Gửi lại' && x.bat && x.the && x.role === 'alert' && x.tel && x.foc === 'dl-thong-bao' && !x.tb.includes(SAU), JSON.stringify(x));
+      await p.close(); }
+    // c. Quá thời gian
+    { const p = await moThat(); await p.evaluate(() => { document.getElementById('form-dat-lich').dataset.cho = '1200'; });
+      const ds = await chanGoogle(p, () => new Promise(() => {})); // không bao giờ trả lời
+      await dien(p); await gui(p); const dang = await p.evaluate(() => ({ nut: document.getElementById('m-gui').textContent.trim(), busy: document.getElementById('m-gui').getAttribute('aria-busy'), khoa: [...document.querySelectorAll('#form-dat-lich fieldset')].every((f) => f.disabled), chu: document.getElementById('form-chu').textContent }));
+      await choHien(p, '#dl-thong-bao'); const x = await p.evaluate(() => ({ tb: document.getElementById('dl-thong-bao').textContent, ten: document.getElementById('m-ten').value, nut: document.getElementById('m-gui').textContent.trim(), the: document.getElementById('dl-nhan').hidden, khoa: [...document.querySelectorAll('#form-dat-lich fieldset')].some((f) => f.disabled) }));
+      ok('[đang gửi] Trong lúc chờ: nút "Đang gửi…" (aria-busy), các ô nhập bị khoá, dòng trạng thái nói đang gửi', dang.nut === 'Đang gửi…' && dang.busy === 'true' && dang.khoa && /Đang gửi/.test(dang.chu), JSON.stringify(dang));
+      ok('[quá thời gian] Không có phản hồi: báo "Chưa nhận được xác nhận…" (KHÔNG báo thành công), giữ dữ liệu, mở khoá ô nhập, nút "Gửi lại"', /Chưa nhận được xác nhận/.test(x.tb) && x.ten === 'Khách thử nghiệm' && x.nut === 'Gửi lại' && x.the && !x.khoa && !x.tb.includes(SAU), JSON.stringify(x));
+      await p.close(); }
+    // d. Phản hồi không đọc được (giống script cũ trả chữ "ok") và e. lỗi mạng
+    for (const [ten, xl] of [['phản hồi không đọc được (văn bản "ok" như script cũ)', (r) => r.fulfill({ status: 200, contentType: 'text/plain', body: 'ok' })], ['JSON thiếu mã', (r) => r.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' })], ['lỗi 500', (r) => r.fulfill({ status: 500, contentType: 'text/html', body: '<h1>lỗi</h1>' })], ['lỗi mạng', (r) => r.abort('failed')]]) {
+      const p = await moThat(); await chanGoogle(p, xl); await dien(p); await gui(p); await choHien(p, '#dl-thong-bao');
+      const x = await p.evaluate(() => ({ tb: document.getElementById('dl-thong-bao').textContent, the: document.getElementById('dl-nhan').hidden, ten: document.getElementById('m-ten').value }));
+      ok(`[không báo nhầm] ${ten}: báo "Chưa nhận được xác nhận…", không hiện "Đã nhận", giữ dữ liệu`, /Chưa nhận được xác nhận/.test(x.tb) && x.the && x.ten === 'Khách thử nghiệm' && !x.tb.includes(SAU), JSON.stringify(x)); await p.close();
+    }
+    // f. Bấm nhiều lần / Enter lặp
+    { const p = await moThat(), ds = await chanGoogle(p, async (r) => { await new Promise((k) => setTimeout(k, 900)); await r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true, ma: 'LS-X-1' }) }); });
+      await dien(p); await choHien(p, '#m-gui:not([disabled])');
+      await p.evaluate(() => { const f = document.getElementById('form-dat-lich'), b = document.getElementById('m-gui'); b.click(); b.click(); b.click(); f.requestSubmit(); f.dispatchEvent(new Event('submit', { cancelable: true })); });
+      await p.focus('#m-ten').catch(() => {}); await p.keyboard.press('Enter').catch(() => {});
+      await choHien(p, '#dl-nhan'); await p.waitForTimeout(300);
+      ok('[chống trùng] Bấm nút 3 lần, gửi bằng mã lệnh 2 lần, Enter lặp trong lúc chờ: chỉ ĐÚNG 1 yêu cầu', ds.length === 1, `${ds.length} yêu cầu`); await p.close(); }
+    // g. Gửi lại dùng lại mã; đổi nội dung thì mã mới; honeypot
+    { const p = await moThat(), ds = await chanGoogle(p, (r, lan) => (lan < 3 ? r.abort('failed') : r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true, ma: 'LS-X-2', trung: true }) })));
+      await dien(p); await gui(p); await choHien(p, '#dl-thong-bao'); await gui(p); await p.waitForFunction(() => document.getElementById('m-gui').textContent.trim() === 'Gửi lại' && !document.getElementById('m-gui').disabled);
+      await p.waitForTimeout(150);
+      const m1 = JSON.parse(ds[0].body).ma_yeu_cau, m2 = ds[1] && JSON.parse(ds[1].body).ma_yeu_cau;
+      ok('[chống trùng] "Gửi lại" nguyên nội dung dùng lại CÙNG mã yêu cầu (máy chủ nhờ đó bỏ qua bản trùng)', ds.length === 2 && m1 === m2, `${m1} / ${m2}`);
+      await p.fill('#m-ghi', 'đổi nội dung'); await gui(p); await choHien(p, '#dl-nhan'); const m3 = JSON.parse(ds[2].body).ma_yeu_cau;
+      ok('[chống trùng] Đổi nội dung rồi gửi: mã yêu cầu MỚI; máy chủ trả trùng thì vẫn hiện đã nhận', m3 !== m1 && (await p.textContent('#dl-nhan')).includes(SAU), `${m1} / ${m3}`); await p.close(); }
+    { const p = await moThat(), ds = await chanGoogle(p, (r) => r.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true,"ma":"x"}' }));
+      await dien(p); await p.evaluate(() => { document.getElementById('m-web').value = 'bot'; }); await p.evaluate(() => document.getElementById('form-dat-lich').requestSubmit()); await p.waitForTimeout(500);
+      ok('[bẫy spam] Ô bẫy có chữ: không gửi yêu cầu nào và không báo đã nhận', ds.length === 0 && (await p.evaluate(() => document.getElementById('dl-nhan').hidden)), `${ds.length} yêu cầu`); await p.close(); }
+    await ctx.close();
+  }
+  // --- Chế độ cũ còn dùng được ---
+  { const f = fs.readFileSync(path.join(GOC, 'dist-cu/dat-lich/index.html'), 'utf8'), g = fs.readFileSync(path.join(GOC, 'dist-cu/index.html'), 'utf8');
+    ok('Chế độ "cu" (quay lại biểu mẫu cũ): trang Đặt lịch có biểu mẫu cũ #dat-lich, không có biểu mẫu mới; trang chủ chỉ còn lối vào /dat-lich/', /id="dat-lich"[^>]*data-endpoint/.test(f) && !/id="form-dat-lich"/.test(f) && !/id="form-dat-lich"/.test(g) && /Mở biểu mẫu đặt lịch/.test(g), ''); }
 
   // ---------- 12. Không gọi ra ngoài ----------
   muc('12. Yêu cầu mạng ra ngoài');
@@ -355,7 +458,7 @@ function kiemDuLieu() {
   chuaXm('Cảm nhận chuyển động và độ mượt trên máy yếu', 'Cần người xem video / thử trên máy thật');
   chuaXm('Nội dung cẩm nang / ca bệnh khi đã có bài thật', 'Thư mục src/content hiện rỗng: giao diện bài viết và ca bệnh chưa được duyệt bằng nội dung thật (kiểm bằng dữ liệu thử ở bước riêng nếu có)');
 
-  await b.close(); may.kill();
+  await b.close(); may.kill(); may2.kill(); for (const t of ['dist-that', 'dist-cu']) fs.rmSync(path.join(GOC, t), { recursive: true, force: true });
   const dem = (t) => kq.filter((x) => x.tt === t).length;
   const tom = `ĐẠT ${dem('ĐẠT')} · KHÔNG ĐẠT ${dem('KHÔNG ĐẠT')} · CHƯA CHẠY ${dem('CHƯA CHẠY')} · CHƯA XÁC MINH ${dem('CHƯA XÁC MINH')}`;
   const dong = [`Kiểm thử bản dựng Astro Lê Sơn · Chromium ${phienBan} (Playwright) · ${new Date().toISOString()}`, tom, '', ...kq.map((x) => x.tt === 'MỤC' ? `\n-- ${x.ten}` : `[${x.tt}] ${x.ten}${x.ct ? '  → ' + x.ct : ''}`)];
