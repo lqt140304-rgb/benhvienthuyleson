@@ -8,7 +8,8 @@ const GOC = path.resolve(__dirname, '..'), RE = /export const modeDatLich: ModeD
 function sachSua() { // mã trong repo phải đúng bản đã commit (phát hiện chế độ tạm bị commit nhầm hoặc sửa dở)
   try { cp.execSync('git diff --quiet HEAD -- src/lib/dat-lich.ts', { cwd: GOC, stdio: 'ignore' }); return true; } catch (e) { return e.status === 1 ? false : true; }
 }
-function dung(mode, thuMuc) {
+// tuyChon.diaChi: (chỉ chế độ that) thay dia_chi_nhan_dat_lich TRONG BẢN SAO TẠM để dựng bản thử nối Sheet thử; src/data của repo không đổi.
+function dung(mode, thuMuc, tuyChon = {}) {
   if (!['gia-lap', 'that', 'cu'].includes(mode)) throw new Error('Chế độ không hợp lệ: ' + mode);
   const tam = fs.mkdtempSync(path.join(os.tmpdir(), 'le-son-che-do-'));
   try {
@@ -18,6 +19,10 @@ function dung(mode, thuMuc) {
     const tep = path.join(tam, 'src/lib/dat-lich.ts'), goc = fs.readFileSync(tep, 'utf8');
     if (!RE.test(goc)) throw new Error('Không tìm thấy dòng modeDatLich trong src/lib/dat-lich.ts');
     fs.writeFileSync(tep, goc.replace(RE, `export const modeDatLich: ModeDatLich = '${mode}';`));
+    if (tuyChon.diaChi) {
+      if (mode !== 'that' || !/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(tuyChon.diaChi)) throw new Error('diaChi chỉ dùng cho chế độ that và phải có dạng https://script.google.com/macros/s/…/exec');
+      const tt = path.join(tam, 'src/data/thong_tin.json'), j = JSON.parse(fs.readFileSync(tt, 'utf8')); j.dia_chi_nhan_dat_lich = tuyChon.diaChi; fs.writeFileSync(tt, JSON.stringify(j, null, 2));
+    }
     cp.execSync(`npx astro build --outDir "${path.resolve(GOC, thuMuc)}"`, { cwd: tam, stdio: 'ignore' });
   } finally { fs.rmSync(tam, { recursive: true, force: true }); }
 }

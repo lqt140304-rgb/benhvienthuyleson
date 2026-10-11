@@ -31,3 +31,8 @@
 - Bản cũ (trước khi sửa) chạy cùng bộ thử này: **17 mục KHÔNG ĐẠT** (`kiem-thu-astro/ket-qua/ban-cu-chay-bo-thu-moi.txt`); bản mới: tất cả ĐẠT.
 ## Chưa xác minh (chỉ Google thật mới trả lời được)
 Quyền khi cấp lần đầu, email thực sự tới, hạn mức email/ngày, trình duyệt đọc được phản hồi từ `github.io`, khoá `LockService` của Google chạy đúng như bản giả. Một giới hạn có chủ ý: nếu script chết đúng giữa lúc gửi email, dòng "ĐANG GỬI" sau 5 phút sẽ được gửi lại và có thể tới **hai** thư (ưu tiên không mất thông báo hơn là không trùng trong tình huống hiếm này).
+
+## Bản THỬ `that` chạy trên máy bạn (nối Sheet thử)
+- Dựng: `node kiem-thu-astro/dung-ban-thu-that.cjs <địa chỉ /exec của Sheet thử>` → thư mục `ban-thu-that/` (**git bỏ qua**, địa chỉ chỉ nằm trong bản dựng thử; `src/data/thong_tin.json` và `modeDatLich` của nhánh **không đổi**). Hướng dẫn chạy cho người không lập trình: `ban-thu-that/README-THU.md`.
+- Kiểm thử bằng máy (trình duyệt thật + `Code.v2.gs` + Trang tính **giả**, không gọi Google): `node kiem-thu-astro/kiem-thu-that-dau-cuoi.cjs` → `kiem-thu-astro/ket-qua/ket-qua-that-dau-cuoi.txt` (gửi thành công; mất phản hồi sau khi đã lưu rồi gửi lại; lỗi mạng rồi gửi lại; hai yêu cầu khác nhau; không có hoá đơn / tổng tạm tính).
+- Phần Google thật (email tới đúng hộp thư, Sheet thử đúng 1 dòng, trình duyệt đọc được phản hồi từ `script.google.com`) **chỉ bạn xác nhận được** bằng README-THU.md.
