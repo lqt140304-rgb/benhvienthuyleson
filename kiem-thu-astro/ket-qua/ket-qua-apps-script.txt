@@ -1,4 +1,4 @@
-Thử logic Code.v2.gs bằng đối tượng giả (không gọi Google) · 2026-10-11T10:45:24.180Z
+Thử logic Code.v2.gs bằng đối tượng giả (không gọi Google) · 2026-10-11T10:55:18.438Z
 ĐẠT 17 · KHÔNG ĐẠT 0
 
 [ĐẠT] Yêu cầu hợp lệ: trả { ok: true, ma } với mã dạng LS-yymmdd-XXXX
