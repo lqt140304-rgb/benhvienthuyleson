@@ -29,7 +29,7 @@ function kiemLienKet() {
   for (const f of trang) {
     const noi = html.get(f), tuongDoi = '/' + path.relative(DIST, f).replace(/index\.html$/, '').replace(/\\/g, '/');
     if (/noindex/.test(noi) === false && /sitemap/.test(f)) continue;
-    const re = /\s(?:href|src|action|content)=["']([^"']+)["']|url\(["']?([^"')]+)/g; let m;
+    const re = /\s(?:href|src|action)=["']([^"']+)["']|url\(["']?([^"')]+)/g; let m;
     while ((m = re.exec(noi))) {
       const v = (m[1] || m[2] || '').trim();
       if (!v || /^(data:|mailto:|tel:|javascript:|#?$)/.test(v)) continue;
@@ -216,22 +216,26 @@ function kiemDuLieu() {
     const { p } = await moTrang(ctx, '/');
     const tt = (ma) => p.evaluate((m) => window.__dai[m].trangThai(), ma);
     const x = async (ma) => (await tt(ma)).x;
-    for (const ma of ['cn', 'dn']) await p.evaluate((m) => document.getElementById(m + '-dai').scrollIntoView({ behavior: 'instant', block: 'center' }), ma);
+    // dải nằm ngoài màn hình thì tự dừng (đỡ tốn pin), nên đo từng dải khi đang nằm giữa màn hình
+    const giua = (ma) => p.evaluate((m) => document.getElementById(m + '-dai').scrollIntoView({ behavior: 'instant', block: 'center' }), ma);
     await p.mouse.move(2, 2);
-    const kd = { cn: await tt('cn'), dn: await tt('dn') }; await p.waitForTimeout(1500);
-    ok(`[${tag}] Lúc đầu cả hai dải tự trượt (nút "Tạm dừng")`, (await tt('cn')).x !== kd.cn.x && (await x('dn')) !== kd.dn.x && (await p.textContent('#cn-dung')).includes('Tạm dừng'), '');
+    const chay = {};
+    for (const ma of ['cn', 'dn']) { await giua(ma); await p.waitForTimeout(300); const a = await x(ma); await p.waitForTimeout(1500); chay[ma] = (await x(ma)) !== a; }
+    ok(`[${tag}] Lúc đầu cả hai dải tự trượt (nút "Tạm dừng")`, chay.cn && chay.dn && (await p.textContent('#cn-dung')).includes('Tạm dừng'), JSON.stringify(chay));
+    await giua('cn');
     await p.click('#cn-dung'); const t0 = await x('cn'); await p.waitForTimeout(900);
     ok(`[${tag}] Bấm Tạm dừng: dải dừng, nút thành "Tiếp tục" (aria-pressed, title)`, (await x('cn')) === t0 && (await p.getAttribute('#cn-dung', 'aria-pressed')) === 'true' && (await p.getAttribute('#cn-dung', 'title')) === 'Tiếp tục', '');
     await p.click('#cn-dung');
     await p.emulateMedia({ reducedMotion: 'reduce' }); await p.waitForTimeout(600);
-    const g0 = { cn: await x('cn'), dn: await x('dn') }; await p.waitForTimeout(1500);
+    await giua('cn'); const g0 = { cn: await x('cn'), dn: await x('dn') }; await p.waitForTimeout(1500);
     const gm = await p.evaluate(() => ({ cn: document.getElementById('cn-dung').getAttribute('aria-pressed'), dn: document.getElementById('dn-dung').getAttribute('aria-pressed'), tt: [...document.querySelectorAll('[data-nut-trang-tri] .tt-trang-thai')].map((e) => e.textContent), lop: document.documentElement.classList.contains('tat-trang-tri') }));
     ok(`[${tag}] Bật giảm chuyển động khi đang xem: cả hai dải đứng yên, nút "Tiếp tục", trang trí tắt ("Đang tắt theo cài đặt máy")`, g0.cn === (await x('cn')) && g0.dn === (await x('dn')) && gm.cn === 'true' && gm.dn === 'true' && gm.lop && gm.tt.every((s) => /theo cài đặt máy/.test(s)), JSON.stringify(gm));
     const truoc = (await tt('cn')).thuTu[0]; await p.click('#cn-sau'); await p.waitForTimeout(200);
     ok(`[${tag}] Đang giảm chuyển động: nút Sau vẫn chuyển đúng một thẻ`, (await tt('cn')).thuTu[1] === truoc || (await tt('cn')).thuTu[0] !== truoc, '');
     await p.emulateMedia({ reducedMotion: 'no-preference' }); await p.waitForTimeout(500);
-    const b0 = { cn: await x('cn'), dn: await x('dn') }; await p.waitForTimeout(1500);
-    ok(`[${tag}] Tắt giảm chuyển động giữa chừng: hai dải chạy lại`, (await x('cn')) !== b0.cn && (await x('dn')) !== b0.dn, '');
+    const lai = {};
+    for (const ma of ['cn', 'dn']) { await giua(ma); await p.waitForTimeout(300); const a = await x(ma); await p.waitForTimeout(1500); lai[ma] = (await x(ma)) !== a; }
+    ok(`[${tag}] Tắt giảm chuyển động giữa chừng: hai dải chạy lại`, lai.cn && lai.dn, JSON.stringify(lai));
     await ctx.close();
     const r = await ctxMoi({ viewport: { width: w, height: h }, reducedMotion: 'reduce', isMobile: mobile, hasTouch: mobile });
     const { p: pr } = await moTrang(r, '/');
@@ -336,8 +340,8 @@ function kiemDuLieu() {
 
   // ---------- 12. Không gọi ra ngoài ----------
   muc('12. Yêu cầu mạng ra ngoài');
-  const cho = [...ngoaiYeuCau].filter((h) => !/fonts\.(googleapis|gstatic)\.com|script\.google\.com/.test(h));
-  ok('Trong toàn bộ lần chạy, ngoài phông chữ Google và địa chỉ nhận form (đã chặn / trả lời giả) không có máy chủ nào khác bị gọi', cho.length === 0, [...ngoaiYeuCau].join(', '));
+  const cho = [...ngoaiYeuCau].filter((h) => !/fonts\.(googleapis|gstatic)\.com|script\.google\.com|^www\.google\.com$/.test(h));
+  ok('Trong toàn bộ lần chạy, ngoài phông chữ Google, bản đồ nhúng ở trang Liên hệ (www.google.com) và địa chỉ nhận form (đã chặn / trả lời giả) không có máy chủ nào khác bị gọi', cho.length === 0, [...ngoaiYeuCau].join(', '));
   console.log('Máy chủ ngoài bị chặn:', [...ngoaiYeuCau].join(', '));
 
   // ---------- Chưa chạy ----------

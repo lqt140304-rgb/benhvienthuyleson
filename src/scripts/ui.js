@@ -200,6 +200,7 @@
   if (tabs.length) { moNhomTheoHash(); window.addEventListener('hashchange', moNhomTheoHash); }
 
   // ---------- Bé Cam ----------
+  var dongBeCam = function () {}; // gán lại bên dưới khi trang có Bé Cam (trang không có Bé Cam: không làm gì)
   var cam = $('cam'), nutNoi = $('cam-nut'), nutDuoi = $('cam-nut-duoi'), bang = $('cam-bang'), tra = $('cam-tra'), nen = $('cam-nen');
   if (cam) {
   // Câu chào: ngoài giờ mở cửa (giờ Việt Nam, UTC+7) thì dùng câu ngoài giờ, ngược lại câu của trang hiện tại
@@ -236,7 +237,7 @@
       if (traFocus !== false && nutMo) nutMo.focus({ preventScroll: true });
     }
   }
-  function dongBeCam() { if (dangMo()) moBang(false, false); }
+  dongBeCam = function () { if (dangMo()) moBang(false, false); };
   nutNoi.addEventListener('click', function () { moBang(!dangMo(), true, nutNoi); });
   if (nutDuoi) nutDuoi.addEventListener('click', function () { moBang(!dangMo(), true, nutDuoi); });
   $('cam-dong').addEventListener('click', function () { moBang(false); });

@@ -1,0 +1,90 @@
+Kiểm thử bản dựng Astro Lê Sơn · Chromium 141.0.7390.37 (Playwright) · 2026-10-11T10:04:56.412Z
+ĐẠT 47 · KHÔNG ĐẠT 5 · CHƯA CHẠY 6 · CHƯA XÁC MINH 3
+
+
+-- 1. Liên kết và tệp trong bản dựng (dist)
+[KHÔNG ĐẠT] Mọi liên kết nội bộ, ảnh, CSS, JS trong 13 trang đều có tệp đích; hash nhóm giá và mục trang có id; không còn link tuyệt đối tới website cũ (444 liên kết đã kiểm)  → /404.html → #5A1E5E: không có id #5A1E5E ở trang đích | /bang-gia/ → #5A1E5E: không có id #5A1E5E ở trang đích | /dat-lich/ → #5A1E5E: không có id #5A1E5E ở trang đích | /dich-vu/ → #5A1E5E: không có id #5A1E5E ở trang đích | /gioi-thieu/ → #5A1E5E: không có id #5A1E5E ở trang đích | / → #5A1E5E: không có id #5A1E5E ở trang đích | /lien-he/ → #5A1E5E: không có id #5A1E5E ở trang đích | /nhan-vien/
+
+-- 2. Dữ liệu giá, logo, dữ liệu nguồn so với commit 24d5057
+[ĐẠT] 10 tệp dữ liệu / logo giống hệt bản gốc (SHA-256)
+
+-- 3. Các trang mở được, có tiêu đề / ngôn ngữ / H1, không lỗi JavaScript
+[ĐẠT] 11 trang: mã 200, lang="vi", có <title>, mô tả, canonical, đúng một <h1> và một <main>
+[ĐẠT] Không có lỗi JavaScript / console trên các trang
+[ĐẠT] Trang không tồn tại trả 404 thật, có H1, noindex, nút về trang chủ và Bảng giá  → {"h1":"Không tìm thấy trang này","robots":"noindex","lienKet":["/benhvienthuyleson/","/benhvienthuyleson/bang-gia/"]}
+
+-- 4. Header: mục đang xem, menu điện thoại, focus bàn phím
+[ĐẠT] Mỗi trang chỉ có một mục menu đúng được đánh dấu (aria-current); trang nhân viên không có mục nào
+[ĐẠT] Thứ tự khu ở trang chủ: Hero, Giới thiệu, Dịch vụ, Sản phẩm (ngay dưới Dịch vụ), Bảng giá, Đặt lịch, Đội ngũ, Cẩm nang, Điều trị, Đánh giá, Liên hệ  → noi-dung,gioi-thieu,dich-vu,san-pham,bang-gia,dat-lich,doi-ngu,cam-nang,dieu-tri,danh-gia,lien-he
+[ĐẠT] Cuộn trang chủ: mục Dịch vụ sáng khi tới khu Dịch vụ; khu Bảng giá (tóm tắt) không đánh dấu nhầm mục  →  / Dịch vụ
+[ĐẠT] 14 lần Tab đầu: lần 1 là "Bỏ qua đến nội dung"; mỗi phần tử focus đều hiện rõ khung focus và nằm trong màn hình  → []
+[KHÔNG ĐẠT] Menu điện thoại: mở (aria-expanded, focus vào menu), Esc đóng và trả focus về nút Menu  → {"mo":{"ex":"true","nhin":true,"foc":false},"dong":{"ex":"false","foc":"nut-menu"}}
+
+-- 5. Bố cục: không cuộn ngang, không chữ tràn ở 7 kích thước + màn ngang
+[ĐẠT] 12 trang × 8 kích thước (360, 390, 430, 768, 1024, 1280, 1440, ngang 844×390): không cuộn ngang, không phần tử tràn khung
+
+-- 6. Bảng giá: đủ giá từ dữ liệu, tab bằng chuột / bàn phím, mở thẳng nhóm bằng #nhom-…
+[ĐẠT] Trang Dịch vụ hiện đủ 57 mức giá khác nhau lấy từ dich_vu.json (đúng từng ký tự, đơn vị đ)
+[ĐẠT] Trang Bảng giá chứa đủ cùng các mức giá
+[ĐẠT] Có đủ một tab và một panel cho mỗi nhóm dịch vụ
+[ĐẠT] Mở /bang-gia/#nhom-<mã> cho 8 nhóm: tab được chọn, chỉ panel đó hiện, focus ở tab
+[ĐẠT] Tab bằng bàn phím: mũi tên phải, End → tab cuối, Home → tab đầu; focus đi theo  → {"cuoi":{"foc":"true","id":"tab-cap-cuu-24-24","n":8},"dau":"tab-kham-va-chan-doan"}
+[CHƯA XÁC MINH] Bảng giá cân nặng trên điện thoại (mỗi mức một dòng mở ra được) hiển thị đúng ý  → Chỉ kiểm tra có hiện; cần người xem trên máy thật. Kết quả đo: {"the":false}
+
+-- 7. Hai dải thẻ (Cẩm nang, Đội ngũ): tự trượt, Tạm dừng, giảm chuyển động lúc mở và khi đổi giữa chừng
+[KHÔNG ĐẠT] [1440x900] Lúc đầu cả hai dải tự trượt (nút "Tạm dừng")
+[ĐẠT] [1440x900] Bấm Tạm dừng: dải dừng, nút thành "Tiếp tục" (aria-pressed, title)
+[ĐẠT] [1440x900] Bật giảm chuyển động khi đang xem: cả hai dải đứng yên, nút "Tiếp tục", trang trí tắt ("Đang tắt theo cài đặt máy")  → {"cn":"true","dn":"true","tt":["Đang tắt theo cài đặt máy","Đang tắt theo cài đặt máy"],"lop":true}
+[ĐẠT] [1440x900] Đang giảm chuyển động: nút Sau vẫn chuyển đúng một thẻ
+[ĐẠT] [1440x900] Tắt giảm chuyển động giữa chừng: hai dải chạy lại
+[ĐẠT] [1440x900] Mở trang khi máy đã bật giảm chuyển động: cả hai dải đứng yên, nút "Tiếp tục"  → [[0,0],[0,0,"true"]]
+[KHÔNG ĐẠT] [390x844] Lúc đầu cả hai dải tự trượt (nút "Tạm dừng")
+[ĐẠT] [390x844] Bấm Tạm dừng: dải dừng, nút thành "Tiếp tục" (aria-pressed, title)
+[ĐẠT] [390x844] Bật giảm chuyển động khi đang xem: cả hai dải đứng yên, nút "Tiếp tục", trang trí tắt ("Đang tắt theo cài đặt máy")  → {"cn":"true","dn":"true","tt":["Đang tắt theo cài đặt máy","Đang tắt theo cài đặt máy"],"lop":true}
+[ĐẠT] [390x844] Đang giảm chuyển động: nút Sau vẫn chuyển đúng một thẻ
+[ĐẠT] [390x844] Tắt giảm chuyển động giữa chừng: hai dải chạy lại
+[ĐẠT] [390x844] Mở trang khi máy đã bật giảm chuyển động: cả hai dải đứng yên, nút "Tiếp tục"  → [[0,0],[0,0,"true"]]
+
+-- 8. Khu "Sản phẩm nổi bật"
+[ĐẠT] [1440x900] Không có giá, nhãn hiệu, tồn kho, số lượng bán; có chip "Ảnh minh hoạ" và "chờ bệnh viện xác nhận"  → Dành cho thú cưngSản phẩm nổi bậtMẫu minh hoạ · chờ bệnh viện xác nhận danh sách sản phẩmẢnh minh hoạ01 / 03Thức ăn cho thú cưngKhám phá sản phẩm phù hợp cho bé
+[ĐẠT] [1440x900] Mũi tên chuyển nhóm và focus theo; Sau ×2 quay vòng về đầu  → {"k1":{"id":"sp-t-1","sel":"true","hien":1},"k2":0}
+[ĐẠT] [1440x900] Ảnh chọn và nút đủ lớn để chạm (≥ 44px; nhỏ nhất 44px)
+[ĐẠT] [390x844] Không có giá, nhãn hiệu, tồn kho, số lượng bán; có chip "Ảnh minh hoạ" và "chờ bệnh viện xác nhận"  → Dành cho thú cưngSản phẩm nổi bậtMẫu minh hoạ · chờ bệnh viện xác nhận danh sách sản phẩmẢnh minh hoạ01 / 03Thức ăn cho thú cưngKhám phá sản phẩm phù hợp cho bé
+[ĐẠT] [390x844] Mũi tên chuyển nhóm và focus theo; Sau ×2 quay vòng về đầu  → {"k1":{"id":"sp-t-1","sel":"true","hien":1},"k2":0}
+[ĐẠT] [390x844] Ảnh chọn và nút đủ lớn để chạm (≥ 44px; nhỏ nhất 44px)
+[ĐẠT] Không JavaScript: cả 3 nhóm sản phẩm hiện đủ, bộ chọn ẩn  → {"panel":3,"tab":"none"}
+[ĐẠT] Không JavaScript: trang chủ hiện đủ nội dung (thẻ dịch vụ, tóm tắt giá, không khối nào bị ẩn mờ)  → {"dv":6,"gia":5,"an":0}
+[ĐẠT] Không JavaScript: Bảng giá có ghi chú dẫn tới trang Dịch vụ (xem đủ mọi nhóm)
+
+-- 9. Bé Cam
+[ĐẠT] [1440x900] Mở Bé Cam: hộp thoại hiện, focus vào trong, đúng một câu chào lấy từ cam.json  → {"hien":true,"foc":true,"chao":["Chào bạn, mình là Cam! Bé nhà bạn là chó hay mèo? Mình chỉ bài hợp với bé nhé."],"ex":"true"}
+[ĐẠT] [1440x900] "Tra cứu bảng giá" dẫn tới /bang-gia/ thật  → /benhvienthuyleson/bang-gia/
+[ĐẠT] [1440x900] Esc đóng Bé Cam và trả focus về nút mở  → {"an":true,"foc":"cam-nut"}
+[ĐẠT] [1440x900] "Xem dịch vụ" cuộn tới khu Dịch vụ ở trang chủ, focus ở tiêu đề (không rơi về BODY)  → {"foc":"H2","tren":193}
+[ĐẠT] [390x844] Mở Bé Cam: hộp thoại hiện, focus vào trong, đúng một câu chào lấy từ cam.json  → {"hien":true,"foc":true,"chao":["Chào bạn, mình là Cam! Bé nhà bạn là chó hay mèo? Mình chỉ bài hợp với bé nhé."],"ex":"true"}
+[ĐẠT] [390x844] "Tra cứu bảng giá" dẫn tới /bang-gia/ thật  → /benhvienthuyleson/bang-gia/
+[ĐẠT] [390x844] Esc đóng Bé Cam và trả focus về nút mở  → {"an":true,"foc":"cam-nut-duoi"}
+[ĐẠT] [390x844] "Xem dịch vụ" cuộn tới khu Dịch vụ ở trang chủ, focus ở tiêu đề (không rơi về BODY)  → {"foc":"H2","tren":313}
+[ĐẠT] Ở trang khác: "Đặt lịch khám" dẫn tới /dat-lich/ (không dùng link tuyệt đối)  → /benhvienthuyleson/dat-lich/
+
+-- 10. Hiệu ứng trang trí và icon dịch vụ
+[ĐẠT] Nút "Hiệu ứng trang trí": tắt được, nhớ lựa chọn sau khi tải lại  → {"lop":true,"pr":"false","ls":"tat"}
+[ĐẠT] Icon dịch vụ mới (SVG lưới 48) hiện ở thẻ dịch vụ và tóm tắt giá  → {"dv":5,"gia":5}
+[ĐẠT] Rê chuột vào thẻ dịch vụ: icon chạy chuyển động (một lần, do CSS)
+
+-- 11. Form đặt lịch hiện tại (giữ nguyên hành vi ở giai đoạn này; không gửi dữ liệu thật)
+[ĐẠT] Gửi form trống: hiện lỗi từng ô và KHÔNG gửi yêu cầu nào  → 3 lỗi, 0 yêu cầu
+[ĐẠT] Điền đúng rồi gửi (máy chủ nhận được giả lập): có đúng 1 yêu cầu tới địa chỉ nhận, hiện thông báo đã gửi  → {"yeuCau":1,"ok":true,"loiGui":"","loiHien":[]}
+
+-- 12. Yêu cầu mạng ra ngoài
+[KHÔNG ĐẠT] Trong toàn bộ lần chạy, ngoài phông chữ Google và địa chỉ nhận form (đã chặn / trả lời giả) không có máy chủ nào khác bị gọi  → fonts.googleapis.com, www.google.com, script.google.com
+
+-- 13. Chưa chạy / chưa xác minh
+[CHƯA CHẠY] Firefox, Safari/WebKit, Microsoft Edge  → Chỉ có Chromium 141.0.7390.37 của Playwright trong môi trường này
+[CHƯA CHẠY] Điện thoại / máy tính bảng thật (iOS, Android)  → Chỉ giả lập kích thước màn hình và cảm ứng
+[CHƯA CHẠY] Trình đọc màn hình (VoiceOver, TalkBack, NVDA)  → Chỉ kiểm tra thuộc tính ARIA, thứ tự Tab, vị trí focus
+[CHƯA CHẠY] Tương phản màu theo WCAG  → Chưa đo tỉ lệ tương phản
+[CHƯA CHẠY] Gửi form thật tới Google Apps Script / nhận email / ghi Google Sheet  → Cố ý không gọi: chỉ dùng máy chủ giả. Cần chủ dự án thử trên môi trường của họ
+[CHƯA CHẠY] Triển khai lên GitHub Pages (nhánh main)  → Không triển khai; chỉ dựng và chạy cục bộ dưới đúng base /benhvienthuyleson/
+[CHƯA XÁC MINH] Cảm nhận chuyển động và độ mượt trên máy yếu  → Cần người xem video / thử trên máy thật
+[CHƯA XÁC MINH] Nội dung cẩm nang / ca bệnh khi đã có bài thật  → Thư mục src/content hiện rỗng: giao diện bài viết và ca bệnh chưa được duyệt bằng nội dung thật (kiểm bằng dữ liệu thử ở bước riêng nếu có)

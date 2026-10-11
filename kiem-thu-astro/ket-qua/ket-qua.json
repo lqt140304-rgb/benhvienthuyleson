@@ -1,0 +1,372 @@
+[
+ {
+  "tt": "MỤC",
+  "ten": "1. Liên kết và tệp trong bản dựng (dist)",
+  "ct": ""
+ },
+ {
+  "tt": "KHÔNG ĐẠT",
+  "ten": "Mọi liên kết nội bộ, ảnh, CSS, JS trong 13 trang đều có tệp đích; hash nhóm giá và mục trang có id; không còn link tuyệt đối tới website cũ (444 liên kết đã kiểm)",
+  "ct": "/404.html → #5A1E5E: không có id #5A1E5E ở trang đích | /bang-gia/ → #5A1E5E: không có id #5A1E5E ở trang đích | /dat-lich/ → #5A1E5E: không có id #5A1E5E ở trang đích | /dich-vu/ → #5A1E5E: không có id #5A1E5E ở trang đích | /gioi-thieu/ → #5A1E5E: không có id #5A1E5E ở trang đích | / → #5A1E5E: không có id #5A1E5E ở trang đích | /lien-he/ → #5A1E5E: không có id #5A1E5E ở trang đích | /nhan-vien/"
+ },
+ {
+  "tt": "MỤC",
+  "ten": "2. Dữ liệu giá, logo, dữ liệu nguồn so với commit 24d5057",
+  "ct": ""
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "10 tệp dữ liệu / logo giống hệt bản gốc (SHA-256)",
+  "ct": ""
+ },
+ {
+  "tt": "MỤC",
+  "ten": "3. Các trang mở được, có tiêu đề / ngôn ngữ / H1, không lỗi JavaScript",
+  "ct": ""
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "11 trang: mã 200, lang=\"vi\", có <title>, mô tả, canonical, đúng một <h1> và một <main>",
+  "ct": ""
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "Không có lỗi JavaScript / console trên các trang",
+  "ct": ""
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "Trang không tồn tại trả 404 thật, có H1, noindex, nút về trang chủ và Bảng giá",
+  "ct": "{\"h1\":\"Không tìm thấy trang này\",\"robots\":\"noindex\",\"lienKet\":[\"/benhvienthuyleson/\",\"/benhvienthuyleson/bang-gia/\"]}"
+ },
+ {
+  "tt": "MỤC",
+  "ten": "4. Header: mục đang xem, menu điện thoại, focus bàn phím",
+  "ct": ""
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "Mỗi trang chỉ có một mục menu đúng được đánh dấu (aria-current); trang nhân viên không có mục nào",
+  "ct": ""
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "Thứ tự khu ở trang chủ: Hero, Giới thiệu, Dịch vụ, Sản phẩm (ngay dưới Dịch vụ), Bảng giá, Đặt lịch, Đội ngũ, Cẩm nang, Điều trị, Đánh giá, Liên hệ",
+  "ct": "noi-dung,gioi-thieu,dich-vu,san-pham,bang-gia,dat-lich,doi-ngu,cam-nang,dieu-tri,danh-gia,lien-he"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "Cuộn trang chủ: mục Dịch vụ sáng khi tới khu Dịch vụ; khu Bảng giá (tóm tắt) không đánh dấu nhầm mục",
+  "ct": " / Dịch vụ"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "14 lần Tab đầu: lần 1 là \"Bỏ qua đến nội dung\"; mỗi phần tử focus đều hiện rõ khung focus và nằm trong màn hình",
+  "ct": "[]"
+ },
+ {
+  "tt": "KHÔNG ĐẠT",
+  "ten": "Menu điện thoại: mở (aria-expanded, focus vào menu), Esc đóng và trả focus về nút Menu",
+  "ct": "{\"mo\":{\"ex\":\"true\",\"nhin\":true,\"foc\":false},\"dong\":{\"ex\":\"false\",\"foc\":\"nut-menu\"}}"
+ },
+ {
+  "tt": "MỤC",
+  "ten": "5. Bố cục: không cuộn ngang, không chữ tràn ở 7 kích thước + màn ngang",
+  "ct": ""
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "12 trang × 8 kích thước (360, 390, 430, 768, 1024, 1280, 1440, ngang 844×390): không cuộn ngang, không phần tử tràn khung",
+  "ct": ""
+ },
+ {
+  "tt": "MỤC",
+  "ten": "6. Bảng giá: đủ giá từ dữ liệu, tab bằng chuột / bàn phím, mở thẳng nhóm bằng #nhom-…",
+  "ct": ""
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "Trang Dịch vụ hiện đủ 57 mức giá khác nhau lấy từ dich_vu.json (đúng từng ký tự, đơn vị đ)",
+  "ct": ""
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "Trang Bảng giá chứa đủ cùng các mức giá",
+  "ct": ""
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "Có đủ một tab và một panel cho mỗi nhóm dịch vụ",
+  "ct": ""
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "Mở /bang-gia/#nhom-<mã> cho 8 nhóm: tab được chọn, chỉ panel đó hiện, focus ở tab",
+  "ct": ""
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "Tab bằng bàn phím: mũi tên phải, End → tab cuối, Home → tab đầu; focus đi theo",
+  "ct": "{\"cuoi\":{\"foc\":\"true\",\"id\":\"tab-cap-cuu-24-24\",\"n\":8},\"dau\":\"tab-kham-va-chan-doan\"}"
+ },
+ {
+  "tt": "CHƯA XÁC MINH",
+  "ten": "Bảng giá cân nặng trên điện thoại (mỗi mức một dòng mở ra được) hiển thị đúng ý",
+  "ct": "Chỉ kiểm tra có hiện; cần người xem trên máy thật. Kết quả đo: {\"the\":false}"
+ },
+ {
+  "tt": "MỤC",
+  "ten": "7. Hai dải thẻ (Cẩm nang, Đội ngũ): tự trượt, Tạm dừng, giảm chuyển động lúc mở và khi đổi giữa chừng",
+  "ct": ""
+ },
+ {
+  "tt": "KHÔNG ĐẠT",
+  "ten": "[1440x900] Lúc đầu cả hai dải tự trượt (nút \"Tạm dừng\")",
+  "ct": ""
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[1440x900] Bấm Tạm dừng: dải dừng, nút thành \"Tiếp tục\" (aria-pressed, title)",
+  "ct": ""
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[1440x900] Bật giảm chuyển động khi đang xem: cả hai dải đứng yên, nút \"Tiếp tục\", trang trí tắt (\"Đang tắt theo cài đặt máy\")",
+  "ct": "{\"cn\":\"true\",\"dn\":\"true\",\"tt\":[\"Đang tắt theo cài đặt máy\",\"Đang tắt theo cài đặt máy\"],\"lop\":true}"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[1440x900] Đang giảm chuyển động: nút Sau vẫn chuyển đúng một thẻ",
+  "ct": ""
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[1440x900] Tắt giảm chuyển động giữa chừng: hai dải chạy lại",
+  "ct": ""
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[1440x900] Mở trang khi máy đã bật giảm chuyển động: cả hai dải đứng yên, nút \"Tiếp tục\"",
+  "ct": "[[0,0],[0,0,\"true\"]]"
+ },
+ {
+  "tt": "KHÔNG ĐẠT",
+  "ten": "[390x844] Lúc đầu cả hai dải tự trượt (nút \"Tạm dừng\")",
+  "ct": ""
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[390x844] Bấm Tạm dừng: dải dừng, nút thành \"Tiếp tục\" (aria-pressed, title)",
+  "ct": ""
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[390x844] Bật giảm chuyển động khi đang xem: cả hai dải đứng yên, nút \"Tiếp tục\", trang trí tắt (\"Đang tắt theo cài đặt máy\")",
+  "ct": "{\"cn\":\"true\",\"dn\":\"true\",\"tt\":[\"Đang tắt theo cài đặt máy\",\"Đang tắt theo cài đặt máy\"],\"lop\":true}"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[390x844] Đang giảm chuyển động: nút Sau vẫn chuyển đúng một thẻ",
+  "ct": ""
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[390x844] Tắt giảm chuyển động giữa chừng: hai dải chạy lại",
+  "ct": ""
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[390x844] Mở trang khi máy đã bật giảm chuyển động: cả hai dải đứng yên, nút \"Tiếp tục\"",
+  "ct": "[[0,0],[0,0,\"true\"]]"
+ },
+ {
+  "tt": "MỤC",
+  "ten": "8. Khu \"Sản phẩm nổi bật\"",
+  "ct": ""
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[1440x900] Không có giá, nhãn hiệu, tồn kho, số lượng bán; có chip \"Ảnh minh hoạ\" và \"chờ bệnh viện xác nhận\"",
+  "ct": "Dành cho thú cưngSản phẩm nổi bậtMẫu minh hoạ · chờ bệnh viện xác nhận danh sách sản phẩmẢnh minh hoạ01 / 03Thức ăn cho thú cưngKhám phá sản phẩm phù hợp cho bé"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[1440x900] Mũi tên chuyển nhóm và focus theo; Sau ×2 quay vòng về đầu",
+  "ct": "{\"k1\":{\"id\":\"sp-t-1\",\"sel\":\"true\",\"hien\":1},\"k2\":0}"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[1440x900] Ảnh chọn và nút đủ lớn để chạm (≥ 44px; nhỏ nhất 44px)",
+  "ct": ""
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[390x844] Không có giá, nhãn hiệu, tồn kho, số lượng bán; có chip \"Ảnh minh hoạ\" và \"chờ bệnh viện xác nhận\"",
+  "ct": "Dành cho thú cưngSản phẩm nổi bậtMẫu minh hoạ · chờ bệnh viện xác nhận danh sách sản phẩmẢnh minh hoạ01 / 03Thức ăn cho thú cưngKhám phá sản phẩm phù hợp cho bé"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[390x844] Mũi tên chuyển nhóm và focus theo; Sau ×2 quay vòng về đầu",
+  "ct": "{\"k1\":{\"id\":\"sp-t-1\",\"sel\":\"true\",\"hien\":1},\"k2\":0}"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[390x844] Ảnh chọn và nút đủ lớn để chạm (≥ 44px; nhỏ nhất 44px)",
+  "ct": ""
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "Không JavaScript: cả 3 nhóm sản phẩm hiện đủ, bộ chọn ẩn",
+  "ct": "{\"panel\":3,\"tab\":\"none\"}"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "Không JavaScript: trang chủ hiện đủ nội dung (thẻ dịch vụ, tóm tắt giá, không khối nào bị ẩn mờ)",
+  "ct": "{\"dv\":6,\"gia\":5,\"an\":0}"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "Không JavaScript: Bảng giá có ghi chú dẫn tới trang Dịch vụ (xem đủ mọi nhóm)",
+  "ct": ""
+ },
+ {
+  "tt": "MỤC",
+  "ten": "9. Bé Cam",
+  "ct": ""
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[1440x900] Mở Bé Cam: hộp thoại hiện, focus vào trong, đúng một câu chào lấy từ cam.json",
+  "ct": "{\"hien\":true,\"foc\":true,\"chao\":[\"Chào bạn, mình là Cam! Bé nhà bạn là chó hay mèo? Mình chỉ bài hợp với bé nhé.\"],\"ex\":\"true\"}"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[1440x900] \"Tra cứu bảng giá\" dẫn tới /bang-gia/ thật",
+  "ct": "/benhvienthuyleson/bang-gia/"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[1440x900] Esc đóng Bé Cam và trả focus về nút mở",
+  "ct": "{\"an\":true,\"foc\":\"cam-nut\"}"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[1440x900] \"Xem dịch vụ\" cuộn tới khu Dịch vụ ở trang chủ, focus ở tiêu đề (không rơi về BODY)",
+  "ct": "{\"foc\":\"H2\",\"tren\":193}"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[390x844] Mở Bé Cam: hộp thoại hiện, focus vào trong, đúng một câu chào lấy từ cam.json",
+  "ct": "{\"hien\":true,\"foc\":true,\"chao\":[\"Chào bạn, mình là Cam! Bé nhà bạn là chó hay mèo? Mình chỉ bài hợp với bé nhé.\"],\"ex\":\"true\"}"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[390x844] \"Tra cứu bảng giá\" dẫn tới /bang-gia/ thật",
+  "ct": "/benhvienthuyleson/bang-gia/"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[390x844] Esc đóng Bé Cam và trả focus về nút mở",
+  "ct": "{\"an\":true,\"foc\":\"cam-nut-duoi\"}"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "[390x844] \"Xem dịch vụ\" cuộn tới khu Dịch vụ ở trang chủ, focus ở tiêu đề (không rơi về BODY)",
+  "ct": "{\"foc\":\"H2\",\"tren\":313}"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "Ở trang khác: \"Đặt lịch khám\" dẫn tới /dat-lich/ (không dùng link tuyệt đối)",
+  "ct": "/benhvienthuyleson/dat-lich/"
+ },
+ {
+  "tt": "MỤC",
+  "ten": "10. Hiệu ứng trang trí và icon dịch vụ",
+  "ct": ""
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "Nút \"Hiệu ứng trang trí\": tắt được, nhớ lựa chọn sau khi tải lại",
+  "ct": "{\"lop\":true,\"pr\":\"false\",\"ls\":\"tat\"}"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "Icon dịch vụ mới (SVG lưới 48) hiện ở thẻ dịch vụ và tóm tắt giá",
+  "ct": "{\"dv\":5,\"gia\":5}"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "Rê chuột vào thẻ dịch vụ: icon chạy chuyển động (một lần, do CSS)",
+  "ct": ""
+ },
+ {
+  "tt": "MỤC",
+  "ten": "11. Form đặt lịch hiện tại (giữ nguyên hành vi ở giai đoạn này; không gửi dữ liệu thật)",
+  "ct": ""
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "Gửi form trống: hiện lỗi từng ô và KHÔNG gửi yêu cầu nào",
+  "ct": "3 lỗi, 0 yêu cầu"
+ },
+ {
+  "tt": "ĐẠT",
+  "ten": "Điền đúng rồi gửi (máy chủ nhận được giả lập): có đúng 1 yêu cầu tới địa chỉ nhận, hiện thông báo đã gửi",
+  "ct": "{\"yeuCau\":1,\"ok\":true,\"loiGui\":\"\",\"loiHien\":[]}"
+ },
+ {
+  "tt": "MỤC",
+  "ten": "12. Yêu cầu mạng ra ngoài",
+  "ct": ""
+ },
+ {
+  "tt": "KHÔNG ĐẠT",
+  "ten": "Trong toàn bộ lần chạy, ngoài phông chữ Google và địa chỉ nhận form (đã chặn / trả lời giả) không có máy chủ nào khác bị gọi",
+  "ct": "fonts.googleapis.com, www.google.com, script.google.com"
+ },
+ {
+  "tt": "MỤC",
+  "ten": "13. Chưa chạy / chưa xác minh",
+  "ct": ""
+ },
+ {
+  "tt": "CHƯA CHẠY",
+  "ten": "Firefox, Safari/WebKit, Microsoft Edge",
+  "ct": "Chỉ có Chromium 141.0.7390.37 của Playwright trong môi trường này"
+ },
+ {
+  "tt": "CHƯA CHẠY",
+  "ten": "Điện thoại / máy tính bảng thật (iOS, Android)",
+  "ct": "Chỉ giả lập kích thước màn hình và cảm ứng"
+ },
+ {
+  "tt": "CHƯA CHẠY",
+  "ten": "Trình đọc màn hình (VoiceOver, TalkBack, NVDA)",
+  "ct": "Chỉ kiểm tra thuộc tính ARIA, thứ tự Tab, vị trí focus"
+ },
+ {
+  "tt": "CHƯA CHẠY",
+  "ten": "Tương phản màu theo WCAG",
+  "ct": "Chưa đo tỉ lệ tương phản"
+ },
+ {
+  "tt": "CHƯA CHẠY",
+  "ten": "Gửi form thật tới Google Apps Script / nhận email / ghi Google Sheet",
+  "ct": "Cố ý không gọi: chỉ dùng máy chủ giả. Cần chủ dự án thử trên môi trường của họ"
+ },
+ {
+  "tt": "CHƯA CHẠY",
+  "ten": "Triển khai lên GitHub Pages (nhánh main)",
+  "ct": "Không triển khai; chỉ dựng và chạy cục bộ dưới đúng base /benhvienthuyleson/"
+ },
+ {
+  "tt": "CHƯA XÁC MINH",
+  "ten": "Cảm nhận chuyển động và độ mượt trên máy yếu",
+  "ct": "Cần người xem video / thử trên máy thật"
+ },
+ {
+  "tt": "CHƯA XÁC MINH",
+  "ten": "Nội dung cẩm nang / ca bệnh khi đã có bài thật",
+  "ct": "Thư mục src/content hiện rỗng: giao diện bài viết và ca bệnh chưa được duyệt bằng nội dung thật (kiểm bằng dữ liệu thử ở bước riêng nếu có)"
+ }
+]
