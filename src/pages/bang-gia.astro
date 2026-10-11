@@ -23,6 +23,7 @@ const cho = (d: (typeof dv)[number]) => d.cap_cuu && capCuuCho;
   </section>
   <section class="khoi khoi-gia" id="bang-gia">
     <div class="khung">
+      <noscript><p class="tp-luu-y" style="margin-bottom:16px">Trình duyệt đang tắt JavaScript nên chỉ hiện nhóm đầu tiên. Xem toàn bộ các nhóm giá ở trang <a href={u('/dich-vu/')}><b>Dịch vụ và bảng giá</b></a>.</p></noscript>
       <div class="bg-tab" role="tablist" aria-label="Nhóm dịch vụ">
         {dv.map((d, i) => (
           <button type="button" role="tab" id={`tab-${d.id}`} aria-controls={`p-${d.id}`} aria-selected={String(i === 0)} tabindex={i === 0 ? 0 : -1}><span class="tab-dau" aria-hidden="true"><Icon name="check" size={16} /></span>{tenNgan(d.ten)}{cho(d) && <><span class="tab-cho" aria-hidden="true"></span><span class="an-chu"> (chờ xác nhận)</span></>}</button>
