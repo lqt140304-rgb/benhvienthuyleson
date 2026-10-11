@@ -23,6 +23,7 @@
  *  - Chống trùng theo NỘI DUNG: cùng số điện thoại + tên thú cưng + dịch vụ + ngày + giờ trong CHONG_TRUNG_PHUT (60) phút = cùng một yêu cầu, dù mã gửi khác nhau
  *    (ví dụ khách bấm "Gửi yêu cầu khác" rồi điền lại y hệt): không thêm dòng, không gửi thêm email, vẫn trả mã cũ. Đổi bất kỳ trường nào trong 5 trường đó hoặc quá 60 phút = yêu cầu mới.
  *  - Hôm nay thì không nhận giờ đã qua (theo giờ Việt Nam), ví dụ đang 8:00 không nhận lịch 6:00. Biểu mẫu cũ: vẫn lưu, gắn "Cần kiểm tra".
+ *  - Màu theo dịch vụ + ẩn cột: mỗi dịch vụ một màu nền cả dòng (bảng MAU_DICH_VU); các cột chỉ để máy dùng (COT_AN) được ẩn. Chạy apDungMauVaAnCot() một lần cho dữ liệu có từ trước.
  *  - Muốn thử trên Sheet RIÊNG trước khi dùng thật: chạy kiemTraTrenSheetRieng() (xem docs/BAT-CHE-DO-THAT.md).
  * Cách cài: xem HUONG-DAN-NHAN-LICH.md. KHÔNG dán đè lên bản đang chạy khi chưa thử nghiệm.
  */
@@ -36,8 +37,14 @@ var CAU_HINH = {
   CHONG_TRUNG_PHUT: 60,         // cùng số điện thoại + tên thú cưng + dịch vụ + ngày + giờ trong ngần ấy phút = CÙNG MỘT yêu cầu (không thêm dòng, không gửi thêm email)
   CHO_GUI_PHUT: 5,              // dòng "ĐANG GỬI" quá số phút này mà chưa có kết quả thì coi là treo và được thử lại
   EMAIL_NHAN: '',               // địa chỉ nhận email báo (nhiều địa chỉ cách nhau bằng dấu phẩy). Để trống = chủ tài khoản đã triển khai script
-  MAU_LOI_EMAIL: '#FDE3C8'      // màu nền dòng có email lỗi
+  MAU_LOI_EMAIL: '#F6B26B'      // màu ô "Email báo" khi gửi lỗi (cam đậm; cả dòng thì tô màu theo dịch vụ)
 };
+// Màu nền cả dòng theo dịch vụ (nhạt, dễ đọc). Khớp theo từ khoá trong tên dịch vụ; dịch vụ mới chưa có trong bảng thì lấy một màu cố định trong bảng dự phòng (cùng tên luôn cùng màu).
+var MAU_DICH_VU = [['cấp cứu', '#F5C6C6'], ['triệt sản', '#FFF2C7'], ['phẫu thuật', '#F9D9D4'], ['nội trú', '#D7F0EE'], ['grooming', '#FBDDE8'], ['spa', '#FBDDE8'], ['tắm', '#FBDDE8'],
+  ['tiêm', '#DDF2E0'], ['xét nghiệm', '#E6DFF5'], ['khám', '#DCEBFA']];
+var MAU_DU_PHONG = ['#E7E6E6', '#FFE9C9', '#E3EDCD', '#EAD9F0', '#D4E6F1'];
+// Cột chỉ để máy dùng: ẩn khỏi mắt nhân viên (dữ liệu vẫn còn, bấm hiện cột là thấy). Chỉ ẩn cột do script tạo, không đụng cột có sẵn của trang cũ.
+var COT_AN = ['Mã gửi từ trình duyệt', 'Cân nặng', 'Hoá đơn tham khảo', 'Tổng tạm tính', 'Số lần gửi email', 'Nguồn'];
 var COT = ['Mã yêu cầu', 'Mã gửi từ trình duyệt', 'Thời gian nhận', 'Tên khách hàng', 'Số điện thoại', 'Tên thú cưng', 'Loài', 'Dịch vụ', 'Ngày mong muốn / gửi', 'Giờ',
   'Ngày đón dự kiến', 'Giờ đón', 'Cân nặng', 'Ghi chú', 'Hoá đơn tham khảo', 'Tổng tạm tính', 'Trạng thái', 'Cần kiểm tra', 'Email báo', 'Số lần gửi email', 'Nguồn'];
 
@@ -176,7 +183,7 @@ function moTrang_() {
   var sh = ss.getSheetByName(CAU_HINH.TEN_TRANG) || ss.insertSheet(CAU_HINH.TEN_TRANG), map = {}, i;
   if (sh.getLastRow() === 0) {
     sh.appendRow(COT); sh.setFrozenRows(1);
-    for (i = 0; i < COT.length; i++) map[COT[i]] = i + 1;
+    for (i = 0; i < COT.length; i++) { map[COT[i]] = i + 1; anCotNeuCan_(sh, COT[i], i + 1); }
     return { sh: sh, map: map, tong: COT.length };
   }
   var cuoi = sh.getLastColumn(), tieuDe = cuoi > 0 ? sh.getRange(1, 1, 1, cuoi).getValues()[0] : [], theoTen = {}, daCo = {};
@@ -184,14 +191,22 @@ function moTrang_() {
   for (i = 0; i < tieuDe.length; i++) { var ten = theoTen[chuanHoaTen_(tieuDe[i])]; if (ten && !map[ten]) { map[ten] = i + 1; daCo[i] = true; } } // 1) khớp đúng tên chuẩn
   for (i = 0; i < tieuDe.length; i++) { var bd = !daCo[i] && BIET_DANH_[chuanHoaTen_(tieuDe[i])]; if (bd && !map[bd]) { map[bd] = i + 1; daCo[i] = true; } } // 2) tên cũ
   var tong = cuoi;
-  for (i = 0; i < COT.length; i++) if (!map[COT[i]]) { tong++; sh.getRange(1, tong).setValue(COT[i]); map[COT[i]] = tong; } // 3) cột còn thiếu: thêm vào cuối
+  for (i = 0; i < COT.length; i++) if (!map[COT[i]]) { tong++; sh.getRange(1, tong).setValue(COT[i]); map[COT[i]] = tong; anCotNeuCan_(sh, COT[i], tong); } // 3) cột còn thiếu: thêm vào cuối
   return { sh: sh, map: map, tong: tong };
+}
+function anCotNeuCan_(sh, ten, soCot) { if (COT_AN.indexOf(ten) >= 0) { try { sh.hideColumns(soCot); } catch (err) { /* không ẩn được: không ảnh hưởng dữ liệu */ } } }
+function mauDichVu_(ten) {
+  var t = chuanHoaTen_(ten); if (!t) return null;
+  for (var i = 0; i < MAU_DICH_VU.length; i++) if (t.indexOf(MAU_DICH_VU[i][0]) >= 0) return MAU_DICH_VU[i][1];
+  var h = 0; for (var k = 0; k < t.length; k++) h = (h * 31 + t.charCodeAt(k)) % 1000003;
+  return MAU_DU_PHONG[h % MAU_DU_PHONG.length];
 }
 function ghiDong_(tr, giaTri) {
   var hang = [], i;
   for (i = 0; i < tr.tong; i++) hang.push('');
   for (var ten in giaTri) if (tr.map[ten]) hang[tr.map[ten] - 1] = giaTri[ten];
   tr.sh.appendRow(hang);
+  var mau = mauDichVu_(giaTri['Dịch vụ']); if (mau) tr.sh.getRange(tr.sh.getLastRow(), 1, 1, tr.tong).setBackground(mau); // cả dòng tô màu theo dịch vụ
 }
 function cotGiaTri_(tr, ten) {
   var n = tr.sh.getLastRow(); if (n < 2) return [];
@@ -263,8 +278,9 @@ function loiEmail_(err) { return 'LỖI: ' + sach_(err && err.message ? err.mess
 function capNhatEmail_(ma, trangThai, loi) {
   voiKhoa_(function () {
     var tr = moTrang_(), hang = timHang_(tr, ma); if (!hang) return;
-    tr.sh.getRange(hang, tr.map['Email báo']).setValue(trangThai);
-    tr.sh.getRange(hang, 1, 1, tr.tong).setBackground(loi ? CAU_HINH.MAU_LOI_EMAIL : null);
+    var o = tr.sh.getRange(hang, tr.map['Email báo']);
+    o.setValue(trangThai);
+    o.setBackground(loi ? CAU_HINH.MAU_LOI_EMAIL : mauDichVu_(String(tr.sh.getRange(hang, tr.map['Dịch vụ']).getValue()))); // lỗi: chỉ ô "Email báo" cam đậm; ổn: trả lại màu của dịch vụ
   }, false);
 }
 // Gửi email lần đầu cho dòng vừa ghi (đã được giữ chỗ trong doPost). Gửi NGOÀI khoá để không chặn các yêu cầu khác.
@@ -289,7 +305,7 @@ function guiLaiEmailLoi() {
         if (!isNaN(t) && bay - t < CAU_HINH.CHO_GUI_PHUT * 60000) continue; // đang có lần chạy khác gửi: bỏ qua
         if (soLan >= CAU_HINH.EMAIL_TOI_DA) { // treo và hết lượt thử: đánh dấu lỗi để nhân viên xem
           tr.sh.getRange(hang, cE).setValue('LỖI: không rõ kết quả gửi (quá ' + CAU_HINH.CHO_GUI_PHUT + ' phút)');
-          tr.sh.getRange(hang, 1, 1, tr.tong).setBackground(CAU_HINH.MAU_LOI_EMAIL);
+          tr.sh.getRange(hang, cE).setBackground(CAU_HINH.MAU_LOI_EMAIL);
           continue;
         }
       } else if (tt.indexOf('LỖI') !== 0 || soLan >= CAU_HINH.EMAIL_TOI_DA) continue;
@@ -339,6 +355,30 @@ function thuNghiem() {
   var mai = Utilities.formatDate(new Date(Date.now() + 86400000), CAU_HINH.MUI_GIO, 'yyyy-MM-dd');
   var kq = doPost({ postData: { contents: JSON.stringify({ ma_yeu_cau: 'thu-nghiem-' + Date.now(), ten_khach: 'Thử nghiệm', dien_thoai: '0912345678', ten_thu_cung: 'Bé thử', loai: 'Chó', loai_khac: '', dich_vu: 'Khám và chẩn đoán', ngay: mai, gio: '09:00', ngay_don: '', ghi_chu: 'Dòng thử, có thể xoá', nguon: '/thu-nghiem', website: '' }) } });
   Logger.log(kq.getContent());
+}
+
+// Chạy tay MỘT lần khi đã có dòng từ trước (hoặc muốn làm mới): tô màu theo dịch vụ các dòng của hệ thống (có "Mã yêu cầu"), ẩn các cột chỉ để máy dùng,
+// và tạo trang "Chú giải màu". Dòng cũ không có mã yêu cầu thì giữ nguyên. Ô "Email báo" đang LỖI giữ màu cam đậm.
+function apDungMauVaAnCot() {
+  voiKhoa_(function () {
+    var tr = moTrang_(), n = tr.sh.getLastRow(), i;
+    for (i = 0; i < COT_AN.length; i++) if (tr.map[COT_AN[i]]) anCotNeuCan_(tr.sh, COT_AN[i], tr.map[COT_AN[i]]);
+    if (n >= 2) {
+      var v = tr.sh.getRange(2, 1, n - 1, tr.tong).getValues();
+      for (i = 0; i < v.length; i++) {
+        if (!String(v[i][tr.map['Mã yêu cầu'] - 1] || '')) continue;
+        var mau = mauDichVu_(String(v[i][tr.map['Dịch vụ'] - 1] || '')), hang = i + 2;
+        if (mau) tr.sh.getRange(hang, 1, 1, tr.tong).setBackground(mau);
+        if (String(v[i][tr.map['Email báo'] - 1] || '').indexOf('LỖI') === 0) tr.sh.getRange(hang, tr.map['Email báo']).setBackground(CAU_HINH.MAU_LOI_EMAIL);
+      }
+    }
+    var ss = SpreadsheetApp.getActiveSpreadsheet(), cg = ss.getSheetByName('Chú giải màu') || ss.insertSheet('Chú giải màu');
+    if (cg.getLastRow() === 0) cg.appendRow(['Dịch vụ (từ khoá)', 'Màu dòng']);
+    var da = {}, k, rows = cg.getLastRow() > 1 ? cg.getRange(2, 1, cg.getLastRow() - 1, 1).getValues() : [];
+    for (k = 0; k < rows.length; k++) da[String(rows[k][0])] = true;
+    for (k = 0; k < MAU_DICH_VU.length; k++) if (!da[MAU_DICH_VU[k][0]]) { cg.appendRow([MAU_DICH_VU[k][0], '']); cg.getRange(cg.getLastRow(), 2).setBackground(MAU_DICH_VU[k][1]); }
+    if (!da['Ô "Email báo" bị lỗi']) { cg.appendRow(['Ô "Email báo" bị lỗi', '']); cg.getRange(cg.getLastRow(), 2).setBackground(CAU_HINH.MAU_LOI_EMAIL); }
+  }, false);
 }
 
 // ---------- Thử trên Sheet RIÊNG (chạy tay MỘT lần, trên một Google Sheet THỬ, không phải Sheet thật) ----------

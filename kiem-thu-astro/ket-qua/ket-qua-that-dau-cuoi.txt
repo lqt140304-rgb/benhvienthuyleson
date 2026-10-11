@@ -1,4 +1,4 @@
-Đầu-cuối bản thử "that" (trình duyệt thật + Code.v2.gs + Trang tính GIẢ; KHÔNG gọi Google thật) · 2026-10-11T12:52:18.030Z
+Đầu-cuối bản thử "that" (trình duyệt thật + Code.v2.gs + Trang tính GIẢ; KHÔNG gọi Google thật) · 2026-10-11T13:00:54.869Z
 ĐẠT 18 · KHÔNG ĐẠT 0
 [ĐẠT] Bản thử: data-mode="that", có địa chỉ script.google.com/macros/s/…/exec, KHÔNG còn dòng "chưa gửi dữ liệu thật"
 [ĐẠT] Form mới không có ô hoá đơn tham khảo / phụ phí tự động / tổng tạm tính

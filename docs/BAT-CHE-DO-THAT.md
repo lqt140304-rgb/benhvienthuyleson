@@ -50,3 +50,11 @@ Yêu cầu của chủ dự án: đang 8:00 thì không đặt được lịch 6
 - **Máy chủ** (`Code.v2.gs`, `kiemTra_`): hôm nay mà giờ đã qua thì trả `{ ok:false, loi:"Giờ này hôm nay đã qua…" }`, không lưu, không email. (Biểu mẫu cũ không đọc được phản hồi nên **không** từ chối: vẫn lưu và ghi "Cần kiểm tra".)
 - Cần **dán lại script và triển khai Phiên bản: Mới**, và dựng lại bản thử để có phần biểu mẫu mới. Kiểm thử: `kiem-thu-apps-script.cjs` mục 12 (đồng hồ giả) và `kiem-thu-that-dau-cuoi.cjs` mục F (đồng hồ trình duyệt đặt 14:00 và 21:30).
 - Giới hạn: giờ so với đồng hồ của máy khách ở biểu mẫu, nên máy khách sai giờ vẫn được máy chủ chặn lại bằng giờ thật của Google.
+
+## Màu theo dịch vụ và ẩn cột trong Sheet
+- **Màu cả dòng theo dịch vụ** (nhạt, dễ đọc): Khám = xanh dương nhạt, Xét nghiệm = tím nhạt, Tiêm phòng = xanh lá nhạt, Grooming / Spa = hồng nhạt, Triệt sản = vàng nhạt, Phẫu thuật = đỏ nhạt, Gửi nội trú = xanh ngọc nhạt, Cấp cứu = đỏ hồng. Dịch vụ mới chưa có trong bảng vẫn có một màu cố định (cùng tên cùng màu). Sửa màu ở bảng `MAU_DICH_VU` đầu `Code.v2.gs`.
+- **Email gửi lỗi:** chỉ **ô "Email báo"** thành cam đậm, phần còn lại của dòng giữ màu dịch vụ; gửi lại thành công thì ô trở về màu dịch vụ.
+- **Ẩn 6 cột chỉ để máy dùng:** Mã gửi từ trình duyệt, Cân nặng, Hoá đơn tham khảo, Tổng tạm tính, Số lần gửi email, Nguồn (danh sách `COT_AN`). Dữ liệu vẫn còn: bấm mũi tên giữa các cột để hiện lại. **Vẫn hiện:** Mã yêu cầu (để đối chiếu với email), Thời gian nhận, Tên khách hàng, Số điện thoại, Tên thú cưng, Loài, Dịch vụ, Ngày, Giờ, Ngày đón, Giờ đón, Ghi chú, Trạng thái, Cần kiểm tra, Email báo.
+- Trang tính **cũ**: khi nhận lịch script **không ẩn** cột có sẵn của trang cũ, chỉ ẩn cột do script thêm.
+- **Với dòng đã có sẵn trong Sheet thử:** sau khi dán script mới, chạy hàm **`apDungMauVaAnCot`** một lần (tô màu các dòng của hệ thống, ẩn cột, tạo trang "Chú giải màu"). Dòng cũ không có mã yêu cầu giữ nguyên. Không cần triển khai lại cho riêng hàm này, nhưng nhận lịch mới có màu thì vẫn cần **Triển khai Phiên bản: Mới**.
+- Kiểm thử: `kiem-thu-apps-script.cjs` mục 13 (Google giả). Cách các màu hiển thị trên Google Sheets thật là CHƯA XÁC MINH.
