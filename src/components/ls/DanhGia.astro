@@ -1,5 +1,5 @@
 ---
-// Ý kiến chủ nuôi: đánh giá thật nhập tay trong trang quản trị (src/data/danh_gia.json); chưa có thì 4 thẻ MẪU ghi rõ "đánh giá mẫu". Không tự bịa tên, sao, điểm.
+// Ý kiến khách hàng: đánh giá thật nhập tay trong trang quản trị (src/data/danh_gia.json); chưa có thì 4 thẻ MẪU ghi rõ "đánh giá mẫu". Không tự bịa tên, sao, điểm.
 import Icon from '../Icon.astro';
 import dg from '../../data/danh_gia.json';
 import tt from '../../data/thong_tin.json';
@@ -23,7 +23,7 @@ const sao = (n: any) => Math.max(1, Math.min(5, Number(n) || 5));
 <section class="khoi khoi-dg" id="danh-gia">
   <div class="khung">
     <div class="dau-khoi hang">
-      <div><p class="nhan">Ý kiến chủ nuôi</p><h2>Lắng nghe ý kiến từ khách hàng</h2></div>
+      <div><p class="nhan">Ý kiến khách hàng</p><h2>Lắng nghe ý kiến từ khách hàng</h2></div>
       {that.length ? <p class="dan-nho">Đánh giá do chủ nuôi chia sẻ, được bệnh viện nhập lại nguyên văn.</p> : <p class="dan-nho">Các thẻ dưới đây là <b>đánh giá mẫu</b> để duyệt bố cục, không phải đánh giá thật của khách hàng.</p>}
     </div>
     <div class="dg-luoi">
@@ -40,7 +40,7 @@ const sao = (n: any) => Math.max(1, Math.min(5, Number(n) || 5));
             <figure class={`dg-the${i === 0 ? ' dg-noi-bat' : ''}`} data-hien>
               <span class="dg-nhay"><Icon name="trich-dan" size={i === 0 ? 30 : 22} /></span>
               <blockquote>{t}</blockquote>
-              <figcaption><span class="dg-nguoi"><Icon name="chan" size={16} />Chủ nuôi (mẫu)</span><span class="dg-mau-chip">Đánh giá mẫu · chỉ minh họa giao diện</span></figcaption>
+              <figcaption><span class="dg-nguoi"><Icon name="chan" size={16} />Khách hàng (mẫu)</span><span class="dg-mau-chip">Đánh giá mẫu · chỉ minh họa giao diện</span></figcaption>
             </figure>
           ))}
     </div>
