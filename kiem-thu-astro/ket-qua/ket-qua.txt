@@ -1,4 +1,4 @@
-Kiểm thử bản dựng Astro Lê Sơn · Chromium 141.0.7390.37 (Playwright) · 2026-10-11T10:07:00.988Z
+Kiểm thử bản dựng Astro Lê Sơn · Chromium 141.0.7390.37 (Playwright) · 2026-10-11T10:23:13.747Z
 ĐẠT 52 · KHÔNG ĐẠT 0 · CHƯA CHẠY 6 · CHƯA XÁC MINH 3
 
 
@@ -64,7 +64,7 @@ Kiểm thử bản dựng Astro Lê Sơn · Chromium 141.0.7390.37 (Playwright) 
 [ĐẠT] [390x844] Mở Bé Cam: hộp thoại hiện, focus vào trong, đúng một câu chào lấy từ cam.json  → {"hien":true,"foc":true,"chao":["Chào bạn, mình là Cam! Bé nhà bạn là chó hay mèo? Mình chỉ bài hợp với bé nhé."],"ex":"true"}
 [ĐẠT] [390x844] "Tra cứu bảng giá" dẫn tới /bang-gia/ thật  → /benhvienthuyleson/bang-gia/
 [ĐẠT] [390x844] Esc đóng Bé Cam và trả focus về nút mở  → {"an":true,"foc":"cam-nut-duoi"}
-[ĐẠT] [390x844] "Xem dịch vụ" cuộn tới khu Dịch vụ ở trang chủ, focus ở tiêu đề (không rơi về BODY)  → {"foc":"H2","tren":269}
+[ĐẠT] [390x844] "Xem dịch vụ" cuộn tới khu Dịch vụ ở trang chủ, focus ở tiêu đề (không rơi về BODY)  → {"foc":"H2","tren":313}
 [ĐẠT] Ở trang khác: "Đặt lịch khám" dẫn tới /dat-lich/ (không dùng link tuyệt đối)  → /benhvienthuyleson/dat-lich/
 
 -- 10. Hiệu ứng trang trí và icon dịch vụ
