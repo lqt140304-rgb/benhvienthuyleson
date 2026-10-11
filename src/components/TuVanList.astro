@@ -14,7 +14,7 @@ const crumbs = loai
   : [{ ten: 'Trang chủ', href: u('/') }, { ten: 'Cẩm nang thú cưng' }];
 ---
 <Layout title={tieuDe} description={`Bài tư vấn ${loai ? 'chăm sóc ' + loai.toLowerCase() : 'chăm sóc chó mèo'} do bác sĩ Bệnh viện thú y Lê Sơn biên soạn: phòng bệnh, dinh dưỡng, dấu hiệu cần đi khám.`} hienTai="cam-nang" cam="trang_khac">
-  <TrangDau crumbs={crumbs} nhan="Cẩm nang" tieuDe={tieuDe} moTa="Kiến thức chăm sóc do bác sĩ bệnh viện biên soạn, viết dễ hiểu cho chủ nuôi." />
+  <TrangDau crumbs={crumbs} nhan="Cẩm nang" tieuDe={tieuDe} moTa="Kiến thức chăm sóc do bác sĩ bệnh viện biên soạn, viết dễ hiểu cho khách hàng." />
   <section class="khoi" style="padding-top:24px">
     <div class="khung">
       <nav class="tp-loc" aria-label="Chuyên mục">{tabs.map((t) => <a href={u(t.href)} aria-current={t.on ? 'page' : undefined}>{t.ten}</a>)}</nav>

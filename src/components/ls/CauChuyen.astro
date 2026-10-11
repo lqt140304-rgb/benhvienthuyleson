@@ -14,7 +14,7 @@ const bia = chinh ? (chinh.data.nhay_cam ? '' : chinh.data.image || chinh.data.a
         : (
           <div class="dt-anh anh-cho" data-hien>
             <span class="anh-chip">{chinh ? 'Ảnh trong trang chi tiết' : 'Chờ bổ sung'}</span>
-            <span class="anh-giua"><span class="anh-vong"><Icon name="heart-pulse" size={24} /></span><span class="anh-mota">{chinh ? 'Ca này có ảnh phẫu thuật hoặc vết thương: xem trong trang chi tiết' : <>Ảnh câu chuyện điều trị đầu tiên<br>(khi có ca bệnh được chủ nuôi cho phép chia sẻ)</>}</span></span>
+            <span class="anh-giua"><span class="anh-vong"><Icon name="heart-pulse" size={24} /></span><span class="anh-mota">{chinh ? 'Ca này có ảnh phẫu thuật hoặc vết thương: xem trong trang chi tiết' : <>Ảnh câu chuyện điều trị đầu tiên<br>(khi có ca bệnh được khách hàng cho phép chia sẻ)</>}</span></span>
           </div>
         )}
       <div class="dt-chu">
@@ -28,7 +28,7 @@ const bia = chinh ? (chinh.data.nhay_cam ? '' : chinh.data.image || chinh.data.a
               <a class="nut nut-vien" href={u('/nhat-ky-ca-benh/')}>Xem các ca bệnh <Icon name="arrow" size={18} /></a>
             </>
           : <>
-              <p class="dan-nho">Chưa có câu chuyện nào được đăng. Câu chuyện chỉ được chia sẻ khi chủ nuôi đồng ý và bác sĩ cung cấp thông tin.</p>
+              <p class="dan-nho">Chưa có câu chuyện nào được đăng. Câu chuyện chỉ được chia sẻ khi khách hàng đồng ý và bác sĩ cung cấp thông tin.</p>
               <ul class="dt-cau-truc" aria-label="Mỗi câu chuyện sẽ gồm">
                 <li><Icon name="info" size={18} />Tình trạng khi bé đến viện</li>
                 <li><Icon name="stethoscope" size={18} />Quá trình thăm khám và điều trị</li>
