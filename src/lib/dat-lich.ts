@@ -13,7 +13,7 @@
 export type ModeDatLich = 'gia-lap' | 'that' | 'cu';
 // MỘT cách duy nhất để đổi chế độ: sửa dòng dưới đây, dựng lại web, kiểm tra bằng `npm run kiem-tra-che-do -- --mong=<chế độ>`, rồi commit.
 // (Không có biến môi trường nào đổi được chế độ; workflow triển khai không đặt biến nào.)
-export const modeDatLich: ModeDatLich = 'gia-lap';
+export const modeDatLich: ModeDatLich = 'that';
 console.info(`[dat-lich] modeDatLich = ${modeDatLich}`); // hiện trong nhật ký dựng web (npm run build)
 
 /** Khung giờ nhận lịch (giờ mở cửa 8:00 – 21:00), cách 30 phút */

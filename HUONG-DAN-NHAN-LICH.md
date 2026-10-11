@@ -1,54 +1,42 @@
-# Hướng dẫn chuyển sang nhận lịch bằng biểu mẫu mới (ĐỀ XUẤT, chưa triển khai)
+# Nhận lịch bằng biểu mẫu mới: việc cần làm (dành cho chủ dự án)
 
-Nội dung này để **chủ dự án đọc và quyết định**. Chưa có gì trong tài liệu này được cài lên Google. Các bước tự làm khoảng 15 phút, và nên thử bằng một Sheet riêng trước.
+> **Đã chốt (11/10/2026):** nhận lịch bằng **cả email lẫn Google Sheet**; **bỏ** hoá đơn tham khảo và phụ phí tự động.
+> Hiện biểu mẫu mới đang ở chế độ **xem trước (giả lập)**, chưa nhận lịch thật. Công tắc chế độ giải thích ở `docs/CHE-DO-DAT-LICH.md`.
+> Chưa có gì trong tài liệu này được cài lên Google. Làm theo thứ tự, và **thử bằng một Google Sheet riêng trước**.
 
-## 1. Chọn nơi nhận yêu cầu đặt lịch
+## A. Việc bạn làm (khoảng 15 phút)
+1. Đăng nhập Google bằng tài khoản của bệnh viện, tạo một **Google Sheet thử**, đặt tên "Thử đặt lịch".
+2. Trong Sheet: **Tiện ích mở rộng → Apps Script**.
+3. Bấm dấu **+** cạnh "Tệp" → **Tập lệnh**, đặt tên `Code.v2`, dán toàn bộ nội dung file `apps-script/Code.v2.gs`. Bấm **Lưu**.
+   - Nếu trong dự án có sẵn tệp `Code.gs` cũ: **xoá** tệp cũ khi làm trên Sheet thử (hai tệp cùng có hàm `doPost` sẽ lẫn).
+4. Chọn hàm **`thuNghiem`** ở thanh trên → **Chạy** → cấp quyền khi Google hỏi.
+   - Kiểm tra: Sheet có thêm trang **"Đặt lịch v2"** với một dòng "Thử nghiệm", và có **email báo** về hộp thư. Xoá dòng thử.
+5. **Triển khai → Tùy chọn triển khai mới → Ứng dụng web.** "Thực thi dưới dạng": **Tôi**. "Người có quyền truy cập": **Bất kỳ ai** → **Triển khai**.
+6. Mở link `/exec` vừa có trên trình duyệt: thấy `{"ok":true,"dich_vu":"dat-lich-v2"}` là chạy đúng.
+7. (Khuyến nghị, vì nhận cả email) chạy hàm **`taoLichGuiLaiEmail`** một lần: nếu email bị lỗi tạm thời, hệ thống tự gửi lại mỗi 15 phút (tối đa 5 lần mỗi lịch).
+8. Báo tôi: **"đã triển khai, link là …"**. Tôi sẽ bật chế độ nhận thật **trên nhánh làm việc** và kiểm tra.
 
-| Lựa chọn | Nhân viên thấy yêu cầu ở đâu | Cần gì |
-|---|---|---|
-| **A. Email** | Hộp thư của tài khoản Google triển khai script (kèm một dòng lưu trong trang tính để chống trùng). **Lưu ý:** nếu email lỗi (hết hạn mức…) yêu cầu vẫn được lưu nhưng nhân viên không nhận email. Cột "Email báo" ghi LỖI và dòng được tô màu cam; dùng `guiLaiEmailLoi()` hoặc đặt tự chạy bằng `taoLichGuiLaiEmail()` (mục 2 bước 7) | `GUI_EMAIL: true` |
-| **B. Trang quản lý = Google Sheet** | Mở trang tính "Đặt lịch v2": mỗi yêu cầu một dòng, cột "Trạng thái" (Mới → Đã gọi…) | `GUI_EMAIL: false` |
-| **C. Cả hai** (đề xuất mặc định) | Email báo + dòng trong trang tính | `GUI_EMAIL: true` |
-| **D. Trang quản lý riêng trong website** | Trang đăng nhập có danh sách yêu cầu | **Chưa làm.** Cần thiết kế riêng (đăng nhập, lưu trữ); hiện website chỉ là trang tĩnh |
+## B. Sau khi tôi bật chế độ nhận thật (bạn kiểm tra)
+1. Mở trang Đặt lịch của bản xem thử, gửi **một lịch thử tên "Thử nghiệm"**.
+2. Màn hình phải hiện **"Đã nhận yêu cầu đặt lịch, bệnh viện sẽ liên hệ xác nhận"** kèm **mã yêu cầu** (dạng `LS-261011-XXXXXX`).
+3. Trang tính "Đặt lịch v2" có **đúng một dòng** với mã đó; email báo tới (cột "Email báo" ghi "đã gửi").
+4. Thử tắt mạng rồi gửi: phải hiện "Chưa nhận được xác nhận…", **không** báo thành công. Bật mạng, bấm "Gửi lại": vẫn **chỉ một dòng**.
+5. Đạt cả bốn mới tính tới bước đưa lên website thật (cần bạn đồng ý).
 
-**Việc cần bạn trả lời:** chọn A, B, C hay D. Cho tới khi chốt, biểu mẫu mới chạy ở chế độ **giả lập**.
+## C. Nhân viên xem lịch ở đâu và cần lưu ý gì
+- Mỗi yêu cầu là một dòng ở trang **"Đặt lịch v2"** (cột "Trạng thái": Mới → Đã gọi…). Đây là trang quản lý.
+- **Cột "Email báo":** "đã gửi", "không dùng", hoặc **LỖI** (dòng được tô màu cam). Dòng LỖI nghĩa là yêu cầu **vẫn được lưu** nhưng email chưa tới: xem Sheet, và nếu đã đặt bước A7 thì hệ thống tự gửi lại.
+- **Cột "Cần kiểm tra"** có chữ: lịch đến từ biểu mẫu cũ và có chỗ hệ thống không đọc được (ví dụ ngày đón): nhân viên xem lại khi gọi khách.
+- Script bản 2 ghi vào trang **"Đặt lịch v2"**, **khác trang "Đặt lịch" cũ**: đổi thói quen xem sang trang mới.
+- Biểu mẫu cũ đang chạy trên web vẫn hoạt động nếu bạn nâng cấp script cũ lên bản 2 (bản 2 vẫn nhận được dữ liệu của biểu mẫu cũ), nhưng lịch từ biểu mẫu cũ cũng nằm ở trang "Đặt lịch v2".
 
-## 2. Cài đặt (làm một lần)
+## D. Quay lại khi cần
+Báo tôi "quay lại biểu mẫu cũ": tôi đặt lại chế độ `'cu'`, dựng lại và kiểm tra. Script bản 2 không phải đổi.
 
-> Làm trên **một Google Sheet thử** trước. Khi chắc chắn mới làm trên Sheet thật.
-
-1. Mở Google Sheet nhận lịch → **Tiện ích mở rộng → Apps Script**.
-2. Tạo tệp mới (dấu **+** cạnh "Tệp"), đặt tên `Code.v2`, dán toàn bộ nội dung `apps-script/Code.v2.gs`. **Không xoá `Code.gs` đang chạy.** Chỉ một hàm `doPost` được dùng: nếu để cả hai tệp, đổi tên hàm `doPost` của tệp cũ thành `doPostCu` hoặc xoá tệp cũ khi đã chuyển hẳn.
-3. Sửa `CAU_HINH` theo lựa chọn ở mục 1. Bấm **Lưu**.
-4. Chọn hàm `thuNghiem` → **Chạy**. Lần đầu Google hỏi cấp quyền: bấm cho phép. Kiểm tra: trang tính "Đặt lịch v2" có một dòng thử và (nếu bật email) có email. Xoá dòng thử.
-5. **Triển khai → Quản lý các bản triển khai → sửa (bút chì) → Phiên bản: Phiên bản mới → Triển khai.** Đường link `/exec` giữ nguyên. Cách thực thi: *Chính tôi*; người truy cập: *Bất kỳ ai*.
-6. Mở link `/exec` trên trình duyệt: thấy `{"ok":true,"dich_vu":"dat-lich-v2"}` là chạy đúng.
-
-7. (Khuyến nghị nếu email là kênh chính) chạy `taoLichGuiLaiEmail` một lần để tự gửi lại các email lỗi mỗi 15 phút (tối đa 5 lần mỗi dòng; cần cấp thêm quyền quản lý trigger). Nếu không đặt, nhân viên cần xem cột **Email báo** và chạy `guiLaiEmailLoi` khi thấy LỖI.
-
-## 3. Bật nhận thật ở website
-
-1. Trong `src/lib/dat-lich.ts` đổi dòng `export const modeDatLich: ModeDatLich = 'gia-lap';` thành `'that'`. **Đây là cách DUY NHẤT để đổi chế độ** (không có biến môi trường nào; workflow triển khai không đặt biến nào).
-2. Dựng lại web: `npm run build` (nhật ký dựng có dòng `[dat-lich] modeDatLich = that`). **Kiểm tra bản dựng trước khi phát hành:** `npm run kiem-tra-che-do -- --mong=that`. Lệnh in "CHẾ ĐỘ BẢN XUẤT: …" và báo LỆCH (mã thoát 1) nếu chế độ không đúng hoặc thiếu địa chỉ nhận.
-3. Mở `/dat-lich/`, gửi **một yêu cầu thử có tên "Thử nghiệm"** và kiểm tra:
-   - màn hình hiện "Đã nhận yêu cầu đặt lịch…" cùng **mã yêu cầu**;
-   - trang tính có đúng **một** dòng với mã đó; email (nếu bật) tới;
-   - tắt mạng giữa chừng rồi gửi: hiện "Chưa nhận được xác nhận…", **không** báo thành công; bấm "Gửi lại" khi có mạng lại: vẫn chỉ **một** dòng.
-4. Chỉ khi các bước trên đều đúng mới commit và đưa lên website thật.
-
-## 4. Hợp đồng gửi / nhận
-
-- Trình duyệt gửi `POST` tới địa chỉ `/exec`, `Content-Type: text/plain;charset=utf-8` (để không bị trình duyệt chặn bước kiểm tra trước), nội dung JSON: `ma_yeu_cau, ten_khach, dien_thoai, ten_thu_cung, loai, loai_khac, dich_vu, dich_vu_ma, ngay (yyyy-mm-dd), gio (HH:MM), ngay_don, ghi_chu, website (ô bẫy, luôn rỗng), nguon, gui_luc`.
-- Mã yêu cầu dạng `LS-yymmdd-XXXXXX` (6 ký tự, được kiểm tra duy nhất trong trang tính).
-- Máy chủ trả JSON: `{ ok: true, ma, trung }` khi đã lưu (`trung: true` nếu mã gửi đã có); `{ ok: false, loi }` khi dữ liệu sai.
-- Web chỉ báo **đã nhận** khi đọc được `ok: true` và có `ma`. Mọi trường hợp khác (không đọc được, quá 15 giây, lỗi mạng) báo "chưa nhận được xác nhận".
-
-## 5. Điều chưa xác minh được (cần bạn thử)
-
-- Trình duyệt có đọc được phản hồi JSON của Apps Script khi gọi từ `github.io` không (cách làm này thường chạy được nhưng chưa thử trên địa chỉ thật của bạn).
+## E. Điều chưa xác minh được (cần bạn thử, tôi không gọi Google)
 - Email có tới; hạn mức gửi email của Google (chưa xác minh con số cụ thể).
-- Cách gộp `Code.gs` cũ và `Code.v2.gs` trên Sheet đang chạy.
+- Trình duyệt từ trang `github.io` đọc được phản hồi của Apps Script (cách làm này thường chạy được nhưng chưa thử trên địa chỉ thật của bạn). Nếu không đọc được, biểu mẫu sẽ báo "Chưa nhận được xác nhận" thay vì báo thành công: an toàn nhưng cần tôi xử lý tiếp.
 
-## 6. Quay lại
-
-Đặt lại `export const modeDatLich: ModeDatLich = 'cu';` (biểu mẫu cũ), `npm run build`, `npm run kiem-tra-che-do -- --mong=cu`. `Code.v2.gs` nhận được biểu mẫu cũ (kể cả ngày đón dính trong tên dịch vụ, cân nặng, hoá đơn, tổng tạm tính) nên không phải đổi script. Vì biểu mẫu cũ không đọc được phản hồi, bản v2 **luôn lưu** lịch cũ và ghi cột "Cần kiểm tra" nếu có chỗ không đọc được.
+## Phụ lục: ghi chú kỹ thuật (cho người triển khai)
+- Đổi chế độ: chỉ **một cách**, sửa hằng số `modeDatLich` trong `src/lib/dat-lich.ts` (`'gia-lap'` / `'that'` / `'cu'`), `npm run build`, `npm run kiem-tra-che-do -- --mong=<chế độ>`, commit.
+- Hợp đồng gửi / nhận: trình duyệt `POST` JSON dạng `text/plain;charset=utf-8` tới địa chỉ `/exec` (`ma_yeu_cau, ten_khach, dien_thoai, ten_thu_cung, loai, loai_khac, dich_vu, dich_vu_ma, ngay (yyyy-mm-dd), gio (HH:MM), ngay_don, ghi_chu, website (ô bẫy), nguon, gui_luc`). Máy chủ trả `{ ok: true, ma, trung }` khi đã lưu hoặc `{ ok: false, loi }`. Web chỉ báo "đã nhận" khi đọc được `ok: true` và có `ma`; mọi trường hợp khác (quá 15 giây, lỗi mạng, không đọc được) báo "chưa nhận được xác nhận". Mã dạng `LS-yymmdd-XXXXXX`, duy nhất trong trang tính.

@@ -11,6 +11,8 @@ Web dựng bằng Astro, GitHub tự dựng lại web mỗi khi nhánh `main` th
 4. Chờ 1–3 phút, dấu tích xanh là web đã lên.
 
 ## 2. Kết nối form đặt lịch với Google Sheet (làm một lần, ~10 phút)
+> Mục này là cách của **biểu mẫu cũ đang chạy**. Biểu mẫu đặt lịch **mới** (nhận lịch bằng cả email và Google Sheet, đã chốt) cài theo `HUONG-DAN-NHAN-LICH.md`; giải thích công tắc chế độ ở `docs/CHE-DO-DAT-LICH.md`.
+
 1. Đăng nhập Google bằng tài khoản của bệnh viện, tạo một Google Sheet mới, đặt tên "Đặt lịch Lê Sơn".
 2. Trong Sheet: **Tiện ích mở rộng → Apps Script**. Xoá hết mã có sẵn, dán toàn bộ nội dung file `apps-script/Code.gs`, bấm **Lưu**.
 3. Chọn hàm **thuNghiem** ở thanh trên → **Chạy** → cấp quyền khi Google hỏi. Kiểm tra: Sheet có thêm trang "Đặt lịch" với một dòng thử, và có email báo về hộp thư. Xoá dòng thử.
@@ -20,7 +22,7 @@ Web dựng bằng Astro, GitHub tự dựng lại web mỗi khi nhánh `main` th
 
 Nếu đã dán mã trước ngày 10/10/2026: dán lại bản mới của `Code.gs`, rồi **Triển khai → Quản lý các bản triển khai → sửa (bút chì) → Phiên bản: Phiên bản mới → Triển khai** (đường link giữ nguyên).
 
-Mỗi lượt đặt lịch: thêm một dòng vào Sheet (cột "Trạng thái" = Mới, nhân viên sửa thành "Đã gọi") và gửi email báo, kèm cân nặng và **hoá đơn tham khảo** khách đã xem.
+Mỗi lượt đặt lịch: thêm một dòng vào Sheet (cột "Trạng thái" = Mới, nhân viên sửa thành "Đã gọi") và gửi email báo (với biểu mẫu cũ: kèm cân nặng và hoá đơn tham khảo khách đã xem; **biểu mẫu mới không có hoá đơn tham khảo**, đã quyết định bỏ).
 Giờ ngoài 8:00–21:00 form không nhận; khách thấy số điện thoại và phụ phí ngoài giờ.
 
 ## 3. Đăng nhập trang quản trị
@@ -46,7 +48,7 @@ Giờ ngoài 8:00–21:00 form không nhận; khách thấy số điện thoại
 - **Thông tin & cài đặt**:
   - *Thông tin bệnh viện*: điện thoại, Zalo, Facebook, phụ phí ngoài giờ, giới thiệu, số năm hoạt động, ảnh tập thể, địa chỉ nhận form.
   - *Dịch vụ và bảng giá*: mỗi nhóm có **bảng giá theo cân nặng** (các cột như "Chó lông ngắn", mỗi dòng một mức cân nặng, giá nhập đúng thứ tự cột, "–" là không có) và/hoặc **danh sách giá**. Giá viết như `120.000`, `từ 250.000`; để trống = "Đang cập nhật".
-  - *Phụ phí tự động và ngày lễ*: giờ spa nhận lịch online (hiện 19:00), phụ phí tắm / cắt tỉa theo giờ hẹn, phí đi lại khám tại nhà, phụ phí khám ngoài giờ, **danh sách ngày lễ** (thêm ngày trước mỗi dịp lễ, tết). Form đặt lịch tự cộng các phí này vào **hoá đơn tham khảo** cho khách xem trước.
+  - *Phụ phí tự động và ngày lễ*: giờ spa nhận lịch online (hiện 19:00), phụ phí tắm / cắt tỉa theo giờ hẹn, phí đi lại khám tại nhà, phụ phí khám ngoài giờ, **danh sách ngày lễ** (thêm ngày trước mỗi dịp lễ, tết). **Chỉ biểu mẫu cũ (chế độ 'cu') dùng các mục này** để tự cộng vào hoá đơn tham khảo; biểu mẫu mới **không tính phụ phí tự động và không có hoá đơn** (đã quyết định bỏ). Danh sách phụ phí khám ngoài giờ vẫn hiện ở trang Đặt lịch như thông tin tham khảo.
   - *Đội ngũ bác sĩ*: tên, chức vụ, ảnh vuông.
   - *Ảnh cơ sở vật chất*: phòng khám, phòng mổ, spa, nội trú, mặt tiền.
   - *Bé Cam*: sửa câu nói của bé Cam ở từng trang, hoặc tắt bé Cam.

@@ -12,7 +12,8 @@
  *    biểu mẫu mới, thay vào đó lưu lịch và ghi "Cần kiểm tra" để nhân viên xem lại.
  *  - Lỗi gửi email không còn im lặng: cột "Email báo", dòng tô màu, hàm guiLaiEmailLoi() (tối đa EMAIL_TOI_DA lần).
  *
- * Nơi nhận lịch (chủ dự án chọn, xem HUONG-DAN-NHAN-LICH.md): GUI_EMAIL ở CAU_HINH. Trang tính luôn được ghi (làm "trang quản lý" và để chống trùng).
+ * Nơi nhận lịch: ĐÃ CHỐT 11/10/2026 = CẢ HAI (email báo + trang tính làm "trang quản lý"), tức GUI_EMAIL: true ở CAU_HINH. Trang tính luôn được ghi (và để chống trùng).
+ * Đã quyết định BỎ hoá đơn tham khảo và phụ phí tự động; biểu mẫu mới không gửi các trường đó (chỉ còn nhận từ biểu mẫu cũ để quay lại được).
  * Cách cài: xem HUONG-DAN-NHAN-LICH.md. KHÔNG dán đè lên bản đang chạy khi chưa thử nghiệm.
  */
 var CAU_HINH = {

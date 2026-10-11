@@ -35,11 +35,12 @@
     },
     {
       "ma": "hoa-don-tham-khao",
-      "noi_dung": "Câu “đặt lịch online có hoá đơn tham khảo”",
-      "nguon": "Website thật có tính năng này ở src/pages/dat-lich.astro; form prototype không có",
-      "hien_thi": "Đã bỏ khỏi prototype (mục 03 Giới thiệu)",
-      "trang_thai": "da-bo-khoi-prototype",
-      "ghi_chu_hien": ""
+      "noi_dung": "Tính năng “hoá đơn tham khảo” và “phụ phí tự động” khi đặt lịch online",
+      "nguon": "Biểu mẫu cũ (components/ls/FormDatLichCu.astro, chế độ 'cu'); biểu mẫu mới không có",
+      "hien_thi": "Đã bỏ khỏi prototype và khỏi biểu mẫu mới",
+      "trang_thai": "da-quyet-dinh-bo",
+      "ghi_chu_hien": "",
+      "quyet_dinh": "Chủ dự án đã quyết định BỎ hoá đơn tham khảo và phụ phí tự động (11/10/2026). Biểu mẫu cũ còn giữ làm đường lui, chưa xoá."
     },
     {
       "ma": "ghi-chu-hoa-don-trong-bang-gia",

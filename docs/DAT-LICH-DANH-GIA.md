@@ -40,8 +40,11 @@ Các điều trên chỉ chủ dự án kiểm được bằng cách tự thử 
 | Mặc định | **Giả lập: không gửi gì** (hằng số `modeDatLich = 'gia-lap'` trong `src/lib/dat-lich.ts`, cách duy nhất để đổi chế độ), có dòng "Bản xem trước · chưa gửi dữ liệu thật" |
 | Nhận thật | Đề xuất `apps-script/Code.v2.gs` + `HUONG-DAN-NHAN-LICH.md`; **chưa triển khai**, không đổi địa chỉ nhận hiện có |
 
-### Không đưa sang biểu mẫu mới (CHỦ DỰ ÁN CHƯA QUYẾT ĐỊNH)
-Hoá đơn tham khảo và phụ phí tự động, chọn cân nặng theo dịch vụ, giảm giá gửi dài ngày: bản thiết kế prototype R3.x không có các tính năng này, nên biểu mẫu mới (một ô chọn dịch vụ) cũng không có. **Chủ dự án chưa quyết định giữ hay bỏ**; việc bỏ chưa được duyệt. Giá vẫn xem ở trang Bảng giá. Muốn giữ tính năng hoá đơn: đặt `modeDatLich = 'cu'` (quay lại biểu mẫu cũ) hoặc yêu cầu bổ sung vào biểu mẫu mới.
+### Không đưa sang biểu mẫu mới (ĐÃ CHỐT 11/10/2026: BỎ)
+Hoá đơn tham khảo và phụ phí tự động, chọn cân nặng theo dịch vụ, giảm giá gửi dài ngày: bản thiết kế prototype R3.x không có các tính năng này, nên biểu mẫu mới (một ô chọn dịch vụ) cũng không có. **Chủ dự án đã quyết định BỎ hoá đơn tham khảo và phụ phí tự động** (11/10/2026). Giá vẫn xem ở trang Bảng giá. Biểu mẫu cũ (chế độ `'cu'`) vẫn còn trong mã như **đường lui**, chưa xoá; bỏ hẳn khi chủ dự án xác nhận. Ghi chú nhóm Grooming trong `src/data/dich_vu.json` còn nhắc "tự cộng vào hoá đơn tham khảo khi đặt lịch" nên cần sửa trong trang quản trị (chưa sửa, vì là dữ liệu do bệnh viện quản lý).
+
+### Nơi nhận lịch: ĐÃ CHỌN CẢ HAI (11/10/2026)
+Email báo + Google Sheet làm trang quản lý (phương án C trong `HUONG-DAN-NHAN-LICH.md`; `GUI_EMAIL: true`). Giải thích công tắc chế độ: `docs/CHE-DO-DAT-LICH.md`.
 
 ## 5. CẢNH BÁO khi gộp vào `main`
 
