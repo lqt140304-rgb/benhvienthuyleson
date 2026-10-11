@@ -21,7 +21,7 @@
       "ma": "link-danh-gia",
       "noi_dung": "Link trang đánh giá Google Maps và Facebook",
       "nguon": "src/data/danh_gia.json (link_google, link_facebook đang để trống)",
-      "hien_thi": "Dải “Lắng nghe ý kiến từ chủ nuôi”: hai ô ở trạng thái chờ bổ sung link, không bấm được",
+      "hien_thi": "Dải “Lắng nghe ý kiến từ khách hàng”: hai ô ở trạng thái chờ bổ sung link, không bấm được",
       "trang_thai": "cho-bo-sung",
       "ghi_chu_hien": "Chờ bổ sung link"
     },

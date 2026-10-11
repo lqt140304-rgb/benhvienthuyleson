@@ -1,7 +1,7 @@
 // Máy chủ tĩnh nhỏ để xem bản dựng đúng như GitHub Pages: thư mục dist được phục vụ dưới /benhvienthuyleson/, đường dẫn không có trang thì trả 404.html (mã 404).
 // Chạy: node kiem-thu-astro/may-chu.cjs [cổng=4321]   (cần chạy `npm run build` trước)
 const http = require('http'), fs = require('fs'), path = require('path');
-const DIST = path.resolve(__dirname, '../dist'), BASE = '/benhvienthuyleson', CONG = +process.argv[2] || 4321;
+const DIST = process.env.DIST ? path.resolve(process.env.DIST) : path.resolve(__dirname, '../dist'), BASE = '/benhvienthuyleson', CONG = +process.argv[2] || 4321;
 const KIEU = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.mjs': 'text/javascript; charset=utf-8', '.json': 'application/json', '.xml': 'application/xml', '.jpg': 'image/jpeg', '.png': 'image/png', '.svg': 'image/svg+xml', '.webp': 'image/webp', '.ico': 'image/x-icon', '.txt': 'text/plain; charset=utf-8' };
 const gui = (res, ma, tep) => { res.writeHead(ma, { 'Content-Type': KIEU[path.extname(tep)] || 'application/octet-stream' }); fs.createReadStream(tep).pipe(res); };
 http.createServer((req, res) => {

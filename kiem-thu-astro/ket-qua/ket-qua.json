@@ -5,9 +5,9 @@
   "ct": ""
  },
  {
-  "tt": "KHÔNG ĐẠT",
-  "ten": "Mọi liên kết nội bộ, ảnh, CSS, JS trong 13 trang đều có tệp đích; hash nhóm giá và mục trang có id; không còn link tuyệt đối tới website cũ (444 liên kết đã kiểm)",
-  "ct": "/404.html → #5A1E5E: không có id #5A1E5E ở trang đích | /bang-gia/ → #5A1E5E: không có id #5A1E5E ở trang đích | /dat-lich/ → #5A1E5E: không có id #5A1E5E ở trang đích | /dich-vu/ → #5A1E5E: không có id #5A1E5E ở trang đích | /gioi-thieu/ → #5A1E5E: không có id #5A1E5E ở trang đích | / → #5A1E5E: không có id #5A1E5E ở trang đích | /lien-he/ → #5A1E5E: không có id #5A1E5E ở trang đích | /nhan-vien/"
+  "tt": "ĐẠT",
+  "ten": "Mọi liên kết nội bộ, ảnh, CSS, JS trong 13 trang đều có tệp đích; hash nhóm giá và mục trang có id; không còn link tuyệt đối tới website cũ (432 liên kết đã kiểm)",
+  "ct": ""
  },
  {
   "tt": "MỤC",
@@ -65,9 +65,9 @@
   "ct": "[]"
  },
  {
-  "tt": "KHÔNG ĐẠT",
+  "tt": "ĐẠT",
   "ten": "Menu điện thoại: mở (aria-expanded, focus vào menu), Esc đóng và trả focus về nút Menu",
-  "ct": "{\"mo\":{\"ex\":\"true\",\"nhin\":true,\"foc\":false},\"dong\":{\"ex\":\"false\",\"foc\":\"nut-menu\"}}"
+  "ct": "{\"mo\":{\"ex\":\"true\",\"nhin\":true,\"foc\":true},\"dong\":{\"ex\":\"false\",\"foc\":\"nut-menu\"}}"
  },
  {
   "tt": "MỤC",
@@ -120,9 +120,9 @@
   "ct": ""
  },
  {
-  "tt": "KHÔNG ĐẠT",
+  "tt": "ĐẠT",
   "ten": "[1440x900] Lúc đầu cả hai dải tự trượt (nút \"Tạm dừng\")",
-  "ct": ""
+  "ct": "{\"cn\":true,\"dn\":true}"
  },
  {
   "tt": "ĐẠT",
@@ -142,7 +142,7 @@
  {
   "tt": "ĐẠT",
   "ten": "[1440x900] Tắt giảm chuyển động giữa chừng: hai dải chạy lại",
-  "ct": ""
+  "ct": "{\"cn\":true,\"dn\":true}"
  },
  {
   "tt": "ĐẠT",
@@ -150,9 +150,9 @@
   "ct": "[[0,0],[0,0,\"true\"]]"
  },
  {
-  "tt": "KHÔNG ĐẠT",
+  "tt": "ĐẠT",
   "ten": "[390x844] Lúc đầu cả hai dải tự trượt (nút \"Tạm dừng\")",
-  "ct": ""
+  "ct": "{\"cn\":true,\"dn\":true}"
  },
  {
   "tt": "ĐẠT",
@@ -172,7 +172,7 @@
  {
   "tt": "ĐẠT",
   "ten": "[390x844] Tắt giảm chuyển động giữa chừng: hai dải chạy lại",
-  "ct": ""
+  "ct": "{\"cn\":true,\"dn\":true}"
  },
  {
   "tt": "ĐẠT",
@@ -252,7 +252,7 @@
  {
   "tt": "ĐẠT",
   "ten": "[1440x900] \"Xem dịch vụ\" cuộn tới khu Dịch vụ ở trang chủ, focus ở tiêu đề (không rơi về BODY)",
-  "ct": "{\"foc\":\"H2\",\"tren\":193}"
+  "ct": "{\"foc\":\"H2\",\"tren\":227}"
  },
  {
   "tt": "ĐẠT",
@@ -272,7 +272,7 @@
  {
   "tt": "ĐẠT",
   "ten": "[390x844] \"Xem dịch vụ\" cuộn tới khu Dịch vụ ở trang chủ, focus ở tiêu đề (không rơi về BODY)",
-  "ct": "{\"foc\":\"H2\",\"tren\":313}"
+  "ct": "{\"foc\":\"H2\",\"tren\":269}"
  },
  {
   "tt": "ĐẠT",
@@ -320,8 +320,8 @@
   "ct": ""
  },
  {
-  "tt": "KHÔNG ĐẠT",
-  "ten": "Trong toàn bộ lần chạy, ngoài phông chữ Google và địa chỉ nhận form (đã chặn / trả lời giả) không có máy chủ nào khác bị gọi",
+  "tt": "ĐẠT",
+  "ten": "Trong toàn bộ lần chạy, ngoài phông chữ Google, bản đồ nhúng ở trang Liên hệ (www.google.com) và địa chỉ nhận form (đã chặn / trả lời giả) không có máy chủ nào khác bị gọi",
   "ct": "fonts.googleapis.com, www.google.com, script.google.com"
  },
  {
