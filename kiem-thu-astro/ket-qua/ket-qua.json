@@ -252,7 +252,7 @@
  {
   "tt": "ĐẠT",
   "ten": "[1440x900] Mở Bé Cam: hộp thoại hiện, focus vào trong, đúng một câu chào lấy từ cam.json",
-  "ct": "{\"hien\":true,\"foc\":true,\"chao\":[\"Bệnh viện đang ngoài giờ (8:00 – 21:00). Bé cần cấp cứu? Gọi ngay cho bệnh viện nhé.\"],\"ex\":\"true\"}"
+  "ct": "{\"hien\":true,\"foc\":true,\"chao\":[\"Chào bạn, mình là Cam! Bé nhà bạn là chó hay mèo? Mình chỉ bài hợp với bé nhé.\"],\"ex\":\"true\"}"
  },
  {
   "tt": "ĐẠT",
@@ -267,12 +267,12 @@
  {
   "tt": "ĐẠT",
   "ten": "[1440x900] \"Xem dịch vụ\" cuộn tới khu Dịch vụ ở trang chủ, focus ở tiêu đề (không rơi về BODY)",
-  "ct": "{\"foc\":\"H2\",\"tren\":193}"
+  "ct": "{\"foc\":\"H2\",\"tren\":212}"
  },
  {
   "tt": "ĐẠT",
   "ten": "[390x844] Mở Bé Cam: hộp thoại hiện, focus vào trong, đúng một câu chào lấy từ cam.json",
-  "ct": "{\"hien\":true,\"foc\":true,\"chao\":[\"Bệnh viện đang ngoài giờ (8:00 – 21:00). Bé cần cấp cứu? Gọi ngay cho bệnh viện nhé.\"],\"ex\":\"true\"}"
+  "ct": "{\"hien\":true,\"foc\":true,\"chao\":[\"Chào bạn, mình là Cam! Bé nhà bạn là chó hay mèo? Mình chỉ bài hợp với bé nhé.\"],\"ex\":\"true\"}"
  },
  {
   "tt": "ĐẠT",
@@ -287,7 +287,7 @@
  {
   "tt": "ĐẠT",
   "ten": "[390x844] \"Xem dịch vụ\" cuộn tới khu Dịch vụ ở trang chủ, focus ở tiêu đề (không rơi về BODY)",
-  "ct": "{\"foc\":\"H2\",\"tren\":313}"
+  "ct": "{\"foc\":\"H2\",\"tren\":328}"
  },
  {
   "tt": "ĐẠT",
@@ -337,7 +337,7 @@
  {
   "tt": "ĐẠT",
   "ten": "[1440x900] Dịch vụ nội trú: hiện \"Ngày đón dự kiến\" (bắt buộc); ngày đón TRƯỚC ngày gửi bị báo lỗi; cùng ngày hoặc sau thì hợp lệ; đổi dịch vụ thường thì ẩn",
-  "ct": "{\"nt\":{\"don\":true,\"nhan\":\"Ngày gửi thú cưng\"},\"chuaDon\":true,\"truoc\":{\"loi\":\"Ngày đón không được trước ngày gửi (14/10/2026).\",\"ban\":true},\"cung\":true,\"sau\":true,\"anDon\":true}"
+  "ct": "{\"nt\":{\"don\":true,\"nhan\":\"Ngày gửi thú cưng\"},\"chuaDon\":true,\"truoc\":{\"loi\":\"Ngày đón không được trước ngày gửi (15/10/2026).\",\"ban\":true},\"cung\":true,\"sau\":true,\"anDon\":true}"
  },
  {
   "tt": "ĐẠT",
@@ -362,7 +362,7 @@
  {
   "tt": "ĐẠT",
   "ten": "[390x844] Dịch vụ nội trú: hiện \"Ngày đón dự kiến\" (bắt buộc); ngày đón TRƯỚC ngày gửi bị báo lỗi; cùng ngày hoặc sau thì hợp lệ; đổi dịch vụ thường thì ẩn",
-  "ct": "{\"nt\":{\"don\":true,\"nhan\":\"Ngày gửi thú cưng\"},\"chuaDon\":true,\"truoc\":{\"loi\":\"Ngày đón không được trước ngày gửi (14/10/2026).\",\"ban\":true},\"cung\":true,\"sau\":true,\"anDon\":true}"
+  "ct": "{\"nt\":{\"don\":true,\"nhan\":\"Ngày gửi thú cưng\"},\"chuaDon\":true,\"truoc\":{\"loi\":\"Ngày đón không được trước ngày gửi (15/10/2026).\",\"ban\":true},\"cung\":true,\"sau\":true,\"anDon\":true}"
  },
  {
   "tt": "ĐẠT",
@@ -402,7 +402,7 @@
  {
   "tt": "ĐẠT",
   "ten": "[nhận thật] Đúng 1 yêu cầu, POST, Content-Type text/plain (không gây bước kiểm tra trước), JSON có đủ trường và ma_yeu_cau",
-  "ct": "{\"ten_khach\":\"Khách thử nghiệm\",\"dien_thoai\":\"0912345678\",\"ten_thu_cung\":\"Bé Thử\",\"loai\":\"Chó\",\"loai_khac\":\"\",\"dich_vu\":\"Khám và chẩn đoán\",\"dich_vu_ma\":\"kham-va-chan-doan\",\"ngay\":\"2026-10-13\",\"gio\":\"09:00\",\"ngay_don\":\"\",\"ghi_chu\":\"ghi chú thử\",\"website\":\"\",\"ma_yeu_cau\":\"d77c0bb4-0c24-42fe-89be-6a2c979b1546\",\"nguon\":\"/benhvienthuyleson/dat-lich/\",\"gui_luc\":\"2026-10-11T14:10:37.541Z\"}"
+  "ct": "{\"ten_khach\":\"Khách thử nghiệm\",\"dien_thoai\":\"0912345678\",\"ten_thu_cung\":\"Bé Thử\",\"loai\":\"Chó\",\"loai_khac\":\"\",\"dich_vu\":\"Khám và chẩn đoán\",\"dich_vu_ma\":\"kham-va-chan-doan\",\"ngay\":\"2026-10-14\",\"gio\":\"09:00\",\"ngay_don\":\"\",\"ghi_chu\":\"ghi chú thử\",\"website\":\"\",\"ma_yeu_cau\":\"5d8f0e7c-2365-4cae-afbe-f4e28de9d02c\",\"nguon\":\"/benhvienthuyleson/dat-lich/\",\"gui_luc\":\"2026-10-12T09:52:53.043Z\"}"
  },
  {
   "tt": "ĐẠT",
@@ -462,12 +462,12 @@
  {
   "tt": "ĐẠT",
   "ten": "[chống trùng] \"Gửi lại\" nguyên nội dung dùng lại CÙNG mã yêu cầu (máy chủ nhờ đó bỏ qua bản trùng)",
-  "ct": "0f0186bd-bb89-4f4c-ad9e-c0d7561dfbd8 / 0f0186bd-bb89-4f4c-ad9e-c0d7561dfbd8"
+  "ct": "2eba9edd-a186-4d0e-9f54-148ef4b76705 / 2eba9edd-a186-4d0e-9f54-148ef4b76705"
  },
  {
   "tt": "ĐẠT",
   "ten": "[chống trùng] Đổi nội dung rồi gửi: mã yêu cầu MỚI; máy chủ trả trùng thì vẫn hiện đã nhận",
-  "ct": "0f0186bd-bb89-4f4c-ad9e-c0d7561dfbd8 / 4b40ebe5-2f5c-445d-93c6-e2981a2ead6a"
+  "ct": "2eba9edd-a186-4d0e-9f54-148ef4b76705 / 032101c2-41b9-4f46-aea9-6e8f4d7711ea"
  },
  {
   "tt": "ĐẠT",
@@ -502,11 +502,11 @@
  {
   "tt": "ĐẠT",
   "ten": "Biểu mẫu cũ thật (chế độ \"cu\") gửi đúng 1 yêu cầu tới địa chỉ nhận (đã chặn, trả lời giả), dạng form-urlencoded, có \"· đón … lúc …\" trong dịch vụ",
-  "ct": "1 yêu cầu, application/x-www-form-urlencoded;charset=UTF-8, ten=Khách cũ thử nghiệm&dien_thoai=0912345678&thu_cung=Khác (thỏ)&dich_vu=Gửi nội trú (khách sạn thú cưng) · đón 16/10/2026 lúc 17:00&can_nang=Dưới 2 kg&ngay=2026-10-13&gio=09:00&ghi_chu=ghi chú cũ&hoa_don=Gửi nội trú (k"
+  "ct": "1 yêu cầu, application/x-www-form-urlencoded;charset=UTF-8, ten=Khách cũ thử nghiệm&dien_thoai=0912345678&thu_cung=Khác (thỏ)&dich_vu=Gửi nội trú (khách sạn thú cưng) · đón 17/10/2026 lúc 17:00&can_nang=Dưới 2 kg&ngay=2026-10-14&gio=09:00&ghi_chu=ghi chú cũ&hoa_don=Gửi nội trú (k"
  },
  {
   "tt": "ĐẠT",
-  "ten": "Logic Code.v2.gs bằng đối tượng giả của Google, gồm BODY của biểu mẫu cũ thật vừa bắt được (không gọi Google): ĐẠT 98 · KHÔNG ĐẠT 0 · CHƯA XÁC MINH 2",
+  "ten": "Logic Code.v2.gs bằng đối tượng giả của Google, gồm BODY của biểu mẫu cũ thật vừa bắt được (không gọi Google): ĐẠT 99 · KHÔNG ĐẠT 0 · CHƯA XÁC MINH 1",
   "ct": ""
  },
  {

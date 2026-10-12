@@ -36,13 +36,14 @@
       vao.sort(function (a, b) { return a.compareDocumentPosition(b) & 4 ? -1 : 1; });
       vao.forEach(function (el, i) {
         quanSat.unobserve(el);
-        var tre = Math.min(i, 4) * 60; // nối tiếp 60ms, tối đa 240ms
+        var tre = Math.min(i, 4) * 70; // nối tiếp 70ms, tối đa 280ms
         el.style.transitionDelay = tre + 'ms';
         el.classList.add('da-hien');
         // Xong hiệu ứng: trả lại transition riêng của thẻ (hover 200ms)
-        setTimeout(function () { el.classList.add('xong-hien'); el.style.transitionDelay = ''; }, tre + 450);
+        setTimeout(function () { el.classList.add('xong-hien'); el.style.transitionDelay = ''; }, tre + 620);
       });
     }, { threshold: 0.15, rootMargin: '0px 0px -6% 0px' });
+    document.querySelectorAll('.dau-khoi').forEach(function (el) { if (!el.hasAttribute('data-hien')) el.setAttribute('data-hien', ''); }); // đầu mỗi khu cũng hiện dần
     document.querySelectorAll('[data-hien]').forEach(function (el) { quanSat.observe(el); });
     // Phần tử nhận focus bằng bàn phím phải hiện ngay
     document.addEventListener('focusin', function (e) { var el = e.target.closest && e.target.closest('[data-hien]'); if (el) hienNgay([el]); });
@@ -457,4 +458,18 @@
   if (window.visualViewport) {
     window.visualViewport.addEventListener('resize', function () { banPhim = window.visualViewport.height < window.innerHeight * 0.75; capNhatThanhDuoi(); });
   }
+
+  // ---------- R3.6: hoạ tiết hero trôi nhẹ theo cuộn (tối đa 12px; chỉ máy tính có chuột; tắt khi giảm chuyển động hoặc tắt hiệu ứng trang trí) ----------
+  (function () {
+    var hero = document.querySelector('.hero'), goc2 = document.documentElement;
+    if (!hero || !goc2.classList.contains('co-hieu-ung') || !window.matchMedia('(hover: hover) and (min-width: 1024px)').matches) return;
+    var cho = false;
+    function cap() {
+      cho = false;
+      var tat = goc2.classList.contains('tat-trang-tri') || itChuyenDong.matches;
+      var t = tat ? 0 : Math.max(0, Math.min(1, window.scrollY / Math.max(1, hero.offsetHeight)));
+      hero.style.setProperty('--py', (t * 12).toFixed(2) + 'px');
+    }
+    window.addEventListener('scroll', function () { if (!cho) { cho = true; requestAnimationFrame(cap); } }, { passive: true });
+  })();
 })();
