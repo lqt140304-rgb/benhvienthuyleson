@@ -1,0 +1,39 @@
+Kiểm thử thiết kế R3.6 · Chromium 141.0.7390.37 (Playwright) · phông: bị chặn · 2026-10-12T13:30:19.755Z
+ĐẠT 19 · KHÔNG ĐẠT 0 · CHƯA CHẠY 1 · CHƯA XÁC MINH 4
+
+
+-- 1. Chữ tiêu đề: h1/h2 dùng Playfair Display; h3/h4, nhãn, nút, nội dung giữ Be Vietnam Pro
+[ĐẠT] 1440x900: 34 tiêu đề h1/h2 hiển thị trên 11 trang đều khai báo Playfair Display đầu tiên
+[ĐẠT] 1440x900: 292 phần tử h3/h4, đoạn văn, nhãn, nút, ô nhập, mục danh sách (ngoài h1/h2) đều khai báo Be Vietnam Pro đầu tiên
+[ĐẠT] 390x844: 34 tiêu đề h1/h2 hiển thị trên 11 trang đều khai báo Playfair Display đầu tiên
+[ĐẠT] 390x844: 303 phần tử h3/h4, đoạn văn, nhãn, nút, ô nhập, mục danh sách (ngoài h1/h2) đều khai báo Be Vietnam Pro đầu tiên
+[CHƯA XÁC MINH] Phông Playfair Display / Be Vietnam Pro thật sự được vẽ ra, đủ dấu tiếng Việt  → Không có PHONG_CUC_BO và Google Fonts bị chặn trong môi trường này: chỉ kiểm được khai báo CSS
+
+-- 2. Giảm chuyển động và nút "Hiệu ứng trang trí" tắt các chuyển động R3.6
+[ĐẠT] Bật giảm chuyển động từ đầu: không gắn html.co-hieu-ung, không chạy r36-len / r36-troi, không có chuyển động lặp vô hạn, mọi thẻ [data-hien] hiện sẵn  → {"coHU":false,"tat":true,"r36":[],"vohan":[],"anHien":0,"tt":["none","none","none"],"py":"","anhLuot":"none"}
+[ĐẠT] Bật giảm chuyển động từ đầu: cuộn 500px thì hoạ tiết hero không trôi (translate none, không đặt --py); rê chuột nút chính không có ánh lướt  → {"coHU":false,"tat":true,"r36":[],"vohan":[],"anHien":0,"tt":["none","none","none"],"py":"","anhLuot":"none"}
+[ĐẠT] Kiểm chứng điều kiện thử: khi KHÔNG giảm chuyển động, trang chủ có html.co-hieu-ung và thẻ "Chẩn đoán" đang lơ lửng (r36-troi)  → ["r36-troi@anh-ghi hero-ghi"]
+[ĐẠT] Đổi sang giảm chuyển động giữa chừng: r36-troi và mọi chuyển động lặp vô hạn dừng; hoạ tiết hero về vị trí gốc (translate none)  → {"coHU":true,"tat":true,"r36":[],"vohan":[],"anHien":0,"tt":["none","none","none"],"py":"0.00px","anhLuot":"\"\""}
+[ĐẠT] Tắt "Hiệu ứng trang trí": html.tat-trang-tri; thẻ "Chẩn đoán" ngừng lơ lửng (r36-troi tạm dừng); cuộn 500px hoạ tiết hero vẫn ở vị trí gốc  → {"tat":true,"r36troi":["paused"],"tt":["none","none","none"],"py":"0.00px"}
+
+-- 3. Hoạ tiết hero trôi theo cuộn: tối đa 12px, chỉ máy tính có chuột (≥ 1024px)
+[ĐẠT] 1440×900 có chuột: hoạ tiết hero có trôi khi cuộn (kiểm chứng điều kiện thử) và KHÔNG hoạ tiết nào lệch quá 12px ở mọi vị trí cuộn (81 vị trí, mỗi 120px tới cuối trang)  → --py lớn nhất 8px; hoạ tiết lệch lớn nhất 12px
+[ĐẠT] điện thoại 390×844 (cảm ứng): hoạ tiết hero không trôi theo cuộn  → --py lớn nhất 0px; lệch lớn nhất 0px
+[ĐẠT] máy tính bảng 1024×768 (cảm ứng): hoạ tiết hero không trôi theo cuộn  → --py lớn nhất 0px; lệch lớn nhất 0px
+[ĐẠT] máy tính 1280×800 + giảm chuyển động: hoạ tiết hero không trôi theo cuộn  → --py lớn nhất 0px; lệch lớn nhất 0px
+
+-- 4. Không cuộn ngang ở 7 kích thước + màn ngang, đo cả lúc hiệu ứng hero đang chạy và khi rê chuột nút / ảnh
+[ĐẠT] 11 trang × 8 kích thước (360, 390, 430, 768, 1024, 1280, 1440, ngang 844×390): không cuộn ngang lúc hiệu ứng đang chạy, khi xong và khi rê chuột (≥ 1024px)
+
+-- 5. Dịch bố cục (CLS): dưới 0,1 và không tăng so với bản trước R3.6 (commit 422c7a4)
+[ĐẠT] 1440x900 (phông Google bị chặn): 11 trang có CLS dưới 0,1 khi tải và cuộn tới cuối  → / 0.003→0.000 · /bang-gia/ 0.000→0.000 · /dich-vu/ 0.000→0.000 · /gioi-thieu/ 0.000→0.000 · /lien-he/ 0.000→0.000 · /dat-lich/ 0.000→0.000 · /nhan-vien/ 0.000→0.000 · /tu-van/ 0.000→0.000 · /tu-van/cho/ 0.000→0.000 · /tu-van/meo/ 0.000→0.000 · /nhat-ky-ca-benh/ 0.000→0.000
+[ĐẠT] 1440x900 (phông Google bị chặn): CLS từng trang không tăng quá 0,01 so với bản trước R3.6  → / 0.003→0.000 · /bang-gia/ 0.000→0.000 · /dich-vu/ 0.000→0.000 · /gioi-thieu/ 0.000→0.000 · /lien-he/ 0.000→0.000 · /dat-lich/ 0.000→0.000 · /nhan-vien/ 0.000→0.000 · /tu-van/ 0.000→0.000 · /tu-van/cho/ 0.000→0.000 · /tu-van/meo/ 0.000→0.000 · /nhat-ky-ca-benh/ 0.000→0.000
+[ĐẠT] 390x844 (phông Google bị chặn): 11 trang có CLS dưới 0,1 khi tải và cuộn tới cuối  → / 0.000→0.000 · /bang-gia/ 0.000→0.000 · /dich-vu/ 0.000→0.000 · /gioi-thieu/ 0.000→0.000 · /lien-he/ 0.000→0.000 · /dat-lich/ 0.000→0.000 · /nhan-vien/ 0.000→0.000 · /tu-van/ 0.000→0.000 · /tu-van/cho/ 0.000→0.000 · /tu-van/meo/ 0.000→0.000 · /nhat-ky-ca-benh/ 0.000→0.000
+[ĐẠT] 390x844 (phông Google bị chặn): CLS từng trang không tăng quá 0,01 so với bản trước R3.6  → / 0.000→0.000 · /bang-gia/ 0.000→0.000 · /dich-vu/ 0.000→0.000 · /gioi-thieu/ 0.000→0.000 · /lien-he/ 0.000→0.000 · /dat-lich/ 0.000→0.000 · /nhan-vien/ 0.000→0.000 · /tu-van/ 0.000→0.000 · /tu-van/cho/ 0.000→0.000 · /tu-van/meo/ 0.000→0.000 · /nhat-ky-ca-benh/ 0.000→0.000
+[CHƯA XÁC MINH] CLS khi phông thật được tải về và đổi (swap)  → Không có PHONG_CUC_BO: phông Google bị chặn nên không đo được dịch do đổi phông
+
+-- 6. Yêu cầu mạng ra ngoài và giới hạn
+[ĐẠT] Không gọi máy chủ ngoài nào ngoài phông Google (đã chặn hoặc trả bằng tệp cục bộ) và bản đồ nhúng trang Liên hệ (chặn)  → fonts.googleapis.com, www.google.com
+[CHƯA CHẠY] Firefox, Safari/WebKit, Edge; điện thoại thật  → Chỉ có Chromium 141.0.7390.37 của Playwright
+[CHƯA XÁC MINH] Phông tải từ Google Fonts thật (tốc độ, đủ ký tự)  → Môi trường này chặn Google Fonts; cần mở web thật để xem
+[CHƯA XÁC MINH] Cảm nhận chuyển động (đẹp / mượt) trên máy thật  → Cần người xem
