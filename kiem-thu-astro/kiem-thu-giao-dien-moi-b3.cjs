@@ -128,7 +128,7 @@ const chuan = (s) => String(s).replace(/\s+/g, ' ').trim();
     ok('Focus vào nút trên nền tím: viền trắng 3px (thấy rõ trên nền tím)', f2.v === 'solid' && f2.r === '3px' && f2.m === 'rgb(255, 255, 255)', JSON.stringify(f2));
     await ctx.close();
     const cr = await ctxMoi({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' }), pr = await mo(cr, '/'); await toi(pr, '#bang-gia', 100); await cho(600);
-    await (await pr.$('.dvx-the')).hover(); await cho(400);
+    await pr.evaluate(() => document.querySelector('.dvx-banner').scrollIntoView({ behavior: 'instant', block: 'center' })); await cho(500); await pr.evaluate(() => document.querySelector('#bang-gia h2').scrollIntoView({ behavior: 'instant', block: 'start' })); await cho(500); await (await pr.$('.dvx-the')).hover(); await cho(400);
     const rd = await pr.evaluate(() => { const a = document.querySelector('.dvx-the'); return { z: getComputedStyle(a.querySelector('.dvx-zoom')).transform, ar: getComputedStyle(a.querySelector('.dvx-cta-chu .mui')).transform, op: [...document.querySelectorAll('#bang-gia [data-hien]')].map((e) => +getComputedStyle(e).opacity), tf: [...document.querySelectorAll('#bang-gia [data-hien]')].map((e) => getComputedStyle(e).transform) }; });
     ok('Giảm chuyển động: không zoom, mũi tên không nhích, mọi thành phần hiện đủ và không dịch chuyển', /^(none|matrix\(1, 0, 0, 1, 0, 0\))$/.test(rd.z) && /^(none|matrix\(1, 0, 0, 1, 0, 0\))$/.test(rd.ar) && rd.op.every((o) => o === 1) && rd.tf.every((x) => x === 'none'), JSON.stringify(rd));
     await cr.close();

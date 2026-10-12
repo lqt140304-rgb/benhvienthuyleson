@@ -1,7 +1,7 @@
 /* Giao diện mới · Premium Service Showcase (lưới 2×2 + khối CTA tím) ở trang chủ.
    Bố cục viết bằng Tailwind (tiền tố tw:) trong components/moi/DichVuShowcase.astro; tệp này giữ phần tương tác:
    ảnh zoom nhẹ khi rê chuột, thẻ đổi trạng thái tinh tế, mũi tên nhích, viền focus rõ, giảm chuyển động. */
-.dvx-the { transition: border-color var(--t-cham-tay) var(--cong-ra), background-color var(--t-cham-tay) var(--cong-ra); }
+.dvx-the { border-color: var(--ke); background-color: var(--kem); transition: border-color var(--t-cham-tay) var(--cong-ra), background-color var(--t-cham-tay) var(--cong-ra); }
 .dvx-zoom { transition: transform 600ms var(--cong-ra); transform-origin: center; }
 .dvx-cta-chu .mui { transition: transform var(--t-cham-tay) var(--cong-ra); }
 .dvx-the:is(:hover, :focus-visible) { border-color: var(--tim-nhat); background-color: #fff; }

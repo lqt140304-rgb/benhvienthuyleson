@@ -32,7 +32,7 @@ const anhCta = anh('cta-cho');
     <ul class="dvx-ds tw:m-0 tw:grid tw:list-none tw:grid-cols-1 tw:gap-6 tw:p-0 tw:md:grid-cols-2 tw:lg:gap-8">
       {the.map((x, i) => (
         <li data-hien="len" data-tre={i * 100}>
-          <a class="dvx-the tw:group tw:flex tw:h-full tw:flex-col tw:overflow-hidden tw:rounded-(--r-video) tw:border tw:border-(--ke) tw:bg-(--kem) tw:no-underline" href={u(`/bang-gia/#nhom-${x.g!.nhom.id}`)} aria-label={`${x.ten}. ${x.mo} ${x.cta}`}>
+          <a class="dvx-the tw:group tw:flex tw:h-full tw:flex-col tw:overflow-hidden tw:rounded-(--r-video) tw:border tw:no-underline" href={u(`/bang-gia/#nhom-${x.g!.nhom.id}`)} aria-label={`${x.ten}. ${x.mo} ${x.cta}`}>
             <span class="dvx-anh tw:relative tw:block tw:aspect-[16/10] tw:overflow-hidden" style={`background:${x.nen}`}>
               <span class="dvx-zoom tw:absolute tw:inset-0 tw:block">
                 {anh(x.k)
