@@ -100,7 +100,7 @@ Một cuốn sổ khám bệnh được làm cẩn thận: nền giấy kem, ch�
 
 ### Hero (`ls/Hero.astro`) — theo bản vẽ tldraw, dùng video
 
-Khối nội dung bên trái, **khung video** bên phải, mép trên và dưới video mờ dần.
+**Video phủ kín cả khu hero** (chủ dự án yêu cầu 12/10/2026), chữ nằm đè lên bên trái; video **mờ dần sang trái** (mặt nạ ngang: 0–36% trong suốt → rõ hoàn toàn ở 78%), mép trên và dưới cũng mờ dần.
 
 - **Nội dung tinh gọn — chỉ 4 thứ:**
   1. **Tiêu đề** (đã chốt): "Xuất sắc trong chăm sóc – Tận tuỵ từ trái tim." Ngắt 2 dòng tại dấu gạch; nét bút cam vẽ dưới cụm "Tận tuỵ".
@@ -108,15 +108,15 @@ Khối nội dung bên trái, **khung video** bên phải, mép trên và dướ
   3. **Một nút chính** "Đặt lịch khám" + **một liên kết chữ** "Xem bảng giá →".
   4. **Một dòng nhỏ**: chấm "Đang mở cửa · 8:00–21:00" (tính theo giờ VN từ `gio_mo_cua`) + hotline bấm gọi được.
 - **Bỏ khỏi hero:** nhãn nhỏ trên tiêu đề, dải 3 ô thông tin (địa chỉ xuống Liên hệ), thẻ "Chẩn đoán ngay tại viện", hoạ tiết, nút "Hiệu ứng trang trí" (xuống footer).
-- **Bố cục:** nội dung ~45% bề rộng; khung video cao bằng hero (~640px), bo góc 24px, cạnh trái bo cong nối mềm vào khối nội dung.
-- **Mờ dần:** `mask-image` ~12% ở mép trên và dưới khung video.
+- **Bố cục:** khung video là nền của cả khu hero (rộng hết màn hình, cao bằng hero ~640px, không bo góc); nội dung ~45% bề rộng nằm trên; nút tạm dừng ở góc phải dưới.
+- **Mờ dần:** `mask-image` hai lớp (ngang: trái → phải; dọc: ~12% mép trên/dưới), kết hợp `mask-composite: intersect`. Bên trái là nền kem nên chữ luôn dễ đọc.
 - **Video:** tắt tiếng, tự chạy, lặp, `playsinline`, không chữ trên video. 10–15 giây quay thật tại viện. Không dùng video stock.
 - **Dung lượng:** 720p, không kênh tiếng, ≤ 3 MB; `public/video/hero.webm` + `hero.mp4` (H.264) + `hero-poster.jpg`. Điện thoại: bản 480p ≤ 1,5 MB (đã chốt dùng video bản nhẹ).
 - **Tải:** ảnh bìa hiện ngay; video tải **sau khi trang hiện xong**, mờ dần đè lên ảnh bìa 640ms. Tiết kiệm dữ liệu / mạng chậm (`navigator.connection`) → chỉ ảnh bìa.
 - **Dừng:** nút tạm dừng icon ở góc khung; tự dừng khi khuất màn hình hoặc đổi tab; giảm chuyển động / tắt hiệu ứng → ảnh bìa đứng yên.
 - **Chưa có video (hiện tại):** khung nền kem đậm + icon máy quay nét mảnh + "Video thực tế · sắp cập nhật". Bệnh viện sẽ gửi video sau.
 - **Lúc vào trang (~0,9s):** tiêu đề hiện từng dòng bằng mặt nạ (`clip-path`, cách 90ms) → nét bút cam → câu phụ, nút, dòng trạng thái. Khung video mở `mo-man` với ảnh bìa, rồi video chạy.
-- **Điện thoại:** chữ + nút ở trên; video 16:9 bên dưới, bo 16px, mờ mép trên/dưới.
+- **Điện thoại:** chữ + nút ở trên; dải video 16:9 đầy bề ngang bên dưới, mờ dần ở mép trái, trên và dưới.
 - **Nút chính:** rê chuột tím đậm hơn + mũi tên nhích 4px. Liên kết chữ: gạch chân vẽ ra.
 
 ### Giới thiệu (`ls/GioiThieu.astro`)

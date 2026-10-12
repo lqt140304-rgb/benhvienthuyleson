@@ -402,7 +402,7 @@
  {
   "tt": "ĐẠT",
   "ten": "[nhận thật] Đúng 1 yêu cầu, POST, Content-Type text/plain (không gây bước kiểm tra trước), JSON có đủ trường và ma_yeu_cau",
-  "ct": "{\"ten_khach\":\"Khách thử nghiệm\",\"dien_thoai\":\"0912345678\",\"ten_thu_cung\":\"Bé Thử\",\"loai\":\"Chó\",\"loai_khac\":\"\",\"dich_vu\":\"Khám và chẩn đoán\",\"dich_vu_ma\":\"kham-va-chan-doan\",\"ngay\":\"2026-10-15\",\"gio\":\"09:00\",\"ngay_don\":\"\",\"ghi_chu\":\"ghi chú thử\",\"website\":\"\",\"ma_yeu_cau\":\"4680c99b-f712-4923-8988-b444a158c66f\",\"nguon\":\"/benhvienthuyleson/dat-lich/\",\"gui_luc\":\"2026-10-12T17:13:34.325Z\"}"
+  "ct": "{\"ten_khach\":\"Khách thử nghiệm\",\"dien_thoai\":\"0912345678\",\"ten_thu_cung\":\"Bé Thử\",\"loai\":\"Chó\",\"loai_khac\":\"\",\"dich_vu\":\"Khám và chẩn đoán\",\"dich_vu_ma\":\"kham-va-chan-doan\",\"ngay\":\"2026-10-15\",\"gio\":\"09:00\",\"ngay_don\":\"\",\"ghi_chu\":\"ghi chú thử\",\"website\":\"\",\"ma_yeu_cau\":\"12efaa2a-30e3-4c6e-b25a-21b19dbc2c6d\",\"nguon\":\"/benhvienthuyleson/dat-lich/\",\"gui_luc\":\"2026-10-12T17:47:58.294Z\"}"
  },
  {
   "tt": "ĐẠT",
@@ -462,12 +462,12 @@
  {
   "tt": "ĐẠT",
   "ten": "[chống trùng] \"Gửi lại\" nguyên nội dung dùng lại CÙNG mã yêu cầu (máy chủ nhờ đó bỏ qua bản trùng)",
-  "ct": "5205e30d-3660-4b46-8678-61c22804eaba / 5205e30d-3660-4b46-8678-61c22804eaba"
+  "ct": "cc9c2df4-11b6-4242-98a1-6b3ee73003d2 / cc9c2df4-11b6-4242-98a1-6b3ee73003d2"
  },
  {
   "tt": "ĐẠT",
   "ten": "[chống trùng] Đổi nội dung rồi gửi: mã yêu cầu MỚI; máy chủ trả trùng thì vẫn hiện đã nhận",
-  "ct": "5205e30d-3660-4b46-8678-61c22804eaba / a160999a-82a3-4298-a253-c70e25de4555"
+  "ct": "cc9c2df4-11b6-4242-98a1-6b3ee73003d2 / 5d4e98dc-a0e9-4b97-95dc-833ccfae4e15"
  },
  {
   "tt": "ĐẠT",

@@ -1,9 +1,9 @@
 /* Giao diện mới · Hero (kế hoạch mục 4): nội dung ~45% bề rộng bên trái, khung video bên phải (cao ~640px, bo 24px, cạnh trái bo cong, mép trên / dưới mờ dần 12%).
    Lúc vào trang (~0,9s, chỉ khi có lớp co-hieu-ung): tiêu đề hiện từng dòng bằng mặt nạ clip-path (cách 90ms) → nét bút cam → câu phụ, nút, dòng trạng thái;
    khung video mở "mo-man" (hien.js). Không JavaScript: mọi thứ hiện sẵn, nét bút vẽ sẵn. */
-.hero { padding: 24px 0 64px; }
-.hero-in { display: grid; grid-template-columns: minmax(0, 640px) minmax(0, 1fr); gap: var(--b5); align-items: center; }
-.hero-chu { display: flex; flex-direction: column; align-items: flex-start; gap: 28px; padding-bottom: 16px; min-width: 0; }
+.hero { position: relative; isolation: isolate; overflow: hidden; }
+.hero-in { display: grid; grid-template-columns: minmax(0, 640px) minmax(0, 1fr); gap: var(--b5); align-items: center; min-height: min(640px, calc(100dvh - 140px)); padding-block: 24px 64px; }
+.hero-chu { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 28px; padding-bottom: 16px; min-width: 0; }
 .hero h1 { font-size: 56px; line-height: 60px; }
 .hero h1 .dong { display: block; }
 .hero h1 .dong-in { display: inline-block; }
@@ -19,19 +19,22 @@
 .hero-sdt { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin-block: -10px; color: var(--chu); font-weight: 600; font-variant-numeric: tabular-nums; }
 .hero-sdt svg { color: var(--tim); }
 
-/* Khung video */
-.hero-khung { min-width: 0; }
+/* Khung video: phủ kín cả khu hero, mờ dần sang trái (bên trái là nền kem để chữ luôn dễ đọc) */
+.hero-khung { position: absolute; inset: 0; z-index: 0; min-width: 0; }
 .hv {
-  position: relative; height: min(640px, calc(100dvh - 140px)); min-height: 420px; border-radius: 200px var(--r-video) var(--r-video) var(--r-video); overflow: hidden;
+  position: relative; height: 100%; border-radius: 0; overflow: hidden;
   background: repeating-linear-gradient(135deg, transparent 0 11px, var(--ke) 11px 12px), var(--kem-dam);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 12%, #000 88%, transparent 100%); mask-image: linear-gradient(to bottom, transparent 0, #000 12%, #000 88%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0, transparent 36%, #000 78%), linear-gradient(to bottom, transparent 0, #000 12%, #000 88%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to right, transparent 0, transparent 36%, #000 78%), linear-gradient(to bottom, transparent 0, #000 12%, #000 88%, transparent 100%);
+  mask-composite: intersect;
 }
-.hv-cho { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; color: var(--phu); font-size: 15px; font-weight: 500; text-align: center; padding: 0 24px; }
+.hv-cho { position: absolute; inset: 0 0 0 52%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; color: var(--phu); font-size: 15px; font-weight: 500; text-align: center; padding: 0 24px; }
 .hv-cho svg { color: var(--tim); }
 .hv-poster, .hv-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .hv-video { opacity: 0; transition: opacity var(--t-mo-dau) var(--cong-ra); }
 .hv.dang-chay .hv-video { opacity: 1; }
-.hv-dung { position: absolute; right: 20px; bottom: 96px; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border: 1px solid var(--ke-dam); border-radius: 50%; background: rgba(251, 247, 241, .92); color: var(--tim); transition: border-color var(--t-cham-tay) var(--cong-ra); }
+.hv-dung { position: absolute; z-index: 2; right: max(20px, calc((100% - 1200px) / 2 + 20px)); bottom: 40px; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border: 1px solid var(--ke-dam); border-radius: 50%; background: rgba(251, 247, 241, .92); color: var(--tim); transition: border-color var(--t-cham-tay) var(--cong-ra); }
 .hv-dung[hidden] { display: none; }
 .hv-dung:hover { border-color: var(--tim); }
 .hv-dung .hv-ic-phat, .hv-dung[aria-pressed="true"] .hv-ic-dung { display: none; }
@@ -54,14 +57,16 @@
   .hero-phu { font-size: 17px; }
 }
 @media (max-width: 1023px) {
-  .hero { padding: 16px 0 48px; }
-  .hero-in { grid-template-columns: minmax(0, 1fr); gap: var(--b4); }
+  .hero-in { grid-template-columns: minmax(0, 1fr); gap: var(--b4); min-height: 0; padding-block: 16px 0; }
   .hero h1 { font-size: 48px; line-height: 52px; }
-  .hv { height: auto; min-height: 0; aspect-ratio: 16 / 9; border-radius: 80px 16px 16px 16px; }
-  .hv-dung { bottom: 28px; right: 12px; }
+  .hero-khung { position: relative; inset: auto; z-index: 0; margin-inline: calc(50% - 50vw); }
+  .hv { height: auto; aspect-ratio: 16 / 9; }
+  .hv-cho { inset: 0; }
+  .hv, .hv-cho { -webkit-mask-image: none; }
+  .hv { -webkit-mask-image: linear-gradient(to right, transparent 0, #000 22%), linear-gradient(to bottom, transparent 0, #000 18%, #000 82%, transparent 100%); mask-image: linear-gradient(to right, transparent 0, #000 22%), linear-gradient(to bottom, transparent 0, #000 18%, #000 82%, transparent 100%); }
+  .hv-dung { bottom: 20px; right: 16px; }
 }
 @media (max-width: 767px) {
-  .hero { padding: 12px 0 40px; }
   .hero-chu { gap: 20px; padding-bottom: 0; }
   .hero h1 { font-size: 37px; line-height: 41px; }
   .hero-phu { font-size: 17px; }
@@ -71,5 +76,4 @@
   .hero-tt { padding-top: 16px; font-size: 14px; }
   .hero-ngan { display: none; }
   .hero-tt { flex-direction: column; align-items: flex-start; }
-  .hv { border-radius: 16px; }
 }

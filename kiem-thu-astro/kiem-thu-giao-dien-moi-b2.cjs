@@ -166,6 +166,20 @@ function taoVideoThu() {
   // ---------- 5. Hero lúc vào trang ----------
   muc('5. Hero lúc vào trang (~0,9s): tiêu đề hiện từng dòng bằng mặt nạ, nét bút cam, rồi câu phụ / nút / dòng trạng thái; khung video mở mo-man');
   {
+    // Video hero phủ kín cả khu hero và mờ dần sang trái (yêu cầu của chủ nhà)
+    const hinh = (p) => p.evaluate(() => { const h = document.querySelector('.hero').getBoundingClientRect(), k = document.querySelector('.hero-khung').getBoundingClientRect(), v = document.querySelector('.hv'), c = document.querySelector('.hero-chu').getBoundingClientRect(), m = getComputedStyle(v).maskImage; return { h: [h.left, h.width, h.height], k: [k.left, k.width, k.height], c: [c.left, c.right], toi: document.documentElement.scrollWidth <= innerWidth, mask: m, dungTrong: !document.querySelector('.hero-chu').contains(document.querySelector('.hv')) }; });
+    for (const [ten, w, hh] of [['máy tính 1440', 1440, 900], ['máy tính 1100', 1100, 800]]) {
+      const c2 = await ctxMoi({ viewport: { width: w, height: hh } }), p2 = await mo(c2, '/'); await cho(900);
+      const x = await hinh(p2);
+      ok(`Hero (${ten}): khung video phủ kín CẢ khu hero (cùng trái / rộng / cao), không tràn ngang, mờ dần sang trái (mặt nạ ngang), không nằm trong khối chữ`, Math.abs(x.k[0] - x.h[0]) < 1 && Math.abs(x.k[1] - x.h[1]) < 1 && Math.abs(x.k[2] - x.h[2]) < 1 && x.k[1] >= w - 20 && x.toi && /linear-gradient\(to right|linear-gradient\(90deg|right/.test(x.mask) && x.dungTrong, JSON.stringify(x));
+      await c2.close();
+    }
+    const c3 = await ctxMoi({ viewport: { width: 390, height: 844 } }), p3 = await mo(c3, '/'); await cho(900);
+    const y = await p3.evaluate(() => ({ k: document.querySelector('.hero-khung').getBoundingClientRect().toJSON(), c: document.querySelector('.hero-chu').getBoundingClientRect().toJSON(), toi: document.documentElement.scrollWidth <= innerWidth, w: innerWidth }));
+    ok('Hero (điện thoại 390): chữ ở trên, dải video đầy bề ngang ở dưới (không tràn ngang trang)', y.k.top >= y.c.bottom - 1 && Math.abs(y.k.width - y.w) < 2 && y.toi, JSON.stringify(y));
+    await c3.close();
+  }
+  {
     const ctx = await ctxMoi({ viewport: { width: 1440, height: 900 } }), p = await mo(ctx, '/');
     const an = await p.evaluate(() => document.getAnimations().filter((a) => a.animationName && /^hero-/.test(a.animationName)).map((a) => ({ ten: a.animationName, tre: a.effect.getTiming().delay, dai: a.effect.getTiming().duration, het: a.effect.getComputedTiming().endTime })));
     const het = Math.max(...an.map((x) => x.het)), theoTen = (t) => an.filter((x) => x.ten === t);

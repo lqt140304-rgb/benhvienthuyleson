@@ -1,6 +1,6 @@
 ---
 // Hero trang chủ (giao diện mới), theo bản vẽ đã duyệt: nội dung bên trái chỉ 4 thứ (tiêu đề, một câu phụ, một nút + một liên kết chữ, một dòng trạng thái),
-// khung video bên phải. Chưa có video thì hiện khung chờ "Video thực tế · sắp cập nhật".
+// video phủ kín cả khu hero, mờ dần sang trái. Chưa có video thì hiện khung chờ "Video thực tế · sắp cập nhật".
 // Bệnh viện gửi video: chỉ cần chép vào public/video/ (xem public/video/README.md), không phải sửa mã. Ảnh bìa hiện ngay; video tải sau khi trang hiện xong
 // (src/scripts/hieu-ung/video-hero.js).
 import { existsSync } from 'node:fs';
@@ -37,10 +37,6 @@ const gioNgan = tt.gio_mo_cua.replace(/\s*[–-]\s*/, '–');
           <>
             {v.poster && <img class="hv-poster" src={v.poster} alt="" width="960" height="640" fetchpriority="high">}
             <video class="hv-video" muted loop playsinline preload="none" tabindex="-1" aria-hidden="true" poster={v.poster || undefined} data-webm={v.webm || undefined} data-mp4={v.mp4 || undefined} data-webm-nho={v.webmNho || undefined} data-mp4-nho={v.mp4Nho || undefined}></video>
-            <button type="button" class="hv-dung" aria-pressed="false" aria-label="Tạm dừng video" hidden>
-              <svg class="hv-ic-dung" aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg>
-              <svg class="hv-ic-phat" aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10-6.5a1 1 0 0 0 0-1.72l-10-6.5A1 1 0 0 0 8 5.5z"></path></svg>
-            </button>
           </>
         ) : (
           <div class="hv-cho">
@@ -51,4 +47,10 @@ const gioNgan = tt.gio_mo_cua.replace(/\s*[–-]\s*/, '–');
       </figure>
     </div>
   </div>
+  {coVideo && (
+    <button type="button" class="hv-dung" aria-pressed="false" aria-label="Tạm dừng video" hidden>
+      <svg class="hv-ic-dung" aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg>
+      <svg class="hv-ic-phat" aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10-6.5a1 1 0 0 0 0-1.72l-10-6.5A1 1 0 0 0 8 5.5z"></path></svg>
+    </button>
+  )}
 </section>

@@ -21,7 +21,8 @@
   // html.co-hieu-ung chỉ được gắn (ở <head>) khi có JS, có IntersectionObserver và không bật giảm chuyển động.
   // Không có lớp này thì mọi nội dung hiện sẵn. Bảng giá, form, lỗi không bao giờ có data-hien.
   // Giao diện mới (html[data-giao-dien="moi"]): phần hiện khi cuộn do src/scripts/hieu-ung/hien.js lo, khối này không chạy.
-  var goc = document.documentElement, laGiaoDienMoi = goc.getAttribute('data-giao-dien') === 'moi', coHieuUng = goc.classList.contains('co-hieu-ung') && !laGiaoDienMoi;
+  // (bản xem thử bỏ thẻ <html> / <body>, nên giao diện mới còn được nhận biết bằng lớp nền header .dau-nen)
+  var goc = document.documentElement, laGiaoDienMoi = goc.getAttribute('data-giao-dien') === 'moi' || !!document.querySelector('.dau-nen'), coHieuUng = goc.classList.contains('co-hieu-ung') && !laGiaoDienMoi;
   function hienNgay(ds) {
     Array.prototype.forEach.call(ds, function (el) {
       if (el.classList.contains('da-hien')) return;

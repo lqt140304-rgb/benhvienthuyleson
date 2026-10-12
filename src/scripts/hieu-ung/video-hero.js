@@ -64,7 +64,7 @@ export function khoiDong() {
   const moi = document.querySelector('[data-video-hero]');
   if (!moi || dangKhoiDong && moi === khung) return;
   dangKhoiDong = true;
-  khung = moi; video = khung.querySelector('.hv-video'); nut = khung.querySelector('.hv-dung');
+  khung = moi; video = khung.querySelector('.hv-video'); nut = khung.closest('.hero').querySelector('.hv-dung');
   if (!video) return;
   if (nut) nut.addEventListener('click', () => {
     if (video.paused) { nguoiDung = false; chay(); } else { nguoiDung = true; video.pause(); }

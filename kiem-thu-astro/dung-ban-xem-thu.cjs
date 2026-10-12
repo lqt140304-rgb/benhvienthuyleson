@@ -1,7 +1,7 @@
 // Dựng BẢN XEM THỬ từ bản dựng Astro (thư mục dist) để đưa lên một địa chỉ xem thử KHÔNG nằm dưới /benhvienthuyleson/ (ví dụ trang riêng tư trên claude.ai).
 // Cấu hình thật của web KHÔNG đổi (astro.config.mjs vẫn site=github.io, base=/benhvienthuyleson cho GitHub Pages). Bản xem thử chỉ là bản sao đã đổi MỌI đường dẫn nội bộ
 // "/benhvienthuyleson/…" thành đường dẫn TƯƠNG ĐỐI (./, ../), liên kết trang trỏ thẳng tới tệp index.html, nên chạy đúng dù đặt ở thư mục nào.
-// Dùng: node kiem-thu-astro/dung-ban-xem-thu.cjs [--dist=dist] [--ra=xem-thu]
+// Dùng: node kiem-thu-astro/dung-ban-xem-thu.cjs [--dist=dist] [--ra=xem-thu] [--tieu-de="Website Lê Sơn"]  (tên trang chính = tên artifact trên claude.ai)
 //   → <ra>/index.html (bản "mảnh" để bọc khung: trang chính của artifact), <ra>/home/index.html (cùng trang chủ, tài liệu đầy đủ), các trang con, tep/ (= _astro/ của bản dựng), img/
 //   → <ra>/danh-sach-tep.json  { "đường/dẫn/đăng": "đường/dẫn/nguồn" } cho tham số `files` của công cụ Artifact
 // Chế độ biểu mẫu không đổi: bản xem thử lấy đúng chế độ của dist (mặc định giả lập: không gửi dữ liệu).
@@ -39,7 +39,7 @@ const danhSach = {}; // đăng → nguồn
 for (const t of trangHtml) {
   let h = fs.readFileSync(path.join(DIST, t.nguon), 'utf8');
   h = doi(h, path.posix.dirname(t.dich));
-  if (t.manh) h = manh(dau(h)).replace(/<title>[^<]*<\/title>/, '<title>Website Lê Sơn</title>'); else h = dau(h);
+  if (t.manh) h = manh(dau(h)).replace(/<title>[^<]*<\/title>/, '<title>' + arg('tieu-de', 'Website Lê Sơn') + '</title>'); else h = dau(h);
   const ra = path.join(RA, t.dich); fs.mkdirSync(path.dirname(ra), { recursive: true }); fs.writeFileSync(ra, h); danhSach[t.dich] = path.relative(GOC, ra);
 }
 // Tệp tĩnh: _astro/* (đăng là tep/), img/*, fonts/* (phông tự chứa của giao diện mới; thư mục không có thì bỏ qua)
