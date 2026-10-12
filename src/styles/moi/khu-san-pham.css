@@ -1,0 +1,35 @@
+/* Giao diện mới · Sản phẩm nổi bật (kế hoạch mục 5): cột trái 30% dính + cột phải 70% dải thẻ cuộn ngang bằng tay (scroll-snap), thẻ ngoài cùng bị cắt để báo còn cuộn được.
+   KHÔNG tự trượt, KHÔNG chiếm cuộn trang. Rê chuột: ảnh phóng 1.02. Chưa có JavaScript: nút Trước / Sau và vạch tiến độ ẩn, dải vẫn cuộn được bằng tay / phím. */
+.sp2-luoi { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 7fr); gap: 48px var(--cot-gian); align-items: start; }
+.sp2-trai { position: sticky; top: calc(var(--cao-dau-cuon) + 32px); display: flex; flex-direction: column; align-items: flex-start; gap: 20px; }
+.sp2-nhan { display: inline-flex; align-items: center; height: 32px; padding: 0 14px; border: 1px solid var(--ngoc); border-radius: 999px; color: var(--ngoc); font-size: 14px; font-weight: 600; }
+.sp2-ghi { display: flex; gap: 8px; font-size: 14px; line-height: 1.55; color: var(--phu); }
+.sp2-ghi svg { flex: none; margin-top: 3px; color: var(--ngoc); }
+.sp2-dk { display: flex; flex-direction: column; gap: 20px; width: 100%; margin-top: 12px; }
+.sp2-dk[hidden] { display: none; }
+.sp2-nut { display: flex; gap: 12px; }
+.sp2-btn { display: grid; place-items: center; width: 52px; height: 52px; padding: 0; border: 1px solid var(--ke-dam); border-radius: var(--r-nut); background: transparent; color: var(--tim); transition: border-color var(--t-cham-tay) var(--cong-ra), opacity var(--t-cham-tay) var(--cong-ra); }
+.sp2-btn:hover { border-color: var(--tim); }
+.sp2-btn[aria-disabled="true"] { opacity: .35; cursor: default; }
+.sp2-btn[aria-disabled="true"]:hover { border-color: var(--ke-dam); }
+.sp2-vach { position: relative; width: 100%; max-width: 300px; height: 2px; background: var(--ke); }
+.sp2-vach i { position: absolute; left: 0; top: 0; width: 100%; height: 2px; background: var(--tim); transform-origin: 0 0; transform: translateX(calc(var(--p0, 0) * 100%)) scaleX(var(--pw, .33)); transition: transform var(--t-trang) var(--cong-ra); }
+.sp2-dai { display: flex; gap: 24px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; outline-offset: 6px; }
+.sp2-dai::-webkit-scrollbar { display: none; }
+.sp2-the { flex: 0 0 min(320px, 78%); scroll-snap-align: start; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+.sp2-the h3 { margin-top: 10px; font-family: var(--f-tieu-de); font-size: 26px; font-weight: 500; line-height: 1.2; color: var(--chu); }
+.sp2-the p { font-size: 15px; line-height: 1.55; color: var(--phu); }
+.sp2-the .lien-ket { margin-top: 4px; }
+.sp2-anh { position: relative; width: 100%; margin: 0; aspect-ratio: 4 / 5; border-radius: var(--r-anh); overflow: hidden; background: var(--kem-dam); }
+.sp2-anh img { width: 100%; height: 100%; object-fit: cover; }
+.sp2-anh figcaption { position: absolute; top: 12px; left: 12px; margin: 0; padding: 4px 12px; border: 1px solid var(--ke); border-radius: 999px; background: rgba(251, 247, 241, .92); font-size: 13px; color: var(--phu); }
+@media (hover: hover) { .sp2-anh img { transition: transform 700ms var(--cong-ra); } .sp2-the:hover .sp2-anh img { transform: scale(1.02); } }
+@media (max-width: 1023px) {
+  .sp2-luoi { grid-template-columns: minmax(0, 1fr); }
+  .sp2-trai { position: static; }
+}
+@media (max-width: 767px) {
+  .sp2-the { flex-basis: 78%; }
+  .sp2-the h3 { font-size: 24px; }
+  .sp2-trai .nut { width: 100%; }
+}

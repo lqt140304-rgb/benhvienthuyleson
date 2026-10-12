@@ -36,6 +36,8 @@ p { text-wrap: pretty; }
 .so, .gia, td { font-variant-numeric: tabular-nums; }
 .nhan { margin-bottom: 12px; font-size: 13px; font-weight: 600; color: var(--ngoc); letter-spacing: .08em; text-transform: uppercase; }
 .dan { max-width: 36em; font-size: 20px; line-height: 1.55; color: var(--phu); }
+.dan-nho { max-width: 38em; font-size: 17px; line-height: 1.6; color: var(--phu); }
+.dau-khoi .dan-nho { margin-top: 16px; }
 .chu-thich { font-size: 14px; color: var(--phu); }
 /* Số thứ tự 01 02 03 thay icon tròn */
 .stt { font-family: var(--f-tieu-de); font-weight: 400; font-size: 20px; color: var(--phu); font-variant-numeric: tabular-nums lining-nums; }
@@ -110,7 +112,15 @@ figcaption { margin-top: 10px; font-size: 14px; color: var(--phu); }
 .co-hieu-ung [data-hien="ve"] .net { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset var(--t-mo-dau) var(--cong-ra) var(--tre, 0ms); }
 .co-hieu-ung [data-hien="ve"].da-hien .net { stroke-dashoffset: 0; }
 .co-hieu-ung [data-hien].hien-ngay, .co-hieu-ung [data-hien].hien-ngay > *, .co-hieu-ung [data-hien].hien-ngay .net { transition: none; }
-@media print { .co-hieu-ung [data-hien], .co-hieu-ung [data-hien="mo-man"] > * { opacity: 1 !important; transform: none !important; clip-path: none !important; } .co-hieu-ung [data-hien] .net { stroke-dashoffset: 0 !important; } }
+/* Kiểu "ke" (hàng danh mục): đường kẻ 1px ở chân hàng vẽ từ trái (scaleX, 360ms), chữ mờ hiện sau 80ms; hàng nối tiếp 60ms (hien.js). Dùng cho li (position: relative) có ::after là đường kẻ. */
+[data-hien="ke"]::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--ke); transform-origin: 0 50%; pointer-events: none; }
+.co-hieu-ung [data-hien="ke"]:not(.da-hien) { opacity: 1; }
+.co-hieu-ung [data-hien="ke"]::after { transition: transform 360ms var(--cong-ra) var(--tre, 0ms); }
+.co-hieu-ung [data-hien="ke"]:not(.da-hien)::after { transform: scaleX(0); }
+.co-hieu-ung [data-hien="ke"] > * { transition: opacity var(--t-hien) var(--cong-ra) calc(var(--tre, 0ms) + 80ms); }
+.co-hieu-ung [data-hien="ke"]:not(.da-hien) > * { opacity: 0; }
+.co-hieu-ung [data-hien="ke"].hien-ngay::after, .co-hieu-ung [data-hien="ke"].hien-ngay > * { transition: none; }
+@media print { .co-hieu-ung [data-hien="ke"]::after { transform: none !important; } .co-hieu-ung [data-hien="ke"] > * { opacity: 1 !important; } .co-hieu-ung [data-hien], .co-hieu-ung [data-hien="mo-man"] > * { opacity: 1 !important; transform: none !important; clip-path: none !important; } .co-hieu-ung [data-hien] .net { stroke-dashoffset: 0 !important; } }
 
 /* ---------- Nét bút cam vẽ tay (components/moi/NetBut.astro) ---------- */
 .net-but { color: var(--cam); overflow: visible; }

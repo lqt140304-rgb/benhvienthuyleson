@@ -1,0 +1,11 @@
+/* Giao diện mới · Đầu các trang con (components/ls/TrangDau.astro và đầu trang Bảng giá): đường dẫn, nhãn, tiêu đề, mô tả. Các trang con còn lại làm ở bước 4–6. */
+.trang-gia-dau { padding: 24px 0 8px; }
+.duong-dan { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 24px; font-size: 14px; color: var(--phu); }
+.duong-dan a { color: var(--phu); }
+.duong-dan a:is(:hover, :focus-visible) { color: var(--tim); text-decoration: underline; text-underline-offset: 3px; }
+.duong-dan [aria-hidden="true"] { color: var(--ke-dam); }
+.duong-dan [aria-current] { color: var(--chu); }
+.trang-gia-dau h1 { margin-top: 4px; }
+.dau-khoi.hang { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 48px; }
+.dau-khoi.hang .dan-nho { margin-top: 12px; }
+.trang-gia-dau .dau-khoi { margin-bottom: 0; }

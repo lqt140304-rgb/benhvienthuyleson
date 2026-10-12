@@ -13,6 +13,7 @@
   }
   .co-hieu-ung [data-hien], .co-hieu-ung [data-hien="mo-man"] > * { transform: none !important; clip-path: none !important; }
   .co-hieu-ung [data-hien] .net { stroke-dashoffset: 0 !important; }
+  .sp2-anh img { transform: none !important; }
 }
 
 html.tat-trang-tri [data-trang-tri], html.tat-trang-tri [data-trang-tri] * { animation-play-state: paused !important; }

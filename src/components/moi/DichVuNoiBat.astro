@@ -1,0 +1,45 @@
+---
+// Dịch vụ nổi bật (giao diện mới): danh mục kẻ hàng, KHÔNG đánh số, không thẻ bo tròn / bóng. Mỗi hàng: icon dịch vụ nét mảnh · tên (Newsreader) · một dòng mô tả · giá hoặc lời dẫn · mũi tên.
+// Hàng dịch vụ và chữ giá lấy từ dữ liệu như bản R3.6 (lib/ls.ts chonTrangChu): không tự đặt giá.
+import Icon from '../Icon.astro';
+import IconDv from '../ls/IconDv.astro';
+import Mui from './Mui.astro';
+import { u } from '../../lib/site';
+import { ICON_DV } from '../../lib/icon-dv.mjs';
+import { dichVuLS, chonTrangChu, cauDau } from '../../lib/ls';
+const { kham, nho, conLai, giaThe } = chonTrangChu(dichVuLS());
+const goiTen = conLai.map((d) => d.ten).join(', ');
+const hang = [kham && { d: kham, gia: 'Phí báo sau khám' }, ...nho.map((d) => ({ d, gia: giaThe(d) }))].filter(Boolean) as { d: (typeof nho)[number]; gia: string }[];
+const coIcon = (i: string) => !!(ICON_DV as Record<string, string>)[i];
+---
+<section class="khoi dv" id="dich-vu">
+  <div class="khung">
+    <div class="lech">
+      <div class="dau-khoi">
+        <p class="nhan">Dịch vụ</p>
+        <h2>Dịch vụ nổi bật</h2>
+        <p class="dan-nho">Giá tham khảo theo bảng giá hiện hành của bệnh viện.</p>
+      </div>
+      <ul class="dv-ds">
+        {hang.map(({ d, gia }) => (
+          <li data-hien="ke">
+            <a class="dv-hang" href={u(`/bang-gia/#nhom-${d.id}`)}>
+              <span class="dv-ic" aria-hidden="true">{coIcon(d.icon) ? <IconDv icon={d.icon} size={40} /> : <Icon name={d.icon} size={28} />}</span>
+              <span class="dv-chu"><b class="dv-ten">{d.ten}</b><span class="dv-mo">{cauDau(d.mo_ta)}</span></span>
+              <span class="dv-gia">{gia}</span>
+              <Mui />
+            </a>
+          </li>
+        ))}
+        <li data-hien="ke">
+          <a class="dv-hang dv-tat-ca" href={u('/dich-vu/')}>
+            <span class="dv-ic" aria-hidden="true"></span>
+            <span class="dv-chu"><b class="dv-ten">Xem tất cả dịch vụ</b><span class="dv-mo">{goiTen ? `${goiTen} cùng bảng giá đầy đủ` : 'Bảng giá đầy đủ'}</span></span>
+            <span class="dv-gia"></span>
+            <Mui />
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>

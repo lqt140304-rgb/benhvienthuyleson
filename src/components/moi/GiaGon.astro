@@ -1,0 +1,39 @@
+---
+// Tóm tắt giá ở trang chủ (giao diện mới): năm nhóm thành năm dòng kiểu thực đơn "tên nhóm ········ giá", chú thích nhỏ dưới tên. Không icon tròn, không viền thẻ.
+// Giá lấy NGUYÊN từ dữ liệu (lib/ls.ts chonTrangChu → giaTuHoa): nhóm chưa có giá chung thì ghi "Xem giá →", không tự đặt giá.
+import Mui from './Mui.astro';
+import { u } from '../../lib/site';
+import { dichVuLS, chonTrangChu } from '../../lib/ls';
+const { giaGon } = chonTrangChu(dichVuLS());
+---
+<section class="khoi gg" id="bang-gia">
+  <div class="khung">
+    <div class="lech">
+      <div class="dau-khoi">
+        <p class="nhan">Bảng giá</p>
+        <h2>Bảng giá tham khảo</h2>
+        <p class="dan-nho">Năm nhóm dịch vụ chính. Giá chi tiết theo cân nặng, loài và hạng mục có ở trang Bảng giá.</p>
+      </div>
+      <div class="gg-bai">
+        <ul class="gg-ds">
+          {giaGon.map((g) => (
+            <li data-hien="ke">
+              <a class="gg-hang" href={u(`/bang-gia/#nhom-${g.nhom.id}`)} aria-label={`${g.ten}${g.gia ? ', ' + g.gia : ''}: ${g.dk}. ${g.cta}`}>
+                <b class="gg-ten">{g.ten}</b>
+                <span class="gg-cham" aria-hidden="true"></span>
+                {g.gia ? <b class="gg-gia">{g.gia}</b> : <span class="gg-xem">{g.cta}</span>}
+                <Mui size={16} />
+                <small class="gg-dk">{g.dk}</small>
+              </a>
+              {g.phu && <a class="lien-ket gg-phu" href={u(`/bang-gia/#nhom-${g.phu.nhom.id}`)}>{g.phu.chu}<Mui size={16} /></a>}
+            </li>
+          ))}
+        </ul>
+        <div class="gg-cuoi">
+          <p><svg aria-hidden="true" focusable="false" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8h.01"></path></svg><span>Chi phí thực tế phụ thuộc cân nặng, tình trạng của bé và chỉ định của bác sĩ. Chưa gồm thuốc, vật tư phát sinh.</span></p>
+          <a class="nut nut-chinh" href={u('/bang-gia/')}>Xem bảng giá đầy đủ<Mui /></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

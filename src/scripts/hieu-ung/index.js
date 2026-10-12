@@ -5,12 +5,16 @@ import { khoiDong as hienKhiCuon } from './hien.js';
 import { khoiDong as dauTrang } from './header.js';
 import { khoiDong as moCua } from './mo-cua.js';
 import { khoiDong as videoHero } from './video-hero.js';
+import { khoiDong as tabGia } from './tab-gia.js';
+import { khoiDong as daiSanPham } from './dai-san-pham.js';
 
 function khoiDong() {
   hienKhiCuon();
   dauTrang();
   moCua();
   videoHero();
+  tabGia();
+  daiSanPham();
 }
 
 khoiDong();

@@ -1,0 +1,41 @@
+---
+// Sản phẩm nổi bật (giao diện mới): cột trái 30% dính (nhãn, tiêu đề, ghi chú, nút liên hệ, nút Trước / Sau, vạch tiến độ), cột phải 70% là dải thẻ cuộn ngang bằng tay
+// (scroll-snap, thẻ ngoài cùng bị cắt để báo còn cuộn được). KHÔNG tự trượt, KHÔNG chiếm cuộn trang. Không dùng lớp .sp-* của giao diện cũ (ui.js tự gắn vào chúng).
+// ẢNH MINH HOẠ, chưa có nhãn hiệu, giá, tồn kho, công dụng hay số lượng bán. Đổi tiêu đề thành "Sản phẩm bán chạy" chỉ khi bệnh viện xác nhận danh sách thật.
+import Mui from './Mui.astro';
+import { u } from '../../lib/site';
+const sp = [
+  { tieu_de: 'Thức ăn cho thú cưng', mo_ta: 'Khám phá sản phẩm phù hợp cho bé.', tep: 'sp-thuc-an', alt: 'Ảnh minh hoạ: túi thức ăn và bát trên bệ trưng bày' },
+  { tieu_de: 'Sản phẩm chăm sóc', mo_ta: 'Gợi ý sản phẩm chăm sóc theo nhu cầu của bé.', tep: 'sp-cham-soc', alt: 'Ảnh minh hoạ: chai chăm sóc, khăn và lược' },
+  { tieu_de: 'Đồ chơi cho thú cưng', mo_ta: 'Gợi ý đồ chơi phù hợp với từng bé.', tep: 'sp-do-choi', alt: 'Ảnh minh hoạ: dây thừng và khúc xương đồ chơi' },
+];
+const anh = (t: string) => u(`/img/san-pham-minh-hoa/${t}.jpg`);
+const mui = '<svg class="mui" aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>';
+---
+<section class="khoi sp2" id="sp-noi-bat" aria-labelledby="sp2-tieu-de">
+  <div class="khung sp2-luoi">
+    <div class="sp2-trai">
+      <p class="sp2-nhan">Dành cho thú cưng</p>
+      <h2 id="sp2-tieu-de">Sản phẩm nổi bật</h2>
+      <p class="sp2-ghi"><svg aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8h.01"></path></svg>Mẫu minh hoạ · chờ bệnh viện xác nhận danh sách sản phẩm</p>
+      <a class="nut nut-chinh" href={u('/lien-he/')}>Liên hệ tư vấn<Mui /></a>
+      <div class="sp2-dk" data-sp2-dk hidden>
+        <div class="sp2-nut">
+          <button type="button" class="sp2-btn" data-sp2-truoc aria-label="Sản phẩm trước"><svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg></button>
+          <button type="button" class="sp2-btn" data-sp2-sau aria-label="Sản phẩm sau"><svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
+        </div>
+        <div class="sp2-vach" aria-hidden="true"><i data-sp2-vach></i></div>
+      </div>
+    </div>
+    <div class="sp2-dai" tabindex="0" role="region" aria-label="Danh sách sản phẩm, cuộn ngang để xem thêm" data-sp2-dai>
+      {sp.map((p) => (
+        <article class="sp2-the">
+          <figure class="sp2-anh"><img src={anh(p.tep)} alt={p.alt} width="960" height="600" loading="lazy" decoding="async"><figcaption>Ảnh minh hoạ</figcaption></figure>
+          <h3>{p.tieu_de}</h3>
+          <p>{p.mo_ta}</p>
+          <a class="lien-ket" href={u('/lien-he/')}>Liên hệ tư vấn<Mui size={16} /></a>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

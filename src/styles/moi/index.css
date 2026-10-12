@@ -1,9 +1,14 @@
 /* Giao diện mới "Sổ khám" (GIAO_DIEN = 'moi' trong src/lib/site.ts). Không nạp chung với le-son.css.
-   Thứ tự: phông → token → nền dùng chung → (các khu: khu-*.css; bước 2: đầu trang, hero, giới thiệu) → giảm chuyển động (luôn cuối). */
+   Thứ tự: phông → token → nền dùng chung → (các khu: khu-*.css; bước 2: đầu trang, hero, giới thiệu; bước 3: dịch vụ, sản phẩm, giá, trang Bảng giá) → giảm chuyển động (luôn cuối). */
 @import './phong.css';
 @import './token.css';
 @import './nen.css';
 @import './khu-dau.css';
 @import './khu-hero.css';
 @import './khu-gioi-thieu.css';
+@import './icon-dv.css';
+@import './khu-dich-vu.css';
+@import './khu-san-pham.css';
+@import './khu-gia.css';
+@import './trang-con.css';
 @import './giam-chuyen-dong.css';

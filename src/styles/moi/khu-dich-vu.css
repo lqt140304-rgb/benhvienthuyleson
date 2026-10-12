@@ -1,0 +1,32 @@
+/* Giao diện mới · Dịch vụ nổi bật (kế hoạch mục 5): danh mục kẻ hàng, không đánh số. Mỗi hàng: icon · tên Newsreader · mô tả một dòng · giá / lời dẫn · mũi tên.
+   Hiện khi cuộn: đường kẻ vẽ từ trái, chữ mờ hiện sau 80ms, hàng nối tiếp 60ms (data-hien="ke"). Rê chuột: nền kem đậm trượt từ trái 160ms, tên → tím, mũi tên nhích 4px, icon chạy một lần. */
+.dv-ds, .gg-ds { border-top: 1px solid var(--tim); }
+.dv-ds > li, .gg-ds > li { position: relative; }
+.dv-ds > li::after, .gg-ds > li::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--ke); pointer-events: none; }
+.dv-hang, .gg-hang { position: relative; isolation: isolate; overflow: hidden; display: grid; align-items: center; color: var(--chu); }
+.dv-hang::before, .gg-hang::before { content: ''; position: absolute; inset: 0; z-index: -1; background: var(--kem-dam); transform: scaleX(0); transform-origin: 0 50%; transition: transform var(--t-cham-tay) var(--cong-ra); }
+.dv-hang:is(:hover, :focus-visible)::before, .gg-hang:is(:hover, :focus-visible)::before { transform: scaleX(1); }
+.dv-hang:focus-visible, .gg-hang:focus-visible { outline-offset: -3px; }
+.dv-hang { grid-template-columns: 40px minmax(0, 1fr) minmax(0, auto) 20px; column-gap: 20px; min-height: 104px; padding: 22px 12px; }
+.dv-ic { display: grid; place-items: center; width: 40px; height: 40px; color: var(--tim); }
+.dv-ic .ic48 { width: 40px; height: 40px; }
+.dv-ten { display: block; font-family: var(--f-tieu-de); font-size: 26px; font-weight: 500; line-height: 1.2; transition: color var(--t-cham-tay) var(--cong-ra); }
+.dv-mo { display: block; margin-top: 6px; max-width: 36em; font-size: 15px; line-height: 1.5; color: var(--phu); }
+.dv-gia { max-width: 14em; font-size: 17px; font-weight: 500; text-align: right; font-variant-numeric: tabular-nums; }
+.dv-hang .mui { color: var(--phu); }
+.dv-hang:is(:hover, :focus-visible) .dv-ten { color: var(--tim); }
+.dv-hang:is(:hover, :focus-visible) .mui, .gg-hang:is(:hover, :focus-visible) .mui { color: var(--tim); transform: translateX(4px); } /* mũi tên nhích 4px */
+.dv-tat-ca .dv-ten { color: var(--tim); }
+@media (max-width: 1023px) { .dv-hang { grid-template-columns: 40px minmax(0, 1fr) minmax(0, auto) 20px; column-gap: 16px; } }
+@media (max-width: 767px) {
+  .dv-hang { grid-template-columns: 36px minmax(0, 1fr) 20px; grid-template-areas: "ic chu mui" "ic gia mui"; column-gap: 14px; row-gap: 6px; min-height: 0; padding: 18px 8px 18px 0; }
+  .dv-ic, .dv-ic .ic48 { width: 36px; height: 36px; }
+  .dv-ic { grid-area: ic; align-self: start; }
+  .dv-chu { grid-area: chu; }
+  .dv-gia { grid-area: gia; max-width: none; text-align: left; font-size: 15px; font-weight: 600; color: var(--tim); }
+  .dv-gia:empty { display: none; }
+  .dv-hang .mui { grid-area: mui; }
+  .dv-ten { font-size: 22px; }
+  .dv-hang::before { transition-duration: 120ms; }
+  .dv-hang:active::before { transform: scaleX(1); }
+}
