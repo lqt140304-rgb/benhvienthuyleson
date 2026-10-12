@@ -72,7 +72,7 @@ function taoVideoThu() {
   {
     const h = fs.readFileSync(path.join(GOC, 'dist-moi/index.html'), 'utf8');
     const lay = (re) => (re.exec(h) || [''])[0];
-    const header = lay(/<header class="dau"[\s\S]*?<\/header>/), hero = lay(/<section class="hero"[\s\S]*?<\/section>/), gt = lay(/<section class="khoi gt"[\s\S]*?<\/section>/);
+    const header = lay(/<header class="dau"[\s\S]*?<\/header>/), hero = lay(/<section class="hero"[\s\S]*?<\/section>/), gt = lay(/<section class="khoi" id="gioi-thieu"[\s\S]*?<\/section>/);
     const chu = (x) => x.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>|<svg[\s\S]*?<\/svg>/g, ' ').replace(/<[^>]+>/g, ' ').replace(/&#38;|&amp;/g, '&').replace(/\s+/g, ' ').trim();
     const links = [...(/<ul class="menu-ds">[\s\S]*?<\/ul>/.exec(header) || [''])[0].matchAll(/<a href="([^"]*)"[^>]*>([^<]+)<\/a>/g)].map((m) => [m[2], m[1]]);
     ok('Header: đúng 8 mục menu theo thứ tự đã duyệt, mục Trang chủ có aria-current="page", logo có nhãn, nút "Đặt lịch khám", nút Menu có aria-expanded / aria-controls, giữ id #dau #menu #nut-menu cho ui.js', links.map((l) => l[0]).join('|') === MENU.join('|') && /<a href="#top" aria-current="page">Trang chủ/.test(header) && /aria-label="Bệnh viện thú y Lê Sơn – về đầu trang"/.test(header) && /nut-dau" href="[^"]*\/dat-lich\/">Đặt lịch khám/.test(header) && /id="nut-menu" aria-expanded="false" aria-controls="menu"/.test(header) && /id="dau"/.test(header) && /id="menu"/.test(header), JSON.stringify(links));
@@ -81,7 +81,7 @@ function taoVideoThu() {
     ok(`Hero chỉ có 4 thứ: tiêu đề · một câu phụ (${phu.split(/\s+/).length} từ, tối đa 12, lấy từ địa chỉ thật trong dữ liệu) · MỘT nút chính + MỘT liên kết chữ · MỘT dòng trạng thái (giờ mở cửa + hotline); không còn nhãn, dải 3 ô, thẻ "Chẩn đoán", hoạ tiết, nút "Hiệu ứng trang trí"`,
       phu.split(/\s+/).length <= 12 && phu.includes(tt.dia_chi.split(',').slice(0, 2).join(',').trim()) && (hero.match(/class="nut nut-chinh/g) || []).length === 1 && (hero.match(/class="lien-ket/g) || []).length === 1 && /class="hero-tt"/.test(hero) && !/class="nhan"|dai-tt|hero-ghi|hoa-tiet|data-nut-trang-tri|Chẩn đoán ngay/.test(hero), phu);
     ok('Hero: chưa có video thì hiện khung chờ "Video thực tế · sắp cập nhật", không có thẻ <video>, không có nút tạm dừng', /Video thực tế · sắp cập nhật/.test(hero) && !/<video|hv-dung/.test(hero) && /hv hv-chua/.test(hero), '');
-    ok('Giới thiệu: tiêu đề + nhãn, văn bản lấy từ dữ liệu, ba điểm KHÔNG đánh số (không <ol>, không "01/02/03"), hai khung chờ ảnh (dọc + ngang) kèm chú thích "Ảnh thực tế · sắp cập nhật"', /Giới thiệu Bệnh viện thú y Lê Sơn/.test(chu(gt)) && !/<ol|>0[1-3]</.test(gt) && !/\b0[1-3]\b/.test(chu(gt)) && (gt.match(/class="khung-cho"/g) || []).length === 2 && (gt.match(/Ảnh thực tế · sắp cập nhật/g) || []).length === 2 && /gt-doc/.test(gt) && /gt-ngang/.test(gt), chu(gt).slice(0, 200));
+    ok('Giới thiệu + Dịch vụ nổi bật (gộp): tiêu đề "Giới thiệu Bệnh viện thú y Lê Sơn", ba điểm KHÔNG đánh số (không <ol>, không "01/02/03"), một khung chờ ảnh "Ảnh thực tế · sắp cập nhật", dùng lớp Tailwind tw:', /Giới thiệu Bệnh viện thú y Lê Sơn/.test(chu(gt)) && !/<ol|>0[1-3]</.test(gt) && !/\b0[1-3]\b/.test(chu(gt)) && (gt.match(/Ảnh thực tế · sắp cập nhật/g) || []).length === 1 && /class="[^"]*\btw:/.test(gt), chu(gt).slice(0, 200));
     let thayDoi = '';
     try { thayDoi = cp.execSync('git status --porcelain src/data public/img', { cwd: GOC }).toString().trim(); } catch (e) { thayDoi = 'không chạy được git'; }
     ok('Dữ liệu src/data/*, logo và ảnh trong public/img không bị sửa (git status sạch)', thayDoi === '', thayDoi);
@@ -292,29 +292,45 @@ function taoVideoThu() {
     ok('KHÔNG tải video (chỉ ảnh bìa, không nút tạm dừng) khi: bật giảm chuyển động · tiết kiệm dữ liệu · mạng 2G · đã tắt "Hiệu ứng trang trí"', khongTai.length === 0, khongTai.join(' | '));
   }
 
-  // ---------- 8. Giới thiệu ----------
-  muc('8. Giới thiệu: như trang đầu một bài báo (chữ cái đầu lớn, cột chữ 36em, hai ảnh bất đối xứng, mo-man, chú thích sau 120ms)');
+  // ---------- 8. Giới thiệu + Dịch vụ nổi bật (gộp một khu, Tailwind) ----------
+  muc('8. Giới thiệu + Dịch vụ nổi bật gộp một khu "Trọng tâm hình ảnh" (Tailwind): ảnh trái 60% / nội dung phải 40%, tiêu đề đè lên ảnh, không chữ cái đầu lớn');
   {
-    const ctx = await ctxMoi({ viewport: { width: 1440, height: 900 } }), p = await mo(ctx, '/');
+    const ctx = await ctxMoi({ viewport: { width: 1440, height: 900 } }), p = await mo(ctx, '/'); await cho(300);
     const x = await p.evaluate(() => {
-      const kc = (s, pc) => getComputedStyle(document.querySelector(s), pc), r = (s) => document.querySelector(s).getBoundingClientRect(), mo = document.querySelector('.gt-mo'), bai = document.querySelector('.gt-bai');
-      const nf = kc('.gt-mo', '::first-letter'), d = r('.gt-doc'), n = r('.gt-ngang'), dd = r('.gt .dau-khoi'), bb = r('.gt-bai');
-      return { phong: nf.fontFamily.split(',')[0].replace(/["']/g, ''), cua: nf.float, co: parseFloat(nf.fontSize), coThan: parseFloat(getComputedStyle(mo).fontSize), rongBai: Math.round(bb.width), emBai: parseFloat(getComputedStyle(bai).fontSize), doc: [Math.round(d.width), Math.round(d.height)], ngang: [Math.round(n.width), Math.round(n.height)], daoDoc: Math.round(d.bottom), daoNgang: Math.round(n.bottom), trenDoc: Math.round(d.top), trenNgang: Math.round(n.top), tieuDeRong: Math.round(dd.width), baiTrai: Math.round(bb.left - dd.left), hang: [...document.querySelectorAll('.gt-diem li')].map((l) => getComputedStyle(l).borderBottomWidth + ' ' + getComputedStyle(l).borderBottomColor), h3: kc('.gt-diem h3').fontFamily.split(',')[0].replace(/["']/g, ''), h2: kc('.gt h2').fontFamily.split(',')[0].replace(/["']/g, '') };
+      const r = (s) => document.querySelector(s).getBoundingClientRect(), cs = (s, pc) => getComputedStyle(document.querySelector(s), pc);
+      const f = r('#gioi-thieu figure'), nd = r('#gioi-thieu .khung > div > div:last-child'), h2 = document.querySelector('#gioi-thieu h2'), hr = h2.getBoundingClientRect();
+      const para = [...document.querySelectorAll('#gioi-thieu p')].find((e) => /bệnh viện thú y dành/.test(e.textContent));
+      const tong = f.width + nd.width;
+      return { anh: Math.round(f.width / tong * 100), nd: Math.round(nd.width / tong * 100), cao: Math.round(f.height), h2Phong: cs('#gioi-thieu h2').fontFamily.split(',')[0].replace(/["']/g, ''), h2Co: parseFloat(cs('#gioi-thieu h2').fontSize), h2Mau: cs('#gioi-thieu h2').color, h2TrongAnh: hr.left >= f.left && hr.right <= f.right && hr.top >= f.top && hr.bottom <= f.bottom, chuL: getComputedStyle(para, '::first-letter').float, coChu: parseFloat(getComputedStyle(para).fontSize), nhan: cs('#gioi-thieu .nhan').color, caiDat: !!document.querySelector('#gioi-thieu figure img') };
     });
-    ok('Chữ cái đầu lớn: phông Newsreader, float trái, lớn gấp > 3 lần chữ thân bài; cột chữ ≤ 36em (' + x.rongBai + 'px ≤ ' + 36 * x.emBai + 'px); tiêu đề khu Newsreader, tiêu đề điểm Be Vietnam Pro; ba hàng điểm kẻ 1px', x.phong === 'Newsreader' && x.cua === 'left' && x.co > 3 * x.coThan && x.rongBai <= 36 * x.emBai + 1 && x.h2 === 'Newsreader' && x.h3 === 'Be Vietnam Pro' && x.hang.length === 3 && x.hang.every((v) => /^1px/.test(v)), JSON.stringify(x));
-    ok('Lưới bất đối xứng: ảnh dọc (cao > rộng, ' + x.doc.join('×') + ') chiếm ~1/3, ảnh ngang (rộng > cao, ' + x.ngang.join('×') + ') chiếm ~2/3; hai ảnh chung đáy nhưng đỉnh lệch nhau; tiêu đề khu (4 cột) và bài (8 cột) lệch nhịp', x.doc[1] > x.doc[0] && x.ngang[0] > x.ngang[1] && x.doc[0] < x.ngang[0] * 0.6 && Math.abs(x.daoDoc - x.daoNgang) <= 2 && Math.abs(x.trenDoc - x.trenNgang) > 40 && x.baiTrai > x.tieuDeRong, JSON.stringify({ doc: x.doc, ngang: x.ngang, day: [x.daoDoc, x.daoNgang], tren: [x.trenDoc, x.trenNgang], tieuDeRong: x.tieuDeRong, baiTrai: x.baiTrai }));
-    const truoc = await p.evaluate(() => [...document.querySelectorAll('.gt-hinh > [data-hien="mo-man"] > *')].map((e) => getComputedStyle(e).clipPath));
-    await p.evaluate(() => { const g = document.querySelector('.gt-anh'); window.scrollTo({ top: g.getBoundingClientRect().top + scrollY - 300, behavior: 'instant' }); });
-    await cho(150);
-    const giua = await p.evaluate(() => [...document.querySelectorAll('.gt-hinh figcaption')].map((e) => ({ da: e.classList.contains('da-hien'), tre: getComputedStyle(e).transitionDelay.split(',')[0].trim() })));
-    await cho(1300);
-    const sau = await p.evaluate(() => ({ clip: [...document.querySelectorAll('.gt-hinh > [data-hien="mo-man"] > *')].map((e) => getComputedStyle(e).clipPath), cap: [...document.querySelectorAll('.gt-hinh figcaption')].map((e) => +getComputedStyle(e).opacity) }));
-    ok('Ảnh / khung chờ mở "mo-man": trước khi cuộn tới bị che bằng clip-path, cuộn tới thì mở hết; chú thích có độ trễ cố định 120ms và 210ms (data-tre), hiện sau ảnh, xong thì độ mờ 1', truoc.every((c) => /^inset\(0px 100% 0px 0px\)$/.test(c)) && sau.clip.every((c) => c === 'none') && sau.cap.every((o) => o === 1) && giua[0].tre === '0.12s' && giua[1].tre === '0.21s', JSON.stringify({ truoc, giua, sau }));
+    ok('Máy tính: ảnh ~60% / nội dung ~40% (' + x.anh + '/' + x.nd + '); tiêu đề Newsreader ' + x.h2Co + 'px màu trắng nằm TRONG khung ảnh; đoạn giới thiệu ' + x.coChu + 'px, KHÔNG có chữ cái đầu lớn (float = none); nhãn màu ngọc', Math.abs(x.anh - 60) <= 3 && Math.abs(x.nd - 40) <= 3 && x.h2Phong === 'Newsreader' && x.h2Co >= 48 && x.h2Mau === 'rgb(255, 255, 255)' && x.h2TrongAnh && x.chuL === 'none' && x.coChu >= 19 && x.nhan === 'rgb(35, 112, 110)', JSON.stringify(x));
+    const gt = await p.evaluate(() => { const g = document.querySelector('#gioi-thieu'); return { ids: [...document.querySelectorAll('#gioi-thieu,#dich-vu')].map((e) => e.id), cu: !!document.querySelector('.gt-mo,.gt-anh,.dv-ds,.gt-bai'), diem: [...g.querySelectorAll('ul > li')].map((l) => l.textContent.replace(/\s+/g, ' ').trim()), links: [...g.querySelectorAll('a.lien-ket')].map((a) => [a.textContent.trim(), new URL(a.href).pathname]), ol: g.querySelectorAll('ol').length, so: /\b0[1-3]\b/.test(g.textContent), cho: g.querySelectorAll('figure').length === 1 && /Ảnh thực tế · sắp cập nhật/.test(g.textContent) }; });
+    ok('Nội dung giữ nguyên: ba điểm nổi bật (Chẩn đoán tại viện · Từ phòng bệnh đến phẫu thuật · Tham khảo chi phí trước khi đến) không đánh số; liên kết "Tìm hiểu thêm về bệnh viện" → /gioi-thieu/ và "Xem tất cả dịch vụ" → /dich-vu/; có khung chờ ảnh (chưa bịa ảnh); id #gioi-thieu và #dich-vu đều có mặt; không còn khu Dịch vụ nổi bật riêng', gt.ids.join() === 'gioi-thieu,dich-vu' && !gt.cu && gt.diem.length === 3 && /Chẩn đoán tại viện/.test(gt.diem[0]) && /Từ phòng bệnh đến phẫu thuật/.test(gt.diem[1]) && /Tham khảo chi phí trước khi đến/.test(gt.diem[2]) && gt.links.length === 2 && /Tìm hiểu thêm về bệnh viện/.test(gt.links[0][0]) && /\/gioi-thieu\/$/.test(gt.links[0][1]) && /Xem tất cả dịch vụ/.test(gt.links[1][0]) && /\/dich-vu\/$/.test(gt.links[1][1]) && !gt.ol && !gt.so && gt.cho, JSON.stringify(gt));
+    const dich = await p.evaluate(async () => { document.querySelector('.menu-ds a[href="#dich-vu"]').click(); await new Promise((r) => setTimeout(r, 1200)); return { hash: location.hash, y: Math.round(document.querySelector('#dich-vu').getBoundingClientRect().top), cur: [...document.querySelectorAll('.menu-ds a[aria-current]')].map((a) => a.textContent.trim()) }; });
+    ok('Menu "Dịch vụ" trên trang chủ cuộn tới #dich-vu (nằm trong khung nhìn, dưới header); trạng thái active của menu vẫn đúng một mục', /dich-vu|^$/.test(dich.hash) && dich.y >= 0 && dich.y < 700 && dich.cur.length <= 1, JSON.stringify(dich));
+    const truoc = await p.evaluate(() => { const e = document.querySelector('#gioi-thieu [data-hien="mo-man"] > *'); return getComputedStyle(e).clipPath; });
     await ctx.close();
-    const c2 = await ctxMoi({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true }), p2 = await mo(c2, '/');
-    const m = await p2.evaluate(() => { const r = (s) => document.querySelector(s).getBoundingClientRect(); return { doc: Math.round(r('.gt-doc').width), ngang: Math.round(r('.gt-ngang').width), vw: innerWidth, cho: r('.gt-doc').top < r('.gt-ngang').top, tren: Math.round(r('.gt-ngang').top) > Math.round(r('.gt-doc').bottom), dc: parseFloat(getComputedStyle(document.querySelector('.gt-mo'), '::first-letter').fontSize) }; });
-    ok('Điện thoại: hai ảnh xếp dọc (ảnh dọc ≤ 280px rộng, ảnh ngang rộng hết khung), chữ cái đầu lớn vẫn còn', m.doc <= 280 && m.ngang >= m.vw - 34 && m.cho && m.tren && m.dc > 40, JSON.stringify(m));
+    const c1 = await ctxMoi({ viewport: { width: 1440, height: 900 } }), p1 = await mo(c1, '/'); await cho(200);
+    const cl0 = await p1.evaluate(() => getComputedStyle(document.querySelector('#gioi-thieu [data-hien="mo-man"] > figure')).clipPath);
+    await p1.evaluate(() => document.querySelector('#gioi-thieu').scrollIntoView({ behavior: 'instant' })); await cho(1400);
+    const cl1 = await p1.evaluate(() => ({ clip: getComputedStyle(document.querySelector('#gioi-thieu [data-hien="mo-man"] > figure')).clipPath, hang: [...document.querySelectorAll('#gioi-thieu ul > li')].map((l) => l.classList.contains('da-hien')) }));
+    ok('Hiệu ứng khi cuộn tới: khung ảnh mở "mo-man" (clip-path che trước, mở hết sau), ba hàng điểm hiện nối tiếp', /^inset\(0px 100% 0px 0px\)$/.test(cl0) && cl1.clip === 'none' && cl1.hang.every(Boolean), JSON.stringify({ cl0, cl1 }));
+    await c1.close();
+    const c2 = await ctxMoi({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true }), p2 = await mo(c2, '/'); await cho(300);
+    const m = await p2.evaluate(() => { const r = (s) => document.querySelector(s).getBoundingClientRect(); const f = r('#gioi-thieu figure'), nd = r('#gioi-thieu .khung > div > div:last-child'); return { fl: Math.round(f.left), fw: Math.round(f.width), vw: innerWidth, anhTren: f.bottom <= nd.top + 1, tran: document.documentElement.scrollWidth > innerWidth, h2: Math.round(parseFloat(getComputedStyle(document.querySelector('#gioi-thieu h2')).fontSize)) }; });
+    ok('Điện thoại: ảnh ở trên, nội dung ở dưới, ảnh vừa khít bề ngang (không tràn), tiêu đề ≥ 32px', m.anhTren && !m.tran && Math.abs(m.fw - (m.vw - 2 * m.fl)) <= 2 && m.fl >= 14 && m.h2 >= 32, JSON.stringify(m));
     await c2.close();
+    const c3 = await ctxMoi({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' }), p3 = await mo(c3, '/'); await cho(300);
+    await p3.evaluate(() => document.querySelector('#gioi-thieu').scrollIntoView({ behavior: 'instant' })); await cho(500);
+    const rd = await p3.evaluate(() => ({ clip: getComputedStyle(document.querySelector('#gioi-thieu [data-hien="mo-man"] > figure')).clipPath, op: [...document.querySelectorAll('#gioi-thieu [data-hien]')].map((e) => +getComputedStyle(e).opacity), tf: [...document.querySelectorAll('#gioi-thieu [data-hien]')].map((e) => getComputedStyle(e).transform) }));
+    ok('Giảm chuyển động: nội dung khu hiện đủ (độ mờ 1), không dịch chuyển, không che bằng clip-path', rd.clip === 'none' && rd.op.every((o) => o === 1) && rd.tf.every((t) => t === 'none'), JSON.stringify(rd));
+    await c3.close();
+    const c4 = await ctxMoi({ viewport: { width: 1440, height: 900 } }), p4 = await mo(c4, '/'); await cho(300);
+    await p4.evaluate(() => document.querySelector('#gioi-thieu').scrollIntoView({ behavior: 'instant' })); await cho(1200);
+    const bp = []; for (let i = 0; i < 12; i++) { await p4.keyboard.press('Tab'); bp.push(await p4.evaluate(() => { const a = document.activeElement; return a && a.closest('#gioi-thieu') ? (a.textContent.trim().slice(0, 30) + '|' + getComputedStyle(a).outlineStyle + '|' + getComputedStyle(a).outlineWidth) : ''; })); }
+    const trongKhu = bp.filter((v) => v);
+    ok('Bàn phím: Tab đi qua đủ 5 liên kết trong khu (3 điểm + 2 liên kết chữ) theo thứ tự, mỗi liên kết có viền focus nhìn thấy', trongKhu.length >= 5 && trongKhu.slice(0, 5).every((v) => v.split('|')[1] !== 'none') && /Chẩn đoán/.test(trongKhu[0]) && /Xem tất cả/.test(trongKhu[4]), JSON.stringify(trongKhu));
+    await c4.close();
   }
 
   // ---------- 9. Chuyển trang ----------

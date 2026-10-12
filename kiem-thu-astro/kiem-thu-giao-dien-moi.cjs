@@ -74,8 +74,9 @@ const CHEN = `
     const r36 = doc('dist'), moi = doc('dist-moi');
     const noiDung = (d, href) => fs.readFileSync(path.join(GOC, d, href.replace(BASE + '/', '')), 'utf8');
     ok('Giao diện mặc định (dist, GIAO_DIEN = r36): đúng MỘT tệp CSS là bộ R3.6 (có .hero-chu, không có Newsreader), vẫn dùng Google Fonts như trước, không tải trước phông tự chứa, không có script hiệu ứng mới', r36.css.filter((c) => !/googleapis/.test(c)).length === 1 && /r36\./.test(r36.css.join()) && r36.google && !r36.preload.length && !r36.scriptNhung && !/data-giao-dien/.test(r36.html) && /\.hero-chu/.test(noiDung('dist', r36.css.find((c) => /r36\./.test(c)))) && !/Newsreader/.test(noiDung('dist', r36.css.find((c) => /r36\./.test(c)))), JSON.stringify(r36));
-    const cssMoi = moi.css.length === 1 ? noiDung('dist-moi', moi.css[0]) : '';
-    ok('Giao diện mới (dist-moi): đúng MỘT tệp CSS là bộ mới (có Newsreader, --kem, data-hien), KHÔNG có quy tắc nào của le-son.css (.hero-nen, .sp-panel, Playfair, --bong-1), không gọi Google Fonts, tải trước 2 tệp Newsreader 500, <html data-giao-dien="moi">', moi.css.length === 1 && /Newsreader/.test(cssMoi) && /--kem:/.test(cssMoi) && /data-hien/.test(cssMoi) && !/\.hero-nen|\.sp-panel|Playfair|--bong-1/.test(cssMoi) && !moi.google && moi.preload.length === 2 && /data-giao-dien="moi"/.test(moi.html) && moi.scriptNhung, JSON.stringify({ ...moi, kichThuoc: cssMoi.length }));
+    const cssTw = moi.css.filter((c) => /\/tailwind\./.test(c)), cssChinh = moi.css.filter((c) => !/\/tailwind\./.test(c));
+    const cssMoi = cssChinh.length === 1 ? noiDung('dist-moi', cssChinh[0]) : '', cssTwNd = cssTw.length === 1 ? noiDung('dist-moi', cssTw[0]) : '';
+    ok('Giao diện mới (dist-moi): đúng MỘT tệp CSS chính là bộ mới + MỘT tệp Tailwind (không có Preflight: không có lớp base, không reset; mọi lớp có tiền tố tw:; lớp tiện ích !important) (có Newsreader, --kem, data-hien), KHÔNG có quy tắc nào của le-son.css (.hero-nen, .sp-panel, Playfair, --bong-1), không gọi Google Fonts, tải trước 2 tệp Newsreader 500, <html data-giao-dien="moi">', cssChinh.length === 1 && cssTw.length === 1 && moi.css.length === 2 && !/@layer base|box-sizing:border-box;margin:0|::file-selector-button/.test(cssTwNd) && /\.tw\\:/.test(cssTwNd) && /!important/.test(cssTwNd) && /Newsreader/.test(cssMoi) && /--kem:/.test(cssMoi) && /data-hien/.test(cssMoi) && !/\.hero-nen|\.sp-panel|Playfair|--bong-1/.test(cssMoi) && !moi.google && moi.preload.length === 2 && /data-giao-dien="moi"/.test(moi.html) && moi.scriptNhung, JSON.stringify({ ...moi, kichThuoc: cssMoi.length }));
     const tepPhong = [...cssMoi.matchAll(/url\(([^)]+\.woff2)\)/g)].map((m) => m[1].replace(/["']/g, ''));
     const thieu = tepPhong.filter((t) => !t.startsWith(BASE + '/fonts/') || !fs.existsSync(path.join(GOC, 'dist-moi', t.replace(BASE + '/', ''))));
     ok(`${tepPhong.length} @font-face trỏ tới tệp có thật trong ${BASE}/fonts/ (Newsreader 400/500/600 + nghiêng 500, Be Vietnam Pro 400/500/600; mỗi độ đậm 2 tệp Latin + Việt); có giấy phép OFL đi kèm`, tepPhong.length === 14 && thieu.length === 0 && fs.existsSync(path.join(GOC, 'public/fonts/LICENSE-newsreader.txt')) && fs.existsSync(path.join(GOC, 'public/fonts/LICENSE-be-vietnam-pro.txt')), thieu.join(', '));
@@ -91,8 +92,8 @@ const CHEN = `
         const p = await mo(ctx, t, URL_MOI, loi), cdp = await ctx.newCDPSession(p);
         await cdp.send('DOM.enable'); await cdp.send('CSS.enable');
         const { root } = await cdp.send('DOM.getDocument', { depth: -1 });
-        // h3 trong .bg-dau (tiêu đề nhóm ở trang Bảng giá) là tiêu đề lớn Newsreader 36px theo thiết kế bước 3, nên không tính vào "h3 là Be Vietnam Pro"
-        for (const [chon, mong] of [['h1', 'Newsreader'], ['h2', 'Newsreader'], ['h3:not(.bg-dau h3)', 'Be Vietnam Pro'], ['p', 'Be Vietnam Pro']]) {
+        // h3 trong .sp2-the (tên sản phẩm, Newsreader 26px) và .bg-dau (tiêu đề nhóm ở trang Bảng giá) là tiêu đề lớn Newsreader 36px theo thiết kế bước 3, nên không tính vào "h3 là Be Vietnam Pro"
+        for (const [chon, mong] of [['h1', 'Newsreader'], ['h2', 'Newsreader'], ['h3:not(.bg-dau h3, .sp2-the h3)', 'Be Vietnam Pro'], ['p', 'Be Vietnam Pro']]) {
           const { nodeIds } = await cdp.send('DOM.querySelectorAll', { nodeId: root.nodeId, selector: `main ${chon}` });
           for (const id of nodeIds.slice(0, 3)) {
             const bm = await cdp.send('DOM.getBoxModel', { nodeId: id }).catch(() => null);

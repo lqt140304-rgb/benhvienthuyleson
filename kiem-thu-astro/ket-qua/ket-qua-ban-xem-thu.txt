@@ -1,4 +1,4 @@
-Kiểm tra bản xem thử đặt ở thư mục lạ (/mot/thu-muc/la/ban-xem-thu/) · Chromium Playwright · 2026-10-12T17:48:45.597Z
+Kiểm tra bản xem thử đặt ở thư mục lạ (/mot/thu-muc/la/ban-xem-thu/) · Chromium Playwright · 2026-10-12T18:49:12.844Z
 ĐẠT 25 · KHÔNG ĐẠT 0
 
 [ĐẠT] [1440x900] Trang chính (bọc khung, đặt ở thư mục lạ): CSS áp dụng (biến màu --tim, header cố định), JavaScript chạy (hai dải thẻ khởi tạo), đủ 11 khu

@@ -3,6 +3,7 @@
 // CSS theo công tắc GIAO_DIEN (src/lib/site.ts): nạp bằng ?url để chỉ MỘT bộ được đưa vào trang (import thường sẽ gộp cả hai).
 import cssR36 from '../styles/r36.css?url';
 import cssMoi from '../styles/moi/index.css?url';
+import cssTw from '../styles/moi/tailwind.css?url';
 import HeaderR36 from '../components/ls/Header.astro';
 import HeaderMoi from '../components/moi/Header.astro';
 import Footer from '../components/ls/Footer.astro';
@@ -79,6 +80,7 @@ const duLieuCam = {
     <link rel="preload" href={u('/fonts/newsreader-latin-500-normal.woff2')} as="font" type="font/woff2" crossorigin>
     <link rel="preload" href={u('/fonts/newsreader-vietnamese-500-normal.woff2')} as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href={cssMoi}>
+    <link rel="stylesheet" href={cssTw}>
   </>
 ) : (
   <>

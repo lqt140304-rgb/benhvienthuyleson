@@ -5,8 +5,7 @@ import { GIAO_DIEN } from '../lib/site';
 import Hero from '../components/ls/Hero.astro';
 import GioiThieu from '../components/ls/GioiThieu.astro';
 import HeroMoi from '../components/moi/Hero.astro';
-import GioiThieuMoi from '../components/moi/GioiThieu.astro';
-import DichVuNoiBatMoi from '../components/moi/DichVuNoiBat.astro';
+import GioiThieuDichVuMoi from '../components/moi/GioiThieuDichVu.astro';
 import SanPhamMoi from '../components/moi/SanPham.astro';
 import GiaGonMoi from '../components/moi/GiaGon.astro';
 import DichVuNoiBat from '../components/ls/DichVuNoiBat.astro';
@@ -21,8 +20,7 @@ import LienHe from '../components/ls/LienHe.astro';
 ---
 <Layout trang="chu" cam="trang_chu">
   {GIAO_DIEN === 'moi' ? <HeroMoi /> : <Hero />}
-  {GIAO_DIEN === 'moi' ? <GioiThieuMoi /> : <GioiThieu />}
-  {GIAO_DIEN === 'moi' ? <DichVuNoiBatMoi /> : <DichVuNoiBat />}
+  {GIAO_DIEN === 'moi' ? <GioiThieuDichVuMoi /> : <><GioiThieu /><DichVuNoiBat /></>}
   {GIAO_DIEN === 'moi' ? <SanPhamMoi /> : <SanPham />}
   {GIAO_DIEN === 'moi' ? <GiaGonMoi /> : <GiaGon />}
   <DatLichKhu />

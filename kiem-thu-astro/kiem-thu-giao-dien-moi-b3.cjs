@@ -62,65 +62,15 @@ const chuan = (s) => String(s).replace(/\s+/g, ' ').trim();
     const pm = await mo(ctx, '/'), pc = await mo(ctx, '/', URL_R);
     moi = await layHome(pm, true); cu = await layHome(pc, false);
     const dvCu = cu.dv.map((x, i) => ({ ...x, mo: x.mo.split(/(?<=\.)\s/)[0], gia: i === 0 ? 'Phí báo sau khám' : x.gia })); // R3.6 ở thẻ Khám ghi 2 câu và "Xem bảng giá khám"; giao diện mới: hàng một dòng = câu đầu của mô tả + "Phí báo sau khám" (chữ có sẵn ở khu tóm tắt giá)
-    ok('Dịch vụ nổi bật: 5 hàng đúng thứ tự, mỗi hàng đúng TÊN, MÔ TẢ (câu đầu, một dòng), ĐÍCH LIÊN KẾT (/bang-gia/#nhom-…) và GIÁ / lời dẫn như thẻ R3.6 (hàng Khám: bỏ câu thứ hai, ghi "Phí báo sau khám" thay "Xem bảng giá khám")', moi.dv.length === 5 && JSON.stringify(moi.dv) === JSON.stringify(dvCu), JSON.stringify({ moi: moi.dv.map((x) => [x.ten, x.gia]), cu: dvCu.map((x) => [x.ten, x.gia]) }));
-    const hang = await pm.evaluate(() => { const a = [...document.querySelectorAll('#dich-vu .dv-tat-ca')]; return a.map((x) => [x.querySelector('.dv-ten').textContent.trim(), x.querySelector('.dv-mo').textContent.trim(), x.getAttribute('href')]); });
-    ok('Hàng "Xem tất cả dịch vụ" có cùng mô tả như R3.6 và trỏ tới /dich-vu/', hang.length === 1 && hang[0][0] === 'Xem tất cả dịch vụ' && hang[0][1] === cu.tatCa.replace(/^Xem tất cả dịch vụ/, '').trim() && /\/dich-vu\/$/.test(hang[0][2]), JSON.stringify({ hang, cu: cu.tatCa }));
     ok('Sản phẩm nổi bật: 3 thẻ đúng tiêu đề, mô tả và liên kết như R3.6; không giá, không giỏ hàng, không số lượng bán; giữ ghi chú "chờ bệnh viện xác nhận"', moi.sp.length === 3 && JSON.stringify(moi.sp) === JSON.stringify(cu.sp) && !/giỏ|Thêm vào|đ\b|đã bán|Giảm/.test(await pm.evaluate(() => document.getElementById('sp-noi-bat').textContent)) && /Mẫu minh hoạ · chờ bệnh viện xác nhận danh sách sản phẩm/.test(await pm.evaluate(() => document.getElementById('sp-noi-bat').textContent)), JSON.stringify({ moi: moi.sp, cu: cu.sp }));
     ok('Tóm tắt giá: 5 dòng, mỗi dòng đúng TÊN nhóm, chú thích, GIÁ (lấy từ dữ liệu) hoặc "Xem giá", đích liên kết và nhãn đọc màn hình như R3.6; liên kết phụ "Triệt sản combo…", ghi chú cuối và nút "Xem bảng giá đầy đủ" giống hệt', moi.gg.length === 5 && JSON.stringify(moi.gg) === JSON.stringify(cu.gg) && JSON.stringify(moi.phu) === JSON.stringify(cu.phu) && moi.cuoi === cu.cuoi && moi.nutCuoi === cu.nutCuoi, JSON.stringify({ moi: moi.gg.map((x) => [x.ten, x.gia]), cu: cu.gg.map((x) => [x.ten, x.gia]) }));
-    const kieu = await pm.evaluate(() => { const hs = [...document.querySelectorAll('.dv-hang, .gg-hang, .sp2-the')]; return { so: !!document.querySelector('#dich-vu ol, #bang-gia ol') || /(^|\s)0[1-5](\s|$)/.test(document.getElementById('dich-vu').textContent + document.getElementById('bang-gia').textContent), tron: !!document.querySelector('#dich-vu .o-ic, #bang-gia .gia-gon-ic'), bong: hs.filter((e) => getComputedStyle(e).boxShadow !== 'none').length, bo: [...document.querySelectorAll('.dv-hang, .gg-hang')].filter((e) => getComputedStyle(e).borderRadius !== '0px').length }; });
+    const kieu = await pm.evaluate(() => { const hs = [...document.querySelectorAll('.gg-hang, .sp2-the')]; return { so: !!document.querySelector('#gioi-thieu ol, #bang-gia ol') || /(^|\s)0[1-5](\s|$)/.test(document.getElementById('dich-vu').textContent + document.getElementById('bang-gia').textContent), tron: !!document.querySelector('#dich-vu .o-ic, #bang-gia .gia-gon-ic'), bong: hs.filter((e) => getComputedStyle(e).boxShadow !== 'none').length, bo: [...document.querySelectorAll('.dv-hang, .gg-hang')].filter((e) => getComputedStyle(e).borderRadius !== '0px').length }; });
     ok('Không đánh số, không ô icon tròn, không bóng đổ, hàng không bo góc (chủ dự án đã chốt)', !kieu.so && !kieu.tron && kieu.bong === 0 && kieu.bo === 0, JSON.stringify(kieu));
     await ctx.close();
   }
 
-  // ---------- 2. Dịch vụ nổi bật (máy tính) ----------
-  muc('2. Dịch vụ nổi bật (máy tính): hiện khi cuộn, rê chuột, bố cục lệch nhịp');
-  {
-    const ctx = await ctxMoi({ viewport: { width: 1440, height: 900 } }), p = await mo(ctx, '/'); await cho(500);
-    const truoc = await p.evaluate(() => [...document.querySelectorAll('#dich-vu .dv-ds > li')].map((l) => ({ k: getComputedStyle(l, '::after').transform, o: +getComputedStyle(l.firstElementChild).opacity })));
-    await toi(p, '#dich-vu', 120); await cho(150);
-    const giua = await p.evaluate(() => [...document.querySelectorAll('#dich-vu .dv-ds > li')].map((l) => l.style.getPropertyValue('--tre') || '0ms'));
-    await cho(1500);
-    const sau = await p.evaluate(() => ({ l: [...document.querySelectorAll('#dich-vu .dv-ds > li')].map((l) => ({ k: getComputedStyle(l, '::after').transform, o: +getComputedStyle(l.firstElementChild).opacity, tt: getComputedStyle(l, '::after').transitionDuration })), du: [...document.querySelectorAll('#dich-vu .dv-ds > li')].map((l) => getComputedStyle(l.firstElementChild).transitionDelay.split(',')[0].trim()) }));
-    ok('Trước khi cuộn tới: 6 đường kẻ chưa vẽ (scaleX 0) và chữ ẩn; cuộn tới thì đường kẻ vẽ từ trái 360ms, chữ hiện sau; hiện nối tiếp 0-60-120-180-240-240ms (tối đa 5 bậc)', truoc.length === 6 && truoc.every((x) => /^matrix\(0, 0, 0, 1/.test(x.k) && x.o === 0) && giua.join() === '0ms,60ms,120ms,180ms,240ms,240ms'.split(',').join() && sau.l.every((x) => (x.k === 'none' || /^matrix\(1, 0, 0, 1/.test(x.k)) && x.o === 1 && x.tt === '0.36s'), JSON.stringify({ truoc: truoc.map((x) => x.k), giua, sau: sau.l.map((x) => [x.k, x.o, x.tt]) }));
-    const bc = await p.evaluate(() => { const r = (s) => document.querySelector(s).getBoundingClientRect(), d = r('#dich-vu .dau-khoi'), l = r('#dich-vu .dv-ds'); return { dau: Math.round(d.width), ds: Math.round(l.width), trai: Math.round(l.left - d.left), hang: [...document.querySelectorAll('#dich-vu .dv-hang')].map((e) => Math.round(e.getBoundingClientRect().height)), top: getComputedStyle(document.querySelector('#dich-vu .dv-ds')).borderTopColor, ten: getComputedStyle(document.querySelector('.dv-ten')).fontFamily.split(',')[0].replace(/["']/g, ''), mo: getComputedStyle(document.querySelector('.dv-mo')).fontFamily.split(',')[0].replace(/["']/g, '') }; });
-    ok('Bố cục lệch nhịp: tiêu đề khu (4 cột trái) hẹp hơn danh mục (8 cột phải); mỗi hàng cao ≥ 96px; đường kẻ trên cùng tím; tên dịch vụ Newsreader, mô tả Be Vietnam Pro', bc.dau < bc.ds * 0.55 && bc.trai > bc.dau && bc.hang.every((h) => h >= 96) && bc.top === 'rgb(90, 30, 94)' && bc.ten === 'Newsreader' && bc.mo === 'Be Vietnam Pro', JSON.stringify(bc));
-    // rê chuột hàng 2
-    const h2 = await p.$('#dich-vu .dv-ds > li:nth-child(2) .dv-hang'); await h2.hover(); await cho(500);
-    const hv = await p.evaluate(() => { const a = document.querySelector('#dich-vu .dv-ds > li:nth-child(2) .dv-hang'), c = (s, pc) => getComputedStyle(a.querySelector(s) || a, pc); const nen = getComputedStyle(a, '::before'); return { nen: nen.transform, mau: nen.backgroundColor, ten: c('.dv-ten').color, mui: getComputedStyle(a.querySelector('.mui')).color, ap: document.getAnimations().filter((x) => x.effect && x.effect.target && x.effect.target.closest && x.effect.target.closest('#dich-vu .ic48')).map((x) => [x.animationName, x.effect.getComputedTiming().iterations]) }; });
-    ok('Rê chuột vào hàng "Xét nghiệm": nền kem đậm #F3ECE1 phủ kín (scaleX 1), tên → tím, mũi tên → tím; icon dịch vụ có hoạt cảnh chạy đúng MỘT lượt (iterations = 1)', (hv.nen === 'none' || /^matrix\(1, 0, 0, 1/.test(hv.nen)) && hv.mau === 'rgb(243, 236, 225)' && hv.ten === 'rgb(90, 30, 94)' && hv.mui === 'rgb(90, 30, 94)' && hv.ap.length > 0 && hv.ap.every((x) => x[1] === 1), JSON.stringify(hv));
-    const tf = await p.evaluate(() => { const m = document.querySelector('#dich-vu .dv-ds > li:nth-child(2) .mui'); const t = getComputedStyle(m).transform; return { t, dur: getComputedStyle(m).transitionDuration }; });
-    ok('Mũi tên nhích 4px sang phải khi rê chuột / focus (translateX 4px)', /matrix\(1, 0, 0, 1, 4, 0\)/.test(tf.t), JSON.stringify(tf));
-    await p.mouse.move(5, 5); await cho(450);
-    const roi = await p.evaluate(() => getComputedStyle(document.querySelector('#dich-vu .dv-ds > li:nth-child(2) .dv-hang'), '::before').transform);
-    ok('Rê chuột ra ngoài: nền kem đậm thu lại (scaleX 0)', /^matrix\(0, 0, 0, 1/.test(roi), roi);
-    await ctx.close();
-  }
-  {
-    const ctx = await ctxMoi({ viewport: { width: 1440, height: 900 } }), p = await mo(ctx, '/');
-    await p.evaluate(() => document.documentElement.classList.add('tat-trang-tri'));
-    await toi(p, '#dich-vu', 120); await cho(400);
-    await (await p.$('#dich-vu .dv-ds > li:nth-child(2) .dv-hang')).hover(); await cho(300);
-    const dem = await p.evaluate(() => document.getAnimations().filter((x) => x.effect && x.effect.target && x.effect.target.closest && x.effect.target.closest('.ic48')).length);
-    ok('Tắt "Hiệu ứng trang trí": rê chuột vào hàng dịch vụ KHÔNG chạy hoạt cảnh icon', dem === 0, 'số hoạt cảnh icon: ' + dem);
-    await ctx.close();
-    const c2 = await ctxMoi({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' }), p2 = await mo(c2, '/');
-    await toi(p2, '#dich-vu', 120); await cho(400);
-    await (await p2.$('#dich-vu .dv-ds > li:nth-child(2) .dv-hang')).hover(); await cho(100);
-    const gm = await p2.evaluate(() => { const a = document.querySelector('#dich-vu .dv-ds > li:nth-child(2) .dv-hang'); return { icon: document.getAnimations().filter((x) => x.effect && x.effect.target && x.effect.target.closest && x.effect.target.closest('.ic48') && x.effect.getComputedTiming().duration > 1).length, tp: getComputedStyle(a, '::before').transitionProperty, mui: getComputedStyle(a.querySelector('.mui')).transitionProperty, ke: [...document.querySelectorAll('#dich-vu .dv-ds > li')].every((l) => getComputedStyle(l.firstElementChild).opacity === '1') }; });
-    ok('Giảm chuyển động: icon đứng yên, nền / mũi tên đổi tức thì (chuyển tiếp chỉ còn độ mờ / màu), các hàng hiện đủ', gm.icon === 0 && !/transform/.test(gm.tp) && !/transform/.test(gm.mui) && gm.ke, JSON.stringify(gm));
-    await c2.close();
-  }
+  // (Mục 2 và 3 cũ — danh sách 5 hàng "Dịch vụ nổi bật" ở trang chủ — đã bỏ: khu này gộp vào "Giới thiệu + Dịch vụ nổi bật", kiểm ở kiem-thu-giao-dien-moi-b2.cjs mục 8.)
 
-  // ---------- 3. Dịch vụ nổi bật (điện thoại) ----------
-  muc('3. Dịch vụ nổi bật (điện thoại 390): giá xuống dưới mô tả, chạm có nền đậm 120ms');
-  {
-    const ctx = await ctxMoi({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true }), p = await mo(ctx, '/'); await toi(p, '#dich-vu', 100); await cho(1500);
-    const x = await p.evaluate(() => { const hs = [...document.querySelectorAll('#dich-vu .dv-hang')], r = (e) => e.getBoundingClientRect(); const a = hs[1]; return { cao: hs.map((e) => Math.round(r(e).height)), giaDuoi: r(a.querySelector('.dv-gia')).top >= r(a.querySelector('.dv-mo')).bottom - 1, giaMau: getComputedStyle(a.querySelector('.dv-gia')).color, giaTrai: Math.round(r(a.querySelector('.dv-gia')).left) === Math.round(r(a.querySelector('.dv-chu')).left), mui: r(a.querySelector('.mui')).right <= innerWidth, dur: getComputedStyle(a, '::before').transitionDuration, sw: document.documentElement.scrollWidth }; });
-    ok('Điện thoại: mỗi hàng ≥ 56px, giá nằm dưới mô tả (cùng lề trái, màu tím), mũi tên trong khung, chạm đổi nền trong 120ms, không cuộn ngang', x.cao.every((h) => h >= 56) && x.giaDuoi && x.giaMau === 'rgb(90, 30, 94)' && x.giaTrai && x.mui && x.dur === '0.12s' && x.sw <= 390, JSON.stringify(x));
-    await ctx.close();
-  }
-
-  // ---------- 4. Sản phẩm nổi bật ----------
   muc('4. Sản phẩm nổi bật: cột trái dính + dải thẻ cuộn ngang, không tự trượt, nút Trước / Sau, vạch tiến độ');
   {
     const ctx = await ctxMoi({ viewport: { width: 1440, height: 900 } }), p = await mo(ctx, '/'); await toi(p, '#sp-noi-bat', 100); await cho(700);
@@ -279,11 +229,6 @@ const chuan = (s) => String(s).replace(/\s+/g, ' ').trim();
       cls.push(`${w}px ${t} ${(await p.evaluate(() => window.__cls)).toFixed(4)}`); await ctx.close();
     }
     ok('CLS (cuộn hết trang, đổi 3 tab Bảng giá) dưới 0,1 ở cả 4 trường hợp: ' + cls.join(' · '), cls.every((s) => parseFloat(s.split(' ').pop()) < 0.1), cls.join(' | '));
-    const ctx = await ctxMoi({ viewport: { width: 1440, height: 900 } }), p = await mo(ctx, '/'); await toi(p, '#dich-vu', 120); await cho(600);
-    await p.evaluate(() => { const a = document.querySelector('#dich-vu .dv-hang'); a.focus(); }); const f = [];
-    for (let i = 0; i < 7; i++) { await cho(260); f.push(await p.evaluate(() => { const e = document.activeElement, c = getComputedStyle(e); return { t: String((e.querySelector && e.querySelector('.dv-ten, .gg-ten') || e).textContent).replace(/\s+/g, ' ').trim().slice(0, 40), vong: (c.outlineStyle !== 'none' && parseFloat(c.outlineWidth) >= 2), nen: getComputedStyle(e, '::before').transform }; })); await p.keyboard.press('Tab'); }
-    ok('Bàn phím: Tab đi qua từng hàng dịch vụ theo thứ tự (Khám, Xét nghiệm, Tiêm phòng, Grooming, Nội trú, Xem tất cả); mỗi hàng nhận focus có viền focus rõ và nền kem đậm phủ kín như khi rê chuột', f.slice(0, 6).map((x) => x.t).join('|') === ['Khám và chẩn đoán', 'Xét nghiệm', 'Tiêm phòng vaccine', 'Grooming - Spa', 'Gửi nội trú (khách sạn thú cưng)', 'Xem tất cả dịch vụ'].join('|') && f.slice(0, 6).every((x) => x.vong && (x.nen === 'none' || /^matrix\(1, 0, 0, 1/.test(x.nen))), JSON.stringify(f));
-    await ctx.close();
   }
 
   muc('9. Yêu cầu mạng ra ngoài, lỗi, giới hạn');

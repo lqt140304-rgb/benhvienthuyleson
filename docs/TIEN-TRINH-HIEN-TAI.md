@@ -11,6 +11,9 @@
 ## Kế hoạch giao diện mới (12/10/2026)
 - Kế hoạch giao diện + hiệu ứng mới đã duyệt với chủ dự án: **`docs/KE-HOACH-GIAO-DIEN-MOI.md`**. Đang làm trên nhánh **`claude/giao-dien-moi-hieu-ung`** (tách từ `claude/vigilant-bell-at24ko`, đã gộp `claude/youthful-turing-b5olam`). **Bước 1 (nền móng), bước 2 (Header, Hero, Giới thiệu, chuyển trang) và bước 3 (Dịch vụ, Sản phẩm, Tóm tắt giá, trang Bảng giá) xong 12/10/2026**; chi tiết ở mục "Tiến độ" cuối tệp kế hoạch. Công tắc `GIAO_DIEN` (`src/lib/site.ts`) vẫn là `'r36'`, web chưa đổi. Việc tiếp theo: bước 4 (Đặt lịch: chỉ đổi lớp vỏ, chạy lại kiểm thử form ngay). Bản vẽ tldraw bước 3 nằm trong phiên tldraw (không có link bền; vẽ lại nếu cần). Bản vẽ Header/Hero đã duyệt: https://claude.ai/artifact/1NVhg6VVqRQUJTgyGtiEFM. Chủ dự án chốt: không dùng số thứ tự / ô đánh dấu ở danh mục và menu; nét bút cam dưới mục menu giữ màu cam; chuyển trang dùng View Transitions (xem điều chỉnh ở kế hoạch).
 
+## Mới nhất (12/10/2026)
+- Hero: video phủ kín cả khu, mờ dần sang trái. Giới thiệu + Dịch vụ nổi bật gộp một khu (Tailwind v4, tiền tố `tw:`, không Preflight). Chi tiết: cuối `docs/KE-HOACH-GIAO-DIEN-MOI.md`. Chủ dự án dặn: khi xong luôn gửi bản xem thử + tài liệu + (lần này) mã nguồn.
+
 ## Quy tắc phải giữ
 - **Khi kết thúc mỗi lượt làm việc (chủ dự án dặn 12/10/2026): luôn đưa (1) link bản xem thử mới nhất (dựng `xem-thu/` hoặc `xem-thu-moi/`, đăng / cập nhật artifact riêng tư ở chế độ giả lập) và (2) các tài liệu chủ dự án đã yêu cầu (gửi tệp, ghi đường dẫn).** Link hiện có: xem mục "Bản xem thử" ngay dưới.
 - Không gộp `main`, không thay web chính, không triển khai Google thật khi chưa được chủ dự án cho phép; không tạo PR.

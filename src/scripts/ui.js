@@ -129,7 +129,8 @@
   // Bản xem trước trên claude.ai bỏ thẻ <body data-trang>: thiếu thuộc tính = trang chủ
   var trangGia = (document.body.getAttribute('data-trang') || 'chu') !== 'chu'; // trang phụ: menu không theo vị trí cuộn
   var linkTrong = Array.prototype.filter.call(menu.querySelectorAll('a'), function (a) { return /^#/.test(a.getAttribute('href')); });
-  var linkCua = function (idKhu) { return linkTrong.filter(function (a) { return a.getAttribute('href') === '#' + (idKhu === 'noi-dung' ? 'top' : idKhu); })[0] || null; };
+// Giao diện mới: Giới thiệu + Dịch vụ nổi bật là một khu (id gioi-thieu), mục menu của khu đó là "Dịch vụ" (#dich-vu)
+  var linkCua = function (idKhu) { if (laGiaoDienMoi && idKhu === 'gioi-thieu') idKhu = 'dich-vu'; return linkTrong.filter(function (a) { return a.getAttribute('href') === '#' + (idKhu === 'noi-dung' ? 'top' : idKhu); })[0] || null; };
   var khuTrang = Array.prototype.slice.call(document.querySelectorAll('main > section[id]'));
   var thanh = document.createElement('span'); thanh.className = 'menu-thanh'; thanh.setAttribute('aria-hidden', 'true'); menu.appendChild(thanh);
   var menuDoc = window.matchMedia('(max-width: 1279px)');

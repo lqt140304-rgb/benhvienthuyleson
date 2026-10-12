@@ -330,3 +330,13 @@ Bản vẽ tldraw (6 khung: ba khu trang chủ máy tính, trang Bảng giá má
 - **Kiểm thử:** `kiem-thu-giao-dien-moi-b3.cjs`: 45 ĐẠT, 0 KHÔNG ĐẠT, 4 CHƯA XÁC MINH. So với trang R3.6 đang chạy: chữ, giá, liên kết ở trang chủ và **toàn bộ 292 ô giá của 8 nhóm Bảng giá giống hệt**.
 - **Lỗi bắt được và đã sửa:** (1) id `san-pham` gây lỗi JavaScript ở `ui.js`; (2) gạch chân tab nhảy tức thì thay vì trượt (đảo điều kiện); (3) hàng danh mục chưa có mũi tên nhích 4px; (4) 8 tab tràn một hàng ở 1440px.
 - **Chưa làm / chưa xác minh:** trang "Dịch vụ & bảng giá" (`/dich-vu/`) dùng chung kiểu bảng nên đã đẹp hơn nhưng chưa rà từng chỗ (bước 5–6); Firefox / Safari / Edge / điện thoại thật; ảnh và danh sách sản phẩm thật (đang dùng ảnh minh hoạ có sẵn).
+
+## Gộp Giới thiệu + Dịch vụ nổi bật, thêm Tailwind CSS (12/10/2026)
+
+**Kết luận khả thi: CÓ.** Astro 7.3.5 + Vite 8.3.4 + Node 22; `@tailwindcss/vite` 4.3.3 hỗ trợ Vite 8. Tích hợp bằng plugin Vite (không dùng CDN), chỉ nạp cho giao diện mới.
+- **Cách tích hợp:** `src/styles/moi/tailwind.css` nạp riêng (tệp CSS thứ hai, ~7 KB) sau `index.css`. Không nạp Preflight (không reset lại CSS cũ), mọi lớp có tiền tố `tw:`, lớp tiện ích `!important` để thắng các quy tắc `h2/p/a` cũ không nằm trong layer. Màu, phông, bo góc dùng biến CSS của `token.css` (`tw:bg-(--kem)`), không khai báo lại. Chỉ quét `GioiThieuDichVu.astro` (`@source`). Giao diện R3.6 (đang chạy) không nạp Tailwind.
+- **Khu mới** `src/components/moi/GioiThieuDichVu.astro`: máy tính ảnh 60% / nội dung 40%; điện thoại ảnh trên, nội dung dưới. Tiêu đề Newsreader 34–56px trắng đè lên ảnh, lớp tím sẫm dần. Bỏ chữ cái đầu lớn. Chữ đoạn giới thiệu 18–21px, ba điểm nổi bật có icon, kèm "Tìm hiểu thêm về bệnh viện →" và "Xem tất cả dịch vụ →". Chưa có ảnh thật nên giữ khung chờ "Ảnh thực tế · sắp cập nhật" (không bịa ảnh; ảnh chú chó trong bản mẫu chỉ là minh hoạ bố cục).
+- **Id / menu:** `#gioi-thieu` là cả khu, `#dich-vu` nằm ở danh sách ba điểm (menu "Dịch vụ" cuộn tới đây); khi cuộn qua khu, mục "Dịch vụ" sáng (sửa nhỏ ở `ui.js`, chỉ cho giao diện mới).
+- **Phông:** yêu cầu nhắc "Playfair Display"; giao diện mới đang dùng **Newsreader** (đã chốt từ bước 1), nên giữ Newsreader cho đồng bộ cả trang.
+- **Đã bỏ khỏi trang chủ (giao diện mới):** danh sách 5 hàng "Dịch vụ nổi bật" kèm giá. Dữ liệu giá không đổi; giá vẫn hiện ở "Tóm tắt giá" trang chủ và trang Bảng giá / Dịch vụ. Tệp cũ `DichVuNoiBat.astro` / `GioiThieu.astro` (moi) còn trong thư mục, không dùng.
+- Ảnh trước / sau: `docs/anh-doi-chieu/`.

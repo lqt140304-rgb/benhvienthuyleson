@@ -1,0 +1,10 @@
+/* Tailwind CSS v4 cho giao diện mới (chỉ nạp khi GIAO_DIEN = 'moi'; R3.6 không bị ảnh hưởng).
+   - KHÔNG nạp Preflight (không reset lại CSS cũ), chỉ nạp theme + utilities.
+   - Mọi lớp có tiền tố "tw:" (ví dụ tw:grid) nên không trùng tên với CSS cũ.
+   - "important": lớp tiện ích thắng cả CSS cũ không nằm trong layer (h2, p, a... trong nen.css).
+   - Màu / phông / bo góc lấy từ biến CSS của token.css: viết tw:bg-(--kem), tw:text-(--tim)... không khai báo lại.
+   - Chỉ quét các tệp liệt kê ở @source (không quét cả dự án). */
+@layer theme, utilities;
+@import 'tailwindcss/theme.css' layer(theme) prefix(tw);
+@import 'tailwindcss/utilities.css' layer(utilities) prefix(tw) important source(none);
+@source '../../components/moi/GioiThieuDichVu.astro';
