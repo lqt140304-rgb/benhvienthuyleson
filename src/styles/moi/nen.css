@@ -1,0 +1,113 @@
+/* Giao diện mới "Sổ khám" · Nền dùng chung: chữ, nút, ô nhập, lưới, đường kẻ, khung chờ, hiện khi cuộn.
+   Giữ tên lớp chung của giao diện cũ (.khung, .khoi, .nut, .nut-chinh, .nut-vien, .nhan, .dau-khoi) để các khu chưa làm lại vẫn đọc được. */
+
+/* ---------- Đặt lại ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: calc(var(--cao-dau) + 16px); }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+body {
+  margin: 0; background: var(--kem); color: var(--chu);
+  font: 400 17px/1.65 var(--f-chu);
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+}
+img, svg, video { display: block; max-width: 100%; }
+.ic { flex: none; max-width: none; }
+a { color: inherit; text-decoration: none; }
+h1, h2, h3, h4, p, ul, ol, dl, dd, figure, blockquote { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--tim); outline-offset: 3px; border-radius: 2px; }
+::selection { background: var(--cam-nhat); color: var(--chu); }
+.bo-qua { position: absolute; left: 16px; top: -64px; z-index: 100; padding: 10px 16px; border-radius: var(--r-nut); background: var(--tim); color: #fff; }
+.bo-qua:focus { top: 12px; }
+.an-chu { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* ---------- Chữ: tiêu đề Newsreader, nội dung Be Vietnam Pro ---------- */
+h1, h2, .tieu-de { font-family: var(--f-tieu-de); font-weight: 500; color: var(--tim); text-wrap: balance; font-optical-sizing: auto; }
+/* Kế hoạch mục 2: h1 56/60px, h2 36/40px (cỡ chữ / chiều cao dòng) */
+h1 { font-size: 56px; line-height: 60px; letter-spacing: -.015em; }
+h2 { font-size: 36px; line-height: 40px; letter-spacing: -.01em; }
+h1 em, h2 em, .tieu-de em { font-style: italic; }
+h3, h4 { font-family: var(--f-chu); font-weight: 600; color: var(--chu); text-wrap: balance; }
+h3 { font-size: 20px; line-height: 1.35; }
+h4 { font-size: 17px; line-height: 1.4; }
+p { text-wrap: pretty; }
+.so, .gia, td { font-variant-numeric: tabular-nums; }
+.nhan { margin-bottom: 12px; font-size: 13px; font-weight: 600; color: var(--ngoc); letter-spacing: .08em; text-transform: uppercase; }
+.dan { max-width: 36em; font-size: 20px; line-height: 1.55; color: var(--phu); }
+.chu-thich { font-size: 14px; color: var(--phu); }
+/* Số thứ tự 01 02 03 thay icon tròn */
+.stt { font-family: var(--f-tieu-de); font-weight: 400; font-size: 20px; color: var(--phu); font-variant-numeric: tabular-nums lining-nums; }
+@media (max-width: 1023px) { h1 { font-size: 48px; line-height: 52px; } }
+@media (max-width: 767px) { h1 { font-size: 38px; line-height: 42px; } h2 { font-size: 29px; line-height: 34px; } .dan { font-size: 18px; } }
+
+/* ---------- Khung, lưới 12 cột, khu ---------- */
+.khung { width: min(var(--khung), 100% - 2 * var(--le)); margin-inline: auto; }
+.khoi { padding-block: var(--khoi); }
+.khoi + .khoi { border-top: 1px solid var(--ke); }
+.luoi { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--b4) var(--cot-gian); }
+/* Bố cục lệch nhịp: tiêu đề khu 4 cột trái, nội dung 8 cột phải; dưới 1024px xếp dọc */
+.lech { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: var(--b6) var(--cot-gian); align-items: start; }
+.dau-khoi { margin-bottom: var(--b5); }
+.lech > .dau-khoi { margin-bottom: 0; }
+@media (max-width: 1023px) { .lech { grid-template-columns: minmax(0, 1fr); gap: var(--b4); } }
+
+/* ---------- Đường kẻ ---------- */
+.ke { height: 0; margin: 0; border: 0; border-top: 1px solid var(--ke); }
+.ke-dam { border-top-color: var(--tim); }
+.hang-ke > * + * { border-top: 1px solid var(--ke); }
+
+/* ---------- Nút ---------- */
+.nut {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 48px; padding: 0 22px; border: 1px solid transparent; border-radius: var(--r-nut);
+  font-size: 16px; font-weight: 600; line-height: 1.2; text-align: center; white-space: nowrap; cursor: pointer;
+  transition: background-color var(--t-cham-tay) var(--cong-ra), border-color var(--t-cham-tay) var(--cong-ra), color var(--t-cham-tay) var(--cong-ra);
+}
+.nut-chinh { background: var(--tim); color: #fff; }
+.nut-chinh:hover { background: var(--tim-dam); }
+.nut-vien { border-color: var(--ke-dam); color: var(--tim); background: transparent; }
+.nut-vien:hover { border-color: var(--tim); }
+/* Mũi tên trong nút / liên kết nhích 4px khi rê chuột */
+.mui { display: inline-block; transition: transform var(--t-cham-tay) var(--cong-ra); }
+:is(.nut, .lien-ket):is(:hover, :focus-visible) .mui { transform: translateX(4px); }
+/* Liên kết chữ: gạch chân vẽ ra từ trái */
+.lien-ket { display: inline-flex; align-items: center; gap: 6px; color: var(--tim); font-weight: 600; background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; transition: background-size var(--t-hien) var(--cong-ra); padding-bottom: 2px; }
+.lien-ket:is(:hover, :focus-visible) { background-size: 100% 1px; }
+
+/* ---------- Ô nhập: dòng kẻ dưới, focus chuyển tím 2px vẽ từ giữa ra (bước 4 dùng) ---------- */
+input:not([type="checkbox"], [type="radio"], [type="hidden"]), select, textarea {
+  width: 100%; min-height: 48px; padding: 10px 2px; border: 0; border-bottom: 1px solid var(--ke-dam); border-radius: 0;
+  background: transparent; font-size: 17px;
+}
+textarea { min-height: 96px; resize: vertical; }
+input:focus-visible, select:focus-visible, textarea:focus-visible { outline: none; border-bottom-color: var(--tim); box-shadow: 0 1px 0 var(--tim); }
+label { font-size: 15px; font-weight: 500; }
+
+/* ---------- Khung chờ ảnh / video: kẻ sọc mảnh + chú thích ---------- */
+.khung-cho {
+  display: grid; place-items: center; gap: 8px; min-height: 200px; padding: 24px; border: 1px solid var(--ke); border-radius: var(--r-anh);
+  background: repeating-linear-gradient(135deg, transparent 0 11px, var(--ke) 11px 12px), var(--kem-dam);
+  color: var(--phu); font-size: 14px; text-align: center;
+}
+.anh-khung { border-radius: var(--r-anh); overflow: hidden; }
+figcaption { margin-top: 10px; font-size: 14px; color: var(--phu); }
+
+/* ---------- Hiện khi cuộn (src/scripts/hieu-ung/hien.js) ----------
+   Chỉ khi <html> có lớp co-hieu-ung (có JavaScript). Bốn kiểu, mỗi khu hiện MỘT lần:
+   mo (mờ → rõ) · len (mờ + lên 12px) · ve (nét SVG có lớp .net vẽ dần, cần pathLength="1") · mo-man (khung mở từ trái bằng clip-path).
+   mo-man: gắn lên KHUNG BỌC; clip-path che các phần tử CON, không che chính khung (IntersectionObserver coi phần tử bị clip-path che kín là
+   không nhìn thấy, nên nếu che chính khung thì nó không bao giờ hiện). Khung bọc không nên có nền / viền riêng.
+   Bảng giá, ô nhập, lỗi, số điện thoại không bao giờ gắn data-hien. */
+.co-hieu-ung [data-hien] { transition: opacity var(--t-hien) var(--cong-ra) var(--tre, 0ms), transform var(--t-hien) var(--cong-ra) var(--tre, 0ms); }
+.co-hieu-ung [data-hien]:not(.da-hien) { opacity: 0; }
+.co-hieu-ung [data-hien="len"]:not(.da-hien) { transform: translateY(var(--dich-max)); }
+.co-hieu-ung [data-hien="mo-man"]:not(.da-hien) { opacity: 1; }
+.co-hieu-ung [data-hien="mo-man"] > * { transition: clip-path var(--t-mo-dau) var(--cong-ra) var(--tre, 0ms); }
+.co-hieu-ung [data-hien="mo-man"]:not(.da-hien) > * { clip-path: inset(0 100% 0 0); }
+.co-hieu-ung [data-hien="ve"]:not(.da-hien) { opacity: 1; }
+.co-hieu-ung [data-hien="ve"] .net { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset var(--t-mo-dau) var(--cong-ra) var(--tre, 0ms); }
+.co-hieu-ung [data-hien="ve"].da-hien .net { stroke-dashoffset: 0; }
+.co-hieu-ung [data-hien].hien-ngay, .co-hieu-ung [data-hien].hien-ngay > *, .co-hieu-ung [data-hien].hien-ngay .net { transition: none; }
+@media print { .co-hieu-ung [data-hien], .co-hieu-ung [data-hien="mo-man"] > * { opacity: 1 !important; transform: none !important; clip-path: none !important; } .co-hieu-ung [data-hien] .net { stroke-dashoffset: 0 !important; } }

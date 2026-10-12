@@ -1,0 +1,53 @@
+/* Giao diện mới "Sổ khám" · Token dùng chung (docs/KE-HOACH-GIAO-DIEN-MOI.md, mục 2 và 3).
+   Nền giấy kem, chữ mực tím, nét bút cam (tối đa 1 chỗ mỗi màn hình), ngọc cho nhãn / trạng thái. Đường kẻ 1px thay bóng đổ. */
+:root {
+  /* Màu */
+  --kem: #FBF7F1;          /* nền chính, thay trắng tinh */
+  --kem-dam: #F3ECE1;      /* nền rê chuột, khung chờ ảnh / video */
+  --tim: #5A1E5E;          /* mực: tiêu đề, nút chính, đường kẻ đậm */
+  --tim-dam: #47164A;      /* nút chính khi rê chuột */
+  --tim-nhat: #B9A3BC;     /* hoạ tiết nét mảnh, ngoặc kép */
+  --cam: #EA7A24;          /* nét bút: gạch chân, khoanh tròn, chấm trạng thái */
+  --cam-nhat: #FBE6D4;     /* loé nền một lần (mở thẳng nhóm giá) */
+  --ngoc: #23706E;         /* lâm sàng: nhãn nhỏ, "Đang mở cửa", liên kết phụ */
+  --ngoc-nhat: #E3F1F0;
+  --chu: #1E1B1F;          /* nội dung */
+  --phu: #5C5861;          /* chú thích */
+  --ke: #E3DDD3;           /* đường kẻ 1px */
+  --ke-dam: #CFC6B8;
+  --do: #B42318;           /* lỗi */
+  --trang: #fff;
+
+  /* Phông */
+  --f-tieu-de: 'Newsreader', Georgia, 'Times New Roman', serif;
+  --f-chu: 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Lưới và nhịp: lưới 12 cột, khung 1200px, lề 32px (điện thoại 16px), bậc 8px */
+  --khung: 1200px;
+  --le: 32px;
+  --cot-gian: 24px;
+  --b1: 8px; --b2: 16px; --b3: 24px; --b4: 32px; --b5: 40px; --b6: 48px; --b8: 64px; --b10: 80px;
+  --khoi: 120px;           /* khoảng giữa các khu (điện thoại 72px) */
+  --cao-dau: 76px;         /* header; thu còn 60px khi cuộn (bước 2) */
+
+  /* Bo góc */
+  --r-nut: 6px;            /* nút, ô nhập */
+  --r-anh: 12px;           /* khung ảnh */
+  --r-video: 24px;         /* khung video hero */
+
+  /* Bóng: chỉ Bé Cam và menu điện thoại */
+  --bong-noi: 0 4px 10px rgba(42, 24, 48, .06), 0 20px 48px rgba(42, 24, 48, .14);
+
+  /* Chuyển động (mục 3) */
+  --t-cham-tay: 160ms;     /* rê chuột, bấm, đổi trạng thái nút */
+  --t-hien: 360ms;         /* nội dung hiện ra khi cuộn tới */
+  --t-mo-dau: 640ms;       /* chỉ hero lần đầu vào trang */
+  --t-trang: 240ms;        /* chuyển giữa các trang */
+  --cong-ra: cubic-bezier(.2, .7, .2, 1);   /* xuất hiện, mở ra */
+  --cong-vao: cubic-bezier(.4, 0, .2, 1);   /* đóng lại, biến mất */
+  --dich-max: 12px;        /* dịch chuyển tối đa */
+  --noi-tiep: 60ms;        /* danh sách hiện nối tiếp, tối đa 5 mục */
+}
+@media (max-width: 767px) {
+  :root { --le: 16px; --khoi: 72px; --cot-gian: 16px; --cao-dau: 64px; }
+}

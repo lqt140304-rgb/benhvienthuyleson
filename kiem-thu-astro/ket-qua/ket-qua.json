@@ -252,7 +252,7 @@
  {
   "tt": "ĐẠT",
   "ten": "[1440x900] Mở Bé Cam: hộp thoại hiện, focus vào trong, đúng một câu chào lấy từ cam.json",
-  "ct": "{\"hien\":true,\"foc\":true,\"chao\":[\"Chào bạn, mình là Cam! Bé nhà bạn là chó hay mèo? Mình chỉ bài hợp với bé nhé.\"],\"ex\":\"true\"}"
+  "ct": "{\"hien\":true,\"foc\":true,\"chao\":[\"Bệnh viện đang ngoài giờ (8:00 – 21:00). Bé cần cấp cứu? Gọi ngay cho bệnh viện nhé.\"],\"ex\":\"true\"}"
  },
  {
   "tt": "ĐẠT",
@@ -267,12 +267,12 @@
  {
   "tt": "ĐẠT",
   "ten": "[1440x900] \"Xem dịch vụ\" cuộn tới khu Dịch vụ ở trang chủ, focus ở tiêu đề (không rơi về BODY)",
-  "ct": "{\"foc\":\"H2\",\"tren\":249}"
+  "ct": "{\"foc\":\"H2\",\"tren\":212}"
  },
  {
   "tt": "ĐẠT",
   "ten": "[390x844] Mở Bé Cam: hộp thoại hiện, focus vào trong, đúng một câu chào lấy từ cam.json",
-  "ct": "{\"hien\":true,\"foc\":true,\"chao\":[\"Chào bạn, mình là Cam! Bé nhà bạn là chó hay mèo? Mình chỉ bài hợp với bé nhé.\"],\"ex\":\"true\"}"
+  "ct": "{\"hien\":true,\"foc\":true,\"chao\":[\"Bệnh viện đang ngoài giờ (8:00 – 21:00). Bé cần cấp cứu? Gọi ngay cho bệnh viện nhé.\"],\"ex\":\"true\"}"
  },
  {
   "tt": "ĐẠT",
@@ -287,7 +287,7 @@
  {
   "tt": "ĐẠT",
   "ten": "[390x844] \"Xem dịch vụ\" cuộn tới khu Dịch vụ ở trang chủ, focus ở tiêu đề (không rơi về BODY)",
-  "ct": "{\"foc\":\"H2\",\"tren\":328}"
+  "ct": "{\"foc\":\"H2\",\"tren\":378}"
  },
  {
   "tt": "ĐẠT",
@@ -402,7 +402,7 @@
  {
   "tt": "ĐẠT",
   "ten": "[nhận thật] Đúng 1 yêu cầu, POST, Content-Type text/plain (không gây bước kiểm tra trước), JSON có đủ trường và ma_yeu_cau",
-  "ct": "{\"ten_khach\":\"Khách thử nghiệm\",\"dien_thoai\":\"0912345678\",\"ten_thu_cung\":\"Bé Thử\",\"loai\":\"Chó\",\"loai_khac\":\"\",\"dich_vu\":\"Khám và chẩn đoán\",\"dich_vu_ma\":\"kham-va-chan-doan\",\"ngay\":\"2026-10-14\",\"gio\":\"09:00\",\"ngay_don\":\"\",\"ghi_chu\":\"ghi chú thử\",\"website\":\"\",\"ma_yeu_cau\":\"ef218812-5f0c-4a76-8c94-2054616bfaac\",\"nguon\":\"/benhvienthuyleson/dat-lich/\",\"gui_luc\":\"2026-10-12T13:27:14.203Z\"}"
+  "ct": "{\"ten_khach\":\"Khách thử nghiệm\",\"dien_thoai\":\"0912345678\",\"ten_thu_cung\":\"Bé Thử\",\"loai\":\"Chó\",\"loai_khac\":\"\",\"dich_vu\":\"Khám và chẩn đoán\",\"dich_vu_ma\":\"kham-va-chan-doan\",\"ngay\":\"2026-10-14\",\"gio\":\"09:00\",\"ngay_don\":\"\",\"ghi_chu\":\"ghi chú thử\",\"website\":\"\",\"ma_yeu_cau\":\"300cb40a-b6f1-4f77-9b77-b610f05bdbc2\",\"nguon\":\"/benhvienthuyleson/dat-lich/\",\"gui_luc\":\"2026-10-12T14:54:17.580Z\"}"
  },
  {
   "tt": "ĐẠT",
@@ -462,12 +462,12 @@
  {
   "tt": "ĐẠT",
   "ten": "[chống trùng] \"Gửi lại\" nguyên nội dung dùng lại CÙNG mã yêu cầu (máy chủ nhờ đó bỏ qua bản trùng)",
-  "ct": "77512a91-22a6-41aa-8035-4ba60301322c / 77512a91-22a6-41aa-8035-4ba60301322c"
+  "ct": "8c815fc4-66c9-4116-b65b-8b5680a5fc12 / 8c815fc4-66c9-4116-b65b-8b5680a5fc12"
  },
  {
   "tt": "ĐẠT",
   "ten": "[chống trùng] Đổi nội dung rồi gửi: mã yêu cầu MỚI; máy chủ trả trùng thì vẫn hiện đã nhận",
-  "ct": "77512a91-22a6-41aa-8035-4ba60301322c / c762ca1a-3636-48f3-938f-26b5137a851f"
+  "ct": "8c815fc4-66c9-4116-b65b-8b5680a5fc12 / 308dd8b0-a15a-416f-90fc-073c8bd653de"
  },
  {
   "tt": "ĐẠT",
@@ -506,7 +506,7 @@
  },
  {
   "tt": "ĐẠT",
-  "ten": "Logic Code.v2.gs bằng đối tượng giả của Google, gồm BODY của biểu mẫu cũ thật vừa bắt được (không gọi Google): ĐẠT 99 · KHÔNG ĐẠT 0 · CHƯA XÁC MINH 1",
+  "ten": "Logic Code.v2.gs bằng đối tượng giả của Google, gồm BODY của biểu mẫu cũ thật vừa bắt được (không gọi Google): ĐẠT 98 · KHÔNG ĐẠT 0 · CHƯA XÁC MINH 2",
   "ct": ""
  },
  {

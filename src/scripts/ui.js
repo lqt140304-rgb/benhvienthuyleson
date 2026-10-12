@@ -20,7 +20,8 @@
   // ---------- R3.2: thẻ xuất hiện khi cuộn (một lần) + hoạ tiết dao động ngắn khi khu hiện ra ----------
   // html.co-hieu-ung chỉ được gắn (ở <head>) khi có JS, có IntersectionObserver và không bật giảm chuyển động.
   // Không có lớp này thì mọi nội dung hiện sẵn. Bảng giá, form, lỗi không bao giờ có data-hien.
-  var goc = document.documentElement, coHieuUng = goc.classList.contains('co-hieu-ung');
+  // Giao diện mới (html[data-giao-dien="moi"]): phần hiện khi cuộn do src/scripts/hieu-ung/hien.js lo, khối này không chạy.
+  var goc = document.documentElement, laGiaoDienMoi = goc.getAttribute('data-giao-dien') === 'moi', coHieuUng = goc.classList.contains('co-hieu-ung') && !laGiaoDienMoi;
   function hienNgay(ds) {
     Array.prototype.forEach.call(ds, function (el) {
       if (el.classList.contains('da-hien')) return;
@@ -50,7 +51,7 @@
     window.addEventListener('beforeprint', function () { hienNgay(document.querySelectorAll('[data-hien]')); });
   }
   // Dùng cho kiểm thử/chụp ảnh toàn trang: hiện tất cả ngay
-  window.__hienTatCa = function () { hienNgay(document.querySelectorAll('[data-hien]')); };
+  if (!laGiaoDienMoi) window.__hienTatCa = function () { hienNgay(document.querySelectorAll('[data-hien]')); };
   // Hoạ tiết trang trí: dao động liên tục bằng CSS (mỗi hoạ tiết một nhịp, lệch pha).
   // Nút "Hiệu ứng trang trí" (hero + chân trang) bật/tắt, nhớ lựa chọn; giảm chuyển động → mặc định tắt.
   var nutTT = Array.prototype.slice.call(document.querySelectorAll('[data-nut-trang-tri]'));

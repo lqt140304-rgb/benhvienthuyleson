@@ -1,0 +1,6 @@
+/* Giao diện mới "Sổ khám" (GIAO_DIEN = 'moi' trong src/lib/site.ts). Không nạp chung với le-son.css.
+   Thứ tự: phông → token → nền dùng chung → (các khu: khu-*.css, thêm ở bước 2–6) → giảm chuyển động (luôn cuối). */
+@import './phong.css';
+@import './token.css';
+@import './nen.css';
+@import './giam-chuyen-dong.css';

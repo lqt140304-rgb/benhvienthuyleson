@@ -4,6 +4,15 @@ import dvRaw from '../data/dich_vu.json';
 
 const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
 
+/**
+ * Giao diện đang dùng (đổi hằng số rồi dựng lại web):
+ * - 'r36': giao diện hiện tại (R3.6, src/styles/le-son.css + trang-phu.css, src/scripts/ui.js).
+ * - 'moi': giao diện mới "Sổ khám" đang làm theo docs/KE-HOACH-GIAO-DIEN-MOI.md (src/styles/moi/, src/scripts/hieu-ung/).
+ *   Hai bộ CSS không bao giờ nạp chung. Khi các khu chưa làm lại xong, giao diện 'moi' còn thô: giữ 'r36' cho tới bước 7.
+ */
+export type GiaoDien = 'moi' | 'r36';
+export const GIAO_DIEN: GiaoDien = 'r36';
+
 /** Ghép đường dẫn nội bộ với base của web (vd "/dat-lich/" → "/benhvienthuyleson/dat-lich/"). Link ngoài giữ nguyên. */
 export function u(path: string = '/'): string {
   if (!path) return '';

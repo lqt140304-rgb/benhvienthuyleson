@@ -1,13 +1,14 @@
 ---
 // Khung chung mọi trang (giao diện mới): thẻ SEO, đầu trang, chân trang, thanh liên hệ nhanh, bé Cam, script giao diện.
-import '../styles/le-son.css';
-import '../styles/trang-phu.css';
+// CSS theo công tắc GIAO_DIEN (src/lib/site.ts): nạp bằng ?url để chỉ MỘT bộ được đưa vào trang (import thường sẽ gộp cả hai).
+import cssR36 from '../styles/r36.css?url';
+import cssMoi from '../styles/moi/index.css?url';
 import Header from '../components/ls/Header.astro';
 import Footer from '../components/ls/Footer.astro';
 import ThanhDuoi from '../components/ls/ThanhDuoi.astro';
 import Cam from '../components/Cam.astro';
 import tt from '../data/thong_tin.json';
-import { u } from '../lib/site';
+import { u, GIAO_DIEN } from '../lib/site';
 
 interface Props {
   title?: string;
@@ -21,6 +22,7 @@ interface Props {
   /** Mục menu của trang hiện tại (xem lib/menu.ts) */
   hienTai?: string;
 }
+const moi = GIAO_DIEN === 'moi';
 const { title, description, image, noindex = false, cam = 'trang_khac', article = false, trang = 'khac', hienTai = '' } = Astro.props;
 
 const tieuDe = title ? `${title} | ${tt.ten}` : `${tt.ten} – Khám chữa bệnh, tư vấn chăm sóc chó mèo`;
@@ -46,11 +48,14 @@ const duLieuCam = {
 };
 ---
 <!doctype html>
-<html lang="vi">
+<html lang="vi" data-giao-dien={moi ? 'moi' : undefined}>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<script is:inline>(function(){var h=document.documentElement;if('IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches){h.classList.add('co-hieu-ung');setTimeout(function(){if(!window.__hieuUngSan)h.classList.remove('co-hieu-ung');},3000);}})();</script>
+{moi
+  ? /* Giao diện mới: bật hiệu ứng cả khi giảm chuyển động (lúc đó giam-chuyen-dong.css chỉ để lại đổi độ mờ 160ms); script hỏng / chưa tải sau 3s thì gỡ để nội dung không bị ẩn */
+    <script is:inline>(function(){var h=document.documentElement;if('IntersectionObserver' in window){h.classList.add('co-hieu-ung');setTimeout(function(){if(!window.__hieuUngSan)h.classList.remove('co-hieu-ung');},3000);}})();</script>
+  : <script is:inline>(function(){var h=document.documentElement;if('IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches){h.classList.add('co-hieu-ung');setTimeout(function(){if(!window.__hieuUngSan)h.classList.remove('co-hieu-ung');},3000);}})();</script>}
 <title>{tieuDe}</title>
 <meta name="description" content={moTa}>
 <link rel="canonical" href={canonical.href}>
@@ -67,9 +72,21 @@ const duLieuCam = {
 <link rel="icon" type="image/png" href={u('/img/favicon.png')}>
 <link rel="apple-touch-icon" href={u('/img/apple-touch-icon.png')}>
 <link rel="sitemap" href={u('/sitemap-index.xml')}>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap">
+{moi ? (
+  <>
+    {/* Phông tự chứa (public/fonts); tải trước phông tiêu đề h1 */}
+    <link rel="preload" href={u('/fonts/newsreader-latin-500-normal.woff2')} as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href={u('/fonts/newsreader-vietnamese-500-normal.woff2')} as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href={cssMoi}>
+  </>
+) : (
+  <>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap">
+    <link rel="stylesheet" href={cssR36}>
+  </>
+)}
 <script type="application/ld+json" set:html={JSON.stringify(schema)}></script>
 </head>
 <body data-trang={trang}>
@@ -83,5 +100,6 @@ const duLieuCam = {
 <Cam trang={cam} />
 <script type="application/json" id="du-lieu-cam" set:html={JSON.stringify(duLieuCam).replace(/</g, '\\u003c')}></script>
 <script>import '../scripts/ui.js';</script>
+{moi && <script>import '../scripts/hieu-ung/index.js';</script>}
 </body>
 </html>

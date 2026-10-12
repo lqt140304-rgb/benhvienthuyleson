@@ -5,7 +5,7 @@
 - **Trạng thái:** `modeDatLich = 'gia-lap'` (`src/lib/dat-lich.ts`). Chưa gộp `main`, chưa thay web chính, chưa triển khai Google cho web thật.
 
 ## Kế hoạch giao diện mới (12/10/2026)
-- Kế hoạch giao diện + hiệu ứng mới đã duyệt với chủ dự án: **`docs/KE-HOACH-GIAO-DIEN-MOI.md`**. Chưa làm code; chờ chủ dự án cho bắt đầu bước 1, làm trên nhánh mới `claude/giao-dien-moi-hieu-ung`.
+- Kế hoạch giao diện + hiệu ứng mới đã duyệt với chủ dự án: **`docs/KE-HOACH-GIAO-DIEN-MOI.md`**. Đang làm trên nhánh **`claude/giao-dien-moi-hieu-ung`** (tách từ `claude/vigilant-bell-at24ko`, đã gộp `claude/youthful-turing-b5olam`). **Bước 1 (nền móng) xong 12/10/2026**; chi tiết ở mục "Tiến độ" cuối tệp kế hoạch. Công tắc `GIAO_DIEN` (`src/lib/site.ts`) vẫn là `'r36'`, web chưa đổi. Việc tiếp theo: bước 2 (Header, Hero, Giới thiệu, chuyển trang).
 
 ## Quy tắc phải giữ
 - Không gộp `main`, không thay web chính, không triển khai Google thật khi chưa được chủ dự án cho phép; không tạo PR.

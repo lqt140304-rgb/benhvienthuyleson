@@ -1,0 +1,19 @@
+/* Giao diện mới · Toàn bộ quy tắc tắt hiệu ứng (kế hoạch mục 3, "Ba lớp tắt/mở"). Nạp SAU CÙNG.
+   1. Không JavaScript: không có lớp co-hieu-ung trên <html> nên mọi quy tắc ẩn của data-hien không áp dụng, nội dung hiện sẵn.
+   2. Máy bật giảm chuyển động: không còn dịch chuyển, mở màn, vẽ nét, lặp; chỉ còn đổi độ mờ 160ms.
+   3. Nút "Hiệu ứng trang trí" tắt (html.tat-trang-tri, nhớ trong localStorage 'le-son-trang-tri'): phần trang trí đứng yên.
+      Các khu gắn [data-trang-tri] cho phần trang trí của mình (hoạ tiết, video hero, dải đánh giá, Bé Cam: các bước sau). */
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important; animation-iteration-count: 1 !important; animation-delay: 0s !important;
+    transition-property: opacity, color, background-color, border-color, outline-color !important;
+    transition-duration: var(--t-cham-tay) !important; transition-delay: 0s !important; transition-timing-function: linear !important;
+  }
+  .co-hieu-ung [data-hien], .co-hieu-ung [data-hien="mo-man"] > * { transform: none !important; clip-path: none !important; }
+  .co-hieu-ung [data-hien] .net { stroke-dashoffset: 0 !important; }
+}
+
+html.tat-trang-tri [data-trang-tri], html.tat-trang-tri [data-trang-tri] * { animation-play-state: paused !important; }
+html.tat-trang-tri [data-trang-tri] { transform: none !important; translate: none !important; }

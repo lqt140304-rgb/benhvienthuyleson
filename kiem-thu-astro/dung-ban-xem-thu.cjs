@@ -14,7 +14,7 @@ fs.rmSync(RA, { recursive: true, force: true });
 const trangHtml = []; // { nguon: đường dẫn trong dist, dich: đường dẫn đăng }
 (function quet(d, tuongDoi = '') { for (const e of fs.readdirSync(d, { withFileTypes: true })) {
   const r = path.posix.join(tuongDoi, e.name);
-  if (e.isDirectory()) { if (['admin', 'uploads', '_astro', 'img'].includes(r)) continue; quet(path.join(d, e.name), r); }
+  if (e.isDirectory()) { if (['admin', 'uploads', '_astro', 'img', 'fonts'].includes(r)) continue; quet(path.join(d, e.name), r); }
   else if (e.name === 'index.html') trangHtml.push({ nguon: r, dich: r === 'index.html' ? 'home/index.html' : r });
 } })(DIST);
 trangHtml.push({ nguon: 'index.html', dich: 'index.html', manh: true }); // trang chính (bản mảnh)
@@ -42,11 +42,15 @@ for (const t of trangHtml) {
   if (t.manh) h = manh(dau(h)).replace(/<title>[^<]*<\/title>/, '<title>Website Lê Sơn</title>'); else h = dau(h);
   const ra = path.join(RA, t.dich); fs.mkdirSync(path.dirname(ra), { recursive: true }); fs.writeFileSync(ra, h); danhSach[t.dich] = path.relative(GOC, ra);
 }
-// Tệp tĩnh: chỉ những tệp trang thật sự dùng (_astro/*, img/* trừ og.jpg không cần)
-for (const thuMuc of ['_astro', 'img']) (function chep(tuongDoiThuMuc) { for (const e of fs.readdirSync(path.join(DIST, tuongDoiThuMuc), { withFileTypes: true })) {
+// Tệp tĩnh: _astro/* (đăng là tep/), img/*, fonts/* (phông tự chứa của giao diện mới; thư mục không có thì bỏ qua)
+// CSS: url(/benhvienthuyleson/…) do Vite ghi sẵn (vd phông) được đổi thành đường dẫn tương đối tính từ thư mục tep/
+for (const thuMuc of ['_astro', 'img', 'fonts']) if (fs.existsSync(path.join(DIST, thuMuc))) (function chep(tuongDoiThuMuc) { for (const e of fs.readdirSync(path.join(DIST, tuongDoiThuMuc), { withFileTypes: true })) {
   const r = path.posix.join(tuongDoiThuMuc, e.name);
   if (e.isDirectory()) { chep(r); continue; }
-  const dang = r.replace(/^_astro\//, 'tep/'), dich = path.join(RA, dang); fs.mkdirSync(path.dirname(dich), { recursive: true }); fs.copyFileSync(path.join(DIST, r), dich); danhSach[dang] = path.relative(GOC, dich);
+  const dang = r.replace(/^_astro\//, 'tep/'), dich = path.join(RA, dang); fs.mkdirSync(path.dirname(dich), { recursive: true });
+  if (dang.endsWith('.css')) fs.writeFileSync(dich, fs.readFileSync(path.join(DIST, r), 'utf8').replace(/url\((["']?)\/benhvienthuyleson\/([^"')]*)\1\)/g, (_, q, v) => `url(${q}${tuongDoi(path.posix.dirname(dang), v)}${q})`));
+  else fs.copyFileSync(path.join(DIST, r), dich);
+  danhSach[dang] = path.relative(GOC, dich);
 } })(thuMuc);
 fs.writeFileSync(path.join(RA, 'danh-sach-tep.json'), JSON.stringify(danhSach, null, 1));
 const conDu = Object.values(danhSach).filter((f) => /\.(html|js|css)$/.test(f)).filter((f) => /["'(]\/benhvienthuyleson\//.test(fs.readFileSync(path.join(GOC, f), 'utf8')));

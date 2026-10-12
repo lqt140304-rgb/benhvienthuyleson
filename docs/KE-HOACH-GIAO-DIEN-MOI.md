@@ -250,7 +250,7 @@ Không thêm thư viện (không GSAP, Lottie, Framer). CSS + JavaScript thuần
 
 Nhánh mới `claude/giao-dien-moi-hieu-ung`, mỗi bước một commit, chụp ảnh máy tính + điện thoại sau mỗi bước.
 
-1. **Nền móng:** `token.css`, `nen.css`, phông tự chứa, công tắc `GIAO_DIEN`, `hien.js`, tệp giảm chuyển động.
+1. **Nền móng:** `token.css`, `nen.css`, phông tự chứa, công tắc `GIAO_DIEN`, `hien.js`, tệp giảm chuyển động. **ĐÃ XONG (12/10/2026)**, xem "Tiến độ" cuối tệp.
 2. **Header, Hero (khung video + khung chờ), Giới thiệu, chuyển trang** (mục 4).
 3. **Dịch vụ, Sản phẩm, Tóm tắt giá, trang Bảng giá** (mục 5).
 4. **Đặt lịch:** chỉ lớp vỏ; chạy lại kiểm thử form ngay.
@@ -287,4 +287,16 @@ Nhánh mới `claude/giao-dien-moi-hieu-ung`, mỗi bước một commit, chụp
 | Bản đồ | Nút "Mở bản đồ", không nhúng sẵn |
 | Ảnh bác sĩ, cơ sở vật chất, video | Chủ dự án gửi sau một thời gian; trong lúc chờ giữ khung chờ |
 
-**Còn mở:** chủ dự án cho bắt đầu bước 1 (mục 9) thì mới làm.
+**Còn mở:** ~~chủ dự án cho bắt đầu bước 1~~ (đã cho bắt đầu 12/10/2026).
+
+## Tiến độ
+
+### Bước 1 · Nền móng (xong 12/10/2026, nhánh `claude/giao-dien-moi-hieu-ung`)
+
+- Công tắc `GIAO_DIEN` trong `src/lib/site.ts`, **mặc định `'r36'`**: web vẫn như cũ cho tới bước 7. `Layout.astro` nạp CSS bằng `?url` nên chỉ MỘT bộ vào trang (`src/styles/r36.css` = `le-son.css` + `trang-phu.css`; hoặc `src/styles/moi/index.css`). Import thường sẽ gộp cả hai, đã thử.
+- `src/styles/moi/`: `phong.css` (Newsreader 400/500/600 + nghiêng 500, Be Vietnam Pro 400/500/600; Latin + Việt, tệp `.woff2` trong `public/fonts/` kèm giấy phép OFL), `token.css`, `nen.css` (chữ, nút, ô nhập, lưới 12 cột, `.lech` 4/8, đường kẻ, khung chờ kẻ sọc, 4 kiểu `data-hien`), `giam-chuyen-dong.css` (nạp cuối).
+- `src/scripts/hieu-ung/hien.js` + `index.js` (`khoiDong()` gọi lúc tải và ở `astro:page-load`). Giao diện mới: 582 byte JS nén. `ui.js` bỏ qua khối hiện-khi-cuộn cũ khi `<html data-giao-dien="moi">`.
+- **Điều chỉnh so với mục 3:** kiểu `mo-man` che các phần tử **con** bằng `clip-path`, không che chính khung. Kiểm thử phát hiện IntersectionObserver coi phần tử bị `clip-path` che kín là không nhìn thấy, nên che chính khung thì nó không bao giờ hiện. Gắn `data-hien="mo-man"` lên khung bọc không có nền / viền riêng.
+- **Giảm chuyển động** ở giao diện mới vẫn gắn `co-hieu-ung` (để còn đổi độ mờ 160ms theo mục 3); mọi dịch chuyển / mở màn / vẽ nét tắt hẳn.
+- Kiểm thử mới `kiem-thu-astro/kiem-thu-giao-dien-moi.cjs` (tự dựng `dist-moi` bằng `dung-giao-dien.cjs`): 22 ĐẠT, 0 KHÔNG ĐẠT. `dung-ban-xem-thu.cjs` chép thêm `fonts/` và đổi `url(/benhvienthuyleson/…)` trong CSS thành đường dẫn tương đối.
+- Mũi tên `→` (U+2192) không có trong tệp phông Latin của Newsreader / Be Vietnam Pro (dải ký tự của gói @fontsource): trình duyệt vẽ bằng phông hệ thống. Bước 2 nên dùng mũi tên SVG.

@@ -1,0 +1,3 @@
+/* Giao diện R3.6 (GIAO_DIEN = 'r36' trong src/lib/site.ts): đúng hai tệp và thứ tự như trước khi có công tắc giao diện. */
+@import './le-son.css';
+@import './trang-phu.css';

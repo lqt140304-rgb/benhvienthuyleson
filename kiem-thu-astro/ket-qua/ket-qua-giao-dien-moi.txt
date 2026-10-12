@@ -1,0 +1,39 @@
+Kiểm thử nền móng giao diện mới (bước 1) · Chromium 141.0.7390.37 (Playwright) · 2026-10-12T14:46:27.318Z
+ĐẠT 22 · KHÔNG ĐẠT 0 · CHƯA CHẠY 1 · CHƯA XÁC MINH 1
+
+
+-- 1. Công tắc GIAO_DIEN: hai bộ CSS tách hẳn; giao diện mới dùng phông tự chứa, không gọi mạng ngoài
+[ĐẠT] Giao diện mặc định (dist, GIAO_DIEN = r36): đúng MỘT tệp CSS là bộ R3.6 (có .hero-chu, không có Newsreader), vẫn dùng Google Fonts như trước, không tải trước phông tự chứa, không có script hiệu ứng mới  → {"css":["https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap","/benhvienthuyleson/_astro/r36.BvJ89V1I.css"],"google":true,"preload":[],"html":"<html lang=\"vi\">","scriptNhung":false}
+[ĐẠT] Giao diện mới (dist-moi): đúng MỘT tệp CSS là bộ mới (có Newsreader, --kem, data-hien), KHÔNG có quy tắc nào của le-son.css (.hero-chu, .sp-panel, Playfair), không gọi Google Fonts, tải trước 2 tệp Newsreader 500, <html data-giao-dien="moi">  → {"css":["/benhvienthuyleson/_astro/index.DJ83kZEg.css"],"google":false,"preload":["/benhvienthuyleson/fonts/newsreader-latin-500-normal.woff2","/benhvienthuyleson/fonts/newsreader-vietnamese-500-normal.woff2"],"html":"<html lang=\"vi\" data-giao-dien=\"moi\">","scriptNhung":true,"kichThuoc":11739}
+[ĐẠT] 14 @font-face trỏ tới tệp có thật trong /benhvienthuyleson/fonts/ (Newsreader 400/500/600 + nghiêng 500, Be Vietnam Pro 400/500/600; mỗi độ đậm 2 tệp Latin + Việt); có giấy phép OFL đi kèm
+
+-- 2. Phông vẽ thật và token màu (giao diện mới)
+[ĐẠT] 1440x900: phông vẽ thật (CSS.getPlatformFontsForNode) ở 4 trang: h1/h2 chỉ Newsreader, h3/đoạn văn chỉ Be Vietnam Pro, không ký tự nào (kể cả dấu tiếng Việt) rơi sang phông dự phòng
+[ĐẠT] 390x844: phông vẽ thật (CSS.getPlatformFontsForNode) ở 4 trang: h1/h2 chỉ Newsreader, h3/đoạn văn chỉ Be Vietnam Pro, không ký tự nào (kể cả dấu tiếng Việt) rơi sang phông dự phòng
+[ĐẠT] Token: nền trang kem #FBF7F1, h1 mực tím #5A1E5E cỡ 56/60px, chữ #1E1B1F; biến --tim/--cam/--ngoc/--ke đúng bảng màu kế hoạch  → {"nen":"rgb(251, 247, 241)","h1":"rgb(90, 30, 94)","h1co":"56px/60px","h1nang":"500","chu":"rgb(30, 27, 31)","tim":"#5a1e5e","cam":"#ea7a24","ngoc":"#23706e","ke":"#e3ddd3"}
+[ĐẠT] Giao diện mới: không lỗi JavaScript / console ở các trang đã mở
+
+-- 3. Hiện khi cuộn (hien.js): bốn kiểu, một lần, nối tiếp 60ms tối đa 5 mục, focus, in
+[ĐẠT] Trước khi cuộn tới: mo mờ hẳn; len mờ + lệch 12px; mo-man che kín phần tử con bằng clip-path (không mờ); nét ve chưa vẽ (dashoffset 1)  → {"mo":{"da":false,"op":0,"tf":"none","clip":"none"},"len":{"da":false,"op":0,"tf":"matrix(1, 0, 0, 1, 0, 12)","clip":"none"},"man":{"da":false,"op":1,"tf":"none","clip":"inset(0px 100% 0px 0px)"},"ve":{"da":false,"op":1,"tf":"none","clip":"none","net":"1px"},"ds":["0ms","0ms","0ms","0ms","0ms","0ms","0ms","0ms","0ms","0ms","0ms"],"coHU":true}
+[ĐẠT] Sau khi cuộn tới: cả bốn kiểu đã hiện (độ mờ 1, không lệch, clip-path none, nét vẽ xong dashoffset 0)  → {"mo":{"da":true,"op":1,"tf":"none","clip":"none"},"len":{"da":true,"op":1,"tf":"none","clip":"none"},"man":{"da":true,"op":1,"tf":"none","clip":"none"},"ve":{"da":true,"op":1,"tf":"none","clip":"none","net":"0px"},"ds":["0ms","0ms","0ms","0ms","0ms","0ms","0ms","0ms","0ms","0ms","0ms"],"coHU":true}
+[ĐẠT] 11 phần tử vào màn hình cùng lúc hiện nối tiếp theo thứ tự trên trang: 0, 60, 120, 180, 240ms rồi dừng ở 240ms (tối đa 5 bậc); xong thì độ trễ được gỡ  → đang chạy: 0ms 60ms 120ms 180ms 240ms 240ms 240ms 240ms 240ms 240ms 240ms · mong đợi: 0 60 120 180 240 240 240 240 240 240 240 · xong: 0ms 0ms 0ms 0ms 0ms 0ms 0ms 0ms 0ms 0ms 0ms
+[ĐẠT] Mỗi phần tử hiện MỘT lần: cuộn đi rồi quay lại không ẩn / chạy lại  → da-hien,da-hien,da-hien,da-hien,da-hien,da-hien,da-hien,da-hien,da-hien,da-hien,da-hien
+[ĐẠT] Gọi khởi động lại nhiều lần (astro:page-load) không lỗi và không làm phần tử đã hiện ẩn lại
+[ĐẠT] Focus bằng bàn phím vào phần tử trong khối data-hien đang ẩn → khối hiện NGAY (không chờ chuyển động)  → {"link":"h-focus-a","truocF":"0","da":true,"op":"1","tr":"0s"}
+[ĐẠT] Khi in: mọi phần tử data-hien hiện đủ  → 0 phần tử còn ẩn
+
+-- 4. Ba lớp tắt/mở: không JavaScript, giảm chuyển động, tắt "Hiệu ứng trang trí"; script hiệu ứng hỏng
+[ĐẠT] Tắt JavaScript: 11 trang không có lớp co-hieu-ung, mọi phần tử data-hien hiện đủ (độ mờ 1)
+[ĐẠT] Giảm chuyển động: KHÔNG còn dịch chuyển / mở màn / vẽ nét (len không lệch, mo-man không che, nét vẽ sẵn), chuyển tiếp chỉ còn độ mờ 160ms; vẫn hiện ra được; không chuyển động lặp vô hạn nào chạy  → {"truoc":{"len":{"da":false,"op":0,"tf":"none","clip":"none"},"man":"none","net":"0px"},"tr":{"prop":"opacity, color, background-color, border-color, outline-color","dur":"0.16s"},"lap":0}
+[ĐẠT] Tắt "Hiệu ứng trang trí" (nút có sẵn, nhớ trong localStorage): html.tat-trang-tri, phần tử [data-trang-tri] đang quay thì dừng  → {"truoc":["running"],"sau":{"lop":true,"an":["paused"],"ls":"tat"}}
+[ĐẠT] Script hiệu ứng không tải được: sau 3 giây lớp co-hieu-ung tự gỡ, mọi nội dung hiện đủ  → {"ngay":{"hu":true,"script":false},"sau":{"hu":false,"an":0}}
+
+-- 5. Giao diện mặc định (r36) không tải gì của giao diện mới; dung lượng
+[ĐẠT] Giao diện r36: không tải tệp phông tự chứa nào, không lỗi JavaScript  → phông tự chứa: 0; lỗi: 
+[ĐẠT] JavaScript hiệu ứng mới < 8 KB nén (kế hoạch mục 8): 582 byte gzip (1155 byte)
+
+-- 6. Yêu cầu mạng ra ngoài và giới hạn
+[ĐẠT] Không gọi máy chủ ngoài nào ngoài Google Fonts của giao diện r36 (bị chặn) và bản đồ nhúng trang Liên hệ (không mở trong lần chạy này)  → www.google.com, fonts.googleapis.com
+[ĐẠT] Giao diện mới thực sự tải phông tự chứa (174 lần)
+[CHƯA XÁC MINH] Bố cục các khu ở giao diện mới  → Bước 1 chỉ là nền móng: các khu (header, hero…) chưa làm lại nên giao diện "moi" còn thô; kiểm ở bước 2–7
+[CHƯA CHẠY] Firefox, Safari/WebKit, Edge; điện thoại thật  → Chỉ có Chromium 141.0.7390.37 của Playwright
