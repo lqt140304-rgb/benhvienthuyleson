@@ -1,10 +1,10 @@
-Kiểm thử nền móng giao diện mới (bước 1) · Chromium 141.0.7390.37 (Playwright) · 2026-10-12T14:46:27.318Z
+Kiểm thử nền móng giao diện mới (bước 1) · Chromium 141.0.7390.37 (Playwright) · 2026-10-12T15:58:30.626Z
 ĐẠT 22 · KHÔNG ĐẠT 0 · CHƯA CHẠY 1 · CHƯA XÁC MINH 1
 
 
 -- 1. Công tắc GIAO_DIEN: hai bộ CSS tách hẳn; giao diện mới dùng phông tự chứa, không gọi mạng ngoài
 [ĐẠT] Giao diện mặc định (dist, GIAO_DIEN = r36): đúng MỘT tệp CSS là bộ R3.6 (có .hero-chu, không có Newsreader), vẫn dùng Google Fonts như trước, không tải trước phông tự chứa, không có script hiệu ứng mới  → {"css":["https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap","/benhvienthuyleson/_astro/r36.BvJ89V1I.css"],"google":true,"preload":[],"html":"<html lang=\"vi\">","scriptNhung":false}
-[ĐẠT] Giao diện mới (dist-moi): đúng MỘT tệp CSS là bộ mới (có Newsreader, --kem, data-hien), KHÔNG có quy tắc nào của le-son.css (.hero-chu, .sp-panel, Playfair), không gọi Google Fonts, tải trước 2 tệp Newsreader 500, <html data-giao-dien="moi">  → {"css":["/benhvienthuyleson/_astro/index.DJ83kZEg.css"],"google":false,"preload":["/benhvienthuyleson/fonts/newsreader-latin-500-normal.woff2","/benhvienthuyleson/fonts/newsreader-vietnamese-500-normal.woff2"],"html":"<html lang=\"vi\" data-giao-dien=\"moi\">","scriptNhung":true,"kichThuoc":11739}
+[ĐẠT] Giao diện mới (dist-moi): đúng MỘT tệp CSS là bộ mới (có Newsreader, --kem, data-hien), KHÔNG có quy tắc nào của le-son.css (.hero-nen, .sp-panel, Playfair, --bong-1), không gọi Google Fonts, tải trước 2 tệp Newsreader 500, <html data-giao-dien="moi">  → {"css":["/benhvienthuyleson/_astro/index.b9syNHtH.css"],"google":false,"preload":["/benhvienthuyleson/fonts/newsreader-latin-500-normal.woff2","/benhvienthuyleson/fonts/newsreader-vietnamese-500-normal.woff2"],"html":"<html lang=\"vi\" data-giao-dien=\"moi\">","scriptNhung":true,"kichThuoc":23369}
 [ĐẠT] 14 @font-face trỏ tới tệp có thật trong /benhvienthuyleson/fonts/ (Newsreader 400/500/600 + nghiêng 500, Be Vietnam Pro 400/500/600; mỗi độ đậm 2 tệp Latin + Việt); có giấy phép OFL đi kèm
 
 -- 2. Phông vẽ thật và token màu (giao diện mới)
@@ -30,10 +30,10 @@ Kiểm thử nền móng giao diện mới (bước 1) · Chromium 141.0.7390.37
 
 -- 5. Giao diện mặc định (r36) không tải gì của giao diện mới; dung lượng
 [ĐẠT] Giao diện r36: không tải tệp phông tự chứa nào, không lỗi JavaScript  → phông tự chứa: 0; lỗi: 
-[ĐẠT] JavaScript hiệu ứng mới < 8 KB nén (kế hoạch mục 8): 582 byte gzip (1155 byte)
+[ĐẠT] JavaScript hiệu ứng mới < 8 KB nén (kế hoạch mục 8): 2572 byte gzip (6005 byte)
 
 -- 6. Yêu cầu mạng ra ngoài và giới hạn
 [ĐẠT] Không gọi máy chủ ngoài nào ngoài Google Fonts của giao diện r36 (bị chặn) và bản đồ nhúng trang Liên hệ (không mở trong lần chạy này)  → www.google.com, fonts.googleapis.com
-[ĐẠT] Giao diện mới thực sự tải phông tự chứa (174 lần)
+[ĐẠT] Giao diện mới thực sự tải phông tự chứa (272 lần)
 [CHƯA XÁC MINH] Bố cục các khu ở giao diện mới  → Bước 1 chỉ là nền móng: các khu (header, hero…) chưa làm lại nên giao diện "moi" còn thô; kiểm ở bước 2–7
 [CHƯA CHẠY] Firefox, Safari/WebKit, Edge; điện thoại thật  → Chỉ có Chromium 141.0.7390.37 của Playwright

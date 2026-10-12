@@ -1,0 +1,9 @@
+---
+// Nét bút cam vẽ tay (SVG một nét, màu theo `color`, mặc định cam). Hiện bằng kiểu data-hien="ve" (vẽ dần khi cuộn tới) hoặc do CSS của khu quyết định.
+// pathLength="1" để nét vẽ dần bằng stroke-dashoffset cho mọi độ dài. Kích thước theo font-size của khu chứa (em), không méo nét.
+interface Props { kieu?: 'gach'; class?: string; hien?: boolean }
+const { kieu = 'gach', class: cls = '', hien = false } = Astro.props;
+const DUONG = { gach: { w: 190, h: 16, d: 'M3 10 C 40 4.5, 92 3.5, 132 6.5 S 176 11.5, 187 5', rong: 3.2 } };
+const n = DUONG[kieu];
+---
+<svg class={`net-but net-but-${kieu} ${cls}`.trim()} viewBox={`0 0 ${n.w} ${n.h}`} aria-hidden="true" focusable="false" data-hien={hien ? 've' : undefined}><path class="net" pathLength="1" d={n.d} fill="none" stroke="currentColor" stroke-width={n.rong} stroke-linecap="round"></path></svg>

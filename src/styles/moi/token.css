@@ -28,7 +28,8 @@
   --cot-gian: 24px;
   --b1: 8px; --b2: 16px; --b3: 24px; --b4: 32px; --b5: 40px; --b6: 48px; --b8: 64px; --b10: 80px;
   --khoi: 120px;           /* khoảng giữa các khu (điện thoại 72px) */
-  --cao-dau: 76px;         /* header; thu còn 60px khi cuộn (bước 2) */
+  --cao-dau: 76px;         /* header; khi cuộn quá 24px chỉ còn dải 60px (thu bằng transform, chiều cao khung giữ 76px nên không dịch bố cục) */
+  --cao-dau-cuon: 60px; --dich-cuon: 8px; --ty-cuon: .7895;   /* (76 - 60) / 2 = 8; 60 / 76 */
 
   /* Bo góc */
   --r-nut: 6px;            /* nút, ô nhập */
@@ -49,5 +50,5 @@
   --noi-tiep: 60ms;        /* danh sách hiện nối tiếp, tối đa 5 mục */
 }
 @media (max-width: 767px) {
-  :root { --le: 16px; --khoi: 72px; --cot-gian: 16px; --cao-dau: 64px; }
+  :root { --le: 16px; --khoi: 72px; --cot-gian: 16px; --cao-dau: 64px; --cao-dau-cuon: 52px; --dich-cuon: 6px; --ty-cuon: .8125; }
 }

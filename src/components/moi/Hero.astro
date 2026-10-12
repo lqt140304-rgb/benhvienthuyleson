@@ -1,0 +1,54 @@
+---
+// Hero trang chủ (giao diện mới), theo bản vẽ đã duyệt: nội dung bên trái chỉ 4 thứ (tiêu đề, một câu phụ, một nút + một liên kết chữ, một dòng trạng thái),
+// khung video bên phải. Chưa có video thì hiện khung chờ "Video thực tế · sắp cập nhật".
+// Bệnh viện gửi video: chỉ cần chép vào public/video/ (xem public/video/README.md), không phải sửa mã. Ảnh bìa hiện ngay; video tải sau khi trang hiện xong
+// (src/scripts/hieu-ung/video-hero.js).
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+import tt from '../../data/thong_tin.json';
+import { u } from '../../lib/site';
+import NetBut from './NetBut.astro';
+import Mui from './Mui.astro';
+
+const tep = (t: string) => (existsSync(join(process.cwd(), 'public', 'video', t)) ? u('/video/' + t) : '');
+const v = { webm: tep('hero.webm'), mp4: tep('hero.mp4'), webmNho: tep('hero-480.webm'), mp4Nho: tep('hero-480.mp4'), poster: tep('hero-poster.jpg') };
+const coVideo = !!(v.webm || v.mp4);
+const diaChiNgan = tt.dia_chi.split(',').slice(0, 2).join(',').trim(); // "101 Khuất Duy Tiến, Thanh Xuân"
+const gioNgan = tt.gio_mo_cua.replace(/\s*[–-]\s*/, '–');
+---
+<section class="hero" id="noi-dung" aria-labelledby="hero-tieu-de">
+  <div class="khung hero-in">
+    <div class="hero-chu">
+      <h1 id="hero-tieu-de"><span class="dong"><span class="dong-in">Xuất sắc trong chăm sóc –</span></span> <span class="dong"><span class="dong-in"><span class="nhan-but"><em>Tận tuỵ</em><NetBut /></span> từ trái tim.</span></span></h1>
+      <p class="hero-phu">Bệnh viện thú y chó mèo, {diaChiNgan}.</p>
+      <div class="hero-nut">
+        <a class="nut nut-chinh nut-lon" href={u('/dat-lich/')}>Đặt lịch khám<Mui /></a>
+        <a class="lien-ket lien-ket-gach" href={u('/bang-gia/')}>Xem bảng giá<Mui size={16} /></a>
+      </div>
+      <p class="hero-tt">
+        <span class="mo-cua" data-mo-cua data-gio={tt.gio_mo_cua}><span class="mc-dot" aria-hidden="true"></span><span class="mc-chu">Giờ mở cửa</span><span class="mc-gio"> · {gioNgan}</span></span>
+        <span class="hero-ngan" aria-hidden="true"></span>
+        <a class="hero-sdt" href={`tel:${tt.dien_thoai_goi}`}><svg aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"></path></svg>{tt.dien_thoai}</a>
+      </p>
+    </div>
+    <div class="hero-khung" data-hien="mo-man">
+      <figure class={`hv${coVideo ? '' : ' hv-chua'}`} data-video-hero={coVideo ? '' : undefined}>
+        {coVideo ? (
+          <>
+            {v.poster && <img class="hv-poster" src={v.poster} alt="" width="960" height="640" fetchpriority="high">}
+            <video class="hv-video" muted loop playsinline preload="none" tabindex="-1" aria-hidden="true" poster={v.poster || undefined} data-webm={v.webm || undefined} data-mp4={v.mp4 || undefined} data-webm-nho={v.webmNho || undefined} data-mp4-nho={v.mp4Nho || undefined}></video>
+            <button type="button" class="hv-dung" aria-pressed="false" aria-label="Tạm dừng video" hidden>
+              <svg class="hv-ic-dung" aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg>
+              <svg class="hv-ic-phat" aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10-6.5a1 1 0 0 0 0-1.72l-10-6.5A1 1 0 0 0 8 5.5z"></path></svg>
+            </button>
+          </>
+        ) : (
+          <div class="hv-cho">
+            <svg aria-hidden="true" focusable="false" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 10l5-3v10l-5-3"></path><rect x="3" y="6" width="12" height="12" rx="2"></rect></svg>
+            <span>Video thực tế · sắp cập nhật</span>
+          </div>
+        )}
+      </figure>
+    </div>
+  </div>
+</section>

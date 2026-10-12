@@ -87,7 +87,7 @@ label { font-size: 15px; font-weight: 500; }
 
 /* ---------- Khung chờ ảnh / video: kẻ sọc mảnh + chú thích ---------- */
 .khung-cho {
-  display: grid; place-items: center; gap: 8px; min-height: 200px; padding: 24px; border: 1px solid var(--ke); border-radius: var(--r-anh);
+  display: grid; place-content: center; justify-items: center; gap: 8px; min-height: 200px; padding: 24px; border: 1px solid var(--ke); border-radius: var(--r-anh);
   background: repeating-linear-gradient(135deg, transparent 0 11px, var(--ke) 11px 12px), var(--kem-dam);
   color: var(--phu); font-size: 14px; text-align: center;
 }
@@ -111,3 +111,15 @@ figcaption { margin-top: 10px; font-size: 14px; color: var(--phu); }
 .co-hieu-ung [data-hien="ve"].da-hien .net { stroke-dashoffset: 0; }
 .co-hieu-ung [data-hien].hien-ngay, .co-hieu-ung [data-hien].hien-ngay > *, .co-hieu-ung [data-hien].hien-ngay .net { transition: none; }
 @media print { .co-hieu-ung [data-hien], .co-hieu-ung [data-hien="mo-man"] > * { opacity: 1 !important; transform: none !important; clip-path: none !important; } .co-hieu-ung [data-hien] .net { stroke-dashoffset: 0 !important; } }
+
+/* ---------- Nét bút cam vẽ tay (components/moi/NetBut.astro) ---------- */
+.net-but { color: var(--cam); overflow: visible; }
+.net-but-gach { width: 3.45em; height: .29em; }
+
+/* ---------- Trạng thái "Đang mở cửa" (scripts/hieu-ung/mo-cua.js): chưa có JavaScript thì chỉ là chữ "Giờ mở cửa · 8:00–21:00" ---------- */
+.mo-cua { display: inline-flex; align-items: center; gap: 8px; }
+.mc-dot { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--phu); opacity: .55; }
+.mo-cua:not([data-trang]) .mc-dot { display: none; }
+.mo-cua[data-trang="mo"] .mc-dot { background: var(--ngoc); opacity: 1; box-shadow: 0 0 0 4px var(--ngoc-nhat); }
+.mo-cua[data-trang="mo"] .mc-chu { color: var(--ngoc); font-weight: 600; }
+.mo-cua[data-trang="dong"] .mc-chu { font-weight: 600; }

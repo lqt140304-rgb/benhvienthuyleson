@@ -1,0 +1,41 @@
+---
+// Đầu trang (giao diện mới "Sổ khám", GIAO_DIEN = 'moi'): logo, menu 8 mục, nút Đặt lịch khám; dưới 1280px menu thành tấm phủ trượt từ phải.
+// Giữ nguyên các id mà src/scripts/ui.js đang dùng (#dau, #menu, #nut-menu, .nut-menu-chu) để theo dõi mục đang xem, mở / đóng menu,
+// Esc và trả focus vẫn chạy bằng đúng mã đã kiểm thử. Phần riêng của giao diện mới (thu gọn khi cuộn, nét bút cam) ở src/scripts/hieu-ung/header.js.
+import tt from '../../data/thong_tin.json';
+import { u } from '../../lib/site';
+import { menuChinh } from '../../lib/menu';
+interface Props { trang: 'chu' | 'khac'; hienTai?: string }
+const { trang, hienTai = '' } = Astro.props;
+const chu = trang === 'chu';
+const menu = menuChinh();
+const gioNgan = tt.gio_mo_cua.replace(/\s*[–-]\s*/, '–');
+---
+<header class="dau" id="dau">
+  <div class="dau-nen" aria-hidden="true"></div>
+  <div class="dau-ke" aria-hidden="true"></div>
+  <div class="khung dau-in">
+    <a class="logo" href={chu ? '#top' : u('/')} aria-label={`${tt.ten} – ${chu ? 'về đầu trang' : 'về trang chủ'}`}><img src={u('/img/logo.jpg')} alt="" width="44" height="44"><span class="logo-chu"><small>Bệnh viện thú y</small><b>Lê Sơn</b></span></a>
+    <nav class="menu" id="menu" aria-label="Menu chính">
+      <div class="menu-dau">
+        <span class="logo-menu"><img src={u('/img/logo.jpg')} alt="" width="38" height="38"><b>Lê Sơn</b></span>
+        <button type="button" class="menu-dong" aria-label="Đóng menu" data-menu-dong><svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+      </div>
+      <ul class="menu-ds">
+        {menu.map((m, i) => {
+          const ht = chu && m.khoa === 'trang-chu' ? 'page' : hienTai === m.khoa ? 'page' : undefined;
+          return <li style={`--i:${i}`}><a href={chu && m.hrefChu ? m.hrefChu : m.href} aria-current={ht}>{m.ten}</a></li>;
+        })}
+      </ul>
+      <div class="menu-chan">
+        <div class="menu-chan-tt">
+          <span class="mo-cua" data-mo-cua data-gio={tt.gio_mo_cua}><span class="mc-dot" aria-hidden="true"></span><span class="mc-chu">Giờ mở cửa</span><span class="mc-gio"> · {gioNgan}</span></span>
+          <a class="menu-sdt" href={`tel:${tt.dien_thoai_goi}`}>{tt.dien_thoai}</a>
+        </div>
+        <a class="nut nut-chinh nut-lon" href={u('/dat-lich/')}>Đặt lịch khám<svg class="mui" aria-hidden="true" focusable="false" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a>
+      </div>
+    </nav>
+    <a class="nut nut-chinh nut-dau" href={u('/dat-lich/')}>Đặt lịch khám</a>
+    <button class="nut-menu" type="button" id="nut-menu" aria-expanded="false" aria-controls="menu" aria-label="Mở menu"><svg aria-hidden="true" focusable="false" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"></path></svg><span class="nut-menu-chu an-chu">Menu</span></button>
+  </div>
+</header>

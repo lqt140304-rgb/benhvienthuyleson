@@ -1,0 +1,6 @@
+---
+// Mũi tên SVG (không dùng ký tự "→": phông tự chứa không có glyph đó). Nhích 4px sang phải khi rê chuột / focus vào nút hoặc liên kết chứa nó (nen.css).
+interface Props { size?: number }
+const { size = 18 } = Astro.props;
+---
+<svg class="mui" aria-hidden="true" focusable="false" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>

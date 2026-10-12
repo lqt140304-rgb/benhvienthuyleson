@@ -11,6 +11,12 @@ const CONG_MOI = 4379, CONG_R36 = 4378, URL_MOI = `http://localhost:${CONG_MOI}$
 const KQ = path.join(__dirname, 'ket-qua'); fs.mkdirSync(KQ, { recursive: true });
 const TRANG = ['/', '/bang-gia/', '/dich-vu/', '/gioi-thieu/', '/lien-he/', '/dat-lich/', '/nhan-vien/', '/tu-van/', '/tu-van/cho/', '/tu-van/meo/', '/nhat-ky-ca-benh/'];
 
+// JavaScript hiệu ứng của giao diện mới: cả script nhúng trong trang lẫn tệp .js (gói đủ lớn thì Astro tách thành tệp) có chứa "astro:page-load"
+const jsHieuUng = (thuMuc) => {
+  const h = fs.readFileSync(path.join(GOC, thuMuc, 'index.html'), 'utf8'), ds = [...h.matchAll(/<script type="module">([\s\S]*?)<\/script>/g)].map((m) => m[1]);
+  for (const m of h.matchAll(/<script type="module" src="([^"]+)"/g)) { const f = path.join(GOC, thuMuc, m[1].replace(BASE + '/', '')); if (fs.existsSync(f)) ds.push(fs.readFileSync(f, 'utf8')); }
+  return ds.filter((c) => /astro:page-load/.test(c)).join('\n'); // dấu hiệu riêng của gói hieu-ung (ui.js của R3.6 cũng có chữ "da-hien")
+};
 const kq = [];
 const ok = (ten, dieuKien, ct = '') => kq.push({ tt: dieuKien ? 'ĐẠT' : 'KHÔNG ĐẠT', ten, ct: String(ct).slice(0, 500) });
 const chuaChay = (ten, ly) => kq.push({ tt: 'CHƯA CHẠY', ten, ct: ly });
@@ -44,9 +50,8 @@ const CHEN = `
       const u = r.request().url();
       if (u.startsWith(`http://localhost:${CONG_MOI}`) || u.startsWith(`http://localhost:${CONG_R36}`)) {
         if (/\/fonts\/.+\.woff2$/.test(u)) yeuCauPhong[u.includes(`:${CONG_MOI}`) ? 'moi' : 'r36']++;
-        if (boScript && r.request().resourceType() === 'document') { // giả lập script hiệu ứng không tải được: bỏ script module nhúng của hien.js
-          const res = await r.fetch(); const h = (await res.text()).replace(/<script type="module">[^<]*da-hien[^<]*<\/script>/g, '');
-          return r.fulfill({ response: res, body: h });
+        if (boScript && r.request().resourceType() === 'script') { // giả lập script hiệu ứng không tải được: chặn tệp .js chứa hien.js
+          const res = await r.fetch(); if (/astro:page-load/.test(await res.text())) return r.abort();
         }
         return r.continue();
       }
@@ -65,12 +70,12 @@ const CHEN = `
   // ---------- 1. Hai bộ CSS tách hẳn, phông tự chứa ----------
   muc('1. Công tắc GIAO_DIEN: hai bộ CSS tách hẳn; giao diện mới dùng phông tự chứa, không gọi mạng ngoài');
   {
-    const doc = (d) => { const h = fs.readFileSync(path.join(GOC, d, 'index.html'), 'utf8'); return { css: [...h.matchAll(/<link rel="stylesheet" href="([^"]+)"/g)].map((m) => m[1]), google: /fonts\.googleapis/.test(h), preload: [...h.matchAll(/rel="preload" href="([^"]+)"/g)].map((m) => m[1]), html: (/<html[^>]*>/.exec(h) || [''])[0], scriptNhung: /<script type="module">[^<]*da-hien/.test(h) }; };
+    const doc = (d) => { const h = fs.readFileSync(path.join(GOC, d, 'index.html'), 'utf8'); return { css: [...h.matchAll(/<link rel="stylesheet" href="([^"]+)"/g)].map((m) => m[1]), google: /fonts\.googleapis/.test(h), preload: [...h.matchAll(/rel="preload" href="([^"]+)"/g)].map((m) => m[1]), html: (/<html[^>]*>/.exec(h) || [''])[0], scriptNhung: jsHieuUng(d).length > 0 }; };
     const r36 = doc('dist'), moi = doc('dist-moi');
     const noiDung = (d, href) => fs.readFileSync(path.join(GOC, d, href.replace(BASE + '/', '')), 'utf8');
     ok('Giao diện mặc định (dist, GIAO_DIEN = r36): đúng MỘT tệp CSS là bộ R3.6 (có .hero-chu, không có Newsreader), vẫn dùng Google Fonts như trước, không tải trước phông tự chứa, không có script hiệu ứng mới', r36.css.filter((c) => !/googleapis/.test(c)).length === 1 && /r36\./.test(r36.css.join()) && r36.google && !r36.preload.length && !r36.scriptNhung && !/data-giao-dien/.test(r36.html) && /\.hero-chu/.test(noiDung('dist', r36.css.find((c) => /r36\./.test(c)))) && !/Newsreader/.test(noiDung('dist', r36.css.find((c) => /r36\./.test(c)))), JSON.stringify(r36));
     const cssMoi = moi.css.length === 1 ? noiDung('dist-moi', moi.css[0]) : '';
-    ok('Giao diện mới (dist-moi): đúng MỘT tệp CSS là bộ mới (có Newsreader, --kem, data-hien), KHÔNG có quy tắc nào của le-son.css (.hero-chu, .sp-panel, Playfair), không gọi Google Fonts, tải trước 2 tệp Newsreader 500, <html data-giao-dien="moi">', moi.css.length === 1 && /Newsreader/.test(cssMoi) && /--kem:/.test(cssMoi) && /data-hien/.test(cssMoi) && !/\.hero-chu|\.sp-panel|Playfair/.test(cssMoi) && !moi.google && moi.preload.length === 2 && /data-giao-dien="moi"/.test(moi.html) && moi.scriptNhung, JSON.stringify({ ...moi, kichThuoc: cssMoi.length }));
+    ok('Giao diện mới (dist-moi): đúng MỘT tệp CSS là bộ mới (có Newsreader, --kem, data-hien), KHÔNG có quy tắc nào của le-son.css (.hero-nen, .sp-panel, Playfair, --bong-1), không gọi Google Fonts, tải trước 2 tệp Newsreader 500, <html data-giao-dien="moi">', moi.css.length === 1 && /Newsreader/.test(cssMoi) && /--kem:/.test(cssMoi) && /data-hien/.test(cssMoi) && !/\.hero-nen|\.sp-panel|Playfair|--bong-1/.test(cssMoi) && !moi.google && moi.preload.length === 2 && /data-giao-dien="moi"/.test(moi.html) && moi.scriptNhung, JSON.stringify({ ...moi, kichThuoc: cssMoi.length }));
     const tepPhong = [...cssMoi.matchAll(/url\(([^)]+\.woff2)\)/g)].map((m) => m[1].replace(/["']/g, ''));
     const thieu = tepPhong.filter((t) => !t.startsWith(BASE + '/fonts/') || !fs.existsSync(path.join(GOC, 'dist-moi', t.replace(BASE + '/', ''))));
     ok(`${tepPhong.length} @font-face trỏ tới tệp có thật trong ${BASE}/fonts/ (Newsreader 400/500/600 + nghiêng 500, Be Vietnam Pro 400/500/600; mỗi độ đậm 2 tệp Latin + Việt); có giấy phép OFL đi kèm`, tepPhong.length === 14 && thieu.length === 0 && fs.existsSync(path.join(GOC, 'public/fonts/LICENSE-newsreader.txt')) && fs.existsSync(path.join(GOC, 'public/fonts/LICENSE-be-vietnam-pro.txt')), thieu.join(', '));
@@ -201,7 +206,7 @@ const CHEN = `
     for (const t of TRANG.slice(0, 4)) { const p = await mo(ctx, t, URL_R36, loi); await p.close(); }
     ok('Giao diện r36: không tải tệp phông tự chứa nào, không lỗi JavaScript', yeuCauPhong.r36 === 0 && loi.length === 0, `phông tự chứa: ${yeuCauPhong.r36}; lỗi: ${loi.join(' | ')}`);
     await ctx.close();
-    const h = fs.readFileSync(path.join(GOC, 'dist-moi/index.html'), 'utf8'), js = (/<script type="module">([^<]*da-hien[^<]*)<\/script>/.exec(h) || ['', ''])[1];
+    const js = jsHieuUng('dist-moi');
     const nen = zlib.gzipSync(js).length;
     ok(`JavaScript hiệu ứng mới < 8 KB nén (kế hoạch mục 8): ${nen} byte gzip (${js.length} byte)`, js.length > 0 && nen < 8192, '');
   }

@@ -1,0 +1,79 @@
+/* Giao diện mới · Đầu trang (kế hoạch mục 4): nền kem, không bóng; đường kẻ 1px chỉ hiện khi đã cuộn quá 24px.
+   Thu gọn 76 → 60px, logo 44 → 36px, 240ms, CHỈ bằng transform: khung header giữ 76px nên nội dung bên dưới không dịch (CLS 0).
+   Dưới 1280px menu thành tấm phủ trượt từ phải (280ms), mục hiện nối tiếp 40ms. Tấm phủ dùng position:absolute (không fixed) vì phần tử có
+   view-transition-name trở thành khối chứa của phần tử fixed bên trong; header dính ở top:0 nên tấm phủ vẫn phủ kín màn hình. */
+.dau { position: sticky; top: 0; z-index: 40; height: var(--cao-dau); view-transition-name: dau-trang; pointer-events: none; overflow-x: clip; } /* clip: tấm phủ menu lúc đóng nằm ngoài mép phải, không được làm trang rộng thêm (cuộn ngang) */
+.dau-nen { position: absolute; z-index: -1; inset: 0; background: var(--kem); transform-origin: 50% 0; transition: transform var(--t-trang) var(--cong-ra); }
+.dau-ke { position: absolute; z-index: -1; left: 0; right: 0; top: calc(var(--cao-dau-cuon) - 1px); height: 1px; background: var(--ke); opacity: 0; transition: opacity var(--t-trang) var(--cong-ra); }
+.dau.da-cuon .dau-nen { transform: scaleY(var(--ty-cuon)); }
+.dau.da-cuon .dau-ke { opacity: 1; }
+.dau-in { display: flex; align-items: center; justify-content: space-between; gap: 24px; height: var(--cao-dau); pointer-events: none; }
+.dau-in > * { pointer-events: auto; }
+
+.logo { display: flex; align-items: center; gap: 12px; flex: none; transition: transform var(--t-trang) var(--cong-ra); }
+.logo img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; transform-origin: 0 50%; transition: transform var(--t-trang) var(--cong-ra); }
+.logo-chu { display: flex; flex-direction: column; line-height: 1.15; }
+.logo-chu small { font-size: 12px; color: var(--phu); transition: opacity var(--t-trang) var(--cong-ra); }
+.logo-chu b { font-family: var(--f-tieu-de); font-size: 23px; font-weight: 600; color: var(--tim); transition: transform var(--t-trang) var(--cong-ra); }
+.dau.da-cuon .logo { transform: translateY(calc(-1 * var(--dich-cuon))); }
+.dau.da-cuon .logo img { transform: scale(.8182); }
+.dau.da-cuon .logo-chu small { opacity: 0; }
+.dau.da-cuon .logo-chu b { transform: translateY(-7px); }
+
+.menu-ds { position: relative; display: flex; align-items: center; gap: 26px; transition: transform var(--t-trang) var(--cong-ra); }
+.menu-ds a { display: inline-block; padding: 8px 0; font-size: 15px; font-weight: 500; color: var(--chu); transition: color var(--t-cham-tay) var(--cong-ra); }
+.menu-ds a:hover, .menu-ds a[aria-current] { color: var(--tim); }
+.menu-thanh { display: none; }  /* thanh trượt của giao diện cũ (ui.js tạo ra), giao diện mới dùng nét bút */
+.net-menu { position: absolute; left: 0; top: 0; height: 8px; overflow: visible; pointer-events: none; color: var(--cam); opacity: 0; }
+.net-menu .net { stroke-dasharray: 1; stroke-dashoffset: 1; }
+.net-menu.ve .net { animation: net-ve 320ms var(--cong-ra) forwards; }
+@keyframes net-ve { to { stroke-dashoffset: 0; } }
+
+.nut-dau { min-height: 44px; padding: 0 20px; font-size: 15px; transition: transform var(--t-trang) var(--cong-ra), background-color var(--t-cham-tay) var(--cong-ra); }
+.dau.da-cuon .nut-dau { transform: translateY(calc(-1 * var(--dich-cuon))); }
+.dau.da-cuon .menu-ds { transform: translateY(calc(-1 * var(--dich-cuon))); }
+
+.nut-menu { display: none; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border: 1px solid var(--ke); border-radius: var(--r-nut); background: transparent; color: var(--tim); transition: transform var(--t-trang) var(--cong-ra), border-color var(--t-cham-tay) var(--cong-ra); }
+.nut-menu:hover { border-color: var(--tim); }
+.menu-dau, .menu-chan { display: none; }
+body.menu-mo { overflow: hidden; }
+
+@media (max-width: 1279px) {
+  .nut-dau { display: none; }
+  .nut-menu { display: inline-flex; }
+  .dau.da-cuon .nut-menu { transform: translateY(calc(-1 * var(--dich-cuon))); }
+  .menu {
+    position: absolute; top: 0; left: 0; right: 0; height: 100dvh; z-index: 50; display: flex; flex-direction: column; background: var(--kem); box-shadow: var(--bong-noi);
+    transform: translateX(100%); visibility: hidden; transition: transform 280ms var(--cong-ra), visibility 0s linear 280ms;
+  }
+  .menu.mo { transform: none; visibility: visible; transition-delay: 0s; }
+  .menu-dau { display: flex; align-items: center; justify-content: space-between; flex: none; height: var(--cao-dau); padding: 0 var(--le); border-bottom: 1px solid var(--ke); }
+  .logo-menu { display: flex; align-items: center; gap: 10px; }
+  .logo-menu img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; }
+  .logo-menu b { font-family: var(--f-tieu-de); font-size: 21px; font-weight: 600; color: var(--tim); }
+  .menu-dong { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border: 1px solid var(--ke); border-radius: var(--r-nut); background: transparent; color: var(--tim); }
+  .menu-ds { flex: 1; flex-direction: column; align-items: stretch; gap: 0; padding: 8px 0 0; overflow-y: auto; transform: none !important; }
+  .menu-ds li { margin-inline: var(--le); border-bottom: 1px solid var(--ke); opacity: 0; transform: translateX(var(--dich-max)); transition: opacity 360ms var(--cong-ra), transform 360ms var(--cong-ra); }
+  .menu.mo .menu-ds li { opacity: 1; transform: none; transition-delay: calc(120ms + var(--i) * 40ms); }
+  .menu-ds a { display: flex; align-items: center; min-height: 56px; padding: 13px 0; font-family: var(--f-tieu-de); font-size: 25px; line-height: 30px; font-weight: 400; color: var(--chu); }
+  .menu-ds a[aria-current] { margin-inline: calc(-1 * var(--le)); padding-inline: var(--le); background: var(--kem-dam); color: var(--tim); font-weight: 500; }
+  .net-menu { display: none; }
+  .menu-chan { display: flex; flex-direction: column; gap: 14px; flex: none; padding: 16px var(--le) 24px; }
+  .menu-chan-tt { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; font-size: 14px; color: var(--phu); }
+  .menu-sdt { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; color: var(--chu); font-variant-numeric: tabular-nums; }
+  .menu-chan .nut { width: 100%; }
+}
+@media (max-width: 767px) {
+  .logo img { width: 38px; height: 38px; }
+  .logo-chu small { font-size: 11px; }
+  .logo-chu b { font-size: 21px; }
+  .dau.da-cuon .logo img { transform: scale(.8421); }
+}
+
+/* ---------- Chuyển trang: View Transitions giữa các trang (mờ đi / mờ hiện 240ms). Trình duyệt không hỗ trợ → đổi trang bình thường ---------- */
+@view-transition { navigation: auto; }
+::view-transition-old(root) { animation: vt-ra var(--t-trang) var(--cong-vao) both; }
+::view-transition-new(root) { animation: vt-vao var(--t-trang) var(--cong-ra) both; }
+@keyframes vt-ra { to { opacity: 0; } }
+@keyframes vt-vao { from { opacity: 0; } }
+.cam { view-transition-name: be-cam; }

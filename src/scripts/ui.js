@@ -463,7 +463,7 @@
   // ---------- R3.6: hoạ tiết hero trôi nhẹ theo cuộn (tối đa 12px; chỉ máy tính có chuột; tắt khi giảm chuyển động hoặc tắt hiệu ứng trang trí) ----------
   (function () {
     var hero = document.querySelector('.hero'), goc2 = document.documentElement;
-    if (!hero || !goc2.classList.contains('co-hieu-ung') || !window.matchMedia('(hover: hover) and (min-width: 1024px)').matches) return;
+    if (laGiaoDienMoi || !hero || !goc2.classList.contains('co-hieu-ung') || !window.matchMedia('(hover: hover) and (min-width: 1024px)').matches) return;
     var cho = false;
     function cap() {
       cho = false;

@@ -28,7 +28,7 @@ const goc = `http://localhost:${CONG}${TIEN_TO}/`;
   const TRANG = [['Dịch vụ', 'dich-vu'], ['Bảng giá', 'bang-gia'], ['Đặt lịch', 'dat-lich'], ['Cẩm nang thú cưng', 'tu-van'], ['Ca bệnh', 'nhat-ky-ca-benh'], ['Giới thiệu', 'gioi-thieu'], ['Liên hệ', 'lien-he']];
   for (const [w, h, mobile] of [[1440, 900, false], [390, 844, true]]) {
     const tag = `${w}x${h}`, ctx = await ctxMoi({ width: w, height: h }, mobile), p = await ctx.newPage(), loi = [];
-    p.on('pageerror', (e) => loi.push(e.message)); p.on('requestfailed', (r) => { if (r.url().startsWith(`http://localhost:${CONG}`)) loi.push('hỏng: ' + r.url()); });
+    p.on('pageerror', (e) => loi.push(e.message)); p.on('requestfailed', (r) => { if (r.url().startsWith(`http://localhost:${CONG}`) && !/ERR_ABORTED/.test((r.failure() || {}).errorText || '')) loi.push('hỏng: ' + r.url()); }); // yêu cầu bị huỷ do chuyển trang (ảnh tải lười dở dang) không phải tệp hỏng; tệp thiếu vẫn bị bắt ở mục 404
     await p.goto(goc, { waitUntil: 'load' }); await p.evaluate(() => document.fonts.ready);
     const x = await p.evaluate(async () => { document.querySelectorAll('img[loading="lazy"]').forEach((i) => { i.loading = 'eager'; }); await new Promise((r) => setTimeout(r, 700)); const cs = getComputedStyle(document.documentElement);
       return { tim: cs.getPropertyValue('--tim').trim(), dau: getComputedStyle(document.getElementById('dau')).position, anh: [...document.images].map((i) => [i.getAttribute('src'), i.complete && i.naturalWidth > 0]), moduleJs: !!window.__dai, so: document.querySelectorAll('main > section').length, canon: !!document.querySelector('link[rel=canonical]') }; });

@@ -267,7 +267,7 @@
  {
   "tt": "ĐẠT",
   "ten": "[1440x900] \"Xem dịch vụ\" cuộn tới khu Dịch vụ ở trang chủ, focus ở tiêu đề (không rơi về BODY)",
-  "ct": "{\"foc\":\"H2\",\"tren\":212}"
+  "ct": "{\"foc\":\"H2\",\"tren\":249}"
  },
  {
   "tt": "ĐẠT",
@@ -287,7 +287,7 @@
  {
   "tt": "ĐẠT",
   "ten": "[390x844] \"Xem dịch vụ\" cuộn tới khu Dịch vụ ở trang chủ, focus ở tiêu đề (không rơi về BODY)",
-  "ct": "{\"foc\":\"H2\",\"tren\":378}"
+  "ct": "{\"foc\":\"H2\",\"tren\":328}"
  },
  {
   "tt": "ĐẠT",
@@ -402,7 +402,7 @@
  {
   "tt": "ĐẠT",
   "ten": "[nhận thật] Đúng 1 yêu cầu, POST, Content-Type text/plain (không gây bước kiểm tra trước), JSON có đủ trường và ma_yeu_cau",
-  "ct": "{\"ten_khach\":\"Khách thử nghiệm\",\"dien_thoai\":\"0912345678\",\"ten_thu_cung\":\"Bé Thử\",\"loai\":\"Chó\",\"loai_khac\":\"\",\"dich_vu\":\"Khám và chẩn đoán\",\"dich_vu_ma\":\"kham-va-chan-doan\",\"ngay\":\"2026-10-14\",\"gio\":\"09:00\",\"ngay_don\":\"\",\"ghi_chu\":\"ghi chú thử\",\"website\":\"\",\"ma_yeu_cau\":\"300cb40a-b6f1-4f77-9b77-b610f05bdbc2\",\"nguon\":\"/benhvienthuyleson/dat-lich/\",\"gui_luc\":\"2026-10-12T14:54:17.580Z\"}"
+  "ct": "{\"ten_khach\":\"Khách thử nghiệm\",\"dien_thoai\":\"0912345678\",\"ten_thu_cung\":\"Bé Thử\",\"loai\":\"Chó\",\"loai_khac\":\"\",\"dich_vu\":\"Khám và chẩn đoán\",\"dich_vu_ma\":\"kham-va-chan-doan\",\"ngay\":\"2026-10-14\",\"gio\":\"09:00\",\"ngay_don\":\"\",\"ghi_chu\":\"ghi chú thử\",\"website\":\"\",\"ma_yeu_cau\":\"a31b0dd0-fd7d-4459-90b1-3635ad0234a7\",\"nguon\":\"/benhvienthuyleson/dat-lich/\",\"gui_luc\":\"2026-10-12T16:08:14.911Z\"}"
  },
  {
   "tt": "ĐẠT",
@@ -462,12 +462,12 @@
  {
   "tt": "ĐẠT",
   "ten": "[chống trùng] \"Gửi lại\" nguyên nội dung dùng lại CÙNG mã yêu cầu (máy chủ nhờ đó bỏ qua bản trùng)",
-  "ct": "8c815fc4-66c9-4116-b65b-8b5680a5fc12 / 8c815fc4-66c9-4116-b65b-8b5680a5fc12"
+  "ct": "f5b2a7a6-2346-408d-b588-d3cbf826a2b8 / f5b2a7a6-2346-408d-b588-d3cbf826a2b8"
  },
  {
   "tt": "ĐẠT",
   "ten": "[chống trùng] Đổi nội dung rồi gửi: mã yêu cầu MỚI; máy chủ trả trùng thì vẫn hiện đã nhận",
-  "ct": "8c815fc4-66c9-4116-b65b-8b5680a5fc12 / 308dd8b0-a15a-416f-90fc-073c8bd653de"
+  "ct": "f5b2a7a6-2346-408d-b588-d3cbf826a2b8 / 75170e5a-8c6f-43b5-a205-53f5512c1061"
  },
  {
   "tt": "ĐẠT",

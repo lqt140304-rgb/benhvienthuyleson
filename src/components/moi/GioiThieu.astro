@@ -1,0 +1,49 @@
+---
+// Giới thiệu ngắn ở trang chủ (giao diện mới): như trang đầu một bài báo. Tiêu đề bên trái (4 cột), bài bên phải (8 cột, cột chữ 36em, chữ cái đầu lớn),
+// hàng ảnh bất đối xứng (một ảnh dọc + một ảnh ngang). Chưa có ảnh thật thì dùng khung chờ kẻ sọc, luôn ghi "Ảnh thực tế · sắp cập nhật".
+// Không đánh số (chủ dự án 12/10/2026): ba điểm nổi bật là ba hàng kẻ 1px.
+import tt from '../../data/thong_tin.json';
+import { u } from '../../lib/site';
+import Mui from './Mui.astro';
+const ngan = tt.gioi_thieu_ngan || 'Lê Sơn là bệnh viện thú y dành cho chó mèo tại Thanh Xuân, Hà Nội. Khám, chẩn đoán và chăm sóc được thực hiện tại cùng một nơi.';
+const iconAnh = '<svg aria-hidden="true" focusable="false" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"></path><circle cx="12" cy="13" r="3.5"></circle></svg>';
+---
+<section class="khoi gt" id="gioi-thieu">
+  <div class="khung">
+    <div class="lech">
+      <div class="dau-khoi">
+        <p class="nhan">Giới thiệu</p>
+        <h2>Giới thiệu Bệnh viện thú y Lê Sơn</h2>
+      </div>
+      <div class="gt-bai">
+        <p class="gt-mo" data-hien="len">{ngan}</p>
+        <ul class="gt-diem hang-ke">
+          <li data-hien="len"><h3>Chẩn đoán tại viện</h3><p>Siêu âm, X-quang và các xét nghiệm thường dùng.</p></li>
+          <li data-hien="len"><h3>Từ phòng bệnh đến phẫu thuật</h3><p>Tiêm phòng, triệt sản, phẫu thuật và gửi nội trú.</p></li>
+          <li data-hien="len"><h3>Tham khảo chi phí trước khi đến</h3><p>Bảng giá công khai theo nhóm dịch vụ và cân nặng.</p></li>
+        </ul>
+        <a class="lien-ket" href={u('/gioi-thieu/')}>Tìm hiểu thêm về bệnh viện<Mui size={16} /></a>
+      </div>
+    </div>
+    <div class={`gt-anh${tt.anh_tap_the ? ' gt-anh-mot' : ''}`}>
+      {tt.anh_tap_the
+        ? (
+          <figure class="gt-hinh gt-ngang">
+            <div data-hien="mo-man"><div class="anh-khung"><img src={u(tt.anh_tap_the)} alt={`Đội ngũ ${tt.ten}`} loading="lazy" width="1200" height="800"></div></div>
+            <figcaption data-hien="mo" data-tre="120">Đội ngũ {tt.ten}</figcaption>
+          </figure>
+        ) : (
+          <>
+            <figure class="gt-hinh gt-doc">
+              <div data-hien="mo-man"><div class="khung-cho"><span set:html={iconAnh}></span><span>Ảnh phòng khám</span></div></div>
+              <figcaption data-hien="mo" data-tre="120">Ảnh thực tế · sắp cập nhật</figcaption>
+            </figure>
+            <figure class="gt-hinh gt-ngang">
+              <div data-hien="mo-man" data-tre="90"><div class="khung-cho"><span set:html={iconAnh}></span><span>Ảnh không gian đón tiếp</span></div></div>
+              <figcaption data-hien="mo" data-tre="210">Ảnh thực tế · sắp cập nhật</figcaption>
+            </figure>
+          </>
+        )}
+    </div>
+  </div>
+</section>

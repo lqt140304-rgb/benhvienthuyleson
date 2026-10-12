@@ -1,0 +1,29 @@
+/* Giao diện mới · Giới thiệu ở trang chủ (kế hoạch mục 4): như trang đầu một bài báo. Tiêu đề 4 cột trái, bài 8 cột phải (cột chữ 36em, chữ cái đầu lớn Newsreader),
+   hàng ảnh bất đối xứng: ảnh dọc 4 cột + ảnh ngang 8 cột lệch xuống. Ảnh / khung chờ mở "mo-man" khi cuộn tới, chú thích hiện sau 120ms. */
+.gt-bai { display: flex; flex-direction: column; align-items: flex-start; gap: var(--b4); max-width: 36em; }
+.gt-mo { font-size: 19px; line-height: 1.7; color: var(--chu); }
+.gt-mo::first-letter { float: left; margin: .06em .06em 0 0; font-family: var(--f-tieu-de); font-size: 4.3em; line-height: .78; font-weight: 500; color: var(--tim); }
+.gt-diem { align-self: stretch; border-top: 1px solid var(--ke); }
+.gt-diem li { display: grid; gap: 4px; padding: 18px 0; border-bottom: 1px solid var(--ke); }
+.gt-diem li + li { border-top: 0; }
+.gt-diem h3 { font-size: 17px; line-height: 1.4; }
+.gt-diem p { font-size: 16px; color: var(--phu); }
+.gt-anh { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--b4) var(--cot-gian); align-items: end; margin-top: var(--b8); }
+.gt-hinh { margin: 0; min-width: 0; }
+.gt-doc { grid-column: 1 / span 4; }
+.gt-ngang { grid-column: 5 / -1; }
+.gt-anh-mot .gt-ngang { grid-column: 1 / -1; }
+.gt-doc .khung-cho { aspect-ratio: 3 / 4; min-height: 0; }
+.gt-ngang .khung-cho { aspect-ratio: 16 / 9; min-height: 0; }
+.gt-ngang .anh-khung img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+.khung-cho svg { color: var(--tim); }
+@media (max-width: 1023px) {
+  .gt-bai { max-width: none; }
+  .gt-anh { margin-top: var(--b6); }
+}
+@media (max-width: 767px) {
+  .gt-mo { font-size: 18px; }
+  .gt-anh { grid-template-columns: minmax(0, 1fr); }
+  .gt-doc, .gt-ngang, .gt-anh-mot .gt-ngang { grid-column: 1 / -1; }
+  .gt-doc { max-width: 280px; }
+}

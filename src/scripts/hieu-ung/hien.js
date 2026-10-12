@@ -1,4 +1,5 @@
 // Giao diện mới · Hiện khi cuộn: MỘT IntersectionObserver chung cho mọi phần tử [data-hien="mo|len|ve|mo-man"] (kế hoạch mục 3).
+// - Độ trễ cố định: gắn data-tre="<ms>" (vd chú thích ảnh hiện sau 120ms), phần tử đó không tham gia nối tiếp.
 // - Chỉ chạy khi <html> có lớp co-hieu-ung (gắn ở <head> khi có IntersectionObserver); thiếu lớp này thì nội dung hiện sẵn.
 // - Mỗi phần tử hiện MỘT lần. Các phần tử vào màn hình cùng lúc hiện nối tiếp 60ms, tối đa 5 mục (mục thứ 6 trở đi cùng lúc mục 5).
 // - Focus bằng bàn phím vào trong phần tử → hiện ngay. In trang → hiện hết.
@@ -29,7 +30,9 @@ export function khoiDong() {
     quanSat = new IntersectionObserver((muc) => {
       const vao = muc.filter((m) => m.isIntersecting).map((m) => m.target);
       vao.sort((a, b) => (a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1));
-      vao.forEach((el, i) => hien(el, Math.min(i, TOI_DA - 1) * NOI_TIEP));
+      // data-tre="120": độ trễ cố định (ms), không nối tiếp; còn lại nối tiếp theo thứ tự trên trang
+      let bac = 0;
+      vao.forEach((el) => { const co = el.getAttribute('data-tre'); hien(el, co !== null ? +co || 0 : Math.min(bac++, TOI_DA - 1) * NOI_TIEP); });
     }, { threshold: 0.15, rootMargin: '0px 0px -6% 0px' });
     document.addEventListener('focusin', (e) => { const el = e.target.closest && e.target.closest('[data-hien]'); if (el) hienNgay([el]); });
     window.addEventListener('beforeprint', () => hienNgay(document.querySelectorAll('[data-hien]')));

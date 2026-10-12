@@ -59,7 +59,7 @@ Một cuốn sổ khám bệnh được làm cẩn thận: nền giấy kem, ch�
 
 - Ảnh thật cắt khung chữ nhật đứng, chú thích nhỏ bên dưới như ảnh báo. Chưa có ảnh → khung kẻ sọc mảnh + "Ảnh thực tế · sắp cập nhật".
 - Hoạ tiết vẽ tay một nét (dấu chân, ống nghe, xương), nét 1.5px tím nhạt.
-- Số thứ tự `01 02 03` bằng Newsreader thay cho icon tròn.
+- ~~Số thứ tự `01 02 03` bằng Newsreader thay cho icon tròn~~ **Bỏ (chủ dự án 12/10/2026: số trông không đẹp).** Không dùng số thứ tự hay ô đánh dấu ở danh mục, menu, danh sách; chỉ đường kẻ 1px và chữ.
 
 ## 3. Hệ chuyển động chung
 
@@ -95,7 +95,8 @@ Một cuốn sổ khám bệnh được làm cẩn thận: nền giấy kem, ch�
 - Logo trái, menu 8 mục giữa, nút "Đặt lịch khám" phải. Nền kem, không bóng; đường kẻ 1px dưới đáy chỉ hiện khi đã cuộn quá 24px.
 - Thu gọn khi cuộn: 76px → 60px, logo 44 → 36px, 240ms; chỉ dùng `transform`, không đổi `height`.
 - Mục đang xem: **nét bút cam vẽ tay** dưới chữ (SVG `stroke-dashoffset`, 320ms).
-- Menu điện thoại: tấm phủ trượt từ phải (280ms), mục hiện nối tiếp 40ms; số điện thoại + giờ mở cửa ở cuối menu.
+- Menu điện thoại: tấm phủ trượt từ phải (280ms), mục hiện nối tiếp 40ms; số điện thoại + giờ mở cửa ở cuối menu. Mục là chữ Newsreader 25px kẻ 1px, **không số, không ô đánh dấu** (chủ dự án đã xem bản vẽ); mục đang xem tô nền kem đậm trải kín hàng.
+- Nét bút cam dưới mục đang xem trên máy tính **giữ màu cam** (chủ dự án chọn 12/10/2026), dù trang chủ khi đó có 2 chỗ cam (nét menu + nét dưới "Tận tuỵ").
 
 ### Hero (`ls/Hero.astro`) — theo bản vẽ tldraw, dùng video
 
@@ -134,9 +135,9 @@ Khối nội dung bên trái, **khung video** bên phải, mép trên và dướ
 
 ### Dịch vụ nổi bật (`ls/DichVuNoiBat.astro`)
 
-- **Danh mục đánh số** thay lưới thẻ: `01` · tên (Newsreader) · một dòng mô tả · "từ …đ" · mũi tên; kẻ 1px giữa các hàng.
+- **Danh mục kẻ hàng (không đánh số)** thay lưới thẻ: tên (Newsreader) · một dòng mô tả · "từ …đ" · mũi tên; kẻ 1px giữa các hàng.
 - Hiện khi cuộn: đường kẻ vẽ từ trái (`scaleX`, 360ms), chữ mờ hiện sau 80ms, nối tiếp 60ms.
-- Rê chuột: nền kem đậm trượt từ trái, `01` sang cam, icon dịch vụ (`icon-dv.mjs`) chạy **một lần**, mũi tên nhích 4px.
+- Rê chuột: nền kem đậm trượt từ trái, tên dịch vụ sang tím, icon dịch vụ (`icon-dv.mjs`) chạy **một lần**, mũi tên nhích 4px.
 - Điện thoại: chạm có nền đậm 120ms rồi mở trang.
 
 ### Sản phẩm nổi bật (`ls/SanPham.astro`)
@@ -251,7 +252,7 @@ Không thêm thư viện (không GSAP, Lottie, Framer). CSS + JavaScript thuần
 Nhánh mới `claude/giao-dien-moi-hieu-ung`, mỗi bước một commit, chụp ảnh máy tính + điện thoại sau mỗi bước.
 
 1. **Nền móng:** `token.css`, `nen.css`, phông tự chứa, công tắc `GIAO_DIEN`, `hien.js`, tệp giảm chuyển động. **ĐÃ XONG (12/10/2026)**, xem "Tiến độ" cuối tệp.
-2. **Header, Hero (khung video + khung chờ), Giới thiệu, chuyển trang** (mục 4).
+2. **Header, Hero (khung video + khung chờ), Giới thiệu, chuyển trang** (mục 4). **ĐÃ XONG (12/10/2026)**, xem "Tiến độ" cuối tệp.
 3. **Dịch vụ, Sản phẩm, Tóm tắt giá, trang Bảng giá** (mục 5).
 4. **Đặt lịch:** chỉ lớp vỏ; chạy lại kiểm thử form ngay.
 5. **Đội ngũ, Cẩm nang, Câu chuyện điều trị** + trang con (mục 6).
@@ -299,4 +300,20 @@ Nhánh mới `claude/giao-dien-moi-hieu-ung`, mỗi bước một commit, chụp
 - **Điều chỉnh so với mục 3:** kiểu `mo-man` che các phần tử **con** bằng `clip-path`, không che chính khung. Kiểm thử phát hiện IntersectionObserver coi phần tử bị `clip-path` che kín là không nhìn thấy, nên che chính khung thì nó không bao giờ hiện. Gắn `data-hien="mo-man"` lên khung bọc không có nền / viền riêng.
 - **Giảm chuyển động** ở giao diện mới vẫn gắn `co-hieu-ung` (để còn đổi độ mờ 160ms theo mục 3); mọi dịch chuyển / mở màn / vẽ nét tắt hẳn.
 - Kiểm thử mới `kiem-thu-astro/kiem-thu-giao-dien-moi.cjs` (tự dựng `dist-moi` bằng `dung-giao-dien.cjs`): 22 ĐẠT, 0 KHÔNG ĐẠT. `dung-ban-xem-thu.cjs` chép thêm `fonts/` và đổi `url(/benhvienthuyleson/…)` trong CSS thành đường dẫn tương đối.
-- Mũi tên `→` (U+2192) không có trong tệp phông Latin của Newsreader / Be Vietnam Pro (dải ký tự của gói @fontsource): trình duyệt vẽ bằng phông hệ thống. Bước 2 nên dùng mũi tên SVG.
+- Mũi tên `→` (U+2192) không có trong tệp phông Latin của Newsreader / Be Vietnam Pro (dải ký tự của gói @fontsource): trình duyệt vẽ bằng phông hệ thống. Bước 2 dùng mũi tên SVG (`components/moi/Mui.astro`).
+
+### Bước 2 · Header, Hero, Giới thiệu, chuyển trang (xong 12/10/2026, nhánh `claude/giao-dien-moi-hieu-ung`)
+
+Làm đúng bản vẽ đã duyệt trên claude.ai (https://claude.ai/artifact/1NVhg6VVqRQUJTgyGtiEFM). Công tắc `GIAO_DIEN` vẫn `'r36'`: web chưa đổi.
+
+- **Thành phần mới** `src/components/moi/`: `Header.astro`, `Hero.astro`, `GioiThieu.astro`, `NetBut.astro` (nét bút cam SVG dùng lại), `Mui.astro` (mũi tên SVG). `Layout.astro` và `pages/index.astro` chọn thành phần theo `GIAO_DIEN`. **Không sửa `components/ls/`** để giao diện R3.6 chạy song song, không đổi một byte. (Kế hoạch mục 8 ghi "đổi `components/ls/*`": đã đổi cách làm vì hai bản phải sống chung tới bước 7.)
+- **CSS** `src/styles/moi/`: `khu-dau.css`, `khu-hero.css`, `khu-gioi-thieu.css`; trạng thái mở cửa và nét bút dùng chung trong `nen.css`.
+- **Script** `src/scripts/hieu-ung/`: `header.js` (thu gọn khi cuộn quá 24px, nét bút cam dưới mục đang xem), `mo-cua.js` ("Đang mở cửa" theo giờ Việt Nam, tính lại mỗi phút; không JavaScript thì chỉ hiện "Giờ mở cửa · 8:00–21:00"), `video-hero.js`.
+- **Header:** khung giữ 76px, chỉ dải nền thu 76 → 60px bằng `transform` (logo 44 → 36px) nên không dịch bố cục (CLS 0). Giữ id `#dau #menu #nut-menu` để `ui.js` vẫn lo mở / đóng menu, Esc, trả focus, theo dõi mục đang xem. Dưới 1280px menu thành tấm phủ trượt từ phải 280ms, mục nối tiếp 40ms, chữ Newsreader, **không số, không ô đánh dấu**, mục đang xem tô nền kem đậm trải kín hàng.
+- **Hero:** tiêu đề "Xuất sắc trong chăm sóc – *Tận tuỵ* từ trái tim." (nét bút cam dưới "Tận tuỵ"), câu phụ 12 từ ghép từ địa chỉ thật trong dữ liệu, một nút + một liên kết chữ, một dòng "Đang mở cửa · 8:00–21:00" + hotline. Lúc vào trang ~0,9s (mặt nạ từng dòng cách 90ms → nét bút → câu phụ, nút, trạng thái). Khung video bên phải: chưa có video thì khung chờ "Video thực tế · sắp cập nhật".
+- **Video:** bệnh viện chỉ cần chép tệp vào `public/video/` (`hero.webm`, `hero.mp4`, `hero-480.webm`, `hero-480.mp4`, `hero-poster.jpg`; xem `public/video/README.md`), dựng lại web là hero tự dùng. Ảnh bìa hiện ngay, video tải sau khi trang tải xong; điện thoại dùng bản 480p; không tải khi giảm chuyển động / tắt "Hiệu ứng trang trí" / tiết kiệm dữ liệu / mạng 2G; tự dừng khi khuất màn hình hoặc đổi tab; nút tạm dừng bấm được bằng bàn phím, ý người dùng được giữ. Chỉ thử với video do ffmpeg tạo, chưa có video thật.
+- **Giới thiệu:** như trang đầu bài báo: chữ cái đầu lớn Newsreader, cột chữ 36em, hàng ảnh bất đối xứng (ảnh dọc 4 cột + ảnh ngang 8 cột, chung đáy, lệch đỉnh), `mo-man` khi cuộn tới, chú thích hiện sau 120ms (`data-tre`). Ba điểm nổi bật là ba hàng kẻ 1px, **không đánh số** (theo ý chủ dự án về số). Có ảnh thật (`anh_tap_the`) thì chỉ hiện một ảnh ngang.
+- **Điều chỉnh so với kế hoạch (mục 4):** chuyển trang dùng **View Transitions giữa các trang** (CSS `@view-transition`, mờ 240ms, header có `view-transition-name: dau-trang`, Bé Cam `be-cam`) thay vì `<ClientRouter />`. Lý do: `ui.js` (480 dòng) và `dat-lich.js` gắn sự kiện một lần lúc tải trang; ClientRouter đổi thân trang nên phải viết lại chúng thành `khoiDong()` chạy lại được, rủi ro cao cho cả giao diện R3.6. Hệ quả: không có `transition:persist` thật (header trông đứng yên nhờ nhóm chuyển riêng; trạng thái Bé Cam không giữ qua trang). Tách `ui.js` / `dat-lich.js` ở bước 6 rồi mới cân nhắc ClientRouter. Trình duyệt không hỗ trợ / giảm chuyển động: đổi trang bình thường. Trong Chromium chạy không giao diện hoạt cảnh thỉnh thoảng không kích hoạt lần đầu (3/8 lần, cả ở R3.6), nên kiểm thử thử tối đa 4 lần.
+- **Lỗi kiểm thử bắt được và đã sửa:** tấm phủ menu lúc đóng (`translateX(100%)`) làm trang rộng gấp đôi trên điện thoại (cuộn ngang). Sửa bằng `overflow-x: clip` trên `.dau`. Dùng `position: absolute` (không `fixed`) cho tấm phủ vì phần tử có `view-transition-name` thành khối chứa của phần tử `fixed` bên trong. `hien.js` thêm `data-tre` (độ trễ cố định, không nối tiếp).
+- **Kiểm thử:** `kiem-thu-giao-dien-moi-b2.cjs`: 56 ĐẠT, 0 KHÔNG ĐẠT, 4 CHƯA XÁC MINH (kết quả `ket-qua/ket-qua-giao-dien-moi-b2.txt`); `kiem-thu-giao-dien-moi.cjs` (bước 1) 22 ĐẠT. `dung-giao-dien.cjs` nhận thêm `tepThem` (chép video thử vào bản sao tạm). Bài đo JavaScript hiệu ứng nay tìm theo dấu `astro:page-load` (gói đủ lớn nên Astro tách thành tệp riêng; `ui.js` của R3.6 cũng có chữ `da-hien`).
+- **Chưa làm / chưa xác minh:** các khu còn lại của trang chủ chưa làm lại (bước 3–7) nên giao diện `moi` còn thô ở dưới hero và giới thiệu; Firefox / Safari / Edge / điện thoại thật; video thật; cảm nhận chuyển trang bằng mắt.

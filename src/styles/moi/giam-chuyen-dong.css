@@ -17,3 +17,8 @@
 
 html.tat-trang-tri [data-trang-tri], html.tat-trang-tri [data-trang-tri] * { animation-play-state: paused !important; }
 html.tat-trang-tri [data-trang-tri] { transform: none !important; translate: none !important; }
+
+/* Chuyển trang: giảm chuyển động thì đổi trang bình thường */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+}

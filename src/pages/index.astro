@@ -1,8 +1,11 @@
 ---
-// Trang chủ: ghép các khu của giao diện mới (mỗi khu là một component trong src/components/ls/)
+// Trang chủ: ghép các khu (mỗi khu là một component trong src/components/ls/ cho giao diện R3.6, src/components/moi/ cho giao diện mới; chọn theo GIAO_DIEN trong src/lib/site.ts)
 import Layout from '../layouts/Layout.astro';
+import { GIAO_DIEN } from '../lib/site';
 import Hero from '../components/ls/Hero.astro';
 import GioiThieu from '../components/ls/GioiThieu.astro';
+import HeroMoi from '../components/moi/Hero.astro';
+import GioiThieuMoi from '../components/moi/GioiThieu.astro';
 import DichVuNoiBat from '../components/ls/DichVuNoiBat.astro';
 import SanPham from '../components/ls/SanPham.astro';
 import GiaGon from '../components/ls/GiaGon.astro';
@@ -14,8 +17,8 @@ import DanhGia from '../components/ls/DanhGia.astro';
 import LienHe from '../components/ls/LienHe.astro';
 ---
 <Layout trang="chu" cam="trang_chu">
-  <Hero />
-  <GioiThieu />
+  {GIAO_DIEN === 'moi' ? <HeroMoi /> : <Hero />}
+  {GIAO_DIEN === 'moi' ? <GioiThieuMoi /> : <GioiThieu />}
   <DichVuNoiBat />
   <SanPham />
   <GiaGon />

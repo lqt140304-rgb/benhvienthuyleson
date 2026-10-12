@@ -3,7 +3,8 @@
 // CSS theo công tắc GIAO_DIEN (src/lib/site.ts): nạp bằng ?url để chỉ MỘT bộ được đưa vào trang (import thường sẽ gộp cả hai).
 import cssR36 from '../styles/r36.css?url';
 import cssMoi from '../styles/moi/index.css?url';
-import Header from '../components/ls/Header.astro';
+import HeaderR36 from '../components/ls/Header.astro';
+import HeaderMoi from '../components/moi/Header.astro';
 import Footer from '../components/ls/Footer.astro';
 import ThanhDuoi from '../components/ls/ThanhDuoi.astro';
 import Cam from '../components/Cam.astro';
@@ -91,7 +92,7 @@ const duLieuCam = {
 </head>
 <body data-trang={trang}>
 <a class="bo-qua" href="#noi-dung">Bỏ qua đến nội dung</a>
-<Header trang={trang} hienTai={hienTai} />
+{moi ? <HeaderMoi trang={trang} hienTai={hienTai} /> : <HeaderR36 trang={trang} hienTai={hienTai} />}
 <main id="top">
   <slot />
 </main>
