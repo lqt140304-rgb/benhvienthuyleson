@@ -4,6 +4,9 @@
 - Người dùng không phải lập trình viên: trả lời tiếng Việt, đơn giản.
 - **Trạng thái:** `modeDatLich = 'gia-lap'` (`src/lib/dat-lich.ts`). Chưa gộp `main`, chưa thay web chính, chưa triển khai Google cho web thật.
 
+## Kế hoạch giao diện mới (12/10/2026)
+- Kế hoạch giao diện + hiệu ứng mới đã duyệt với chủ dự án: **`docs/KE-HOACH-GIAO-DIEN-MOI.md`**. Chưa làm code; chờ chủ dự án cho bắt đầu bước 1, làm trên nhánh mới `claude/giao-dien-moi-hieu-ung`.
+
 ## Quy tắc phải giữ
 - Không gộp `main`, không thay web chính, không triển khai Google thật khi chưa được chủ dự án cho phép; không tạo PR.
 - Không sửa `src/data/*` khi chưa được phép (đã được phép một lần: ghi chú Grooming trong `dich_vu.json`, đã sửa xong).
