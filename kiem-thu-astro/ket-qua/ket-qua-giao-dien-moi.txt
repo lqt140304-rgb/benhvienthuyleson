@@ -1,16 +1,16 @@
-Kiểm thử nền móng giao diện mới (bước 1) · Chromium 141.0.7390.37 (Playwright) · 2026-10-12T18:53:35.824Z
+Kiểm thử nền móng giao diện mới (bước 1) · Chromium 141.0.7390.37 (Playwright) · 2026-10-12T19:35:23.503Z
 ĐẠT 22 · KHÔNG ĐẠT 0 · CHƯA CHẠY 1 · CHƯA XÁC MINH 1
 
 
 -- 1. Công tắc GIAO_DIEN: hai bộ CSS tách hẳn; giao diện mới dùng phông tự chứa, không gọi mạng ngoài
 [ĐẠT] Giao diện mặc định (dist, GIAO_DIEN = r36): đúng MỘT tệp CSS là bộ R3.6 (có .hero-chu, không có Newsreader), vẫn dùng Google Fonts như trước, không tải trước phông tự chứa, không có script hiệu ứng mới  → {"css":["https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap","/benhvienthuyleson/_astro/r36.BvJ89V1I.css"],"google":true,"preload":[],"html":"<html lang=\"vi\">","scriptNhung":false}
-[ĐẠT] Giao diện mới (dist-moi): đúng MỘT tệp CSS chính là bộ mới + MỘT tệp Tailwind (không có Preflight: không có lớp base, không reset; mọi lớp có tiền tố tw:; lớp tiện ích !important) (có Newsreader, --kem, data-hien), KHÔNG có quy tắc nào của le-son.css (.hero-nen, .sp-panel, Playfair, --bong-1), không gọi Google Fonts, tải trước 2 tệp Newsreader 500, <html data-giao-dien="moi">  → {"css":["/benhvienthuyleson/_astro/index.CsHm6Ovr.css","/benhvienthuyleson/_astro/tailwind.Cqc_3rjB.css"],"google":false,"preload":["/benhvienthuyleson/fonts/newsreader-latin-500-normal.woff2","/benhvienthuyleson/fonts/newsreader-vietnamese-500-normal.woff2"],"html":"<html lang=\"vi\" data-giao-dien=\"moi\">","scriptNhung":true,"kichThuoc":39487}
+[ĐẠT] Giao diện mới (dist-moi): đúng MỘT tệp CSS chính là bộ mới + MỘT tệp Tailwind (không có Preflight: không có lớp base, không reset; mọi lớp có tiền tố tw:; lớp tiện ích !important) (có Newsreader, --kem, data-hien), KHÔNG có quy tắc nào của le-son.css (.hero-nen, .sp-panel, Playfair, --bong-1), không gọi Google Fonts, tải trước 2 tệp Newsreader 500, <html data-giao-dien="moi">  → {"css":["/benhvienthuyleson/_astro/index.DpPTyVeH.css","/benhvienthuyleson/_astro/tailwind.MjEtqYri.css"],"google":false,"preload":["/benhvienthuyleson/fonts/newsreader-latin-500-normal.woff2","/benhvienthuyleson/fonts/newsreader-vietnamese-500-normal.woff2"],"html":"<html lang=\"vi\" data-giao-dien=\"moi\">","scriptNhung":true,"kichThuoc":39517}
 [ĐẠT] 14 @font-face trỏ tới tệp có thật trong /benhvienthuyleson/fonts/ (Newsreader 400/500/600 + nghiêng 500, Be Vietnam Pro 400/500/600; mỗi độ đậm 2 tệp Latin + Việt); có giấy phép OFL đi kèm
 
 -- 2. Phông vẽ thật và token màu (giao diện mới)
 [ĐẠT] 1440x900: phông vẽ thật (CSS.getPlatformFontsForNode) ở 4 trang: h1/h2 chỉ Newsreader, h3/đoạn văn chỉ Be Vietnam Pro, không ký tự nào (kể cả dấu tiếng Việt) rơi sang phông dự phòng
 [ĐẠT] 390x844: phông vẽ thật (CSS.getPlatformFontsForNode) ở 4 trang: h1/h2 chỉ Newsreader, h3/đoạn văn chỉ Be Vietnam Pro, không ký tự nào (kể cả dấu tiếng Việt) rơi sang phông dự phòng
-[ĐẠT] Token: nền trang kem #FBF7F1, h1 mực tím #5A1E5E cỡ 56/60px, chữ #1E1B1F; biến --tim/--cam/--ngoc/--ke đúng bảng màu kế hoạch  → {"nen":"rgb(251, 247, 241)","h1":"rgb(90, 30, 94)","h1co":"56px/60px","h1nang":"500","chu":"rgb(30, 27, 31)","tim":"#5a1e5e","cam":"#ea7a24","ngoc":"#23706e","ke":"#e3ddd3"}
+[ĐẠT] Token: nền trang kem #FBF7F1, h1 mực tím #5A1E5E cỡ 48–66px (to hơn bản đầu theo yêu cầu 12/10: 66px ở 1440), chữ #1E1B1F; biến --tim/--cam/--ngoc/--ke đúng bảng màu kế hoạch  → {"nen":"rgb(251, 247, 241)","h1":"rgb(90, 30, 94)","h1co":"66px/70.62px","h1nang":"500","chu":"rgb(30, 27, 31)","tim":"#5a1e5e","cam":"#ea7a24","ngoc":"#23706e","ke":"#e3ddd3"}
 [ĐẠT] Giao diện mới: không lỗi JavaScript / console ở các trang đã mở
 
 -- 3. Hiện khi cuộn (hien.js): bốn kiểu, một lần, nối tiếp 60ms tối đa 5 mục, focus, in

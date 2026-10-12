@@ -2,14 +2,14 @@
    Lúc vào trang (~0,9s, chỉ khi có lớp co-hieu-ung): tiêu đề hiện từng dòng bằng mặt nạ clip-path (cách 90ms) → nét bút cam → câu phụ, nút, dòng trạng thái;
    khung video mở "mo-man" (hien.js). Không JavaScript: mọi thứ hiện sẵn, nét bút vẽ sẵn. */
 .hero { position: relative; isolation: isolate; overflow: hidden; }
-.hero-in { display: grid; grid-template-columns: minmax(0, 640px) minmax(0, 1fr); gap: var(--b5); align-items: center; min-height: max(560px, calc(100dvh - var(--cao-dau))); padding-block: 24px 64px; }
+.hero-in { display: grid; grid-template-columns: minmax(0, 760px) minmax(0, 1fr); gap: var(--b5); align-items: center; min-height: max(560px, calc(100dvh - var(--cao-dau))); padding-block: 24px 64px; }
 .hero-chu { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 28px; padding-bottom: 16px; min-width: 0; }
-.hero h1 { font-size: 56px; line-height: 60px; }
+
 .hero h1 .dong { display: block; }
 .hero h1 .dong-in { display: inline-block; }
 .nhan-but { position: relative; display: inline-block; }
 .nhan-but .net-but { position: absolute; left: -.02em; bottom: -.26em; pointer-events: none; }
-.hero-phu { max-width: 30em; font-size: 19px; line-height: 1.55; color: var(--phu); }
+.hero-phu { max-width: 30em; font-size: 21px; line-height: 1.55; color: var(--phu); }
 .hero-nut { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 28px; }
 .nut-lon { min-height: 52px; padding: 0 26px; }
 .lien-ket-gach { background: linear-gradient(var(--tim), var(--tim)) 0 100% / 0 1px no-repeat, linear-gradient(var(--ke-dam), var(--ke-dam)) 0 100% / 100% 1px no-repeat; padding-bottom: 3px; }

@@ -340,3 +340,9 @@ Bản vẽ tldraw (6 khung: ba khu trang chủ máy tính, trang Bảng giá má
 - **Phông:** yêu cầu nhắc "Playfair Display"; giao diện mới đang dùng **Newsreader** (đã chốt từ bước 1), nên giữ Newsreader cho đồng bộ cả trang.
 - **Đã bỏ khỏi trang chủ (giao diện mới):** danh sách 5 hàng "Dịch vụ nổi bật" kèm giá. Dữ liệu giá không đổi; giá vẫn hiện ở "Tóm tắt giá" trang chủ và trang Bảng giá / Dịch vụ. Tệp cũ `DichVuNoiBat.astro` / `GioiThieu.astro` (moi) còn trong thư mục, không dùng.
 - Ảnh trước / sau: `docs/anh-doi-chieu/`.
+
+## Rà khoảng trống và cỡ chữ tiêu đề (12/10/2026)
+- Tiêu đề h1: 56px → 48–66px (66px ở màn 1440); h2: 36px → 38–52px (52px ở 1440; điện thoại 32px); h3 20 → 22px. Câu phụ hero 19 → 21px.
+- Khung nội dung 1200 → 1280px (đỡ khoảng trống hai bên); khoảng giữa các khu 120 → 104px.
+- Ảnh Giới thiệu: tỉ lệ 7/5 thay vì 3/2, cao tối thiểu 720px (trước 600px); tiêu đề trên ảnh tới 68px; chữ bên phải 19–23px, tiêu đề điểm 21–25px.
+- Còn thấy (chưa làm, thuộc bước sau): mục Đội ngũ ở trang chủ rất dài (~15.000px, thiết kế cũ R3.6, bước 5); cột trái mục Sản phẩm và Bảng giá còn trống phía dưới.

@@ -26,11 +26,11 @@ button { cursor: pointer; }
 /* ---------- Chữ: tiêu đề Newsreader, nội dung Be Vietnam Pro ---------- */
 h1, h2, .tieu-de { font-family: var(--f-tieu-de); font-weight: 500; color: var(--tim); text-wrap: balance; font-optical-sizing: auto; }
 /* Kế hoạch mục 2: h1 56/60px, h2 36/40px (cỡ chữ / chiều cao dòng) */
-h1 { font-size: 56px; line-height: 60px; letter-spacing: -.015em; }
-h2 { font-size: 36px; line-height: 40px; letter-spacing: -.01em; }
+h1 { font-size: clamp(48px, 4.6vw, 66px); line-height: 1.07; letter-spacing: -.015em; }
+h2 { font-size: clamp(38px, 3.6vw, 52px); line-height: 1.1; letter-spacing: -.012em; }
 h1 em, h2 em, .tieu-de em { font-style: italic; }
 h3, h4 { font-family: var(--f-chu); font-weight: 600; color: var(--chu); text-wrap: balance; }
-h3 { font-size: 20px; line-height: 1.35; }
+h3 { font-size: 22px; line-height: 1.35; }
 h4 { font-size: 17px; line-height: 1.4; }
 p { text-wrap: pretty; }
 .so, .gia, td { font-variant-numeric: tabular-nums; }
@@ -41,8 +41,8 @@ p { text-wrap: pretty; }
 .chu-thich { font-size: 14px; color: var(--phu); }
 /* Số thứ tự 01 02 03 thay icon tròn */
 .stt { font-family: var(--f-tieu-de); font-weight: 400; font-size: 20px; color: var(--phu); font-variant-numeric: tabular-nums lining-nums; }
-@media (max-width: 1023px) { h1 { font-size: 48px; line-height: 52px; } }
-@media (max-width: 767px) { h1 { font-size: 38px; line-height: 42px; } h2 { font-size: 29px; line-height: 34px; } .dan { font-size: 18px; } }
+@media (max-width: 1023px) { h1 { font-size: 48px; line-height: 52px; } h2 { font-size: 38px; line-height: 42px; } }
+@media (max-width: 767px) { h1 { font-size: 38px; line-height: 42px; } h2 { font-size: 32px; line-height: 37px; } .dan { font-size: 18px; } }
 
 /* ---------- Khung, lưới 12 cột, khu ---------- */
 .khung { width: min(var(--khung), 100% - 2 * var(--le)); margin-inline: auto; }

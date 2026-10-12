@@ -22,12 +22,12 @@
   --f-tieu-de: 'Newsreader', Georgia, 'Times New Roman', serif;
   --f-chu: 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
-  /* Lưới và nhịp: lưới 12 cột, khung 1200px, lề 32px (điện thoại 16px), bậc 8px */
-  --khung: 1200px;
+  /* Lưới và nhịp: lưới 12 cột, khung 1280px, lề 32px (điện thoại 16px), bậc 8px */
+  --khung: 1280px;
   --le: 32px;
   --cot-gian: 24px;
   --b1: 8px; --b2: 16px; --b3: 24px; --b4: 32px; --b5: 40px; --b6: 48px; --b8: 64px; --b10: 80px;
-  --khoi: 120px;           /* khoảng giữa các khu (điện thoại 72px) */
+  --khoi: 104px;           /* khoảng giữa các khu (điện thoại 72px) */
   --cao-dau: 76px;         /* header; khi cuộn quá 24px chỉ còn dải 60px (thu bằng transform, chiều cao khung giữ 76px nên không dịch bố cục) */
   --cao-dau-cuon: 60px; --dich-cuon: 8px; --ty-cuon: .7895;   /* (76 - 60) / 2 = 8; 60 / 76 */
 

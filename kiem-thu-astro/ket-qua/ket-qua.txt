@@ -1,4 +1,4 @@
-Kiểm thử bản dựng Astro Lê Sơn · Chromium 141.0.7390.37 (Playwright) · 2026-10-12T18:48:55.493Z
+Kiểm thử bản dựng Astro Lê Sơn · Chromium 141.0.7390.37 (Playwright) · 2026-10-12T19:44:01.648Z
 ĐẠT 91 · KHÔNG ĐẠT 0 · CHƯA CHẠY 6 · CHƯA XÁC MINH 3
 
 
@@ -67,7 +67,7 @@ Kiểm thử bản dựng Astro Lê Sơn · Chromium 141.0.7390.37 (Playwright) 
 [ĐẠT] [390x844] Mở Bé Cam: hộp thoại hiện, focus vào trong, đúng một câu chào lấy từ cam.json  → {"hien":true,"foc":true,"chao":["Bệnh viện đang ngoài giờ (8:00 – 21:00). Bé cần cấp cứu? Gọi ngay cho bệnh viện nhé."],"ex":"true"}
 [ĐẠT] [390x844] "Tra cứu bảng giá" dẫn tới /bang-gia/ thật  → /benhvienthuyleson/bang-gia/
 [ĐẠT] [390x844] Esc đóng Bé Cam và trả focus về nút mở  → {"an":true,"foc":"cam-nut-duoi"}
-[ĐẠT] [390x844] "Xem dịch vụ" cuộn tới khu Dịch vụ ở trang chủ, focus ở tiêu đề (không rơi về BODY)  → {"foc":"H2","tren":328}
+[ĐẠT] [390x844] "Xem dịch vụ" cuộn tới khu Dịch vụ ở trang chủ, focus ở tiêu đề (không rơi về BODY)  → {"foc":"H2","tren":378}
 [ĐẠT] Ở trang khác: "Đặt lịch khám" dẫn tới /dat-lich/ (không dùng link tuyệt đối)  → /benhvienthuyleson/dat-lich/
 
 -- 10. Hiệu ứng trang trí và icon dịch vụ
@@ -92,7 +92,7 @@ Kiểm thử bản dựng Astro Lê Sơn · Chromium 141.0.7390.37 (Playwright) 
 [ĐẠT] [/] Bấm gửi ở chế độ giả lập: 0 yêu cầu mạng; hiện "Hoàn tất giả lập, chưa gửi đi đâu"; KHÔNG có câu "Đã nhận yêu cầu"  → {"ngoai":[],"t":"Hoàn tất giả lậpĐây là bản xem trước: yêu cầu CHƯA được gửi đi đâu và chưa có lịch hẹn nào được xác nhận. Cần đặt lịch n"}
 [ĐẠT] [nhận thật] Bản dựng chế độ "that" không có dòng "chưa gửi dữ liệu thật"; địa chỉ nhận lấy từ thong_tin.json
 [ĐẠT] [nhận thật] Máy chủ trả { ok: true, ma }: hiện đúng câu "Đã nhận yêu cầu đặt lịch, bệnh viện sẽ liên hệ xác nhận." + mã yêu cầu + tóm tắt; không nói "đã xác nhận lịch"  → Đã nhận yêu cầu đặt lịch, bệnh viện sẽ liên hệ xác nhận.Lịch hẹn chỉ được xác nhận sau khi nhân viên liên hệ với bạn. Cần gấp? Gọi 0973 555 105.Mã yêu cầu: LS-2
-[ĐẠT] [nhận thật] Đúng 1 yêu cầu, POST, Content-Type text/plain (không gây bước kiểm tra trước), JSON có đủ trường và ma_yeu_cau  → {"ten_khach":"Khách thử nghiệm","dien_thoai":"0912345678","ten_thu_cung":"Bé Thử","loai":"Chó","loai_khac":"","dich_vu":"Khám và chẩn đoán","dich_vu_ma":"kham-va-chan-doan","ngay":"2026-10-15","gio":"09:00","ngay_don":"","ghi_chu":"ghi chú thử","website":"","ma_yeu_cau":"a97c3391-4f5b-4d57-ad0b-4af740ff2f79","nguon":"/benhvienthuyleson/dat-lich/","gui_luc":"2026-10-12T18:48:19.995Z"}
+[ĐẠT] [nhận thật] Đúng 1 yêu cầu, POST, Content-Type text/plain (không gây bước kiểm tra trước), JSON có đủ trường và ma_yeu_cau  → {"ten_khach":"Khách thử nghiệm","dien_thoai":"0912345678","ten_thu_cung":"Bé Thử","loai":"Chó","loai_khac":"","dich_vu":"Khám và chẩn đoán","dich_vu_ma":"kham-va-chan-doan","ngay":"2026-10-15","gio":"09:00","ngay_don":"","ghi_chu":"ghi chú thử","website":"","ma_yeu_cau":"d2cd6440-c889-426b-8fe3-6d725f9c29de","nguon":"/benhvienthuyleson/dat-lich/","gui_luc":"2026-10-12T19:43:24.601Z"}
 [ĐẠT] [nhận thật] "Gửi yêu cầu khác": form trống trở lại, thẻ kết quả ẩn  → {"ten":"","form":true,"the":true}
 [ĐẠT] [nhận thật] Yêu cầu thứ hai dùng mã yêu cầu MỚI
 [ĐẠT] [nhận thật] Không có lỗi JavaScript
@@ -104,8 +104,8 @@ Kiểm thử bản dựng Astro Lê Sơn · Chromium 141.0.7390.37 (Playwright) 
 [ĐẠT] [không báo nhầm] lỗi 500: báo "Chưa nhận được xác nhận…", không hiện "Đã nhận", giữ dữ liệu  → {"tb":"Chưa nhận được xác nhận từ bệnh viện, nên yêu cầu có thể chưa được gửi. Thông tin bạn nhập vẫn còn nguyên: bấm “Gửi lại” (hệ thống tránh tạo lịch trùng) hoặc gọi 0973 555 105.","the":true,"ten":"Khách thử nghiệm"}
 [ĐẠT] [không báo nhầm] lỗi mạng: báo "Chưa nhận được xác nhận…", không hiện "Đã nhận", giữ dữ liệu  → {"tb":"Chưa nhận được xác nhận từ bệnh viện, nên yêu cầu có thể chưa được gửi. Thông tin bạn nhập vẫn còn nguyên: bấm “Gửi lại” (hệ thống tránh tạo lịch trùng) hoặc gọi 0973 555 105.","the":true,"ten":"Khách thử nghiệm"}
 [ĐẠT] [chống trùng] Bấm nút 3 lần, gửi bằng mã lệnh 2 lần, Enter lặp trong lúc chờ: chỉ ĐÚNG 1 yêu cầu  → 1 yêu cầu
-[ĐẠT] [chống trùng] "Gửi lại" nguyên nội dung dùng lại CÙNG mã yêu cầu (máy chủ nhờ đó bỏ qua bản trùng)  → ea32303f-ea06-40d0-8c29-ea1a92a89f0d / ea32303f-ea06-40d0-8c29-ea1a92a89f0d
-[ĐẠT] [chống trùng] Đổi nội dung rồi gửi: mã yêu cầu MỚI; máy chủ trả trùng thì vẫn hiện đã nhận  → ea32303f-ea06-40d0-8c29-ea1a92a89f0d / 956ac2c7-1a5e-47fe-8531-f66dff2acf65
+[ĐẠT] [chống trùng] "Gửi lại" nguyên nội dung dùng lại CÙNG mã yêu cầu (máy chủ nhờ đó bỏ qua bản trùng)  → b6808313-b573-4f0d-8e59-2e030b79d439 / b6808313-b573-4f0d-8e59-2e030b79d439
+[ĐẠT] [chống trùng] Đổi nội dung rồi gửi: mã yêu cầu MỚI; máy chủ trả trùng thì vẫn hiện đã nhận  → b6808313-b573-4f0d-8e59-2e030b79d439 / 380dc53d-fbd7-4ab9-afc2-7f388041414e
 [ĐẠT] [bẫy spam] Ô bẫy có chữ: không gửi yêu cầu nào và không báo đã nhận  → 0 yêu cầu
 [ĐẠT] Chế độ "cu" (quay lại biểu mẫu cũ): trang Đặt lịch có biểu mẫu cũ #dat-lich, không có biểu mẫu mới; trang chủ chỉ còn lối vào /dat-lich/
 [ĐẠT] kiem-tra-che-do: bản mặc định (dist) ĐÚNG "gia-lap" (mã thoát 0)  → CHẾ ĐỘ BẢN XUẤT: gia-lap  (thư mục dist)
