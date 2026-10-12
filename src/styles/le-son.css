@@ -1453,7 +1453,7 @@ h2 { font-size: clamp(26px, 3.1vw, 38px); line-height: 1.22; letter-spacing: -.0
 .co-hieu-ung .hero-chu > :nth-child(4) { animation-delay: 210ms; }
 .co-hieu-ung .hero .dai-tt { animation: r36-len 640ms var(--e-muot) 280ms both; }
 
-/* Thẻ “Chẩn đoán ngay tại viện” lơ lửng rất nhẹ; hoạ tiết trôi theo cuộn (JS đặt --py, tối đa 12px, chỉ máy tính) */
+/* Thẻ “Chẩn đoán ngay tại viện” lơ lửng rất nhẹ; hoạ tiết trôi theo cuộn (JS đặt --py tối đa 8px; nhân --k lớn nhất 1,5 nên không hoạ tiết nào lệch quá 12px; chỉ máy tính) */
 @keyframes r36-troi { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 .co-hieu-ung .hero-ghi { animation: r36-troi 7s ease-in-out 1.2s infinite; }
 .co-hieu-ung .hero .hoa-tiet { translate: 0 calc(var(--py, 0px) * var(--k, 1)); }

@@ -21,9 +21,10 @@
 ## 2. Kết quả kiểm thử cuối (Google GIẢ)
 | Bộ kiểm thử | Lệnh | Kết quả |
 |---|---|---|
-| Astro đầy đủ (~12 phút) | `node kiem-thu-astro/kiem-thu-astro.cjs` | 91 ĐẠT, 0 KHÔNG ĐẠT, 6 CHƯA CHẠY, 3 CHƯA XÁC MINH |
+| Astro đầy đủ (~12 phút, chạy lại sau sửa hoạ tiết trôi) | `node kiem-thu-astro/kiem-thu-astro.cjs` | 91 ĐẠT, 0 KHÔNG ĐẠT, 6 CHƯA CHẠY, 3 CHƯA XÁC MINH |
 | Apps Script | `node kiem-thu-astro/kiem-thu-apps-script.cjs` | 99 ĐẠT, 0 KHÔNG ĐẠT |
 | Bản thử `that` trong trình duyệt thật | `node kiem-thu-astro/kiem-thu-that-dau-cuoi.cjs` | 18 ĐẠT, 0 KHÔNG ĐẠT |
+| Thiết kế R3.6 (~6 phút; phông cục bộ qua `PHONG_CUC_BO`) | `node kiem-thu-astro/kiem-thu-r36.cjs` | 21 ĐẠT, 0 KHÔNG ĐẠT, 1 CHƯA CHẠY, 2 CHƯA XÁC MINH (không có phông cục bộ: 19 ĐẠT, 4 CHƯA XÁC MINH) |
 
 Bản cũ chạy cùng bộ thử đều có mục KHÔNG ĐẠT (log `kiem-thu-astro/ket-qua/ban-cu-chay-*.txt`), tức bộ thử bắt đúng các lỗi đã sửa.
 

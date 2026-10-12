@@ -468,7 +468,7 @@
       cho = false;
       var tat = goc2.classList.contains('tat-trang-tri') || itChuyenDong.matches;
       var t = tat ? 0 : Math.max(0, Math.min(1, window.scrollY / Math.max(1, hero.offsetHeight)));
-      hero.style.setProperty('--py', (t * 12).toFixed(2) + 'px');
+      hero.style.setProperty('--py', (t * 8).toFixed(2) + 'px'); // 8px × hệ số --k lớn nhất 1,5 (cuộn len) = 12px
     }
     window.addEventListener('scroll', function () { if (!cho) { cho = true; requestAnimationFrame(cap); } }, { passive: true });
   })();
