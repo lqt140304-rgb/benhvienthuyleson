@@ -33,13 +33,12 @@
 - ~~Thêm test riêng~~ **ĐÃ XONG** (nhánh `claude/youthful-turing-b5olam`): `kiem-thu-astro/kiem-thu-r36.cjs`, kết quả `kiem-thu-astro/ket-qua/ket-qua-r36.txt` (21 ĐẠT, 0 KHÔNG ĐẠT, 1 CHƯA CHẠY, 2 CHƯA XÁC MINH) và `ket-qua-r36-khong-phong.txt`. Kiểm: h1/h2 Playfair, phần còn lại Be Vietnam Pro (cả khai báo CSS lẫn phông vẽ thật, đủ dấu tiếng Việt); giảm chuyển động từ đầu / đổi giữa chừng / tắt "Hiệu ứng trang trí"; hoạ tiết trôi ≤ 12px chỉ máy tính có chuột; không cuộn ngang 11 trang × 8 cỡ (lúc hiệu ứng chạy, xong, rê chuột); CLS < 0,1 và không tăng quá 0,01 so với commit 422c7a4.
   - Cách chạy: `npm pack @fontsource/playfair-display @fontsource/be-vietnam-pro`, giải nén mỗi gói vào `<thư mục>/fontsource-playfair-display/` và `<thư mục>/fontsource-be-vietnam-pro/`, rồi `PHONG_CUC_BO=<thư mục> NODE_PATH=$(npm root -g) node kiem-thu-astro/kiem-thu-r36.cjs` (không có phông thì vẫn chạy, các mục phông thành CHƯA XÁC MINH).
   - **Lỗi test tìm ra và đã sửa:** hoạ tiết "cuộn len" (hệ số `--k` 1,5) trôi tới 18px, vượt 12px. Sửa `src/scripts/ui.js`: `--py` tối đa 8px (8 × 1,5 = 12px); tỉ lệ chiều sâu giữa ba hoạ tiết giữ nguyên. Bộ Astro đầy đủ chạy lại sau sửa: 91 ĐẠT, 0 KHÔNG ĐẠT, 6 CHƯA CHẠY, 3 CHƯA XÁC MINH.
-- Dựng lại bản xem thử **giả lập** (`kiem-thu-astro/dung-ban-xem-thu.cjs`) và **hỏi chủ dự án** trước khi đăng lại lên claude.ai (bản đang đăng là bản cũ: chưa có chặn giờ đã qua, chưa có thiết kế mới).
+- ~~Dựng lại bản xem thử giả lập~~ **ĐÃ XONG (12/10/2026):** `dung-ban-xem-thu.cjs` → `xem-thu/` (git bỏ qua), `kiem-thu-ban-xem-thu.cjs` 25 ĐẠT, 0 KHÔNG ĐẠT; có thiết kế R3.6 và chặn giờ đã qua. Chủ dự án đồng ý đăng **link mới, riêng tư**: https://claude.ai/artifact/DacogZFGCxReWgvqeV6qi4 (bản cũ nằm ở tài khoản khác, không cập nhật được). Đăng lại: dựng lại `xem-thu/` rồi đăng `xem-thu/index.html` kèm các tệp trong `xem-thu/danh-sach-tep.json` (bỏ `index.html`) lên đúng link trên.
 - Cập nhật tài liệu về thiết kế mới; chụp ảnh trước/sau.
 - Không thêm bộ đếm số liệu: web chưa có số liệu thật để đếm (tránh bịa).
 
 ## D. Còn chờ chủ dự án quyết định
 - Bật `'that'` cho web thật: cần địa chỉ `/exec` của Sheet THẬT và quyền đổi `dia_chi_nhan_dat_lich` trong `src/data/thong_tin.json` (hiện vẫn là script cũ đang chạy thật).
-- Có đăng lại bản xem thử claude.ai không.
 - Có xoá hẳn biểu mẫu cũ sau khi nhận thật ổn định không.
 
 ## E. Chưa xác minh (chỉ Google thật / người dùng thật trả lời được)
