@@ -1,0 +1,21 @@
+/* Giao diện mới · Premium Service Showcase (lưới 2×2 + khối CTA tím) ở trang chủ.
+   Bố cục viết bằng Tailwind (tiền tố tw:) trong components/moi/DichVuShowcase.astro; tệp này giữ phần tương tác:
+   ảnh zoom nhẹ khi rê chuột, thẻ đổi trạng thái tinh tế, mũi tên nhích, viền focus rõ, giảm chuyển động. */
+.dvx-the { transition: border-color var(--t-cham-tay) var(--cong-ra), background-color var(--t-cham-tay) var(--cong-ra); }
+.dvx-zoom { transition: transform 600ms var(--cong-ra); transform-origin: center; }
+.dvx-cta-chu .mui { transition: transform var(--t-cham-tay) var(--cong-ra); }
+.dvx-the:is(:hover, :focus-visible) { border-color: var(--tim-nhat); background-color: #fff; }
+.dvx-the:is(:hover, :focus-visible) .dvx-zoom { transform: scale(1.05); }
+.dvx-the:is(:hover, :focus-visible) .dvx-cta-chu .mui { transform: translateX(6px); }
+.dvx-the:focus-visible { outline: 3px solid var(--tim); outline-offset: 4px; border-radius: var(--r-video); }
+.dvx-the:active { border-color: var(--tim); }
+/* Khối tím: nút nhấc nhẹ + mũi tên nhích; focus viền trắng (nền tím) */
+.dvx-nut { transition: background-color var(--t-cham-tay) var(--cong-ra), border-color var(--t-cham-tay) var(--cong-ra), color var(--t-cham-tay) var(--cong-ra); }
+.dvx-nut-chinh:is(:hover, :focus-visible) { background-color: var(--kem-dam) !important; }
+.dvx-nut-phu:is(:hover, :focus-visible) { background-color: rgba(255, 255, 255, .14) !important; border-color: #fff !important; }
+.dvx-nut:is(:hover, :focus-visible) .mui { transform: translateX(4px); }
+.dvx-nut:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) {
+  .dvx-zoom, .dvx-the:is(:hover, :focus-visible) .dvx-zoom, .dvx-the:is(:hover, :focus-visible) .dvx-cta-chu .mui, .dvx-nut:is(:hover, :focus-visible) .mui { transform: none !important; }
+}
+html.tat-trang-tri .dvx-zoom { transform: none !important; }

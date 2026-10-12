@@ -1,0 +1,79 @@
+---
+// Premium Service Showcase (giao diện mới, thay khu "Bảng giá tham khảo" ở trang chủ): lưới 2×2 bốn dịch vụ + Luxury CTA màu tím.
+// Bảng giá chi tiết nằm ở trang /bang-gia/ (dữ liệu giá, nhóm và ghi chú giữ nguyên, KHÔNG tạo giá mới); mỗi thẻ dẫn thẳng tới nhóm giá tương ứng (/bang-gia/#nhom-…).
+// Ảnh: chưa có ảnh thật → khung chờ pastel + icon dịch vụ + "Ảnh thực tế · sắp cập nhật". Khi bệnh viện có ảnh, chỉ cần chép vào public/img/dich-vu/ (xem README.md ở đó), không sửa mã.
+// Không dùng ảnh minh hoạ giả làm bác sĩ / cơ sở vật chất. Không đánh số thẻ (đã chốt: danh mục không số).
+// Tailwind v4 (tiền tố tw:) cho bố cục; hover / focus / giảm chuyển động nằm ở styles/moi/khu-showcase.css.
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+import Mui from './Mui.astro';
+import IconDv from '../ls/IconDv.astro';
+import Icon from '../Icon.astro';
+import { u } from '../../lib/site';
+import { dichVuLS, chonTrangChu } from '../../lib/ls';
+const { giaGon } = chonTrangChu(dichVuLS());
+const anh = (ten: string) => { for (const e of ['webp', 'jpg', 'png']) if (existsSync(join(process.cwd(), 'public', 'img', 'dich-vu', `${ten}.${e}`))) return u(`/img/dich-vu/${ten}.${e}`); return ''; };
+const theo = (icon: string) => giaGon.find((g) => g.icon === icon);
+const the = [
+  { k: 'kham', g: theo('stethoscope'), ten: 'Khám & Điều trị', mo: 'Chăm sóc sức khỏe, thăm khám và điều trị theo tình trạng của từng thú cưng.', cta: 'Khám phá dịch vụ', nen: '#FBE6D4' },
+  { k: 'xet-nghiem', g: theo('flask'), ten: 'Xét nghiệm & Chẩn đoán', mo: 'Hỗ trợ bác sĩ đánh giá tình trạng sức khỏe và đưa ra hướng điều trị phù hợp.', cta: 'Tìm hiểu thêm', nen: '#E3F1F0' },
+  { k: 'grooming', g: theo('scissors'), ten: 'Grooming & Spa', mo: 'Dịch vụ vệ sinh và chăm sóc ngoại hình dành cho thú cưng.', cta: 'Khám phá dịch vụ', nen: '#EDE3EE' },
+  { k: 'noi-tru', g: theo('bed'), ten: 'Nội trú & Chăm sóc', mo: 'Theo dõi và chăm sóc thú cưng trong thời gian lưu trú tại bệnh viện.', cta: 'Tìm hiểu thêm', nen: '#F3ECE1' },
+].filter((x) => x.g);
+const anhCta = anh('cta-cho');
+---
+<section class="khoi dvx" id="bang-gia" aria-labelledby="dvx-tieu-de">
+  <div class="khung">
+    <header class="tw:mx-auto tw:mb-12 tw:max-w-[44rem] tw:text-center" data-hien="len">
+      <h2 id="dvx-tieu-de" class="tw:m-0">Chăm sóc tận tâm, đồng hành trọn đời.</h2>
+      <p class="tw:mt-5 tw:text-[clamp(17px,1.4vw,19px)] tw:leading-[1.65] tw:text-(--phu)">Từ thăm khám định kỳ đến điều trị chuyên sâu, Bệnh viện Thú y Lê Sơn luôn hướng đến sự chăm sóc chu đáo, an toàn và phù hợp cho từng thú cưng.</p>
+    </header>
+
+    <ul class="dvx-ds tw:m-0 tw:grid tw:list-none tw:grid-cols-1 tw:gap-6 tw:p-0 tw:md:grid-cols-2 tw:lg:gap-8">
+      {the.map((x, i) => (
+        <li data-hien="len" data-tre={i * 100}>
+          <a class="dvx-the tw:group tw:flex tw:h-full tw:flex-col tw:overflow-hidden tw:rounded-(--r-video) tw:border tw:border-(--ke) tw:bg-(--kem) tw:no-underline" href={u(`/bang-gia/#nhom-${x.g!.nhom.id}`)} aria-label={`${x.ten}. ${x.mo} ${x.cta}`}>
+            <span class="dvx-anh tw:relative tw:block tw:aspect-[16/10] tw:overflow-hidden" style={`background:${x.nen}`}>
+              <span class="dvx-zoom tw:absolute tw:inset-0 tw:block">
+                {anh(x.k)
+                  ? <img class="tw:size-full tw:object-cover" src={anh(x.k)} alt="" loading="lazy" width="960" height="600">
+                  : (
+                    <span class="tw:absolute tw:inset-0 tw:flex tw:flex-col tw:items-center tw:justify-center tw:gap-3 tw:bg-[repeating-linear-gradient(135deg,transparent_0_11px,rgba(90,30,94,.07)_11px_12px)] tw:text-(--tim)">
+                      <IconDv icon={x.g!.icon} size={72} />
+                      <span class="tw:text-[14px] tw:font-medium tw:text-(--phu)">Ảnh thực tế · sắp cập nhật</span>
+                    </span>
+                  )}
+              </span>
+            </span>
+            <span class="tw:flex tw:flex-1 tw:flex-col tw:gap-3 tw:p-6 tw:lg:p-8">
+              <b class="tw:font-(family-name:--f-tieu-de) tw:text-[clamp(24px,2.2vw,31px)] tw:leading-[1.2] tw:font-medium tw:text-(--tim)">{x.ten}</b>
+              <span class="tw:text-[17px] tw:leading-[1.6] tw:text-(--phu)">{x.mo}</span>
+              <span class="dvx-cta-chu tw:mt-auto tw:inline-flex tw:items-center tw:gap-2 tw:pt-2 tw:text-[16px] tw:font-semibold tw:text-(--tim)">{x.cta}<Mui size={18} /></span>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <div class="dvx-banner tw:relative tw:mt-8 tw:grid tw:grid-cols-1 tw:overflow-hidden tw:rounded-(--r-video) tw:bg-(--tim) tw:text-white tw:lg:mt-10 tw:lg:grid-cols-[3fr_2fr]" data-hien="len">
+      <div class="tw:flex tw:flex-col tw:items-start tw:justify-center tw:gap-5 tw:p-8 tw:sm:p-10 tw:lg:p-14">
+        <h3 class="tw:m-0 tw:max-w-[16em] tw:font-(family-name:--f-tieu-de) tw:text-[clamp(30px,3.4vw,46px)] tw:leading-[1.12] tw:font-medium tw:text-white">Mỗi thú cưng đều xứng đáng được chăm sóc tốt nhất.</h3>
+        <p class="tw:m-0 tw:max-w-[32em] tw:text-[clamp(17px,1.4vw,19px)] tw:leading-[1.65] tw:text-white/85">Hãy để Bệnh viện Thú y Lê Sơn đồng hành cùng bạn trong hành trình chăm sóc sức khỏe cho người bạn nhỏ.</p>
+        <div class="tw:mt-2 tw:flex tw:flex-wrap tw:gap-3">
+          <a class="dvx-nut dvx-nut-chinh tw:inline-flex tw:min-h-12 tw:items-center tw:gap-2 tw:rounded-md tw:bg-white tw:px-6 tw:text-[16px] tw:font-semibold tw:text-(--tim) tw:no-underline" href={u('/dat-lich/')}>Đặt lịch khám<Mui /></a>
+          <a class="dvx-nut dvx-nut-phu tw:inline-flex tw:min-h-12 tw:items-center tw:gap-2 tw:rounded-md tw:border tw:border-white/60 tw:bg-transparent tw:px-6 tw:text-[16px] tw:font-semibold tw:text-white tw:no-underline" href={u('/bang-gia/')}>Xem bảng giá<Mui /></a>
+        </div>
+      </div>
+      <div class="tw:relative tw:min-h-[260px] tw:overflow-hidden tw:bg-[#6B2C70] tw:lg:min-h-[380px]" data-hien="mo" data-tre="200">
+        {anhCta
+          ? <img class="tw:absolute tw:inset-0 tw:size-full tw:object-cover" src={anhCta} alt="" loading="lazy" width="800" height="760">
+          : (
+            <div class="tw:absolute tw:inset-0 tw:flex tw:flex-col tw:items-center tw:justify-center tw:gap-3 tw:bg-[repeating-linear-gradient(135deg,transparent_0_11px,rgba(255,255,255,.07)_11px_12px)] tw:text-white/90">
+              <Icon name="dog" size={120} />
+              <span class="tw:text-[14px] tw:font-medium tw:text-white/80">Ảnh thú cưng thực tế · sắp cập nhật</span>
+            </div>
+          )}
+      </div>
+    </div>
+  </div>
+</section>

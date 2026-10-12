@@ -93,7 +93,7 @@ const CHEN = `
         await cdp.send('DOM.enable'); await cdp.send('CSS.enable');
         const { root } = await cdp.send('DOM.getDocument', { depth: -1 });
         // h3 trong .sp2-the (tên sản phẩm, Newsreader 26px) và .bg-dau (tiêu đề nhóm ở trang Bảng giá) là tiêu đề lớn Newsreader 36px theo thiết kế bước 3, nên không tính vào "h3 là Be Vietnam Pro"
-        for (const [chon, mong] of [['h1', 'Newsreader'], ['h2', 'Newsreader'], ['h3:not(.bg-dau h3, .sp2-the h3)', 'Be Vietnam Pro'], ['p', 'Be Vietnam Pro']]) {
+        for (const [chon, mong] of [['h1', 'Newsreader'], ['h2', 'Newsreader'], ['h3:not(.bg-dau h3, .sp2-the h3, .dvx-banner h3)', 'Be Vietnam Pro'], ['p', 'Be Vietnam Pro']]) {
           const { nodeIds } = await cdp.send('DOM.querySelectorAll', { nodeId: root.nodeId, selector: `main ${chon}` });
           for (const id of nodeIds.slice(0, 3)) {
             const bm = await cdp.send('DOM.getBoxModel', { nodeId: id }).catch(() => null);

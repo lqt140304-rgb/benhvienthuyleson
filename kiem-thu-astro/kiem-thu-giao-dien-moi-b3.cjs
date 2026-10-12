@@ -42,8 +42,8 @@ const chuan = (s) => String(s).replace(/\s+/g, ' ').trim();
     if (laMoi) return {
       dv: [...document.querySelectorAll('#dich-vu .dv-hang:not(.dv-tat-ca)')].map((a) => ({ ten: t(a.querySelector('.dv-ten')), mo: t(a.querySelector('.dv-mo')), gia: t(a.querySelector('.dv-gia')), href: a.getAttribute('href') })),
       sp: [...document.querySelectorAll('#sp-noi-bat .sp2-the')].map((c) => ({ ten: t(c.querySelector('h3')), mo: t(c.querySelector('p')), href: c.querySelector('a').getAttribute('href') })),
-      gg: [...document.querySelectorAll('#bang-gia .gg-hang')].map((a) => ({ ten: t(a.querySelector('.gg-ten')), dk: t(a.querySelector('.gg-dk')), gia: t(a.querySelector('.gg-gia, .gg-xem')), href: a.getAttribute('href'), aria: a.getAttribute('aria-label') })),
-      phu: [...document.querySelectorAll('#bang-gia .gg-phu')].map((a) => ({ chu: t(a), href: a.getAttribute('href') })), cuoi: t(document.querySelector('#bang-gia .gg-cuoi p')), nutCuoi: t(document.querySelector('#bang-gia .gg-cuoi .nut')),
+      gg: [...document.querySelectorAll('#bang-gia .dvx-the')].map((a) => ({ ten: t(a.querySelector('b')), href: a.getAttribute('href'), aria: a.getAttribute('aria-label') })),
+      phu: [], cuoi: '', nutCuoi: ''
     };
     return {
       dv: [...document.querySelectorAll('#dich-vu a.the-dv:not(.tat-ca)')].map((a) => ({ ten: t(a.querySelector('h3')), mo: t(a.querySelector('p')), gia: t(a.querySelector('.dv-gia, .dv-di')), href: a.getAttribute('href') })),
@@ -63,9 +63,9 @@ const chuan = (s) => String(s).replace(/\s+/g, ' ').trim();
     moi = await layHome(pm, true); cu = await layHome(pc, false);
     const dvCu = cu.dv.map((x, i) => ({ ...x, mo: x.mo.split(/(?<=\.)\s/)[0], gia: i === 0 ? 'Phí báo sau khám' : x.gia })); // R3.6 ở thẻ Khám ghi 2 câu và "Xem bảng giá khám"; giao diện mới: hàng một dòng = câu đầu của mô tả + "Phí báo sau khám" (chữ có sẵn ở khu tóm tắt giá)
     ok('Sản phẩm nổi bật: 3 thẻ đúng tiêu đề, mô tả và liên kết như R3.6; không giá, không giỏ hàng, không số lượng bán; giữ ghi chú "chờ bệnh viện xác nhận"', moi.sp.length === 3 && JSON.stringify(moi.sp) === JSON.stringify(cu.sp) && !/giỏ|Thêm vào|đ\b|đã bán|Giảm/.test(await pm.evaluate(() => document.getElementById('sp-noi-bat').textContent)) && /Mẫu minh hoạ · chờ bệnh viện xác nhận danh sách sản phẩm/.test(await pm.evaluate(() => document.getElementById('sp-noi-bat').textContent)), JSON.stringify({ moi: moi.sp, cu: cu.sp }));
-    ok('Tóm tắt giá: 5 dòng, mỗi dòng đúng TÊN nhóm, chú thích, GIÁ (lấy từ dữ liệu) hoặc "Xem giá", đích liên kết và nhãn đọc màn hình như R3.6; liên kết phụ "Triệt sản combo…", ghi chú cuối và nút "Xem bảng giá đầy đủ" giống hệt', moi.gg.length === 5 && JSON.stringify(moi.gg) === JSON.stringify(cu.gg) && JSON.stringify(moi.phu) === JSON.stringify(cu.phu) && moi.cuoi === cu.cuoi && moi.nutCuoi === cu.nutCuoi, JSON.stringify({ moi: moi.gg.map((x) => [x.ten, x.gia]), cu: cu.gg.map((x) => [x.ten, x.gia]) }));
-    const kieu = await pm.evaluate(() => { const hs = [...document.querySelectorAll('.gg-hang, .sp2-the')]; return { so: !!document.querySelector('#gioi-thieu ol, #bang-gia ol') || /(^|\s)0[1-5](\s|$)/.test(document.getElementById('dich-vu').textContent + document.getElementById('bang-gia').textContent), tron: !!document.querySelector('#dich-vu .o-ic, #bang-gia .gia-gon-ic'), bong: hs.filter((e) => getComputedStyle(e).boxShadow !== 'none').length, bo: [...document.querySelectorAll('.dv-hang, .gg-hang')].filter((e) => getComputedStyle(e).borderRadius !== '0px').length }; });
-    ok('Không đánh số, không ô icon tròn, không bóng đổ, hàng không bo góc (chủ dự án đã chốt)', !kieu.so && !kieu.tron && kieu.bong === 0 && kieu.bo === 0, JSON.stringify(kieu));
+    ok('Khu Dịch vụ (thay "Bảng giá tham khảo"): 4 thẻ đúng thứ tự Khám & Điều trị · Xét nghiệm & Chẩn đoán · Grooming & Spa · Nội trú & Chăm sóc; mỗi thẻ dẫn tới ĐÚNG nhóm giá mà R3.6 dẫn tới (/bang-gia/#nhom-…, bốn dòng đầu của tóm tắt giá cũ); không giá nào được hiện ở trang chủ', moi.gg.length === 4 && JSON.stringify(moi.gg.map((x) => x.ten)) === JSON.stringify(['Khám & Điều trị', 'Xét nghiệm & Chẩn đoán', 'Grooming & Spa', 'Nội trú & Chăm sóc']) && JSON.stringify(moi.gg.map((x) => x.href)) === JSON.stringify(cu.gg.slice(0, 4).map((x) => x.href)) && !/\d+\.\d{3}\s?đ|Từ \d/.test(await pm.evaluate(() => document.getElementById('bang-gia').textContent)), JSON.stringify({ moi: moi.gg.map((x) => [x.ten, x.href]), cu: cu.gg.map((x) => [x.ten, x.href]) }));
+    const kieu = await pm.evaluate(() => { const hs = [...document.querySelectorAll('.dvx-the, .dvx-banner, .sp2-the')]; return { so: !!document.querySelector('#gioi-thieu ol, #bang-gia ol') || /(^|\s)0[1-5](\s|$)/.test(document.getElementById('bang-gia').textContent), bong: hs.filter((e) => getComputedStyle(e).boxShadow !== 'none').length }; });
+    ok('Không đánh số, không bóng đổ ở thẻ dịch vụ / khối tím / thẻ sản phẩm (đã chốt: danh mục không số, viền 1px thay bóng)', !kieu.so && kieu.bong === 0, JSON.stringify(kieu));
     await ctx.close();
   }
 
@@ -106,16 +106,40 @@ const chuan = (s) => String(s).replace(/\s+/g, ' ').trim();
     await c4.close();
   }
 
-  // ---------- 5. Tóm tắt giá ----------
-  muc('5. Tóm tắt giá: dòng kiểu thực đơn, chấm dẫn, giá căn phải thẳng cột');
+  // ---------- 5. Premium Service Showcase ----------
+  muc('5. Khu Dịch vụ (lưới 2×2 + khối tím): bố cục 3 cỡ màn, hover / focus, CTA, giảm chuyển động');
   {
-    const ctx = await ctxMoi({ viewport: { width: 1440, height: 900 } }), p = await mo(ctx, '/'); await toi(p, '#bang-gia', 100); await cho(1500);
-    const g = await p.evaluate(() => { const hs = [...document.querySelectorAll('#bang-gia .gg-hang')], r = (e) => e.getBoundingClientRect(); return { cham: hs.map((a) => Math.round(r(a.querySelector('.gg-cham')).width)), chamKieu: getComputedStyle(hs[0].querySelector('.gg-cham')).backgroundImage.slice(0, 22), phai: hs.map((a) => Math.round(r(a.querySelector('.gg-gia, .gg-xem')).right)), mui: hs.map((a) => Math.round(r(a.querySelector('.mui')).right)), ten: getComputedStyle(hs[0].querySelector('.gg-ten')).fontFamily.split(',')[0].replace(/["']/g, ''), sub: [...hs].every((a) => r(a.querySelector('.gg-dk')).top >= r(a.querySelector('.gg-ten')).bottom - 1), gia: getComputedStyle(hs[1].querySelector('.gg-gia')).fontVariantNumeric, bo: hs.every((a) => getComputedStyle(a).borderRadius === '0px' && getComputedStyle(a).boxShadow === 'none'), tomLoe: !!document.querySelector('#bang-gia .gia-gon-ic') }; });
-    ok('Mỗi dòng có chấm dẫn từ tên tới giá (rộng ≥ 100px), tên Newsreader, chú thích nhỏ nằm dưới tên, giá / "Xem giá" căn phải cùng một mép (' + [...new Set(g.phai)].join(',') + ') và mũi tên cùng mép (' + [...new Set(g.mui)].join(',') + '), giá dùng tabular-nums, không thẻ / bóng / icon tròn', g.cham.every((w) => w >= 100) && /radial-gradient/.test(g.chamKieu) && g.ten === 'Newsreader' && g.sub && new Set(g.phai).size === 1 && new Set(g.mui).size === 1 && /tabular-nums/.test(g.gia) && g.bo && !g.tomLoe, JSON.stringify(g));
-    const hv = await (await p.$('#bang-gia .gg-ds > li:nth-child(2) .gg-hang')).hover(); await cho(400);
-    const h = await p.evaluate(() => { const a = document.querySelector('#bang-gia .gg-ds > li:nth-child(2) .gg-hang'); return { nen: getComputedStyle(a, '::before').transform, mau: getComputedStyle(a, '::before').backgroundColor, ten: getComputedStyle(a.querySelector('.gg-ten')).color, mui: getComputedStyle(a.querySelector('.mui')).transform }; });
-    ok('Rê chuột: nền kem đậm trượt từ trái, tên → tím, mũi tên nhích 4px', (h.nen === 'none' || /^matrix\(1, 0, 0, 1/.test(h.nen)) && h.mau === 'rgb(243, 236, 225)' && h.ten === 'rgb(90, 30, 94)' && /matrix\(1, 0, 0, 1, 4, 0\)/.test(h.mui), JSON.stringify(h));
+    for (const [w, h, cot] of [[1440, 900, 2], [768, 1024, 2], [390, 844, 1]]) {
+      const c = await ctxMoi({ viewport: { width: w, height: h }, isMobile: w < 500, hasTouch: w < 500 }), p = await mo(c, '/'); await toi(p, '#bang-gia', 100); await cho(1400);
+      const g = await p.evaluate(() => { const r = (e) => e.getBoundingClientRect(), the = [...document.querySelectorAll('#bang-gia .dvx-the')].map(r), b = r(document.querySelector('.dvx-banner')), tren = new Set(the.map((x) => Math.round(x.top))).size, trai = new Set(the.map((x) => Math.round(x.left))).size; const a = [...document.querySelectorAll('.dvx-banner a')]; return { n: the.length, hang: tren, cot: trai, banner: b.top >= Math.max(...the.map((x) => x.bottom)) - 1, tran: document.documentElement.scrollWidth > innerWidth, nut: a.map((x) => [x.textContent.trim(), new URL(x.href).pathname, x.getBoundingClientRect().height >= 44]), h2: parseFloat(getComputedStyle(document.querySelector('#bang-gia h2')).fontSize), fonts: [getComputedStyle(document.querySelector('#bang-gia h2')).fontFamily.split(',')[0], getComputedStyle(document.querySelector('.dvx-the b')).fontFamily.split(',')[0], getComputedStyle(document.querySelector('.dvx-the span:last-child')).fontFamily.split(',')[0]], mau: getComputedStyle(document.querySelector('.dvx-banner')).backgroundColor }; });
+      ok(`${w}px: ${cot} cột (${g.cot} vị trí trái, ${g.hang} hàng), 4 thẻ, khối tím nằm DƯỚI lưới, không tràn ngang, tiêu đề ${g.h2}px; 2 nút "Đặt lịch khám" → /dat-lich/ và "Xem bảng giá" → /bang-gia/ cao ≥ 44px; nền tím #5A1E5E; Newsreader + Be Vietnam Pro`, g.n === 4 && g.cot === cot && g.banner && !g.tran && g.nut.length === 2 && /Đặt lịch khám/.test(g.nut[0][0]) && /\/dat-lich\/$/.test(g.nut[0][1]) && /Xem bảng giá/.test(g.nut[1][0]) && /\/bang-gia\/$/.test(g.nut[1][1]) && g.nut.every((x) => x[2]) && g.mau === 'rgb(90, 30, 94)' && g.fonts[0] === 'Newsreader' && g.fonts[1] === 'Newsreader' && g.fonts[2].replace(/"/g, '') === 'Be Vietnam Pro', JSON.stringify(g));
+      await c.close();
+    }
+    const ctx = await ctxMoi({ viewport: { width: 1440, height: 900 } }), p = await mo(ctx, '/'); await toi(p, '#bang-gia', 100); await cho(1400);
+    const t0 = await p.evaluate(() => { const a = document.querySelector('.dvx-the'); return { z: getComputedStyle(a.querySelector('.dvx-zoom')).transform, bd: getComputedStyle(a).borderColor, ar: getComputedStyle(a.querySelector('.dvx-cta-chu .mui')).transform }; });
+    await (await p.$('.dvx-the')).hover(); await cho(900);
+    const t1 = await p.evaluate(() => { const a = document.querySelector('.dvx-the'); return { z: getComputedStyle(a.querySelector('.dvx-zoom')).transform, bd: getComputedStyle(a).borderColor, ar: getComputedStyle(a.querySelector('.dvx-cta-chu .mui')).transform, nen: getComputedStyle(a).backgroundColor }; });
+    ok('Rê chuột vào thẻ: ảnh zoom nhẹ (scale 1,05), viền đổi sang tím nhạt, nền sáng lên trắng, mũi tên nhích sang phải 6px', /^(none|matrix\(1, 0, 0, 1, 0, 0\))$/.test(t0.z) && /matrix\(1\.05/.test(t1.z) && t0.bd !== t1.bd && t1.nen === 'rgb(255, 255, 255)' && /matrix\(1, 0, 0, 1, 6,/.test(t1.ar), JSON.stringify({ t0, t1 }));
+    await p.mouse.move(5, 5); await p.keyboard.press('Tab'); await p.evaluate(() => document.querySelectorAll('.dvx-the')[1].focus()); await cho(900);
+    const f = await p.evaluate(() => { const a = document.activeElement, c = getComputedStyle(a); return { ten: a.querySelector('b').textContent, vong: c.outlineStyle, rong: c.outlineWidth, z: getComputedStyle(a.querySelector('.dvx-zoom')).transform }; });
+    ok('Focus bàn phím vào thẻ: viền focus 3px nhìn rõ, ảnh zoom giống khi rê chuột', f.vong === 'solid' && f.rong === '3px' && /matrix\(1\.05/.test(f.z), JSON.stringify(f));
+    await p.evaluate(() => document.querySelectorAll('.dvx-banner a')[0].focus()); await cho(300);
+    const f2 = await p.evaluate(() => { const c = getComputedStyle(document.activeElement); return { v: c.outlineStyle, r: c.outlineWidth, m: c.outlineColor }; });
+    ok('Focus vào nút trên nền tím: viền trắng 3px (thấy rõ trên nền tím)', f2.v === 'solid' && f2.r === '3px' && f2.m === 'rgb(255, 255, 255)', JSON.stringify(f2));
     await ctx.close();
+    const cr = await ctxMoi({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' }), pr = await mo(cr, '/'); await toi(pr, '#bang-gia', 100); await cho(600);
+    await (await pr.$('.dvx-the')).hover(); await cho(400);
+    const rd = await pr.evaluate(() => { const a = document.querySelector('.dvx-the'); return { z: getComputedStyle(a.querySelector('.dvx-zoom')).transform, ar: getComputedStyle(a.querySelector('.dvx-cta-chu .mui')).transform, op: [...document.querySelectorAll('#bang-gia [data-hien]')].map((e) => +getComputedStyle(e).opacity), tf: [...document.querySelectorAll('#bang-gia [data-hien]')].map((e) => getComputedStyle(e).transform) }; });
+    ok('Giảm chuyển động: không zoom, mũi tên không nhích, mọi thành phần hiện đủ và không dịch chuyển', /^(none|matrix\(1, 0, 0, 1, 0, 0\))$/.test(rd.z) && /^(none|matrix\(1, 0, 0, 1, 0, 0\))$/.test(rd.ar) && rd.op.every((o) => o === 1) && rd.tf.every((x) => x === 'none'), JSON.stringify(rd));
+    await cr.close();
+    const cj = await ctxMoi({ viewport: { width: 1440, height: 900 }, javaScriptEnabled: false }), pj = await mo(cj, '/');
+    const nj = await pj.evaluate(() => [...document.querySelectorAll('#bang-gia [data-hien]')].map((e) => +getComputedStyle(e).opacity));
+    ok('Tắt JavaScript: toàn bộ khu hiện sẵn (độ mờ 1)', nj.length >= 6 && nj.every((o) => o === 1), JSON.stringify(nj));
+    await cj.close();
+    const cl = await ctxMoi({ viewport: { width: 1440, height: 900 } }), pl = await mo(cl, '/');
+    const lk = await pl.evaluate(async () => { const out = []; for (const a of document.querySelectorAll('#bang-gia a')) { const r = await fetch(a.href, { method: 'GET' }).then((x) => x.status).catch(() => 0); out.push([new URL(a.href).pathname + new URL(a.href).hash, r]); } return out; });
+    ok('Mọi liên kết trong khu (4 thẻ + 2 nút) mở được (HTTP 200) và 4 thẻ trỏ tới nhóm giá có thật trên /bang-gia/', lk.length === 6 && lk.every((x) => x[1] === 200), JSON.stringify(lk));
+    await cl.close();
   }
 
   // ---------- 6. Trang Bảng giá ----------
