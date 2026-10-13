@@ -1,16 +1,16 @@
-Kiểm tra bản xem thử giao diện mới đặt ở thư mục lạ (/mot/thu-muc/la/ban-xem-thu-moi/) · Chromium Playwright · 2026-10-13T11:42:39.208Z
+Kiểm tra bản xem thử giao diện mới đặt ở thư mục lạ (/mot/thu-muc/la/ban-xem-thu-moi/) · Chromium Playwright · 2026-10-13T11:51:13.948Z
 ĐẠT 16 · KHÔNG ĐẠT 0
 
 [ĐẠT] [1440x900] Trang chính (bọc khung, thư mục lạ): CSS giao diện mới áp dụng (--kem #FBF7F1, nền kem), header mới, tiêu đề hero Newsreader đúng chữ, JavaScript hiệu ứng chạy (co-hieu-ung + __hieuUngSan)  → {"kem":"#fbf7f1","nen":"rgb(251, 247, 241)","dau":true,"nenDau":true,"h1":"Sức khỏe hôm nay, hạnh phúc về sau.","phongH1":"Newsreader","san":true,"hu":true,"khu":9}
 [ĐẠT] [1440x900] Phông tự chứa (tải từ ../fonts/ của bản xem thử) vẽ đúng: h1 chỉ Newsreader, đoạn văn chỉ Be Vietnam Pro, không rơi sang phông dự phòng
-[ĐẠT] [1440x900] Mọi ảnh trên trang chính tải được (logo, ảnh sản phẩm minh hoạ…): 6 ảnh
+[ĐẠT] [1440x900] Mọi ảnh trên trang chính tải được (logo, ảnh sản phẩm minh hoạ…): 7 ảnh
 [ĐẠT] [1440x900] Cuộn hết trang chính: mọi phần tử [data-hien] đã hiện (hien.js chạy trong khung), header thu gọn khi cuộn  → còn ẩn: 0
 [ĐẠT] [1440x900] Dải sản phẩm trong khung xem thử cuộn ngang được, nút Trước / Sau hiện  → {"sw":true,"nut":true}
 [ĐẠT] [1440x900] Trang Bảng giá trong khung xem thử: mở thẳng #nhom-grooming-spa chọn đúng tab, gạch chân đúng vị trí, bảng giá hiện đủ ô  → {"sel":"tab-grooming-spa","ok":true,"bang":72}
 [ĐẠT] [1440x900] Không lỗi JavaScript, không tệp nào bị hỏng khi duyệt hết các trang
 [ĐẠT] [390x844] Trang chính (bọc khung, thư mục lạ): CSS giao diện mới áp dụng (--kem #FBF7F1, nền kem), header mới, tiêu đề hero Newsreader đúng chữ, JavaScript hiệu ứng chạy (co-hieu-ung + __hieuUngSan)  → {"kem":"#fbf7f1","nen":"rgb(251, 247, 241)","dau":true,"nenDau":true,"h1":"Sức khỏe hôm nay, hạnh phúc về sau.","phongH1":"Newsreader","san":true,"hu":true,"khu":9}
 [ĐẠT] [390x844] Phông tự chứa (tải từ ../fonts/ của bản xem thử) vẽ đúng: h1 chỉ Newsreader, đoạn văn chỉ Be Vietnam Pro, không rơi sang phông dự phòng
-[ĐẠT] [390x844] Mọi ảnh trên trang chính tải được (logo, ảnh sản phẩm minh hoạ…): 6 ảnh
+[ĐẠT] [390x844] Mọi ảnh trên trang chính tải được (logo, ảnh sản phẩm minh hoạ…): 7 ảnh
 [ĐẠT] [390x844] Cuộn hết trang chính: mọi phần tử [data-hien] đã hiện (hien.js chạy trong khung), header thu gọn khi cuộn  → còn ẩn: 0
 [ĐẠT] [390x844] Menu điện thoại trong khung xem thử: mở phủ kín màn hình, Esc đóng lại  → {"m1":[0,0,390,844],"m2":"hidden"}
 [ĐẠT] [390x844] Trang Bảng giá trong khung xem thử: mở thẳng #nhom-grooming-spa chọn đúng tab, gạch chân đúng vị trí, bảng giá hiện đủ ô  → {"sel":"tab-grooming-spa","ok":true,"bang":72}
