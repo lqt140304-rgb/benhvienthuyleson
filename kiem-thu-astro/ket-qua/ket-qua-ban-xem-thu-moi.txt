@@ -1,4 +1,4 @@
-Kiểm tra bản xem thử giao diện mới đặt ở thư mục lạ (/mot/thu-muc/la/ban-xem-thu-moi/) · Chromium Playwright · 2026-10-13T12:15:37.727Z
+Kiểm tra bản xem thử giao diện mới đặt ở thư mục lạ (/mot/thu-muc/la/ban-xem-thu-moi/) · Chromium Playwright · 2026-10-13T12:47:42.946Z
 ĐẠT 16 · KHÔNG ĐẠT 0
 
 [ĐẠT] [1440x900] Trang chính (bọc khung, thư mục lạ): CSS giao diện mới áp dụng (--kem #FBF7F1, nền kem), header mới, tiêu đề hero Newsreader đúng chữ, JavaScript hiệu ứng chạy (co-hieu-ung + __hieuUngSan)  → {"kem":"#fbf7f1","nen":"rgb(251, 247, 241)","dau":true,"nenDau":true,"h1":"Sức khỏe hôm nay, hạnh phúc về sau.","phongH1":"Newsreader","san":true,"hu":true,"khu":9}
