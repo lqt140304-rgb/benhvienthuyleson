@@ -1,4 +1,4 @@
-Kiểm thử trang Đặt lịch giao diện mới · Chromium Playwright · 2026-10-13T09:25:57.134Z
+Kiểm thử trang Đặt lịch giao diện mới · Chromium Playwright · 2026-10-13T11:15:46.237Z
 ✓ [ĐẠT] máy tính 1440: tiêu đề "Đặt lịch khám & chăm sóc" (Newsreader), 4 bước tiến trình, biểu mẫu + tóm tắt, tóm tắt ở CỘT PHẢI và sticky, không tràn ngang, không ô mật khẩu / đăng nhập
 ✓ [ĐẠT] máy tính 1440: thẻ Chó / Mèo / Khác đủ lớn; mọi nút cao ≥ 44px
 ✓ [ĐẠT] máy tính bảng 768: tiêu đề "Đặt lịch khám & chăm sóc" (Newsreader), 4 bước tiến trình, biểu mẫu + tóm tắt, tóm tắt xếp DƯỚI biểu mẫu, không tràn ngang, không ô mật khẩu / đăng nhập
