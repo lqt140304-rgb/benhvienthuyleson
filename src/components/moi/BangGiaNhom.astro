@@ -1,0 +1,90 @@
+---
+// Nội dung giá của MỘT nhóm dịch vụ, giao diện mới: Minimal Accordion List (Tab + Accordion, chủ dự án duyệt 13/10/2026). Dữ liệu lấy NGUYÊN từ dich_vu.json qua cùng
+// hàm của bản R3.6 (tachBang, nhanGiaMuc, Gia): không đổi, không làm tròn, không thêm chữ "Từ", không tự đặt giá.
+// - Hạng mục (hang_muc): một hàng = tên · mô tả ngắn · giá hoặc trạng thái ("Báo sau khi khám", "Theo giờ hẹn", "Đang cập nhật") · mũi tên. Có ghi chú dài thì mở ra được
+//   (accordion); không có gì để mở thì là hàng tĩnh (không ép accordion rỗng).
+// - Bảng theo cân nặng (bang): MỖI CỘT là một dịch vụ (vd "Tắm chó lông ngắn", "Mèo đực"), bấm mở ra danh sách cân nặng → giá. Nhóm chỉ có một cột (Nội trú) thì mở sẵn.
+// - Giảm gửi dài ngày, phụ phí ngoài giờ, ghi chú nhóm: giữ nguyên nội dung.
+// Mặc định thu gọn khi có JavaScript (lớp co-hieu-ung); không JavaScript thì mọi thứ mở sẵn. Tương tác: src/scripts/hieu-ung/bang-gia-acc.js; kiểu dáng: styles/moi/khu-bang-gia-acc.css.
+import Icon from '../Icon.astro';
+import Gia from '../ls/Gia.astro';
+import pp from '../../data/phu_phi.json';
+import tt from '../../data/thong_tin.json';
+import { gia } from '../../lib/site';
+import { tachBang, nhanGiaMuc, cauDau } from '../../lib/ls';
+import type { DV } from '../../lib/ls';
+interface Props { d: DV }
+const { d } = Astro.props;
+const nhomBang = d.bang.cot.length ? tachBang(d) : [];
+// Ghi chú của hạng mục: câu đầu là mô tả ngắn dưới tên; phần còn lại (nếu có) là nội dung mở rộng. Ghi chú chỉ một câu thì hiện trọn dưới tên, không ép accordion rỗng.
+const tach = (g: string) => { const dau = cauDau(g), con = g.slice(dau.length).trim(); return { dau: dau || g, con }; };
+const hm = d.hang_muc.map((m, i) => { const t = tach(m.ghi_chu || ''); return { m, i, dau: t.dau, con: t.con, acc: !!t.con }; });
+const motSan = d.hang_muc.length === 0 && d.bang.cot.length === 1; // nhóm CHỈ có một bảng cân nặng một cột (Gửi nội trú): mở sẵn; còn lại thu gọn
+const id = (k: string) => `${d.id}-${k}`;
+---
+<div class="bga">
+  {nhomBang.map((b, gi) => (
+    <>
+      {b.tieu_de && <h4 class="bg-phu">{b.tieu_de}</h4>}
+      <ul class="bga-ds">
+        {b.cot.map((j) => (
+          <li class={`bga-muc bga-co-acc${motSan ? ' mo' : ''}`} data-mo-san={motSan ? '1' : undefined}>
+            <button type="button" class="bga-hang" id={id(`n-${gi}-${j}`)} aria-expanded={String(motSan)} aria-controls={id(`c-${gi}-${j}`)}>
+              <span class="bga-ten">{d.bang.cot[j]}</span>
+              <span class="bga-mo">Giá theo {(d.bang.tieu_de_dong || 'cân nặng').toLowerCase()}</span>
+              <span class="bga-gia nhan-gia">{d.bang.dong.length} mức giá</span>
+              <Icon name="xuong" size={20} class="bga-chev" />
+            </button>
+            <div class="bga-tt" id={id(`c-${gi}-${j}`)} role="region" aria-labelledby={id(`n-${gi}-${j}`)}>
+              <div class="bga-tt-in"><dl class="bga-kg">
+                {d.bang.dong.map((r) => <div><dt>{r.nhan}</dt><dd><b class="gia"><Gia g={r.gia[j]} /></b></dd></div>)}
+              </dl></div>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </>
+  ))}
+  {hm.length > 0 && (
+    <ul class="bga-ds">
+      {hm.map(({ m, i, acc, dau, con }) => {
+        const gt = m.gia ? <b class="bga-gia gia"><Gia g={m.gia} /></b> : <span class="bga-gia nhan-gia">{nhanGiaMuc(m)}</span>;
+        return acc ? (
+          <li class={`bga-muc bga-co-acc${motSan ? ' mo' : ''}`} data-mo-san={motSan ? '1' : undefined}>
+            <button type="button" class="bga-hang" id={id(`h-${i}`)} aria-expanded={String(motSan)} aria-controls={id(`hc-${i}`)}>
+              <span class="bga-ten">{m.ten}</span>
+              <span class="bga-mo">{dau}</span>
+              {gt}
+              <Icon name="xuong" size={20} class="bga-chev" />
+            </button>
+            <div class="bga-tt" id={id(`hc-${i}`)} role="region" aria-labelledby={id(`h-${i}`)}>
+              <div class="bga-tt-in"><p class="bga-chi-tiet">{con}</p></div>
+            </div>
+          </li>
+        ) : (
+          <li class="bga-muc">
+            <div class={`bga-hang bga-tinh${m.ghi_chu ? '' : ' bga-1d'}`}>
+              <span class="bga-ten">{m.ten}</span>
+              {m.ghi_chu && <span class="bga-mo">{m.ghi_chu}</span>}
+              {gt}
+            </div>
+          </li>
+        );
+      })}
+    </ul>
+  )}
+  {d.giam_dai_ngay.length > 0 && (
+    <div class="bg-giam"><b>Gửi dài ngày được giảm</b><ul>{d.giam_dai_ngay.map((g) => <li><span>{g.nhan}</span><b>−{g.giam}%</b></li>)}</ul></div>
+  )}
+  {d.cap_cuu && (
+    <>
+      <h4 class="bg-phu">Phụ phí khám ngoài giờ</h4>
+      <ul class="bga-ds">
+        {pp.kham_ngoai_gio.map((k) => <li class="bga-muc"><div class="bga-hang bga-tinh bga-1d"><span class="bga-ten">Khám ngoài giờ {k.tu} – {k.den}</span><b class="bga-gia gia">+{gia(k.gia)}</b></div></li>)}
+        <li class="bga-muc"><div class="bga-hang bga-tinh bga-1d"><span class="bga-ten">Phụ phí cấp cứu ngoài giờ</span><span class="bga-gia nhan-gia">{tt.phu_phi_cap_cuu_ngoai_gio || 'Gọi để biết mức'}</span></div></li>
+      </ul>
+    </>
+  )}
+  {!d.bang.cot.length && !d.hang_muc.length && !d.cap_cuu && <p class="nhan-gia">Đang cập nhật</p>}
+  {d.ghi_chu && <p class="bg-ghi"><Icon name="info" size={18} /><span>{d.ghi_chu}</span></p>}
+</div>

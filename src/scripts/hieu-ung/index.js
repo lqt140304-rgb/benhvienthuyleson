@@ -7,6 +7,7 @@ import { khoiDong as moCua } from './mo-cua.js';
 import { khoiDong as videoHero } from './video-hero.js';
 import { khoiDong as tabGia } from './tab-gia.js';
 import { khoiDong as daiSanPham } from './dai-san-pham.js';
+import { khoiDong as bangGiaAcc } from './bang-gia-acc.js';
 
 function khoiDong() {
   hienKhiCuon();
@@ -15,6 +16,7 @@ function khoiDong() {
   videoHero();
   tabGia();
   daiSanPham();
+  bangGiaAcc();
 }
 
 khoiDong();

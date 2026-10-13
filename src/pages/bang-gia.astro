@@ -4,12 +4,15 @@ import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
 import OIc from '../components/ls/OIc.astro';
 import BangGiaNhom from '../components/ls/BangGiaNhom.astro';
+import BangGiaNhomMoi from '../components/moi/BangGiaNhom.astro';
+import Mui from '../components/moi/Mui.astro';
 import tt from '../data/thong_tin.json';
-import { u } from '../lib/site';
+import { u, GIAO_DIEN } from '../lib/site';
 import { dichVuLS, choXn, tenNgan } from '../lib/ls';
 const dv = dichVuLS();
 const capCuuCho = choXn('cap-cuu-24-24');
 const cho = (d: (typeof dv)[number]) => d.cap_cuu && capCuuCho;
+const moi = GIAO_DIEN === 'moi'; // giao diện mới: Minimal Accordion List (components/moi/BangGiaNhom.astro); R3.6 giữ bảng cũ
 ---
 <Layout title="Bảng giá dịch vụ" description={`Bảng giá khám, xét nghiệm, grooming, triệt sản, gửi nội trú cho chó mèo tại ${tt.ten}. Giá tham khảo theo cân nặng và hạng mục.`} trang="khac" hienTai="bang-gia" cam="dich_vu">
   <section class="trang-gia-dau" id="noi-dung">
@@ -40,15 +43,25 @@ const cho = (d: (typeof dv)[number]) => d.cap_cuu && capCuuCho;
                 {cho(d) && <p class="xn-ghi"><Icon name="info" size={16} />{capCuuCho.ghi_chu_hien}</p>}
               </div>
             </div>
-            <BangGiaNhom d={d} />
+            {moi ? <BangGiaNhomMoi d={d} /> : <BangGiaNhom d={d} />}
             {d.dat_lich && <p class="bg-dat"><a class="link-mui" href={u(`/dat-lich/?nhom=${encodeURIComponent(d.id)}`)}>Đặt lịch {d.ten.toLowerCase().replace(/ \(.*\)$/, '')} <Icon name="arrow" size={18} /></a></p>}
           </div>
         ))}
       </div>
+      {moi ? (
+        <div class="bg-cuoi bga-cuoi">
+          <p><Icon name="info" size={18} /><span>Chi phí mang tính tham khảo, có thể thay đổi tùy tình trạng thú cưng, cân nặng và chỉ định của bác sĩ. Vui lòng liên hệ để được tư vấn chính xác. Chưa gồm thuốc, vật tư phát sinh.</span></p>
+          <div class="bga-cta">
+            <a class="nut nut-chinh" href={u('/dat-lich/')}>Đặt lịch khám<Mui /></a>
+            <a class="nut nut-vien" href={u('/lien-he/')}>Liên hệ tư vấn</a>
+          </div>
+        </div>
+      ) : (
       <div class="bg-cuoi">
-        <p><Icon name="info" size={18} /><span>Chi phí thực tế phụ thuộc cân nặng, tình trạng của bé và chỉ định của bác sĩ. Chưa gồm thuốc, vật tư phát sinh.</span></p>
-        <a class="link-mui" href={u('/dat-lich/')}>Đặt lịch khám <Icon name="arrow" size={18} /></a>
-      </div>
+          <p><Icon name="info" size={18} /><span>Chi phí thực tế phụ thuộc cân nặng, tình trạng của bé và chỉ định của bác sĩ. Chưa gồm thuốc, vật tư phát sinh.</span></p>
+          <a class="link-mui" href={u('/dat-lich/')}>Đặt lịch khám <Icon name="arrow" size={18} /></a>
+        </div>
+      )}
     </div>
   </section>
 </Layout>

@@ -58,8 +58,8 @@ const cho = (ms) => new Promise((r) => setTimeout(r, ms));
     }
     // trang Bảng giá: tab, gạch chân, hash
     await p.goto(goc + 'bang-gia/index.html#nhom-grooming-spa', { waitUntil: 'load' }); await p.evaluate(() => document.fonts.ready); await cho(800);
-    const bg = await p.evaluate(() => { const s = document.querySelector('.bg-tab [aria-selected=true]'), g = document.querySelector('.bg-gach'); return { sel: s && s.id, ok: !!g && Math.abs(new DOMMatrix(getComputedStyle(g).transform).e - s.offsetLeft) <= 1, bang: document.querySelectorAll('.bg-panel:not([hidden]) td').length }; });
-    ok(`[${tag}] Trang Bảng giá trong khung xem thử: mở thẳng #nhom-grooming-spa chọn đúng tab, gạch chân đúng vị trí, bảng giá hiện đủ ô`, /grooming/.test(bg.sel) && bg.ok && (mobile || bg.bang >= 30), JSON.stringify(bg));
+    const bg = await p.evaluate(() => { const s = document.querySelector('.bg-tab [aria-selected=true]'), g = document.querySelector('.bg-gach'); return { sel: s && s.id, ok: !!g && Math.abs(new DOMMatrix(getComputedStyle(g).transform).e - s.offsetLeft) <= 1, bang: document.querySelectorAll('.bg-panel:not([hidden]) .bga-kg dd').length }; });
+    ok(`[${tag}] Trang Bảng giá trong khung xem thử: mở thẳng #nhom-grooming-spa chọn đúng tab, gạch chân đúng vị trí, bảng giá hiện đủ ô`, /grooming/.test(bg.sel) && bg.ok && bg.bang >= 30, JSON.stringify(bg));
     ok(`[${tag}] Không lỗi JavaScript, không tệp nào bị hỏng khi duyệt hết các trang`, loi.length === 0, loi.join(' | '));
     await ctx.close();
   }
