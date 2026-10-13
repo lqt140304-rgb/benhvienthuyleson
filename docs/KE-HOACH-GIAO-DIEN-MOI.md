@@ -346,3 +346,9 @@ Bản vẽ tldraw (6 khung: ba khu trang chủ máy tính, trang Bảng giá má
 - Khung nội dung 1200 → 1280px (đỡ khoảng trống hai bên); khoảng giữa các khu 120 → 104px.
 - Ảnh Giới thiệu: tỉ lệ 7/5 thay vì 3/2, cao tối thiểu 720px (trước 600px); tiêu đề trên ảnh tới 68px; chữ bên phải 19–23px, tiêu đề điểm 21–25px.
 - Còn thấy (chưa làm, thuộc bước sau): mục Đội ngũ ở trang chủ rất dài (~15.000px, thiết kế cũ R3.6, bước 5); cột trái mục Sản phẩm và Bảng giá còn trống phía dưới.
+
+## Hero phương án 2 "Warm Companionship" (13/10/2026)
+- Chủ dự án chốt mẫu 02. Chữ: tiêu đề "Sức khỏe hôm nay, hạnh phúc về sau." (nét bút cam dưới "hạnh phúc"), câu phụ "Thú cưng không chỉ là vật nuôi, mà là thành viên trong gia đình. Lê Sơn luôn ở bên để chăm sóc chúng thật trọn vẹn.", nút "Đặt lịch khám" + "Xem bảng giá", bốn thẻ dịch vụ nhỏ ở chân hero (Khám & Điều trị toàn diện · Chăm sóc sức khỏe định kỳ · Grooming & Spa thư giãn · Tư vấn dinh dưỡng và hành vi; ba thẻ đầu dẫn tới nhóm giá, thẻ cuối tới Cẩm nang). Giữ dòng giờ mở cửa + hotline thật.
+- Ảnh / video phủ kín bên phải, mờ dần sang trái (như cũ). **Chưa có ảnh thật** nên là khung chờ ấm màu "Ảnh · video thực tế sắp cập nhật" (không dùng ảnh minh hoạ chó mèo giả). Chép `public/video/hero-poster.jpg` là có ảnh tĩnh, thêm `hero.webm/mp4` là có video.
+- Điện thoại: giữ tinh thần như máy tính, sắp lại thứ tự tiêu đề → câu phụ → ảnh (4:3) → nút (cao 56px) → giờ mở cửa → 4 thẻ 2×2.
+- File: `src/components/moi/Hero.astro`, `src/styles/moi/khu-hero.css`, `public/video/README.md`, kiểm thử `kiem-thu-giao-dien-moi-b2.cjs`.

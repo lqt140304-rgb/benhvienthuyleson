@@ -13,3 +13,7 @@ Bệnh viện gửi video thì chép vào thư mục này, dựng lại web là 
 - Quay thật tại bệnh viện, không chữ chèn trên video, không dùng video stock.
 - Máy bật giảm chuyển động, tắt "Hiệu ứng trang trí", bật tiết kiệm dữ liệu hoặc mạng chậm thì chỉ hiện ảnh bìa, không tải video.
 - Giao diện cũ (R3.6) không dùng các tệp này.
+
+
+## Chỉ có ảnh (chưa có video)
+Chép `hero-poster.jpg` (ngang 16:9, tối thiểu 1600×900, chú chó / mèo thật của bệnh viện hoặc ảnh khách đồng ý, ấm áp, sáng) vào đây: hero hiện ảnh tĩnh phủ kín bên phải, mờ dần sang trái, không tải video. Có cả video thì ảnh này là ảnh bìa hiện trước.
