@@ -23,7 +23,7 @@ import LienHe from '../components/ls/LienHe.astro';
   {GIAO_DIEN === 'moi' ? <GioiThieuDichVuMoi /> : <><GioiThieu /><DichVuNoiBat /></>}
   {GIAO_DIEN === 'moi' ? <SanPhamMoi /> : <SanPham />}
   {GIAO_DIEN === 'moi' ? <DichVuShowcaseMoi /> : <GiaGon />}
-  <DatLichKhu />
+  {GIAO_DIEN !== 'moi' && <DatLichKhu />} {/* giao diện mới: bỏ khu đặt lịch ở trang chủ (chủ dự án 13/10/2026); đặt lịch ở trang /dat-lich/ */}
   <DoiNgu />
   <CamNang />
   <CauChuyen />
