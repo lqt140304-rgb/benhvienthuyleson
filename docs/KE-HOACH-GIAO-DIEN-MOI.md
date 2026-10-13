@@ -357,3 +357,7 @@ Bản vẽ tldraw (6 khung: ba khu trang chủ máy tính, trang Bảng giá má
 - Chỉ ở điện thoại (< 768px) và chỉ khi có `public/video/hero-poster.jpg` hoặc video thật. Tiêu đề trở thành "chữ khoét": nền kem, chữ đen, `mix-blend-mode: lighten` nên hình (video / ảnh bìa) hiện bên trong nét chữ; lớp phủ tím nhạt giữ chữ đủ đậm. Chữ đậm 600.
 - Chưa có hình, hoặc giảm chuyển động / tiết kiệm dữ liệu mà không có ảnh bìa → tiêu đề tím như thường (không bao giờ ra chữ nhạt khó đọc). Máy tính / máy tính bảng không đổi.
 - Nút tạm dừng nằm dưới chữ (trong khung tiêu đề). Ảnh `hero-chu-video-dien-thoai-thu.png` là hình thử bằng video mẫu tạo bằng máy (hoạ tiết màu), KHÔNG phải nội dung thật.
+
+### Bảng giá: ẩn Gói khám tổng quát, gộp Siêu âm (13/10/2026)
+- Theo yêu cầu: ở trang Bảng giá GIAO DIỆN MỚI, hạng mục "Gói khám sức khoẻ tổng quát" (300.000đ) được ẨN, và ba mục "Siêu âm ổ bụng / tim / thai" gộp thành MỘT accordion "Siêu âm" (mở ra thấy từng loại + giá, như Grooming / Nội trú).
+- Cấu hình ở `src/lib/bang-gia-trinh-bay.ts` (`HANG_MUC_AN`, `TIEN_TO_GOP`). Dữ liệu `src/data/dich_vu.json` KHÔNG đổi; bản R3.6 vẫn hiện đủ. Muốn hiện lại gói khám: xoá tên khỏi `HANG_MUC_AN`.

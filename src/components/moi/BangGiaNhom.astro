@@ -12,14 +12,25 @@ import pp from '../../data/phu_phi.json';
 import tt from '../../data/thong_tin.json';
 import { gia } from '../../lib/site';
 import { tachBang, nhanGiaMuc, cauDau } from '../../lib/ls';
+import { HANG_MUC_AN, TIEN_TO_GOP } from '../../lib/bang-gia-trinh-bay';
 import type { DV } from '../../lib/ls';
 interface Props { d: DV }
 const { d } = Astro.props;
 const nhomBang = d.bang.cot.length ? tachBang(d) : [];
 // Ghi chú của hạng mục: câu đầu là mô tả ngắn dưới tên; phần còn lại (nếu có) là nội dung mở rộng. Ghi chú chỉ một câu thì hiện trọn dưới tên, không ép accordion rỗng.
 const tach = (g: string) => { const dau = cauDau(g), con = g.slice(dau.length).trim(); return { dau: dau || g, con }; };
-const hm = d.hang_muc.map((m, i) => { const t = tach(m.ghi_chu || ''); return { m, i, dau: t.dau, con: t.con, acc: !!t.con }; });
-const motSan = d.hang_muc.length === 0 && d.bang.cot.length === 1; // nhóm CHỈ có một bảng cân nặng một cột (Gửi nội trú): mở sẵn; còn lại thu gọn
+const hm = d.hang_muc.map((m, i) => { const t = tach(m.ghi_chu || ''); return { m, i, dau: t.dau, con: t.con, acc: !!t.con }; }).filter((x) => !HANG_MUC_AN.includes(x.m.ten));
+// Gộp các hạng mục cùng tiền tố (vd "Siêu âm ổ bụng / tim / thai") thành một accordion tại vị trí của mục đầu tiên
+type Hm = (typeof hm)[number];
+const dongHm: ({ loai: 'muc'; x: Hm } | { loai: 'gop'; ten: string; ds: Hm[]; k: number })[] = [];
+const daGop = new Set<number>();
+hm.forEach((x) => {
+  if (daGop.has(x.i)) return;
+  const tt = TIEN_TO_GOP.find((t) => x.m.ten.startsWith(t) && x.m.gia && !x.m.ghi_chu);
+  const ds = tt ? hm.filter((y) => y.m.ten.startsWith(tt) && y.m.gia && !y.m.ghi_chu) : [];
+  if (tt && ds.length >= 2) { ds.forEach((y) => daGop.add(y.i)); dongHm.push({ loai: 'gop', ten: tt, ds, k: x.i }); } else dongHm.push({ loai: 'muc', x });
+});
+const motSan = dongHm.length === 0 && d.bang.cot.length === 1; // nhóm CHỈ có một bảng cân nặng một cột (Gửi nội trú): mở sẵn; còn lại thu gọn
 const id = (k: string) => `${d.id}-${k}`;
 ---
 <div class="bga">
@@ -45,9 +56,28 @@ const id = (k: string) => `${d.id}-${k}`;
       </ul>
     </>
   ))}
-  {hm.length > 0 && (
+  {dongHm.length > 0 && (
     <ul class="bga-ds">
-      {hm.map(({ m, i, acc, dau, con }) => {
+      {dongHm.map((e) => {
+        if (e.loai === 'gop') {
+          const ten2 = (n: string) => n.slice(e.ten.length).trim();
+          return (
+            <li class="bga-muc bga-co-acc">
+              <button type="button" class="bga-hang" id={id(`g-${e.k}`)} aria-expanded="false" aria-controls={id(`gc-${e.k}`)}>
+                <span class="bga-ten">{e.ten}</span>
+                <span class="bga-mo">{e.ds.map((y) => ten2(y.m.ten)).join(', ')}</span>
+                <span class="bga-gia nhan-gia">{e.ds.length} mức giá</span>
+                <Icon name="xuong" size={20} class="bga-chev" />
+              </button>
+              <div class="bga-tt" id={id(`gc-${e.k}`)} role="region" aria-labelledby={id(`g-${e.k}`)}>
+                <div class="bga-tt-in"><dl class="bga-kg">
+                  {e.ds.map((y) => <div><dt>{y.m.ten}</dt><dd><b class="gia"><Gia g={y.m.gia} /></b></dd></div>)}
+                </dl></div>
+              </div>
+            </li>
+          );
+        }
+        const { m, i, acc, dau, con } = e.x;
         const gt = m.gia ? <b class="bga-gia gia"><Gia g={m.gia} /></b> : <span class="bga-gia nhan-gia">{nhanGiaMuc(m)}</span>;
         return acc ? (
           <li class={`bga-muc bga-co-acc${motSan ? ' mo' : ''}`} data-mo-san={motSan ? '1' : undefined}>
