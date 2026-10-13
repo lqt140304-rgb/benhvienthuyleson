@@ -1,5 +1,5 @@
 ---
-// Premium Service Showcase (giao diện mới, thay khu "Bảng giá tham khảo" ở trang chủ): lưới 2×2 bốn dịch vụ + Luxury CTA màu tím.
+// Premium Service Showcase (giao diện mới, thay khu "Bảng giá tham khảo" ở trang chủ): lưới BENTO bốn dịch vụ (máy tính: hàng 1 = 7 + 5 cột, hàng 2 = 5 + 7 cột, ô rộng xếp ngang ảnh | chữ; máy tính bảng 2 cột; điện thoại 1 cột) + Luxury CTA màu tím.
 // Bảng giá chi tiết nằm ở trang /bang-gia/ (dữ liệu giá, nhóm và ghi chú giữ nguyên, KHÔNG tạo giá mới); mỗi thẻ dẫn thẳng tới nhóm giá tương ứng (/bang-gia/#nhom-…).
 // Ảnh: chưa có ảnh thật → khung chờ pastel + icon dịch vụ + "Ảnh thực tế · sắp cập nhật". Khi bệnh viện có ảnh, chỉ cần chép vào public/img/dich-vu/ (xem README.md ở đó), không sửa mã.
 // Không dùng ảnh minh hoạ giả làm bác sĩ / cơ sở vật chất. Không đánh số thẻ (đã chốt: danh mục không số).
@@ -21,6 +21,7 @@ const the = [
   { k: 'noi-tru', g: theo('bed'), ten: 'Nội trú & Chăm sóc', mo: 'Theo dõi và chăm sóc thú cưng trong thời gian lưu trú tại bệnh viện.', cta: 'Tìm hiểu thêm', nen: '#F3ECE1' },
 ].filter((x) => x.g);
 const anhCta = anh('cta-cho');
+const rong = (i: number) => i === 0 || i === 3; // ô rộng của bố cục bento: Khám & Điều trị (hàng 1) và Nội trú & Chăm sóc (hàng 2)
 ---
 <section class="khoi dvx" id="bang-gia" aria-labelledby="dvx-tieu-de">
   <div class="khung">
@@ -29,11 +30,11 @@ const anhCta = anh('cta-cho');
       <p class="tw:mt-5 tw:text-[clamp(17px,1.4vw,19px)] tw:leading-[1.65] tw:text-(--phu)">Từ thăm khám định kỳ đến điều trị chuyên sâu, Bệnh viện Thú y Lê Sơn luôn hướng đến sự chăm sóc chu đáo, an toàn và phù hợp cho từng thú cưng.</p>
     </header>
 
-    <ul class="dvx-ds tw:m-0 tw:grid tw:list-none tw:grid-cols-1 tw:gap-5 tw:p-0 tw:md:grid-cols-2 tw:lg:gap-6">
+    <ul class="dvx-ds tw:m-0 tw:grid tw:list-none tw:grid-cols-1 tw:gap-4 tw:p-0 tw:md:grid-cols-2 tw:lg:grid-cols-12 tw:lg:gap-5">
       {the.map((x, i) => (
-        <li data-hien="len" data-tre={i * 100}>
-          <a class="dvx-the tw:group tw:flex tw:h-full tw:flex-col tw:overflow-hidden tw:rounded-(--r-video) tw:border tw:no-underline" href={u(`/bang-gia/#nhom-${x.g!.nhom.id}`)} aria-label={`${x.ten}. ${x.mo} ${x.cta}`}>
-            <span class="dvx-anh tw:relative tw:block tw:aspect-[5/2] tw:overflow-hidden" style={`background:${x.nen}`}>
+        <li data-hien="len" data-tre={i * 100} class={rong(i) ? 'tw:lg:col-span-7' : 'tw:lg:col-span-5'}>
+          <a class={`dvx-the tw:group tw:flex tw:h-full tw:flex-col ${rong(i) ? 'tw:lg:flex-row' : ''} tw:overflow-hidden tw:rounded-(--r-video) tw:border tw:no-underline`} href={u(`/bang-gia/#nhom-${x.g!.nhom.id}`)} aria-label={`${x.ten}. ${x.mo} ${x.cta}`}>
+            <span class={`dvx-anh tw:relative tw:block tw:aspect-[16/6] tw:overflow-hidden ${rong(i) ? 'tw:lg:aspect-auto tw:lg:w-[44%] tw:lg:shrink-0' : ''}`} style={`background:${x.nen}`}>
               <span class="dvx-zoom tw:absolute tw:inset-0 tw:block">
                 {anh(x.k)
                   ? <img class="tw:size-full tw:object-cover" src={anh(x.k)} alt="" loading="lazy" width="960" height="600">
@@ -45,10 +46,10 @@ const anhCta = anh('cta-cho');
                   )}
               </span>
             </span>
-            <span class="tw:flex tw:flex-1 tw:flex-col tw:gap-2 tw:p-5 tw:lg:p-6">
-              <b class="tw:font-(family-name:--f-tieu-de) tw:text-[clamp(21px,1.8vw,26px)] tw:leading-[1.2] tw:font-medium tw:text-(--tim)">{x.ten}</b>
+            <span class={`tw:flex tw:flex-1 tw:flex-col tw:gap-2 tw:p-5 tw:lg:p-6 ${rong(i) ? 'tw:lg:justify-center tw:lg:gap-3 tw:lg:px-8' : ''}`}>
+              <b class={`tw:font-(family-name:--f-tieu-de) tw:text-[clamp(21px,1.8vw,26px)] tw:leading-[1.2] tw:font-medium tw:text-(--tim) ${rong(i) ? 'tw:lg:text-[clamp(26px,2.3vw,32px)]' : ''}`}>{x.ten}</b>
               <span class="tw:text-[16px] tw:leading-[1.55] tw:text-(--phu)">{x.mo}</span>
-              <span class="dvx-cta-chu tw:mt-auto tw:inline-flex tw:items-center tw:gap-2 tw:pt-1 tw:text-[15px] tw:font-semibold tw:text-(--tim)">{x.cta}<Mui size={18} /></span>
+              <span class={`dvx-cta-chu tw:inline-flex ${rong(i) ? 'tw:mt-2 tw:lg:mt-3' : 'tw:mt-auto'} tw:items-center tw:gap-2 tw:pt-1 tw:text-[15px] tw:font-semibold tw:text-(--tim)`}>{x.cta}<Mui size={18} /></span>
             </span>
           </a>
         </li>
