@@ -14,10 +14,11 @@
 ## Mới nhất (12/10/2026)
 - Hero: video phủ kín cả khu, mờ dần sang trái. Giới thiệu + Dịch vụ nổi bật gộp một khu (Tailwind v4, tiền tố `tw:`, không Preflight). Chi tiết: cuối `docs/KE-HOACH-GIAO-DIEN-MOI.md`. Chủ dự án dặn: khi xong luôn gửi bản xem thử + tài liệu + (lần này) mã nguồn.
 
-- Đặt lịch giao diện mới (nhánh `claude/dat-lich-moi`): xem `docs/DAT-LICH-MOI.md`. Chưa gộp, chờ chủ dự án duyệt bản xem thử.
+- Đặt lịch giao diện mới (nhánh `claude/dat-lich-moi`): xem `docs/DAT-LICH-MOI.md`. Đã gộp vào `claude/giao-dien-moi-hieu-ung` (13/10/2026).
 
 ## Quy tắc phải giữ
 - **Khi kết thúc mỗi lượt làm việc (chủ dự án dặn 12/10/2026): luôn đưa (1) link bản xem thử mới nhất (dựng `xem-thu/` hoặc `xem-thu-moi/`, đăng / cập nhật artifact riêng tư ở chế độ giả lập) và (2) các tài liệu chủ dự án đã yêu cầu (gửi tệp, ghi đường dẫn).** Link hiện có: xem mục "Bản xem thử" ngay dưới.
+- **Chủ dự án dặn 13/10/2026: các nhánh tính năng làm xong (kiểm thử đạt) cứ tự gộp vào nhánh `claude/giao-dien-moi-hieu-ung`, không cần hỏi lại. VẪN KHÔNG gộp `main`.**
 - Không gộp `main`, không thay web chính, không triển khai Google thật khi chưa được chủ dự án cho phép; không tạo PR.
 - Không sửa `src/data/*` khi chưa được phép (đã được phép một lần: ghi chú Grooming trong `dich_vu.json`, đã sửa xong).
 - Không bịa nội dung; giữ logo, dữ liệu giá, nhãn "Chờ xác nhận".
