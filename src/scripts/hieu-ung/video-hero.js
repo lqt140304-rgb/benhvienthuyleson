@@ -29,7 +29,7 @@ function chay() {
 function dung(traBia) {
   if (!video) return;
   video.pause();
-  if (traBia) khung.classList.remove('dang-chay');
+  if (traBia) { khung.classList.remove('dang-chay'); const h = khung.closest('.hero'); if (h && !khung.querySelector('.hv-poster')) h.classList.remove('chu-video'); } // không còn hình để lồng vào chữ → tiêu đề tím như thường
 }
 
 function taiVideo() {
@@ -40,7 +40,7 @@ function taiVideo() {
   const dsNguon = nho ? [[ngu('webm-nho') || ngu('webm'), 'video/webm'], [ngu('mp4-nho') || ngu('mp4'), 'video/mp4']] : [[ngu('webm'), 'video/webm'], [ngu('mp4'), 'video/mp4']];
   dsNguon.filter(([url]) => url).forEach(([url, kieu]) => { const s = document.createElement('source'); s.src = url; s.type = kieu; video.appendChild(s); });
   video.muted = true;
-  video.addEventListener('playing', () => { khung.classList.add('dang-chay'); if (nut) nut.hidden = false; capNhatNut(); });
+  video.addEventListener('playing', () => { khung.classList.add('dang-chay'); const h = khung.closest('.hero'); if (h) h.classList.add('chu-video'); if (nut) nut.hidden = false; capNhatNut(); });
   video.addEventListener('pause', capNhatNut);
   video.addEventListener('play', capNhatNut);
   video.preload = 'auto';

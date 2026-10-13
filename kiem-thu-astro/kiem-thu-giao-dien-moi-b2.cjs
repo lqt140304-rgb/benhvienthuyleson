@@ -251,6 +251,26 @@ function taoVideoThu() {
   else {
     const theoDoi = (p, nhat) => { p.on('request', (r) => { if (/\/video\//.test(r.url())) nhat.push({ u: r.url().split('/video/')[1], t: Date.now() }); }); };
     const doV = (p) => p.evaluate(() => { const v = document.querySelector('.hv-video'), k = document.querySelector('.hv'), n = document.querySelector('.hv-dung'); return v ? { pau: v.paused, nguon: (v.currentSrc || '').split('/video/')[1] || '', chay: k.classList.contains('dang-chay'), op: +getComputedStyle(v).opacity, nut: n && !n.hidden, ap: n && n.getAttribute('aria-pressed'), nhan: n && n.getAttribute('aria-label'), muted: v.muted, loop: v.loop, pi: v.hasAttribute('playsinline'), con: v.querySelectorAll('source').length } : null; });
+    { // Điện thoại: video "lồng vào chữ" tiêu đề (chủ dự án 13/10/2026)
+      const ctx = await ctxMoi({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true }), p = await ctx.newPage(); p.on('pageerror', (e) => loiChung.push('chữ-video · ' + e.message));
+      await p.goto(URL_V + '/', { waitUntil: 'load' }); await cho(3000);
+      const x = await p.evaluate(() => { const r = (s) => document.querySelector(s).getBoundingClientRect(), h = r('.hero h1'), k = r('.hero-khung'), n = document.querySelector('.hv-dung'), nb = n.getBoundingClientRect(), cs = getComputedStyle(document.querySelector('.hero h1')), t = document.elementFromPoint(nb.left + nb.width / 2, nb.top + nb.height / 2); return { cls: document.querySelector('.hero').className, mix: cs.mixBlendMode, mau: cs.color, nen: cs.backgroundColor, trung: Math.abs(h.top - k.top) < 2 && Math.abs(h.height - k.height) < 2 && Math.abs(h.left - k.left) < 2, hv: +getComputedStyle(document.querySelector('.hv')).opacity, chay: !!document.querySelector('.hv.dang-chay'), nutTren: !!t && t.closest('.hv-dung') === n, nutTrong: nb.top >= h.top && nb.bottom <= h.bottom, tran: document.documentElement.scrollWidth > innerWidth, vitri: getComputedStyle(document.querySelector('.hv-video')).position, cao: Math.round(h.height) }; });
+      ok('Điện thoại + có video: video "lồng vào chữ" tiêu đề: tiêu đề chữ ĐEN, nền kem, hoà trộn lighten (hình hiện qua nét chữ), khung video trùng đúng khung tiêu đề, video đang chạy, nút tạm dừng nằm TRÊN tiêu đề (bấm được) và trong khung, không tràn ngang', /chu-video/.test(x.cls) && x.mix === 'lighten' && x.mau === 'rgb(0, 0, 0)' && x.nen === 'rgb(251, 247, 241)' && x.trung && x.hv === 1 && x.chay && x.nutTren && x.nutTrong && !x.tran, JSON.stringify(x));
+      await p.click('.hv-dung'); await cho(300); const dung = await p.evaluate(() => ({ pau: document.querySelector('.hv-video').paused, mix: getComputedStyle(document.querySelector('.hero h1')).mixBlendMode }));
+      ok('Điện thoại: bấm tạm dừng thì video dừng, chữ vẫn hiện khung hình đang dừng (không biến mất)', dung.pau && dung.mix === 'lighten', JSON.stringify(dung));
+      await ctx.close();
+      const c2 = await ctxMoi({ viewport: { width: 1440, height: 900 } }), p2 = await c2.newPage(); await p2.goto(URL_V + '/', { waitUntil: 'load' }); await cho(2500);
+      const d = await p2.evaluate(() => { const cs = getComputedStyle(document.querySelector('.hero h1')); return { mix: cs.mixBlendMode, mau: cs.color }; });
+      ok('Máy tính (có video): tiêu đề KHÔNG lồng video, vẫn chữ tím như thiết kế (chỉ điện thoại mới lồng chữ)', d.mix === 'normal' && d.mau === 'rgb(90, 30, 94)', JSON.stringify(d)); await c2.close();
+      const c3 = await ctxMoi({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, reducedMotion: 'reduce' }), p3 = await c3.newPage(); await p3.goto(URL_V + '/', { waitUntil: 'load' }); await cho(1200);
+      const g = await p3.evaluate(() => ({ mix: getComputedStyle(document.querySelector('.hero h1')).mixBlendMode, poster: !!document.querySelector('.hv-poster'), tran: document.documentElement.scrollWidth > innerWidth, chay: !!document.querySelector('.hv.dang-chay') }));
+      ok('Giảm chuyển động (điện thoại, có ảnh bìa): không tải video; ảnh bìa tĩnh vẫn hiện qua nét chữ, không tràn ngang', !g.chay && g.poster && g.mix === 'lighten' && !g.tran, JSON.stringify(g)); await c3.close();
+    }
+    { // Điện thoại, KHÔNG có ảnh / video: tiêu đề tím như thường, khung chờ như cũ
+      const c4 = await ctxMoi({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true }), p4 = await mo(c4, '/'); await cho(1200);
+      const h = await p4.evaluate(() => { const cs = getComputedStyle(document.querySelector('.hero h1')); return { mix: cs.mixBlendMode, mau: cs.color, cls: document.querySelector('.hero').className, cho: !!document.querySelector('.hv-cho'), media: document.querySelector('.hero').hasAttribute('data-media') }; });
+      ok('Điện thoại, chưa có ảnh / video: tiêu đề tím như thường (không lồng chữ, không chữ nhạt khó đọc), vẫn là khung chờ như cũ', h.mix === 'normal' && h.mau === 'rgb(90, 30, 94)' && !/chu-video/.test(h.cls) && h.cho && !h.media, JSON.stringify(h)); await c4.close();
+    }
     {
       const ctx = await ctxMoi({ viewport: { width: 1440, height: 900 } }), nhat = []; let tLoad = 0;
       const p = await ctx.newPage(); theoDoi(p, nhat); p.on('load', () => { tLoad = Date.now(); });

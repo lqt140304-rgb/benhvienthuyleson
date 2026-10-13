@@ -103,4 +103,26 @@
   .hero-tt { flex-direction: column; align-items: flex-start; }
 }
 
+
+/* ĐIỆN THOẠI + có ảnh / video thật: hình "lồng vào chữ" tiêu đề (chữ khoét). Cách làm: tiêu đề và khung hình cùng một ô lưới; khung hình nằm dưới;
+   tiêu đề có nền kem, chữ đen, mix-blend-mode: lighten (lấy giá trị sáng hơn) → nền kem giữ nguyên (lớp phủ tím làm hình tối hơn kem), chữ đen để hình hiện qua. Chỉ bật khi đã có hình (lớp chu-video: ảnh bìa có sẵn từ đầu,
+   hoặc video đã chạy); chưa có / giảm chuyển động không tải video → tiêu đề tím như thường. Lớp phủ tím nhạt trên hình giữ chữ đủ đậm để đọc. */
+@media (max-width: 767px) {
+  .hero[data-media] .hero-in { display: grid; grid-template-columns: minmax(0, 1fr); align-items: stretch; gap: 22px; }
+  .hero[data-media] h1 { grid-row: 1; grid-column: 1; position: relative; z-index: 2; }
+  .hero[data-media] .hero-khung { grid-row: 1; grid-column: 1; position: relative; inset: auto; z-index: auto; margin-inline: 0; align-self: stretch; }
+  .hero[data-media] .hero-phu { grid-row: 2; grid-column: 1; }
+  .hero[data-media] .hero-nut { grid-row: 3; grid-column: 1; }
+  .hero[data-media] .hero-tt { grid-row: 4; grid-column: 1; }
+  .hero[data-media] .hero-the { grid-row: 5; grid-column: 1; }
+  .hero[data-media] .hv { position: absolute; inset: 0; height: 100%; aspect-ratio: auto; z-index: 1; opacity: 0; transition: opacity 400ms var(--cong-ra); -webkit-mask-image: none; mask-image: none; background: none; }
+  .hero[data-media] .hv::after { content: ''; position: absolute; inset: 0; background: rgba(60, 18, 66, .42); pointer-events: none; }
+  .hero[data-media="video"] h1 { padding-bottom: 56px; } /* chừa chỗ cho nút tạm dừng, tránh nhảy bố cục khi video bắt đầu chạy */
+  .hero[data-media] .hv-dung { z-index: 3; right: 8px; bottom: 8px; }
+  .hero.chu-video .hv { opacity: 1; }
+  .hero.chu-video h1 { background: var(--kem); color: #000; mix-blend-mode: lighten; font-weight: 600; padding-block: 14px; }
+  .hero.chu-video[data-media="video"] h1 { padding-bottom: 56px; }
+  .hero.chu-video h1 em { color: #000; font-weight: 600; }
+  .hero.chu-video .nhan-but .net-but { color: #000; }
+}
 @media (prefers-reduced-motion: reduce) { .hero-the-a:hover, .hero-the-a:active { transform: none !important; } }

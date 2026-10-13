@@ -1,6 +1,7 @@
 ---
 // Hero trang chủ (giao diện mới), phương án số 2 "Warm Companionship" (chủ dự án chốt 13/10/2026): tiêu đề giàu cảm xúc, câu phụ ấm áp, hai nút, bốn thẻ dịch vụ nhỏ ở chân hero
-// (+ dòng giờ mở cửa thật). Ảnh / video phủ kín cả khu hero, mờ dần sang trái. Chưa có ảnh / video thật thì hiện khung chờ ấm màu "Ảnh · video thực tế sắp cập nhật" (KHÔNG dùng ảnh minh hoạ giả).
+// (+ dòng giờ mở cửa thật).
+// Điện thoại + có ảnh / video thật: ảnh / video "lồng vào chữ" tiêu đề (chữ khoét, hiện hình ảnh bên trong nét chữ; lớp chu-video, CSS mix-blend-mode: lighten). Chưa có gì thì tiêu đề tím như thường. Ảnh / video phủ kín cả khu hero, mờ dần sang trái. Chưa có ảnh / video thật thì hiện khung chờ ấm màu "Ảnh · video thực tế sắp cập nhật" (KHÔNG dùng ảnh minh hoạ giả).
 // Bệnh viện gửi video: chỉ cần chép vào public/video/ (xem public/video/README.md), không phải sửa mã. Ảnh bìa hiện ngay; video tải sau khi trang hiện xong
 // (src/scripts/hieu-ung/video-hero.js).
 import { existsSync } from 'node:fs';
@@ -26,7 +27,7 @@ const the = [
 ];
 const gioNgan = tt.gio_mo_cua.replace(/\s*[–-]\s*/, '–');
 ---
-<section class="hero" id="noi-dung" aria-labelledby="hero-tieu-de">
+<section class={`hero${coAnh || (coVideo && v.poster) ? ' chu-video' : ''}`} id="noi-dung" aria-labelledby="hero-tieu-de" data-media={coVideo ? 'video' : coAnh ? 'anh' : undefined}>
   <div class="khung hero-in">
     <div class="hero-chu">
       <h1 id="hero-tieu-de"><span class="dong"><span class="dong-in">Sức khỏe hôm nay,</span></span> <span class="dong"><span class="dong-in"><span class="nhan-but"><em>hạnh phúc</em><NetBut /></span> về sau.</span></span></h1>

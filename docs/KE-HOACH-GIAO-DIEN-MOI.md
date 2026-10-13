@@ -352,3 +352,8 @@ Bản vẽ tldraw (6 khung: ba khu trang chủ máy tính, trang Bảng giá má
 - Ảnh / video phủ kín bên phải, mờ dần sang trái (như cũ). **Chưa có ảnh thật** nên là khung chờ ấm màu "Ảnh · video thực tế sắp cập nhật" (không dùng ảnh minh hoạ chó mèo giả). Chép `public/video/hero-poster.jpg` là có ảnh tĩnh, thêm `hero.webm/mp4` là có video.
 - Điện thoại: giữ tinh thần như máy tính, sắp lại thứ tự tiêu đề → câu phụ → ảnh (4:3) → nút (cao 56px) → giờ mở cửa → 4 thẻ 2×2.
 - File: `src/components/moi/Hero.astro`, `src/styles/moi/khu-hero.css`, `public/video/README.md`, kiểm thử `kiem-thu-giao-dien-moi-b2.cjs`.
+
+### Hero điện thoại: ảnh / video lồng vào chữ (13/10/2026)
+- Chỉ ở điện thoại (< 768px) và chỉ khi có `public/video/hero-poster.jpg` hoặc video thật. Tiêu đề trở thành "chữ khoét": nền kem, chữ đen, `mix-blend-mode: lighten` nên hình (video / ảnh bìa) hiện bên trong nét chữ; lớp phủ tím nhạt giữ chữ đủ đậm. Chữ đậm 600.
+- Chưa có hình, hoặc giảm chuyển động / tiết kiệm dữ liệu mà không có ảnh bìa → tiêu đề tím như thường (không bao giờ ra chữ nhạt khó đọc). Máy tính / máy tính bảng không đổi.
+- Nút tạm dừng nằm dưới chữ (trong khung tiêu đề). Ảnh `hero-chu-video-dien-thoai-thu.png` là hình thử bằng video mẫu tạo bằng máy (hoạ tiết màu), KHÔNG phải nội dung thật.
