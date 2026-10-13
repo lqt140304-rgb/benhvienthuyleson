@@ -25,9 +25,9 @@
   position: relative; height: 100%; border-radius: 0; overflow: hidden;
   /* khung chờ ấm màu (chưa có ảnh / video thật): quầng cam nhạt + tím nhạt, gợi cảm giác gia đình */
   background: radial-gradient(ellipse 60% 70% at 72% 42%, #FBE6D4 0, rgba(251, 230, 212, 0) 100%), radial-gradient(ellipse 50% 60% at 92% 85%, #EDE3EE 0, rgba(237, 227, 238, 0) 100%), var(--kem-dam);
-  -webkit-mask-image: linear-gradient(to right, transparent 0, transparent 36%, #000 78%), linear-gradient(to bottom, transparent 0, #000 12%, #000 88%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0, transparent 46%, #000 88%), linear-gradient(to bottom, transparent 0, #000 12%, #000 88%, transparent 100%);
   -webkit-mask-composite: source-in;
-  mask-image: linear-gradient(to right, transparent 0, transparent 36%, #000 78%), linear-gradient(to bottom, transparent 0, #000 12%, #000 88%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, transparent 46%, #000 88%), linear-gradient(to bottom, transparent 0, #000 12%, #000 88%, transparent 100%);
   mask-composite: intersect;
 }
 .hv-cho { position: absolute; inset: 0 0 0 52%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; color: var(--phu); font-size: 15px; font-weight: 500; text-align: center; padding: 0 24px; }
@@ -116,7 +116,7 @@
   .hero[data-media] .hero-tt { grid-row: 4; grid-column: 1; }
   .hero[data-media] .hero-the { grid-row: 5; grid-column: 1; }
   .hero[data-media] .hv { position: absolute; inset: 0; height: 100%; aspect-ratio: auto; z-index: 1; opacity: 0; transition: opacity 400ms var(--cong-ra); -webkit-mask-image: none; mask-image: none; background: none; }
-  .hero[data-media] .hv::after { content: ''; position: absolute; inset: 0; background: rgba(60, 18, 66, .42); pointer-events: none; }
+  .hero[data-media] .hv::after { content: ''; position: absolute; inset: 0; background: rgba(44, 12, 50, .6); pointer-events: none; }
   .hero[data-media="video"] h1 { padding-bottom: 56px; } /* chừa chỗ cho nút tạm dừng, tránh nhảy bố cục khi video bắt đầu chạy */
   .hero[data-media] .hv-dung { z-index: 3; right: 8px; bottom: 8px; }
   .hero.chu-video .hv { opacity: 1; }

@@ -246,6 +246,14 @@ function taoVideoThu() {
   }
 
   // ---------- 7. Video hero ----------
+  { // Video thật của bệnh viện đã đưa vào repo (public/video): dung lượng, không tiếng, đủ bốn bản + ảnh bìa
+    const d = path.join(GOC, 'public/video'), kt = (f) => (fs.existsSync(path.join(d, f)) ? fs.statSync(path.join(d, f)).size : -1);
+    const tracks = (f) => { try { return cp.execSync(`ffprobe -v error -show_entries stream=codec_type -of csv=p=0 "${path.join(d, f)}"`).toString().trim().split(/\s+/); } catch (e) { return ['?']; } };
+    const dong = { 'hero.webm': 3e6, 'hero.mp4': 3e6, 'hero-480.webm': 1.5e6, 'hero-480.mp4': 1.5e6, 'hero-poster.jpg': 3e5 };
+    const co = Object.keys(dong).filter((f) => kt(f) > 0);
+    if (!co.length) chuaXm('Video thật đã đưa vào public/video', 'Repo chưa có video thật');
+    else ok('Video thật (public/video): đủ hero.webm / hero.mp4 (720p ≤ 3 MB), hero-480.webm / hero-480.mp4 (480p ≤ 1,5 MB), hero-poster.jpg (≤ 300 KB), KHÔNG có kênh tiếng, chỉ một luồng hình', co.length === 5 && Object.entries(dong).every(([f, g]) => kt(f) > 0 && kt(f) <= g) && ['hero.webm', 'hero.mp4', 'hero-480.webm', 'hero-480.mp4'].every((f) => tracks(f).join() === 'video'), co.map((f) => f + ' ' + Math.round(kt(f) / 1024) + 'KB').join(' · '));
+  }
   muc('7. Video hero (bản dựng có video thử do ffmpeg tạo): ảnh bìa ngay, video tải sau khi trang hiện xong, 480p cho điện thoại, nút tạm dừng, tự dừng, tiết kiệm dữ liệu');
   if (!vd.tep) chuaChay('Toàn bộ các mục video hero', 'Không tạo được video thử (cần ffmpeg có libvpx-vp9): ' + vd.loi);
   else {
