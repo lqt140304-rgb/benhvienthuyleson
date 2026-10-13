@@ -2,8 +2,8 @@
    Lúc vào trang (~0,9s, chỉ khi có lớp co-hieu-ung): tiêu đề hiện từng dòng bằng mặt nạ clip-path (cách 90ms) → nét bút cam → câu phụ, nút, dòng trạng thái;
    khung video mở "mo-man" (hien.js). Không JavaScript: mọi thứ hiện sẵn, nét bút vẽ sẵn. */
 .hero { position: relative; isolation: isolate; overflow: hidden; }
-.hero-in { display: grid; grid-template-columns: minmax(0, 760px) minmax(0, 1fr); gap: var(--b5); align-items: center; min-height: max(560px, calc(100dvh - var(--cao-dau))); padding-block: 24px 64px; }
-.hero-chu { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 28px; padding-bottom: 16px; min-width: 0; }
+.hero-in { display: grid; grid-template-columns: minmax(0, 760px) minmax(0, 1fr); grid-template-rows: 1fr auto; gap: var(--b3) var(--b5); align-items: center; min-height: max(620px, calc(100dvh - var(--cao-dau))); padding-block: 24px 40px; }
+.hero-chu { grid-row: 1; position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 28px; padding-bottom: 16px; min-width: 0; }
 
 .hero h1 .dong { display: block; }
 .hero h1 .dong-in { display: inline-block; }
@@ -23,7 +23,8 @@
 .hero-khung { position: absolute; inset: 0; z-index: 0; min-width: 0; }
 .hv {
   position: relative; height: 100%; border-radius: 0; overflow: hidden;
-  background: repeating-linear-gradient(135deg, transparent 0 11px, var(--ke) 11px 12px), var(--kem-dam);
+  /* khung chờ ấm màu (chưa có ảnh / video thật): quầng cam nhạt + tím nhạt, gợi cảm giác gia đình */
+  background: radial-gradient(ellipse 60% 70% at 72% 42%, #FBE6D4 0, rgba(251, 230, 212, 0) 100%), radial-gradient(ellipse 50% 60% at 92% 85%, #EDE3EE 0, rgba(237, 227, 238, 0) 100%), var(--kem-dam);
   -webkit-mask-image: linear-gradient(to right, transparent 0, transparent 36%, #000 78%), linear-gradient(to bottom, transparent 0, #000 12%, #000 88%, transparent 100%);
   -webkit-mask-composite: source-in;
   mask-image: linear-gradient(to right, transparent 0, transparent 36%, #000 78%), linear-gradient(to bottom, transparent 0, #000 12%, #000 88%, transparent 100%);
@@ -34,13 +35,24 @@
 .hv-poster, .hv-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .hv-video { opacity: 0; transition: opacity var(--t-mo-dau) var(--cong-ra); }
 .hv.dang-chay .hv-video { opacity: 1; }
-.hv-dung { position: absolute; z-index: 2; right: max(20px, calc((100% - 1200px) / 2 + 20px)); bottom: 40px; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border: 1px solid var(--ke-dam); border-radius: 50%; background: rgba(251, 247, 241, .92); color: var(--tim); transition: border-color var(--t-cham-tay) var(--cong-ra); }
+.hv-dung { position: absolute; z-index: 2; right: max(20px, calc((100% - var(--khung)) / 2)); bottom: 168px; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border: 1px solid var(--ke-dam); border-radius: 50%; background: rgba(251, 247, 241, .92); color: var(--tim); transition: border-color var(--t-cham-tay) var(--cong-ra); }
 .hv-dung[hidden] { display: none; }
 .hv-dung:hover { border-color: var(--tim); }
 .hv-dung .hv-ic-phat, .hv-dung[aria-pressed="true"] .hv-ic-dung { display: none; }
 .hv-dung[aria-pressed="true"] .hv-ic-phat { display: block; }
 
 /* Lúc vào trang */
+/* Bốn thẻ dịch vụ nhỏ ở chân hero (phương án 2 "Warm Companionship") */
+.hero-the { grid-row: 2; grid-column: 1 / -1; position: relative; z-index: 1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin: 0; padding: 0; list-style: none; }
+.hero-the-a { display: flex; align-items: center; gap: 14px; min-height: 76px; height: 100%; padding: 14px 16px; border: 1px solid var(--ke); border-radius: 14px; background: rgba(251, 247, 241, .88); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); color: var(--chu); text-decoration: none; font-size: 15px; font-weight: 600; line-height: 1.35; transition: border-color 220ms var(--cong-ra), background-color 220ms var(--cong-ra), transform 220ms var(--cong-ra); }
+.hero-the-ic { display: grid; place-items: center; flex: none; width: 46px; height: 46px; border-radius: 12px; background: var(--cam-nhat); color: var(--tim); }
+.hero-the li:nth-child(2) .hero-the-ic { background: var(--ngoc-nhat); }
+.hero-the li:nth-child(3) .hero-the-ic { background: #EDE3EE; }
+.hero-the li:nth-child(4) .hero-the-ic { background: var(--kem-dam); }
+.hero-the-a:hover { transform: translateY(-3px); border-color: var(--tim-nhat); background: #fff; }
+.hero-the-a:active { transform: scale(.98); }
+.hero-the-a:focus-visible { outline: 3px solid var(--tim); outline-offset: 3px; }
+
 @keyframes hero-dong { from { clip-path: inset(-20% 100% -20% -5%); } to { clip-path: inset(-20% -10% -20% -5%); } }
 @keyframes hero-len { from { opacity: 0; transform: translateY(var(--dich-max)); } to { opacity: 1; transform: none; } }
 @keyframes hero-ve { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
@@ -52,28 +64,43 @@
 .co-hieu-ung .hero-tt { animation: hero-len var(--t-hien) var(--cong-ra) 540ms both; }
 
 @media (max-width: 1199px) {
-  .hero-in { grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: var(--b4); }
+  .hero-in { grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: var(--b3) var(--b4); }
+  .hero-the { gap: 12px; }
+  .hero-the-a { padding: 12px; gap: 10px; font-size: 14px; }
   .hero h1 { font-size: 46px; line-height: 50px; }
   .hero-phu { font-size: 17px; }
 }
 @media (max-width: 1023px) {
-  .hero-in { grid-template-columns: minmax(0, 1fr); gap: var(--b4); min-height: 0; padding-block: 16px 0; }
+  .hero-in { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; gap: var(--b4); min-height: 0; padding-block: 16px 40px; }
+  .hero-chu, .hero-the { grid-row: auto; }
+  .hero-the { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .hero h1 { font-size: 48px; line-height: 52px; }
   .hero-khung { position: relative; inset: auto; z-index: 0; margin-inline: calc(50% - 50vw); }
   .hv { height: auto; aspect-ratio: 16 / 9; }
   .hv-cho { inset: 0; }
   .hv, .hv-cho { -webkit-mask-image: none; }
   .hv { -webkit-mask-image: linear-gradient(to right, transparent 0, #000 22%), linear-gradient(to bottom, transparent 0, #000 18%, #000 82%, transparent 100%); mask-image: linear-gradient(to right, transparent 0, #000 22%), linear-gradient(to bottom, transparent 0, #000 18%, #000 82%, transparent 100%); }
-  .hv-dung { bottom: 20px; right: 16px; }
+  .hv-dung { bottom: 14px; right: 16px; }
 }
 @media (max-width: 767px) {
-  .hero-chu { gap: 20px; padding-bottom: 0; }
-  .hero h1 { font-size: 37px; line-height: 41px; }
-  .hero-phu { font-size: 17px; }
+  /* Điện thoại: giữ đúng tinh thần bản máy tính, chỉ sắp lại thứ tự: tiêu đề → câu phụ → ảnh → hai nút → giờ mở cửa → bốn thẻ dịch vụ */
+  .hero-in { display: flex; flex-direction: column; align-items: stretch; gap: 22px; padding-block: 20px 36px; }
+  .hero-chu { display: contents; }
+  .hero h1 { order: 1; font-size: 36px; line-height: 1.12; }
+  .hero-phu { order: 2; font-size: 16.5px; line-height: 1.65; margin-top: -8px; }
+  .hero-khung { order: 3; }
+  .hv { aspect-ratio: 4 / 3; }
+  .hero-nut { order: 4; }
+  .hero-tt { order: 5; }
+  .hero-the { order: 6; gap: 10px; }
+  .hero-the-a { flex-direction: column; align-items: flex-start; gap: 10px; padding: 14px 12px; font-size: 14px; min-height: 110px; }
+  .hero-the-ic { width: 40px; height: 40px; }
   .hero-nut { flex-direction: column; align-items: stretch; gap: 4px; width: 100%; }
-  .hero-nut .nut { width: 100%; }
+  .hero-nut .nut { width: 100%; min-height: 56px; font-size: 17px; }
   .hero-nut .lien-ket { align-self: flex-start; min-height: 44px; }
   .hero-tt { padding-top: 16px; font-size: 14px; }
   .hero-ngan { display: none; }
   .hero-tt { flex-direction: column; align-items: flex-start; }
 }
+
+@media (prefers-reduced-motion: reduce) { .hero-the-a:hover, .hero-the-a:active { transform: none !important; } }

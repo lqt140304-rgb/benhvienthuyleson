@@ -1,6 +1,6 @@
 ---
-// Hero trang chủ (giao diện mới), theo bản vẽ đã duyệt: nội dung bên trái chỉ 4 thứ (tiêu đề, một câu phụ, một nút + một liên kết chữ, một dòng trạng thái),
-// video phủ kín cả khu hero, mờ dần sang trái. Chưa có video thì hiện khung chờ "Video thực tế · sắp cập nhật".
+// Hero trang chủ (giao diện mới), phương án số 2 "Warm Companionship" (chủ dự án chốt 13/10/2026): tiêu đề giàu cảm xúc, câu phụ ấm áp, hai nút, bốn thẻ dịch vụ nhỏ ở chân hero
+// (+ dòng giờ mở cửa thật). Ảnh / video phủ kín cả khu hero, mờ dần sang trái. Chưa có ảnh / video thật thì hiện khung chờ ấm màu "Ảnh · video thực tế sắp cập nhật" (KHÔNG dùng ảnh minh hoạ giả).
 // Bệnh viện gửi video: chỉ cần chép vào public/video/ (xem public/video/README.md), không phải sửa mã. Ảnh bìa hiện ngay; video tải sau khi trang hiện xong
 // (src/scripts/hieu-ung/video-hero.js).
 import { existsSync } from 'node:fs';
@@ -9,18 +9,28 @@ import tt from '../../data/thong_tin.json';
 import { u } from '../../lib/site';
 import NetBut from './NetBut.astro';
 import Mui from './Mui.astro';
+import Icon from '../Icon.astro';
+import { dichVuLS } from '../../lib/ls';
 
 const tep = (t: string) => (existsSync(join(process.cwd(), 'public', 'video', t)) ? u('/video/' + t) : '');
 const v = { webm: tep('hero.webm'), mp4: tep('hero.mp4'), webmNho: tep('hero-480.webm'), mp4Nho: tep('hero-480.mp4'), poster: tep('hero-poster.jpg') };
 const coVideo = !!(v.webm || v.mp4);
-const diaChiNgan = tt.dia_chi.split(',').slice(0, 2).join(',').trim(); // "101 Khuất Duy Tiến, Thanh Xuân"
+const coAnh = !coVideo && !!v.poster; // chỉ có ảnh bìa (public/video/hero-poster.jpg): hiện ảnh tĩnh, không video
+const dv = dichVuLS(), nhomId = (icon: string) => dv.find((d) => d.icon === icon)?.id;
+// Bốn thẻ dịch vụ nhỏ: chữ theo yêu cầu; thẻ dẫn tới nhóm giá tương ứng (/bang-gia/#nhom-…) hoặc trang Cẩm nang
+const the = [
+  { icon: 'stethoscope', ten: 'Khám & Điều trị toàn diện', href: nhomId('stethoscope') ? `/bang-gia/#nhom-${nhomId('stethoscope')}` : '/dich-vu/' },
+  { icon: 'syringe', ten: 'Chăm sóc sức khỏe định kỳ', href: nhomId('syringe') ? `/bang-gia/#nhom-${nhomId('syringe')}` : '/dich-vu/' },
+  { icon: 'scissors', ten: 'Grooming & Spa thư giãn', href: nhomId('scissors') ? `/bang-gia/#nhom-${nhomId('scissors')}` : '/dich-vu/' },
+  { icon: 'book', ten: 'Tư vấn dinh dưỡng và hành vi', href: '/tu-van/' },
+];
 const gioNgan = tt.gio_mo_cua.replace(/\s*[–-]\s*/, '–');
 ---
 <section class="hero" id="noi-dung" aria-labelledby="hero-tieu-de">
   <div class="khung hero-in">
     <div class="hero-chu">
-      <h1 id="hero-tieu-de"><span class="dong"><span class="dong-in">Xuất sắc trong chăm sóc –</span></span> <span class="dong"><span class="dong-in"><span class="nhan-but"><em>Tận tuỵ</em><NetBut /></span> từ trái tim.</span></span></h1>
-      <p class="hero-phu">Bệnh viện thú y chó mèo, {diaChiNgan}.</p>
+      <h1 id="hero-tieu-de"><span class="dong"><span class="dong-in">Sức khỏe hôm nay,</span></span> <span class="dong"><span class="dong-in"><span class="nhan-but"><em>hạnh phúc</em><NetBut /></span> về sau.</span></span></h1>
+      <p class="hero-phu">Thú cưng không chỉ là vật nuôi, mà là thành viên trong gia đình. Lê Sơn luôn ở bên để chăm sóc chúng thật trọn vẹn.</p>
       <div class="hero-nut">
         <a class="nut nut-chinh nut-lon" href={u('/dat-lich/')}>Đặt lịch khám<Mui /></a>
         <a class="lien-ket lien-ket-gach" href={u('/bang-gia/')}>Xem bảng giá<Mui size={16} /></a>
@@ -32,8 +42,10 @@ const gioNgan = tt.gio_mo_cua.replace(/\s*[–-]\s*/, '–');
       </p>
     </div>
     <div class="hero-khung" data-hien="mo-man">
-      <figure class={`hv${coVideo ? '' : ' hv-chua'}`} data-video-hero={coVideo ? '' : undefined}>
-        {coVideo ? (
+      <figure class={`hv${coVideo || coAnh ? '' : ' hv-chua'}`} data-video-hero={coVideo ? '' : undefined}>
+        {coAnh ? (
+          <img class="hv-poster hv-tinh" src={v.poster} alt="" width="1600" height="900" fetchpriority="high">
+        ) : coVideo ? (
           <>
             {v.poster && <img class="hv-poster" src={v.poster} alt="" width="960" height="640" fetchpriority="high">}
             <video class="hv-video" muted loop playsinline preload="none" tabindex="-1" aria-hidden="true" poster={v.poster || undefined} data-webm={v.webm || undefined} data-mp4={v.mp4 || undefined} data-webm-nho={v.webmNho || undefined} data-mp4-nho={v.mp4Nho || undefined}></video>
@@ -41,16 +53,21 @@ const gioNgan = tt.gio_mo_cua.replace(/\s*[–-]\s*/, '–');
         ) : (
           <div class="hv-cho">
             <svg aria-hidden="true" focusable="false" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 10l5-3v10l-5-3"></path><rect x="3" y="6" width="12" height="12" rx="2"></rect></svg>
-            <span>Video thực tế · sắp cập nhật</span>
+            <span>Ảnh · video thực tế sắp cập nhật</span>
           </div>
         )}
       </figure>
+      {coVideo && (
+        <button type="button" class="hv-dung" aria-pressed="false" aria-label="Tạm dừng video" hidden>
+          <svg class="hv-ic-dung" aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg>
+          <svg class="hv-ic-phat" aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10-6.5a1 1 0 0 0 0-1.72l-10-6.5A1 1 0 0 0 8 5.5z"></path></svg>
+        </button>
+      )}
     </div>
+    <ul class="hero-the" data-hien="len" data-tre="560" aria-label="Dịch vụ của bệnh viện">
+      {the.map((x) => (
+        <li><a class="hero-the-a" href={u(x.href)}><span class="hero-the-ic" aria-hidden="true"><Icon name={x.icon} size={22} /></span><span class="hero-the-ten">{x.ten}</span></a></li>
+      ))}
+    </ul>
   </div>
-  {coVideo && (
-    <button type="button" class="hv-dung" aria-pressed="false" aria-label="Tạm dừng video" hidden>
-      <svg class="hv-ic-dung" aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg>
-      <svg class="hv-ic-phat" aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10-6.5a1 1 0 0 0 0-1.72l-10-6.5A1 1 0 0 0 8 5.5z"></path></svg>
-    </button>
-  )}
 </section>
