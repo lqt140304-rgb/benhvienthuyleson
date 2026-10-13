@@ -9,12 +9,17 @@ import tt from '../data/thong_tin.json';
 import pp from '../data/phu_phi.json';
 import { u, gia } from '../lib/site';
 import { modeDatLich } from '../lib/dat-lich';
+import { GIAO_DIEN } from '../lib/site';
+import FormDatLichMoi from '../components/moi/FormDatLichMoi.astro';
 const phiCapCuu = tt.phu_phi_cap_cuu_ngoai_gio || 'vui lòng gọi để biết mức';
 const cu = modeDatLich === 'cu';
+const moi = GIAO_DIEN === 'moi' && !cu; // giao diện mới: biểu mẫu 4 bước (src/components/moi/FormDatLichMoi.astro); R3.6 và chế độ 'cu' giữ như cũ
 ---
 <Layout title="Đặt lịch khám" description={`Gửi yêu cầu đặt lịch khám, tiêm phòng, grooming, triệt sản, gửi nội trú cho chó mèo tại ${tt.ten}. Nhân viên sẽ liên hệ xác nhận.`} cam="dat_lich" hienTai="dat-lich">
-  <TrangDau crumbs={[{ ten: 'Trang chủ', href: u('/') }, { ten: 'Đặt lịch' }]} nhan="Đặt lịch" tieuDe="Đặt lịch cho bé" moTa={cu ? 'Chọn dịch vụ và giờ hẹn, web tự tính hoá đơn tham khảo. Nhân viên sẽ gọi lại để xác nhận.' : 'Gửi yêu cầu đặt lịch, nhân viên sẽ liên hệ xác nhận. Lịch chỉ được xác nhận khi bệnh viện liên hệ với bạn.'} />
-  {cu
+  <TrangDau crumbs={[{ ten: 'Trang chủ', href: u('/') }, { ten: moi ? 'Đặt lịch khám' : 'Đặt lịch' }]} nhan={moi ? undefined : 'Đặt lịch'} tieuDe={moi ? 'Đặt lịch khám & chăm sóc' : 'Đặt lịch cho bé'} moTa={moi ? 'Lựa chọn dịch vụ và thời gian phù hợp cho thú cưng của bạn. Nhân viên sẽ liên hệ để xác nhận lịch.' : cu ? 'Chọn dịch vụ và giờ hẹn, web tự tính hoá đơn tham khảo. Nhân viên sẽ gọi lại để xác nhận.' : 'Gửi yêu cầu đặt lịch, nhân viên sẽ liên hệ xác nhận. Lịch chỉ được xác nhận khi bệnh viện liên hệ với bạn.'} />
+  {moi
+    ? <section class="dlm"><FormDatLichMoi /></section>
+    : cu
     ? <FormDatLichCu />
     : (
       <section class="khoi" style="padding-top:24px">

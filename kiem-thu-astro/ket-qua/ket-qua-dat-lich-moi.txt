@@ -1,0 +1,58 @@
+Kiểm thử trang Đặt lịch giao diện mới · Chromium Playwright · 2026-10-13T08:14:57.151Z
+✓ [ĐẠT] máy tính 1440: tiêu đề "Đặt lịch khám & chăm sóc" (Newsreader), 4 bước tiến trình, biểu mẫu + tóm tắt, tóm tắt ở CỘT PHẢI và sticky, không tràn ngang, không ô mật khẩu / đăng nhập
+✓ [ĐẠT] máy tính 1440: thẻ Chó / Mèo / Khác đủ lớn; mọi nút cao ≥ 44px
+✓ [ĐẠT] máy tính bảng 768: tiêu đề "Đặt lịch khám & chăm sóc" (Newsreader), 4 bước tiến trình, biểu mẫu + tóm tắt, tóm tắt xếp DƯỚI biểu mẫu, không tràn ngang, không ô mật khẩu / đăng nhập
+✓ [ĐẠT] máy tính bảng 768: thẻ Chó / Mèo / Khác đủ lớn; mọi nút cao ≥ 44px
+✓ [ĐẠT] điện thoại 390: tiêu đề "Đặt lịch khám & chăm sóc" (Newsreader), 4 bước tiến trình, biểu mẫu + tóm tắt, tóm tắt xếp DƯỚI biểu mẫu, không tràn ngang, không ô mật khẩu / đăng nhập
+✓ [ĐẠT] điện thoại 390: thẻ Chó / Mèo / Khác cao ≥ 76px, đủ rộng để chạm; mọi nút cao ≥ 44px
+✓ [ĐẠT] Điện thoại: tóm tắt thu gọn sẵn (nút aria-expanded=false, phần thân ẩn), bấm mở ra và bấm lại thì đóng
+✓ [ĐẠT] Khách đặt lịch cho CHÓ: tóm tắt cập nhật trực tiếp (Bông · Chó · Golden / dịch vụ / ngày giờ / họ tên · SĐT / chi phí lấy từ dữ liệu)
+✓ [ĐẠT] Bước 4: có khối "Kiểm tra lại trước khi gửi" liệt kê đủ thông tin (kể cả giống, tuổi, cân nặng 5.2 kg, giới tính, tình trạng) và nút "Sửa" mỗi dòng
+✓ [ĐẠT] Giả lập: sau khi gửi hiện "Hoàn tất giả lập", KHÔNG có câu "đã tiếp nhận / đặt lịch thành công", KHÔNG có yêu cầu mạng ra ngoài nào
+✓ [ĐẠT] Không lưu dữ liệu khách ở máy (localStorage / sessionStorage / cookie đều trống)
+✓ [ĐẠT] Khách đặt lịch cho MÈO: tóm tắt ghi "Miu" và loài "Mèo"
+✓ [ĐẠT] Chọn "Khác": ô "Thú cưng của bạn là loài gì?" hiện (ban đầu ẩn, bắt buộc); bỏ trống → lỗi cụ thể và KHÔNG chuyển bước; nhập "Thỏ" → sang bước 2; đổi qua lại vẫn giữ "Thỏ"
+✓ [ĐẠT] Không nhập tên thú cưng: lỗi ngay dưới ô ("Vui lòng nhập tên thú cưng."), ở lại bước 1, focus về ô lỗi, aria-invalid
+✓ [ĐẠT] Chưa chọn loài: lỗi "Vui lòng chọn loài thú cưng" và không chuyển bước
+✓ [ĐẠT] Cân nặng không phải số: báo lỗi và không chuyển bước
+✓ [ĐẠT] Số điện thoại không hợp lệ (12345): báo "Số điện thoại gồm 10 số…", KHÔNG gửi, ở lại bước 4
+✓ [ĐẠT] Định dạng SĐT Việt Nam: 0912345678, +84912345678, "0912 345 678" hợp lệ; 091234567, abc, 1912345678 bị từ chối
+✓ [ĐẠT] Email không bắt buộc: để trống hợp lệ; nhập sai định dạng thì báo lỗi
+✓ [ĐẠT] Quay lại bước 1 vẫn còn tên "Bông"; đổi sang Xét nghiệm và giờ 10:30 → tóm tắt + "Kiểm tra lại" đổi theo; thông tin liên hệ đã nhập không mất
+✓ [ĐẠT] Không nhảy tới bước sau khi bước trước còn thiếu bắt buộc (xoá tên thú cưng rồi bấm bước 3 → ở lại bước 1)
+✓ [ĐẠT] Lịch: mọi ngày trước hôm nay bị vô hiệu hoá, từ hôm nay trở đi chọn được, nút "tháng trước" tắt ở tháng hiện tại
+✓ [ĐẠT] Trước khi chọn ngày: chưa hiện khung giờ (có lời nhắc chọn ngày); dòng gợi ý nói rõ đây là giờ MONG MUỐN, không phải lịch đã giữ chỗ
+✓ [ĐẠT] Ngày tương lai: khung giờ 08:00–21:00 cách 30 phút (26 ô) chia nhóm Sáng / Chiều / Tối, không ô nào bị tắt
+✓ [ĐẠT] Chưa chọn giờ: báo "Vui lòng chọn giờ mong muốn", không chuyển bước
+✓ [ĐẠT] Hôm nay lúc 14:05 (giờ VN): các giờ ≤ 14:00 bị vô hiệu hoá (gạch ngang), từ 14:30 trở đi chọn được
+✓ [ĐẠT] Hôm nay lúc 21:30 (hết giờ nhận lịch): hiện thông báo "không có khung giờ phù hợp", không có ô giờ nào, không cho sang bước sau; chọn ngày mai thì có giờ
+✓ [ĐẠT] Dịch vụ nội trú: hiện thêm "Ngày đón dự kiến" (nhãn đổi thành "Ngày gửi thú cưng"), ngày đón không trước ngày gửi, bắt buộc; chọn xong mới sang bước 4
+✓ [ĐẠT] Tóm tắt trực tiếp: gõ tên thú cưng chỉ làm nổi bật ĐÚNG dòng "Thú cưng" (không nhấp nháy cả bảng); nền nổi bật tự tắt sau ~1s
+✓ [ĐẠT] Chuyển bước: hoạt cảnh mờ + trượt ngang 12px trong 320ms (dlm-vao-phai), dùng transform / opacity
+✓ [ĐẠT] Chọn thẻ: dấu tick hiện (độ mờ 1), chuyển 220ms; viền tím + nền tím nhạt cho thẻ đã chọn
+✓ [ĐẠT] Rê chuột vào thẻ: nâng nhẹ lên 2px (translateY -2px)
+✓ [ĐẠT] Nút: chuyển 200ms, mũi tên dịch sang phải 4px khi rê chuột; bấm xuống thu 0,98
+✓ [ĐẠT] Giảm chuyển động: chuyển bước không còn hoạt cảnh trượt, thẻ không nâng khi rê chuột, mũi tên không dịch
+✓ [ĐẠT] Chỉ dùng bàn phím: chọn loài bằng Space, Enter chuyển bước, chọn dịch vụ, mũi tên chọn ngày trong lịch (có viền focus), chọn giờ, nhập liên hệ, gửi bằng Enter → tới kết quả; focus chuyển vào thẻ kết quả
+✓ [ĐẠT] Trợ năng: mỗi ô nhập có <label>, nhóm radio có role, tiến trình có nhãn và aria-current="step", thông báo lỗi role=alert, tóm tắt aria-live
+✓ [ĐẠT] Tình trạng khẩn cấp (khó thở, co giật): hiện hướng dẫn GỌI NGAY cho bệnh viện (có liên kết tel:), không đưa kết luận y khoa; gõ nội dung bình thường thì ẩn
+✓ [ĐẠT] Gửi thành công (máy chủ Code.v2.gs thật, Trang tính giả): hiện "Yêu cầu đặt lịch đã được tiếp nhận!" + mã yêu cầu + nói rõ nhân viên sẽ liên hệ xác nhận, KHÔNG nói "đã xác nhận / đặt lịch thành công"
+✓ [ĐẠT] Máy chủ nhận ĐỦ dữ liệu: đúng 1 dòng; dòng ghi tên, SĐT, thú cưng, loài Khác (Thỏ), dịch vụ, ngày, giờ; giống / tuổi / cân nặng / giới tính / email / tình trạng / ghi chú nằm trong cột Ghi chú (không mất)
+✓ [ĐẠT] Gói gửi đi có mã yêu cầu, ô bẫy chống tin rác để trống, các trường mới (giống, tuổi, cân nặng, giới tính, email, tình trạng) gửi riêng để máy chủ mới đọc được
+✓ [ĐẠT] Chỉ có DUY NHẤT yêu cầu tới địa chỉ nhận (script.google.com); không có yêu cầu ra ngoài nào khác
+✓ [ĐẠT] Bấm gửi hai lần liên tiếp (double-click): chỉ MỘT yêu cầu được gửi, chỉ một dòng trong Trang tính
+✓ [ĐẠT] Lỗi mạng khi gửi: hiện "Chưa nhận được xác nhận…" kèm số điện thoại, KHÔNG báo thành công, dữ liệu vẫn nguyên, nút đổi thành "Gửi lại"
+✓ [ĐẠT] Bấm "Gửi lại" sau lỗi mạng: thành công, dùng LẠI cùng mã yêu cầu (hệ thống tránh trùng), Trang tính có đúng 1 dòng
+✓ [ĐẠT] Máy chủ ĐÃ lưu nhưng trình duyệt không nhận được phản hồi → gửi lại không tạo dòng thứ hai (chống trùng theo mã)
+✓ [ĐẠT] Máy chủ trả ok:false: hiện "Chưa gửi được yêu cầu: …" và KHÔNG hiện thẻ tiếp nhận
+✓ [ĐẠT] Máy chủ trả nội dung không đọc được (không phải JSON hợp đồng): KHÔNG báo thành công
+✓ [ĐẠT] Ô bẫy chống tin rác có nội dung: không gửi gì, không báo gì
+✓ [ĐẠT] Nội trú: gửi kèm ngày đón dự kiến, máy chủ chấp nhận và ghi cột "Ngày đón dự kiến"
+✓ [ĐẠT] Thành công: dấu tick xuất hiện mềm bằng hoạt cảnh 450ms (scale + vẽ nét), chỉ khi máy chủ đã xác nhận
+✓ [ĐẠT] "Gửi yêu cầu khác": quay về bước 1 với biểu mẫu trống, tóm tắt về "Chưa nhập"
+✓ [ĐẠT] Trang không có đăng nhập, tài khoản, thanh toán; không có mức giá ví dụ (250.000đ); chi phí chỉ lấy từ dữ liệu giá hoặc là lời dẫn
+✓ [ĐẠT] Có nhãn "Bản xem trước · chưa gửi dữ liệu thật" ở bản giả lập; bản "that" KHÔNG có nhãn này và có data-endpoint
+✓ [ĐẠT] Không có lỗi JavaScript trong suốt các tình huống trên
+? [CHƯA XÁC MINH] Trình đọc màn hình thật (NVDA / VoiceOver), Safari / Firefox / Edge, bàn phím ảo trên điện thoại thật; nhận email / Google Sheet thật → Chỉ kiểm được bằng thiết bị / tài khoản thật; ở đây chỉ chạy Chromium với Google giả
+
+ĐẠT 54 · KHÔNG ĐẠT 0 · CHƯA CHẠY 0 · CHƯA XÁC MINH 1

@@ -1,0 +1,143 @@
+---
+// Đặt lịch giao diện mới: biểu mẫu 4 bước (thú cưng → dịch vụ → ngày giờ → liên hệ) + tóm tắt đặt lịch bên phải, theo bản thiết kế đã duyệt.
+// KHÔNG đăng nhập, KHÔNG thanh toán, KHÔNG lưu dữ liệu khách vào localStorage. Dữ liệu chỉ nằm trong bộ nhớ của trang cho tới khi gửi.
+// Gửi dữ liệu: dùng đúng hợp đồng với apps-script/Code.v2.gs như biểu mẫu hiện có (chế độ 'gia-lap' | 'that' do src/lib/dat-lich.ts quyết định; 'gia-lap' KHÔNG gửi gì).
+// Dịch vụ lấy từ src/data/dich_vu.json (dịch vụ có dat_lich = true); chi phí lấy từ dữ liệu giá, không tự đặt. Không có dữ liệu lịch trống: giờ chỉ là "giờ mong muốn", nhân viên xác nhận.
+// Logic: src/scripts/dat-lich-moi.js. Kiểu dáng: src/styles/moi/khu-dat-lich.css.
+import Icon from '../Icon.astro';
+import Mui from './Mui.astro';
+import tt from '../../data/thong_tin.json';
+import { u } from '../../lib/site';
+import { dichVuLS, cauDau, giaTuHoa } from '../../lib/ls';
+import { modeDatLich, khungGio, thoiGianCho } from '../../lib/dat-lich';
+const dv = dichVuLS().filter((d) => d.dat_lich);
+// Chi phí tham khảo cho tóm tắt: chỉ lấy từ dữ liệu giá; không có thì dùng lời dẫn, KHÔNG tự đặt số
+const chiPhi = (d: (typeof dv)[number]) => d.icon === 'stethoscope' ? 'Phí báo sau khám' : d.icon === 'bed' ? (giaTuHoa(d) ? `${giaTuHoa(d)} / ngày` : 'Liên hệ để được tư vấn') : d.icon === 'scissors' || d.icon === 'syringe' ? 'Liên hệ để được tư vấn' : (giaTuHoa(d) || 'Liên hệ để được tư vấn');
+const buoc = ['Thông tin thú cưng', 'Chọn dịch vụ', 'Ngày & giờ', 'Thông tin liên hệ'];
+---
+<div class="dlm-luoi">
+  <div class="dlm-chinh">
+    <ol class="dlm-tien" id="dlm-tien" aria-label="Các bước đặt lịch">
+      {buoc.map((t, i) => (
+        <li><button type="button" class="dlm-tien-nut" data-toi={i + 1} aria-current={i === 0 ? 'step' : undefined}><span class="dlm-tien-so" aria-hidden="true">{i + 1}</span><span class="dlm-tien-chu">{t}</span></button></li>
+      ))}
+    </ol>
+
+    <form class="dlm-form" id="dlm-form" novalidate data-mode={modeDatLich} data-endpoint={modeDatLich === 'that' ? tt.dia_chi_nhan_dat_lich : undefined} data-cho={thoiGianCho} data-sdt={tt.dien_thoai} data-tel={tt.dien_thoai_goi} data-gio={khungGio.join(',')}>
+      {modeDatLich === 'gia-lap' && <p class="dlm-the-xem"><Icon name="info" size={16} />Bản xem trước · chưa gửi dữ liệu thật</p>}
+      <div class="dlm-tb" id="dlm-tb" tabindex="-1" role="alert" hidden></div>
+
+      <!-- Bước 1 -->
+      <section class="dlm-buoc" data-buoc="1" aria-labelledby="dlm-h1">
+        <header class="dlm-buoc-dau"><span class="dlm-so" aria-hidden="true">1</span><div><h2 id="dlm-h1" tabindex="-1">Thông tin thú cưng</h2><p>Hãy cho chúng tôi biết một chút về bé nhé!</p></div></header>
+        <fieldset class="dlm-nhom" id="dlm-f-loai">
+          <legend class="dlm-nhan">Loài thú cưng <i aria-hidden="true">*</i></legend>
+          <div class="dlm-the-chon dlm-ba" role="radiogroup" aria-describedby="dlm-loai-loi">
+            {[['cho', 'Chó', 'dog'], ['meo', 'Mèo', 'cat'], ['khac', 'Khác', 'lap-lanh']].map(([v, t, ic]) => (
+              <label class="dlm-the"><input type="radio" name="loai" value={v} aria-controls={v === 'khac' ? 'dlm-o-khac' : undefined}><span class="dlm-the-in"><span class="dlm-the-ic" aria-hidden="true"><Icon name={ic} size={30} /></span><span class="dlm-the-ten">{t}</span><i class="dlm-tick" aria-hidden="true"><Icon name="check" size={14} /></i></span></label>
+            ))}
+          </div>
+          <p class="dlm-loi" id="dlm-loai-loi"></p>
+        </fieldset>
+        <div class="dlm-o dlm-phu" id="dlm-o-khac" hidden><label for="dlm-loai-khac">Thú cưng của bạn là loài gì? <i aria-hidden="true">*</i></label><input id="dlm-loai-khac" name="loai_khac" maxlength="40" autocomplete="off" placeholder="Ví dụ: Thỏ, Hamster, Chim, Rùa, Bò sát…" aria-describedby="dlm-loai-khac-goi dlm-loai-khac-loi"><p class="dlm-goi" id="dlm-loai-khac-goi">Nhân viên sẽ liên hệ để xác nhận bệnh viện có tiếp nhận loài này hay không.</p><p class="dlm-loi" id="dlm-loai-khac-loi"></p></div>
+        <div class="dlm-hai">
+          <div class="dlm-o"><label for="dlm-ten-thu">Tên thú cưng <i aria-hidden="true">*</i></label><input id="dlm-ten-thu" name="ten_thu_cung" maxlength="60" autocomplete="off" placeholder="Ví dụ: Bông, Miu, Bo…" required aria-describedby="dlm-ten-thu-loi"><p class="dlm-loi" id="dlm-ten-thu-loi"></p></div>
+          <div class="dlm-o"><label for="dlm-giong">Giống thú cưng <span class="dlm-nhe">(không bắt buộc)</span></label><input id="dlm-giong" name="giong" maxlength="40" autocomplete="off" placeholder="Ví dụ: Golden Retriever, Mèo Anh…"></div>
+        </div>
+        <div class="dlm-ba-o">
+          <div class="dlm-o"><label for="dlm-tuoi">Tuổi hoặc ngày sinh <span class="dlm-nhe">(không bắt buộc)</span></label><input id="dlm-tuoi" name="tuoi" maxlength="30" autocomplete="off" placeholder="Ví dụ: 2 tuổi, 3 tháng"></div>
+          <div class="dlm-o"><label for="dlm-can">Cân nặng, kg <span class="dlm-nhe">(không bắt buộc)</span></label><input id="dlm-can" name="can_nang" inputmode="decimal" maxlength="6" autocomplete="off" placeholder="Ví dụ: 5.2" aria-describedby="dlm-can-loi"><p class="dlm-loi" id="dlm-can-loi"></p></div>
+          <fieldset class="dlm-o dlm-gt"><legend>Giới tính <span class="dlm-nhe">(không bắt buộc)</span></legend>
+            <div class="dlm-chip-hang">
+              {[['Đực', 'duc'], ['Cái', 'cai'], ['Không rõ', 'khong-ro']].map(([t, v]) => <label class="dlm-chip"><input type="radio" name="gioi_tinh" value={t}><span>{t}</span></label>)}
+            </div>
+          </fieldset>
+        </div>
+        <div class="dlm-o"><label for="dlm-tinh-trang">Tình trạng sức khỏe hoặc yêu cầu đặc biệt <span class="dlm-nhe">(không bắt buộc)</span></label><textarea id="dlm-tinh-trang" name="tinh_trang" rows="3" maxlength="400" placeholder="Ví dụ: Ho, nôn, bỏ ăn, cần tiêm phòng, kiểm tra định kỳ…" aria-describedby="dlm-khan"></textarea>
+          <p class="dlm-khan" id="dlm-khan" role="status" aria-live="polite" hidden><Icon name="alert" size={18} /><span>Nếu bé có dấu hiệu nguy cấp (khó thở, co giật, chảy máu nhiều, ngộ độc, bất tỉnh…), vui lòng <a href={`tel:${tt.dien_thoai_goi}`}>gọi ngay {tt.dien_thoai}</a> thay vì chờ xác nhận đặt lịch. Biểu mẫu này không đưa ra kết luận y khoa.</span></p></div>
+      </section>
+
+      <!-- Bước 2 -->
+      <section class="dlm-buoc" data-buoc="2" aria-labelledby="dlm-h2" hidden>
+        <header class="dlm-buoc-dau"><span class="dlm-so" aria-hidden="true">2</span><div><h2 id="dlm-h2" tabindex="-1">Chọn dịch vụ</h2><p>Chọn dịch vụ bé cần. Chi phí cụ thể do bác sĩ báo sau khi thăm khám.</p></div></header>
+        <fieldset class="dlm-nhom" id="dlm-f-dv">
+          <legend class="dlm-an">Dịch vụ</legend>
+          <div class="dlm-the-chon dlm-luoi-dv" role="radiogroup" aria-describedby="dlm-dv-loi">
+            {dv.map((d) => (
+              <label class="dlm-the dlm-the-dv"><input type="radio" name="dich_vu" value={d.id} data-ten={d.ten} data-noi-tru={d.icon === 'bed' ? '' : undefined} data-chi-phi={chiPhi(d)}><span class="dlm-the-in"><span class="dlm-the-ic" aria-hidden="true"><Icon name={d.icon} size={26} /></span><span class="dlm-the-chu"><b class="dlm-the-ten">{d.ten}</b><span class="dlm-the-mo">{cauDau(d.mo_ta)}</span></span><i class="dlm-tick" aria-hidden="true"><Icon name="check" size={14} /></i></span></label>
+            ))}
+          </div>
+          <p class="dlm-loi" id="dlm-dv-loi"></p>
+        </fieldset>
+        <p class="dlm-ghi"><Icon name="info" size={16} /><span>Cần cấp cứu? Vui lòng <a href={`tel:${tt.dien_thoai_goi}`}>gọi {tt.dien_thoai}</a> (cấp cứu không đặt lịch qua biểu mẫu).</span></p>
+      </section>
+
+      <!-- Bước 3 -->
+      <section class="dlm-buoc" data-buoc="3" aria-labelledby="dlm-h3" hidden>
+        <header class="dlm-buoc-dau"><span class="dlm-so" aria-hidden="true">3</span><div><h2 id="dlm-h3" tabindex="-1">Ngày &amp; giờ mong muốn</h2><p>Chọn thời gian bạn muốn đến. Giờ mở cửa {tt.gio_mo_cua}. Nhân viên sẽ liên hệ để xác nhận lịch.</p></div></header>
+        <div class="dlm-thoi-gian">
+          <div class="dlm-o dlm-lich-hop"><span class="dlm-nhan" id="dlm-ngay-nhan">Ngày mong muốn <i aria-hidden="true">*</i></span>
+            <div class="dlm-lich" id="dlm-lich" data-nhan="dlm-ngay-nhan"></div>
+            <p class="dlm-loi" id="dlm-ngay-loi"></p></div>
+          <div class="dlm-o dlm-gio-hop"><span class="dlm-nhan" id="dlm-gio-nhan">Giờ mong muốn <i aria-hidden="true">*</i></span>
+            <div id="dlm-gio" role="radiogroup" aria-labelledby="dlm-gio-nhan" aria-describedby="dlm-gio-goi dlm-gio-loi"></div>
+            <p class="dlm-goi" id="dlm-gio-goi">Đây là giờ bạn mong muốn, không phải lịch đã được giữ chỗ.</p>
+            <p class="dlm-loi" id="dlm-gio-loi"></p></div>
+        </div>
+        <div class="dlm-o dlm-phu" id="dlm-o-don" hidden><span class="dlm-nhan" id="dlm-don-nhan">Ngày đón dự kiến <i aria-hidden="true">*</i></span>
+          <div class="dlm-lich" id="dlm-lich-don" data-nhan="dlm-don-nhan"></div>
+          <p class="dlm-goi">Không trước ngày gửi. Chi phí nội trú do nhân viên báo khi xác nhận lịch.</p>
+          <p class="dlm-loi" id="dlm-don-loi"></p></div>
+      </section>
+
+      <!-- Bước 4 -->
+      <section class="dlm-buoc" data-buoc="4" aria-labelledby="dlm-h4" hidden>
+        <header class="dlm-buoc-dau"><span class="dlm-so" aria-hidden="true">4</span><div><h2 id="dlm-h4" tabindex="-1">Thông tin liên hệ</h2><p>Để nhân viên liên hệ xác nhận lịch với bạn.</p></div></header>
+        <div class="dlm-hai">
+          <div class="dlm-o"><label for="dlm-ten-khach">Họ và tên <i aria-hidden="true">*</i></label><input id="dlm-ten-khach" name="ten_khach" maxlength="80" autocomplete="name" required aria-describedby="dlm-ten-khach-loi"><p class="dlm-loi" id="dlm-ten-khach-loi"></p></div>
+          <div class="dlm-o"><label for="dlm-sdt">Số điện thoại <i aria-hidden="true">*</i></label><input id="dlm-sdt" name="dien_thoai" type="tel" inputmode="tel" maxlength="16" autocomplete="tel" placeholder="Ví dụ: 0912 345 678" required aria-describedby="dlm-sdt-loi"><p class="dlm-loi" id="dlm-sdt-loi"></p></div>
+        </div>
+        <div class="dlm-o"><label for="dlm-email">Email <span class="dlm-nhe">(không bắt buộc)</span></label><input id="dlm-email" name="email" type="email" inputmode="email" maxlength="80" autocomplete="email" aria-describedby="dlm-email-loi"><p class="dlm-loi" id="dlm-email-loi"></p></div>
+        <div class="dlm-o"><label for="dlm-ghi-chu">Ghi chú <span class="dlm-nhe">(không bắt buộc)</span></label><textarea id="dlm-ghi-chu" name="ghi_chu" rows="2" maxlength="250" placeholder="Ví dụ: khung giờ thuận tiện, cách liên hệ bạn muốn…"></textarea></div>
+        <section class="dlm-xem-lai" aria-labelledby="dlm-xem-lai-h"><h3 id="dlm-xem-lai-h">Kiểm tra lại trước khi gửi</h3><dl id="dlm-xem-lai-ds"></dl></section>
+        <p class="dlm-ghi"><Icon name="info" size={16} /><span>Gửi biểu mẫu là gửi YÊU CẦU đặt lịch. Lịch hẹn chỉ được xác nhận sau khi nhân viên bệnh viện liên hệ với bạn.</span></p>
+      </section>
+
+      <div class="dlm-bay" aria-hidden="true"><label for="dlm-web">Để trống ô này</label><input id="dlm-web" name="website" tabindex="-1" autocomplete="off"></div>
+
+      <div class="dlm-dieu-huong">
+        <a class="dlm-huy" id="dlm-huy" href={u('/')}>Hủy đặt lịch</a>
+        <button type="button" class="dlm-nut dlm-nut-vien" id="dlm-lui" hidden>Quay lại</button>
+        <button type="button" class="dlm-nut dlm-nut-chinh" id="dlm-tiep"><span class="dlm-nut-chu">Tiếp tục</span><Mui /></button>
+        <button type="submit" class="dlm-nut dlm-nut-chinh" id="dlm-gui" hidden><span class="dlm-quay" aria-hidden="true"></span><span class="dlm-nut-chu">Gửi yêu cầu đặt lịch</span><Mui /></button>
+      </div>
+      <p class="dlm-trang-thai" id="dlm-trang-thai" role="status" aria-live="polite"></p>
+    </form>
+    <div class="dlm-nhan-the" id="dlm-nhan" tabindex="-1" hidden></div>
+  </div>
+
+  <aside class="dlm-ben" aria-label="Tóm tắt đặt lịch">
+    <section class="dlm-tt" id="dlm-tt">
+      <button type="button" class="dlm-tt-nut" id="dlm-tt-nut" aria-expanded="true" aria-controls="dlm-tt-than"><span>Tóm tắt đặt lịch</span><svg aria-hidden="true" focusable="false" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg></button>
+      <h2 class="dlm-tt-tieu-de">Tóm tắt đặt lịch</h2>
+      <div class="dlm-tt-than" id="dlm-tt-than">
+        <dl class="dlm-tt-ds" aria-live="polite">
+          <div data-tt="thu"><span class="dlm-tt-ic" aria-hidden="true"><Icon name="dog" size={20} /></span><div><dt>Thú cưng</dt><dd class="dlm-tt-gt">Chưa nhập</dd><dd class="dlm-tt-phu"></dd></div></div>
+          <div data-tt="dv"><span class="dlm-tt-ic" aria-hidden="true"><Icon name="stethoscope" size={20} /></span><div><dt>Dịch vụ</dt><dd class="dlm-tt-gt">Chưa chọn</dd></div></div>
+          <div data-tt="gio"><span class="dlm-tt-ic" aria-hidden="true"><Icon name="calendar" size={20} /></span><div><dt>Thời gian mong muốn</dt><dd class="dlm-tt-gt">Chưa chọn</dd></div></div>
+          <div data-tt="lh"><span class="dlm-tt-ic" aria-hidden="true"><Icon name="users" size={20} /></span><div><dt>Thông tin liên hệ</dt><dd class="dlm-tt-gt">Chưa nhập</dd></div></div>
+        </dl>
+        <div class="dlm-tt-gia" data-tt="gia"><span>Chi phí tham khảo</span><b class="dlm-tt-gt">Chưa có thông tin</b></div>
+        <p class="dlm-tt-chu"><Icon name="info" size={16} /><span>Chi phí có thể thay đổi sau thăm khám. Đây là yêu cầu đặt lịch, chưa phải lịch đã xác nhận.</span></p>
+      </div>
+    </section>
+    <section class="dlm-ho-tro">
+      <h2><Icon name="phone" size={20} />Cần hỗ trợ?</h2>
+      <p>Nếu thú cưng có dấu hiệu nguy cấp, vui lòng liên hệ trực tiếp với bệnh viện để được tư vấn kịp thời.</p>
+      <a class="dlm-nut dlm-nut-vien" href={`tel:${tt.dien_thoai_goi}`}>Liên hệ ngay · {tt.dien_thoai}</a>
+      {tt.zalo && <a class="dlm-lien-ket" href={tt.zalo} target="_blank" rel="noopener">Nhắn Zalo<Mui size={16} /></a>}
+      <p class="dlm-rieng"><Icon name="lock" size={16} /><span>Thông tin chỉ dùng để bệnh viện liên hệ xác nhận lịch.</span></p>
+    </section>
+  </aside>
+</div>
+<script>import '../../scripts/dat-lich-moi.js';</script>
