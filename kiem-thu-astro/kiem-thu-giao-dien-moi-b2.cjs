@@ -194,8 +194,8 @@ function taoVideoThu() {
     const loi = [];
     for (const [tuy, ten] of [[{ reducedMotion: 'reduce' }, 'giảm chuyển động'], [{ javaScriptEnabled: false }, 'tắt JavaScript']]) {
       const ctx = await ctxMoi({ viewport: { width: 1440, height: 900 }, ...tuy }), p = await mo(ctx, '/'); await cho(80);
-      // chuyển tiếp độ mờ 160ms (CSSTransition trên opacity) vẫn được phép khi giảm chuyển động, nên không tính
-      const x = await p.evaluate(() => { const o = (s) => +getComputedStyle(document.querySelector(s)).opacity; return { ap: document.getAnimations().filter((a) => a.playState === 'running' && a.effect.getComputedTiming().duration > 1 && !(a.transitionProperty === 'opacity')).length, o: [o('.hero h1'), o('.hero-phu'), o('.hero-nut'), o('.hero-tt')], dash: getComputedStyle(document.querySelector('.hero .nhan-but .net')).strokeDashoffset, khung: getComputedStyle(document.querySelector('.hv')).clipPath, cho: getComputedStyle(document.querySelector('.hv-cho')).display }; });
+      // chuyển tiếp 160ms của độ mờ / màu (opacity, color, background-color, border-color, outline-color) vẫn được phép khi giảm chuyển động (giam-chuyen-dong.css), nên không tính; riêng chữ "Giờ mở cửa" đổi màu theo giờ Việt Nam lúc nạp trang
+      const x = await p.evaluate(() => { const o = (s) => +getComputedStyle(document.querySelector(s)).opacity; return { ap: document.getAnimations().filter((a) => a.playState === 'running' && a.effect.getComputedTiming().duration > 1 && !['opacity', 'color', 'background-color', 'border-color', 'outline-color'].includes(a.transitionProperty)).length, o: [o('.hero h1'), o('.hero-phu'), o('.hero-nut'), o('.hero-tt')], dash: getComputedStyle(document.querySelector('.hero .nhan-but .net')).strokeDashoffset, khung: getComputedStyle(document.querySelector('.hv')).clipPath, cho: getComputedStyle(document.querySelector('.hv-cho')).display }; });
       if (!(x.ap === 0 && x.o.every((v) => v === 1) && /^0(px)?$/.test(x.dash) && (x.khung === 'none' || tuy.reducedMotion) && x.cho !== 'none')) loi.push(ten + ' ' + JSON.stringify(x));
       await ctx.close();
     }
