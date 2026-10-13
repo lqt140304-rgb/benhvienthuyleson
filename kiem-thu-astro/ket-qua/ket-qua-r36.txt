@@ -1,4 +1,4 @@
-Kiểm thử thiết kế R3.6 · Chromium 141.0.7390.37 (Playwright) · phông: cục bộ (@fontsource) · 2026-10-13T08:43:06.186Z
+Kiểm thử thiết kế R3.6 · Chromium 141.0.7390.37 (Playwright) · phông: cục bộ (@fontsource) · 2026-10-13T08:56:24.281Z
 ĐẠT 21 · KHÔNG ĐẠT 0 · CHƯA CHẠY 1 · CHƯA XÁC MINH 2
 
 
@@ -26,8 +26,8 @@ Kiểm thử thiết kế R3.6 · Chromium 141.0.7390.37 (Playwright) · phông:
 [ĐẠT] 11 trang × 8 kích thước (360, 390, 430, 768, 1024, 1280, 1440, ngang 844×390): không cuộn ngang lúc hiệu ứng đang chạy, khi xong và khi rê chuột (≥ 1024px)
 
 -- 5. Dịch bố cục (CLS): dưới 0,1 và không tăng so với bản trước R3.6 (commit 422c7a4)
-[ĐẠT] 1440x900 (có phông cục bộ đổi "swap" sau 300 ms): 11 trang có CLS dưới 0,1 khi tải và cuộn tới cuối  → / 0.006→0.007 · /bang-gia/ 0.001→0.001 · /dich-vu/ 0.013→0.015 · /gioi-thieu/ 0.000→0.001 · /lien-he/ 0.001→0.001 · /dat-lich/ 0.001→0.001 · /nhan-vien/ 0.001→0.002 · /tu-van/ 0.001→0.001 · /tu-van/cho/ 0.001→0.002 · /tu-van/meo/ 0.001→0.001 · /nhat-ky-ca-benh/ 0.001→0.002
-[ĐẠT] 1440x900 (có phông cục bộ đổi "swap" sau 300 ms): CLS từng trang không tăng quá 0,01 so với bản trước R3.6  → / 0.006→0.007 · /bang-gia/ 0.001→0.001 · /dich-vu/ 0.013→0.015 · /gioi-thieu/ 0.000→0.001 · /lien-he/ 0.001→0.001 · /dat-lich/ 0.001→0.001 · /nhan-vien/ 0.001→0.002 · /tu-van/ 0.001→0.001 · /tu-van/cho/ 0.001→0.002 · /tu-van/meo/ 0.001→0.001 · /nhat-ky-ca-benh/ 0.001→0.002
+[ĐẠT] 1440x900 (có phông cục bộ đổi "swap" sau 300 ms): 11 trang có CLS dưới 0,1 khi tải và cuộn tới cuối  → / 0.006→0.007 · /bang-gia/ 0.001→0.000 · /dich-vu/ 0.013→0.014 · /gioi-thieu/ 0.000→0.001 · /lien-he/ 0.000→0.001 · /dat-lich/ 0.001→0.001 · /nhan-vien/ 0.000→0.002 · /tu-van/ 0.001→0.001 · /tu-van/cho/ 0.001→0.002 · /tu-van/meo/ 0.001→0.001 · /nhat-ky-ca-benh/ 0.001→0.001
+[ĐẠT] 1440x900 (có phông cục bộ đổi "swap" sau 300 ms): CLS từng trang không tăng quá 0,01 so với bản trước R3.6  → / 0.006→0.007 · /bang-gia/ 0.001→0.000 · /dich-vu/ 0.013→0.014 · /gioi-thieu/ 0.000→0.001 · /lien-he/ 0.000→0.001 · /dat-lich/ 0.001→0.001 · /nhan-vien/ 0.000→0.002 · /tu-van/ 0.001→0.001 · /tu-van/cho/ 0.001→0.002 · /tu-van/meo/ 0.001→0.001 · /nhat-ky-ca-benh/ 0.001→0.001
 [ĐẠT] 390x844 (có phông cục bộ đổi "swap" sau 300 ms): 11 trang có CLS dưới 0,1 khi tải và cuộn tới cuối  → / 0.000→0.000 · /bang-gia/ 0.000→0.000 · /dich-vu/ 0.000→0.000 · /gioi-thieu/ 0.000→0.000 · /lien-he/ 0.000→0.000 · /dat-lich/ 0.000→0.000 · /nhan-vien/ 0.000→0.000 · /tu-van/ 0.000→0.000 · /tu-van/cho/ 0.000→0.000 · /tu-van/meo/ 0.000→0.000 · /nhat-ky-ca-benh/ 0.000→0.000
 [ĐẠT] 390x844 (có phông cục bộ đổi "swap" sau 300 ms): CLS từng trang không tăng quá 0,01 so với bản trước R3.6  → / 0.000→0.000 · /bang-gia/ 0.000→0.000 · /dich-vu/ 0.000→0.000 · /gioi-thieu/ 0.000→0.000 · /lien-he/ 0.000→0.000 · /dat-lich/ 0.000→0.000 · /nhan-vien/ 0.000→0.000 · /tu-van/ 0.000→0.000 · /tu-van/cho/ 0.000→0.000 · /tu-van/meo/ 0.000→0.000 · /nhat-ky-ca-benh/ 0.000→0.000
 
