@@ -1,4 +1,4 @@
-Kiểm thử bước 3 giao diện mới (dịch vụ, sản phẩm, tóm tắt giá, trang Bảng giá) · Chromium 141.0.7390.37 (Playwright) · 2026-10-13T11:14:22.630Z
+Kiểm thử bước 3 giao diện mới (dịch vụ, sản phẩm, tóm tắt giá, trang Bảng giá) · Chromium 141.0.7390.37 (Playwright) · 2026-10-13T11:40:49.789Z
 ĐẠT 41 · KHÔNG ĐẠT 0 · CHƯA CHẠY 0 · CHƯA XÁC MINH 4
 
 
@@ -33,14 +33,14 @@ Kiểm thử bước 3 giao diện mới (dịch vụ, sản phẩm, tóm tắt 
 -- 6. Trang Bảng giá (máy tính): tab gạch chân tím trượt, bảng giá căn phải, giá giữ nguyên
 [ĐẠT] MỌI giá và chữ trong bảng của 8 nhóm (292 ô / hàng) giống hệt trang Bảng giá R3.6: không đổi một chữ số
 [ĐẠT] Thanh tab: 8 tab trên MỘT hàng ở 1440px, không nền / bo (chữ + đường kẻ mảnh); gạch chân tím 3px nằm đúng dưới tab đang chọn (vị trí 0/0, rộng 182/182) và chuyển tiếp 240ms chỉ trên transform  → {"so":8,"mot":true,"cao":49,"x":0,"w":182,"tx":0,"tw":182,"mau":"rgb(90, 30, 94)","day":-1,"tp":"transform / 0.24s","nen":"rgba(0, 0, 0, 0)","bo":"0px"}
-[ĐẠT] Bấm tab "Grooming - Spa": gạch chân TRƯỢT tới tab mới (giữa chừng ở 404px, giữa vị trí cũ 0 và mới 481), tới đúng nơi, đúng độ rộng; panel mới hiện, panel cũ ẩn  → {"giua":403.558,"t0x":0,"t1":{"x":481,"tx":481,"w":152,"tw":152,"hien":true,"cu":true,"ten":"Grooming - Spa"}}
+[ĐẠT] Bấm tab "Grooming - Spa": gạch chân TRƯỢT tới tab mới (giữa chừng ở 428px, giữa vị trí cũ 0 và mới 481), tới đúng nơi, đúng độ rộng; panel mới hiện, panel cũ ẩn  → {"giua":427.549,"t0x":0,"t1":{"x":481,"tx":481,"w":152,"tw":152,"hien":true,"cu":true,"ten":"Grooming - Spa"}}
 [ĐẠT] Đổi nhóm: panel mới chỉ MỜ HIỆN 160ms (hoạt cảnh bg-mo trên panel); không có hoạt cảnh nào trên từng hàng / ô giá (giá không bao giờ chờ hiệu ứng)  → [{"ten":"color","dai":160,"tren":"","trongBang":false},{"ten":"color","dai":160,"tren":"","trongBang":false},{"ten":"transform","dai":240,"tren":"bg-gach san","trongBang":false},{"ten":"net-ve","dai":320,"tren":"","trongBang":false},{"ten":"bg-mo","dai":160,"tren":"bg-panel","trongBang":false}]
 [ĐẠT] Bàn phím: mũi tên phải sang tab kế (Tiêm phòng vaccine), End sang tab cuối (Cấp cứu); gạch chân đi theo đúng tab  → {"kb":{"id":"tab-tiem-phong-vaccine","x":297,"tx":297},"kb2":{"id":"tab-cap-cuu-24-24","x":947,"tx":947}}
 [ĐẠT] Nhóm chờ xác nhận (Cấp cứu 24/24): chip "Chờ xác nhận" viền ngọc, nền trong, ĐỨNG YÊN (không hoạt cảnh); tab có chấm viền ngọc và chữ "(chờ xác nhận)" cho trình đọc màn hình  → {"chip":"Chờ xác nhận","vien":"rgb(35, 112, 110)","mau":"rgb(35, 112, 110)","nen":"rgba(0, 0, 0, 0)","an":0,"cham":"rgb(35, 112, 110)","sr":"(chờ xác nhận)"}
 [ĐẠT] Hàng giá: số căn phải thẳng một mép (1360), dùng tabular-nums; chữ "Báo sau khi khám" / "Theo giờ hẹn" là chữ thường, không bịa số  → {"gia":[{"r":1360,"a":"tabular-nums","t":"start"},{"r":1360,"a":"normal","t":"start"},{"r":1360,"a":"normal","t":"start"},{"r":1360,"a":"tabular-nums","t":"start"},{"r":1360,"a":"tabular-nums","t":"start"},{"r":1360,"a":"tabular-nums","t":"start"},{"r":1360,"a":"tabular-nums","t":"start"}],"ten":"Be Vietnam Pro"}
 [ĐẠT] Bảng theo cân nặng (Grooming): các cột giá thẳng hàng tuyệt đối từ trên xuống dưới, căn phải, tabular-nums  → [{"thẳng":true,"dongs":8,"canPhai":true,"fv":true},{"thẳng":true,"dongs":8,"canPhai":true,"fv":true}]
 [ĐẠT] Tiêu đề nhóm DÍNH khi cuộn: position sticky, nền kem đặc (không lộ chữ phía dưới), Newsreader; sau khi cuộn sâu vào bảng vẫn nằm ngay dưới header đã thu (đỉnh 60px, mong đợi 60px)  → {"st":{"pos":"sticky","top":"60px","bg":"rgb(251, 247, 241)","ff":"Newsreader","z":"5"},"dinh":60}
-[ĐẠT] Mở thẳng /bang-gia/#nhom-grooming-spa: tab Grooming được chọn, tiêu đề nhóm loé nền cam nhạt (9 sắc độ trong lúc loé, từ #FBE6D4 về kem) rồi hết (lớp loe tự gỡ sau ~0,7s); hoạt cảnh loe-cam chỉ MỘT lần  → {"lan":[[true,"rgb(251, 230, 212)"],[true,"rgb(251, 230, 213)"],[true,"rgb(251, 232, 216)"],[true,"rgb(251, 238, 225)"],[true,"rgb(251, 242, 232)"],[true,"rgb(251, 245, 237)"],[true,"rgb(251, 246, 239)"],[true,"rgb(251, 247, 240)"],[true,"rgb(251, 247, 241)"],[true,"rgb(251, 247, 241)"],[false,"rgb(251, 247, 241)"],[false,"rgb(251, 247, 241)"]],"sau":{"loe":false,"bg":"rgb(251, 247, 241)","ap":0,"sel":"tab-grooming-spa"}}
+[ĐẠT] Mở thẳng /bang-gia/#nhom-grooming-spa: tab Grooming được chọn, tiêu đề nhóm loé nền cam nhạt (8 sắc độ trong lúc loé, từ #FBE6D4 về kem) rồi hết (lớp loe tự gỡ sau ~0,7s); hoạt cảnh loe-cam chỉ MỘT lần  → {"lan":[[true,"rgb(251, 230, 212)"],[true,"rgb(251, 231, 214)"],[true,"rgb(251, 235, 221)"],[true,"rgb(251, 240, 229)"],[true,"rgb(251, 243, 234)"],[true,"rgb(251, 245, 238)"],[true,"rgb(251, 246, 240)"],[true,"rgb(251, 247, 241)"],[true,"rgb(251, 247, 241)"],[false,"rgb(251, 247, 241)"],[false,"rgb(251, 247, 241)"],[false,"rgb(251, 247, 241)"]],"sau":{"loe":false,"bg":"rgb(251, 247, 241)","ap":0,"sel":"tab-grooming-spa"}}
 [ĐẠT] Vào trang Bảng giá bình thường (không có #nhom-…): KHÔNG loé  → false
 
 -- 7. Trang Bảng giá: điện thoại 390 và giảm chuyển động
@@ -51,7 +51,7 @@ Kiểm thử bước 3 giao diện mới (dịch vụ, sản phẩm, tóm tắt 
 
 -- 8. Không cuộn ngang ở 9 cỡ (trang chủ + Bảng giá), CLS, bàn phím
 [ĐẠT] 9 kích thước (360, 390, 430, 768, 1024, 1280, 1440, 1920, ngang 844×390) × 3 trang (chủ, Bảng giá, Bảng giá mở nhóm Grooming): không cuộn ngang
-[ĐẠT] CLS (cuộn hết trang, đổi 3 tab Bảng giá) dưới 0,1 ở cả 4 trường hợp: 1440px / 0.0013 · 390px / 0.0000 · 1440px /bang-gia/ 0.0000 · 390px /bang-gia/ 0.0000  → 1440px / 0.0013 | 390px / 0.0000 | 1440px /bang-gia/ 0.0000 | 390px /bang-gia/ 0.0000
+[ĐẠT] CLS (cuộn hết trang, đổi 3 tab Bảng giá) dưới 0,1 ở cả 4 trường hợp: 1440px / 0.0022 · 390px / 0.0000 · 1440px /bang-gia/ 0.0013 · 390px /bang-gia/ 0.0000  → 1440px / 0.0022 | 390px / 0.0000 | 1440px /bang-gia/ 0.0013 | 390px /bang-gia/ 0.0000
 
 -- 9. Yêu cầu mạng ra ngoài, lỗi, giới hạn
 [ĐẠT] Không lỗi JavaScript / console ở mọi trang đã mở (giao diện mới)

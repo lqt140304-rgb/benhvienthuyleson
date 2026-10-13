@@ -1,10 +1,10 @@
-Kiểm thử nền móng giao diện mới (bước 1) · Chromium 141.0.7390.37 (Playwright) · 2026-10-13T11:12:50.512Z
+Kiểm thử nền móng giao diện mới (bước 1) · Chromium 141.0.7390.37 (Playwright) · 2026-10-13T11:36:51.830Z
 ĐẠT 22 · KHÔNG ĐẠT 0 · CHƯA CHẠY 1 · CHƯA XÁC MINH 1
 
 
 -- 1. Công tắc GIAO_DIEN: hai bộ CSS tách hẳn; giao diện mới dùng phông tự chứa, không gọi mạng ngoài
 [ĐẠT] Giao diện mặc định (dist, GIAO_DIEN = r36): đúng MỘT tệp CSS là bộ R3.6 (có .hero-chu, không có Newsreader), vẫn dùng Google Fonts như trước, không tải trước phông tự chứa, không có script hiệu ứng mới  → {"css":["https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap","/benhvienthuyleson/_astro/r36.BvJ89V1I.css"],"google":true,"preload":[],"html":"<html lang=\"vi\">","scriptNhung":false}
-[ĐẠT] Giao diện mới (dist-moi): đúng MỘT tệp CSS chính là bộ mới + MỘT tệp Tailwind (không có Preflight: không có lớp base, không reset; mọi lớp có tiền tố tw:; lớp tiện ích !important) (có Newsreader, --kem, data-hien), KHÔNG có quy tắc nào của le-son.css (.hero-nen, .sp-panel, Playfair, --bong-1), không gọi Google Fonts, tải trước 2 tệp Newsreader 500, <html data-giao-dien="moi">  → {"css":["/benhvienthuyleson/_astro/index.CIqynRDL.css","/benhvienthuyleson/_astro/tailwind.BiI-wkzb.css"],"google":false,"preload":["/benhvienthuyleson/fonts/newsreader-latin-500-normal.woff2","/benhvienthuyleson/fonts/newsreader-vietnamese-500-normal.woff2"],"html":"<html lang=\"vi\" data-giao-dien=\"moi\">","scriptNhung":true,"kichThuoc":62101}
+[ĐẠT] Giao diện mới (dist-moi): đúng MỘT tệp CSS chính là bộ mới + MỘT tệp Tailwind (không có Preflight: không có lớp base, không reset; mọi lớp có tiền tố tw:; lớp tiện ích !important) (có Newsreader, --kem, data-hien), KHÔNG có quy tắc nào của le-son.css (.hero-nen, .sp-panel, Playfair, --bong-1), không gọi Google Fonts, tải trước 2 tệp Newsreader 500, <html data-giao-dien="moi">  → {"css":["/benhvienthuyleson/_astro/index.HTh_lLwo.css","/benhvienthuyleson/_astro/tailwind.BiI-wkzb.css"],"google":false,"preload":["/benhvienthuyleson/fonts/newsreader-latin-500-normal.woff2","/benhvienthuyleson/fonts/newsreader-vietnamese-500-normal.woff2"],"html":"<html lang=\"vi\" data-giao-dien=\"moi\">","scriptNhung":true,"kichThuoc":62101}
 [ĐẠT] 14 @font-face trỏ tới tệp có thật trong /benhvienthuyleson/fonts/ (Newsreader 400/500/600 + nghiêng 500, Be Vietnam Pro 400/500/600; mỗi độ đậm 2 tệp Latin + Việt); có giấy phép OFL đi kèm
 
 -- 2. Phông vẽ thật và token màu (giao diện mới)
